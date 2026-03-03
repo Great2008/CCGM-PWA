@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Push Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #0f1f3d; color: white; }
+    button { background: #f59e0b; color: #0f1f3d; border: none; padding: 14px 28px; border-radius: 30px; font-size: 1rem; font-weight: 900; cursor: pointer; width: 100%; margin: 10px 0; }
+    .log { background: #1e293b; border-radius: 10px; padding: 14px; margin: 10px 0; font-size: 0.82rem; font-family: monospace; line-height: 1.8; word-break: break-all; }
+    .ok  { color: #86efac; }
+    .err { color: #fca5a5; }
+    .inf { color: #93c5fd; }
+  </style>
+</head>
+<body>
+  <h2>🔔 Push Notification Test</h2>
+  <div id="log" class="log">Tap a button to test...<br></div>
+  <button onclick="testAll()">▶ Run Full Test</button>
+  <button onclick="clearLog()">🗑 Clear</button>
+
+  <script>
+    const VAPID = 'EH0Ewi8UZP4Jjflxsdm0363_I3SalbXHht3cruC-0GDZKwdkAIxehmW1NcwKfqkh-o5JR957slYk3dyPQF87Pw'
+    const SUPABASE_URL  = 'https://gxetxqlzuipiymdmibpt.supabase.co'  // ← will be replaced
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4ZXR4cWx6dWlwaXltZG1pYnB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NjQ3NjYsImV4cCI6MjA4NzU0MDc2Nn0.o8_P0R_4-DArtXYyIeupS4KQVAZo-aLKe5q5sQ6EyMc'                     // ← will be replaced
+
+    function log(msg, type='inf') {
+      const d = document.getElementById('log')
+      d.innerHTML += '<span class="' + type + '">' + new Date().toLocaleTimeString() + ' — ' + msg + '</span><br>'
+      d.scrollTop = d.scrollHeight
+    }
+
+    function clearLog() { document.getElementById('log').innerHTML = '' }
+
+    function urlB64ToUint8(b) {
+      const pad = '='.repeat((4 - b.length % 4) % 4)
+      const raw = atob((b + pad).replace(/-/g,'+').replace(/_/g,'/'))
+      return Uint8Array.from([...raw].map(c => c.charCodeAt(0)))
+    }
+
+    async function testAll() {
+      clearLog()
+
+      // 1. Check support
+      log('1. Checking browser support...')
+      if (!('serviceWorker' in navigator)) { log('❌ Service Worker NOT supported', 'err'); return }
+      log('✅ Service Worker supported', 'ok')
+      if (!('PushManager' in window)) { log('❌ PushManager NOT supported', 'err'); return }
+      log('✅ PushManager supported', 'ok')
+      if (!('Notification' in window)) { log('❌ Notifications NOT supported', 'err'); return }
+      log('✅ Notifications supported', 'ok')
+
+      // 2. Check SW registration
+      log('2. Checking service worker...')
+      try {
+        const regs = await navigator.serviceWorker.getRegistrations()
+        log('SW registrations found: ' + regs.length + (regs.length ? ' (' + regs[0].scope + ')' : ''), regs.length ? 'ok' : 'err')
+        if (!regs.length) { log('❌ No SW registered — sw.js may not be deployed', 'err'); return }
+      } catch(e) { log('❌ SW check failed: ' + e.message, 'err'); return }
+
+      // 3. Request permission
+      log('3. Requesting notification permission...')
+      try {
+        const perm = await Notification.requestPermission()
+        log('Permission result: ' + perm, perm === 'granted' ? 'ok' : 'err')
+        if (perm !== 'granted') { log('❌ Permission not granted', 'err'); return }
+      } catch(e) { log('❌ Permission error: ' + e.message, 'err'); return }
+
+      // 4. Subscribe to push
+      log('4. Subscribing to push...')
+      let sub
+      try {
+        const reg = await navigator.serviceWorker.ready
+        log('SW ready scope: ' + reg.scope, 'ok')
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlB64ToUint8(VAPID)
+        })
+        log('✅ Push subscription created!', 'ok')
+        log('Endpoint: ' + sub.endpoint.substring(0, 80) + '...', 'inf')
+      } catch(e) {
+        log('❌ Push subscribe failed: ' + e.message, 'err')
+        log('Error name: ' + e.name, 'err')
+        return
+      }
+
+      // 5. Save to Supabase
+      log('5. Saving to Supabase...')
+      try {
+        const subJson = sub.toJSON()
+        const res = await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON,
+            'Authorization': 'Bearer ' + SUPABASE_ANON,
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({
+            user_id: null,
+            endpoint: subJson.endpoint,
+            p256dh: subJson.keys?.p256dh,
+            auth: subJson.keys?.auth,
+            user_agent: navigator.userAgent.substring(0, 200),
+            subscribed_at: new Date().toISOString()
+          })
+        })
+        const text = await res.text()
+        if (res.ok) {
+          log('✅ Saved to Supabase! Status: ' + res.status, 'ok')
+          log('Response: ' + text.substring(0, 200), 'ok')
+        } else {
+          log('❌ Supabase error: ' + res.status, 'err')
+          log('Response: ' + text, 'err')
+        }
+      } catch(e) {
+        log('❌ Supabase fetch failed: ' + e.message, 'err')
+      }
+
+      log('✅ Test complete!', 'ok')
+    }
+  </script>
+</body>
+</html>
