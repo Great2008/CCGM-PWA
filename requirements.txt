@@ -1,0 +1,4 @@
+# No external packages needed for the base API
+# Add here as you grow:
+# sendgrid==6.11.0
+# supabase==2.7.4
