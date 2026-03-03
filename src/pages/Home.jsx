@@ -55,6 +55,33 @@ export default function Home() {
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
             <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
           </div>
+
+          {/* Android App Download */}
+          <div style={{marginTop:28,display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
+            <a
+              href="https://github.com/Great2008/CCGM/releases/download/latest/CCGWorld-latest.apk"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display:'inline-flex',alignItems:'center',gap:10,
+                background:'linear-gradient(135deg,#16a34a,#15803d)',
+                border:'none',borderRadius:40,padding:'13px 28px',
+                textDecoration:'none',boxShadow:'0 6px 24px rgba(22,163,74,0.35)',
+                transition:'transform 0.2s,box-shadow 0.2s',
+              }}
+              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 10px 32px rgba(22,163,74,0.45)'}}
+              onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 6px 24px rgba(22,163,74,0.35)'}}
+            >
+              <span style={{fontSize:'1.3rem'}}>🤖</span>
+              <div style={{textAlign:'left'}}>
+                <div style={{fontSize:'0.62rem',color:'rgba(255,255,255,0.75)',letterSpacing:'0.1em',textTransform:'uppercase',lineHeight:1}}>Download for</div>
+                <div style={{fontSize:'0.95rem',fontWeight:900,color:'white',lineHeight:1.3}}>Android APK</div>
+              </div>
+            </a>
+            <div style={{fontSize:'0.68rem',color:'rgba(255,255,255,0.35)',letterSpacing:'0.05em'}}>
+              Free · No Play Store required
+            </div>
+          </div>
           <div style={{marginTop:48,display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',alignItems:'center'}}>
             {isLive ? (
               <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:10,background:'#dc2626',border:'none',borderRadius:40,padding:'10px 24px',textDecoration:'none',animation:'pulse 1.5s infinite'}}>
