@@ -1,0 +1,197 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* CCG World palette — deep navy + electric blue + gold accent */
+  --brand-deep:   #0f1f3d;   /* deep navy */
+  --brand-mid:    #1a3a6b;   /* rich blue */
+  --brand-light:  #2563eb;   /* electric blue */
+  --brand-glow:   #3b82f6;   /* bright blue */
+  --brand-pale:   #eff6ff;   /* ice blue */
+  --gold:         #f59e0b;   /* amber gold */
+  --gold-light:   #fcd34d;
+  --white:        #ffffff;
+  --cream:        #f8fafc;
+  --text-dark:    #0f172a;
+  --text-mid:     #334155;
+  --text-light:   #64748b;
+  --radius-sm:    8px;
+  --radius-md:    14px;
+  --radius-lg:    24px;
+  --shadow-sm:    0 2px 12px rgba(15,31,61,0.08);
+  --shadow-md:    0 8px 32px rgba(15,31,61,0.15);
+  --shadow-lg:    0 24px 64px rgba(15,31,61,0.22);
+  --transition:   0.25s ease;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+  --font-mono:    'Courier New', monospace;
+
+  /* Legacy green aliases — map to brand palette so Bible/Sermons/Events pages render correctly */
+  --green-deep:   #0f1f3d;
+  --green-mid:    #1a3a6b;
+  --green-light:  #3b82f6;
+  --green-pale:   #eff6ff;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.2; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font-body); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--brand-light); border-radius: 6px; }
+
+/* ── Layout ── */
+.container { max-width: 1160px; margin: 0 auto; padding: 0 5%; }
+.section-pad { padding: 90px 0; }
+
+.section-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--brand-glow); display: block; margin-bottom: 8px;
+}
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--brand-deep); margin-bottom: 16px;
+}
+.section-divider {
+  width: 52px; height: 4px;
+  background: linear-gradient(90deg, var(--brand-light), var(--gold));
+  border-radius: 4px; margin-bottom: 28px;
+}
+.section-sub {
+  font-size: 1.05rem; color: var(--text-mid); line-height: 1.8; max-width: 600px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 32px; border-radius: 40px;
+  font-size: 0.88rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-blue {
+  background: var(--brand-light); color: white;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.35);
+}
+.btn-blue:hover { background: var(--brand-mid); box-shadow: 0 8px 28px rgba(26,58,107,0.4); }
+
+.btn-gold {
+  background: var(--gold); color: var(--brand-deep);
+  box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+}
+.btn-gold:hover { background: var(--gold-light); }
+
+.btn-outline-white { border: 2px solid white; color: white; }
+.btn-outline-white:hover { background: white; color: var(--brand-deep); }
+
+.btn-outline-blue { border: 2px solid var(--brand-light); color: var(--brand-light); }
+.btn-outline-blue:hover { background: var(--brand-light); color: white; }
+
+/* keep green aliases for admin panel */
+.btn-green { background: var(--brand-light); color: white; box-shadow: 0 4px 20px rgba(37,99,235,0.35); }
+.btn-green:hover { background: var(--brand-mid); }
+.btn-outline-green { border: 2px solid var(--brand-light); color: var(--brand-light); }
+.btn-outline-green:hover { background: var(--brand-light); color: white; }
+
+/* ── Card ── */
+.card {
+  background: white; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+/* ── Tag ── */
+.tag {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+  background: var(--brand-pale); color: var(--brand-light); display: inline-block;
+}
+
+/* ── Forms ── */
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block; font-size: 0.82rem; font-weight: 700;
+  color: var(--text-dark); margin-bottom: 6px; letter-spacing: 0.04em;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 11px 16px;
+  border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.92rem;
+  background: white; color: var(--text-dark);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none; box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--brand-light);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .section-pad { padding: 56px 0; }
+  .section-title { font-size: 1.7rem; }
+  .btn { padding: 11px 22px; font-size: 0.82rem; }
+}
+@media (max-width: 600px) {
+  html { font-size: 15px; }
+  .container { padding: 0 4%; }
+}
+@media (max-width: 960px) { .desktop-nav { display: none !important; } .hamburger { display: flex !important; } }
+@media (min-width: 961px) { .hamburger { display: none !important; } }
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE — Global Additions
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll */
+  body { overflow-x: hidden; }
+  section, .container { overflow-x: hidden; }
+
+  /* ── Bible reader ── */
+  .bible-reader-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Devotional two-col ── */
+  .dev-layout { grid-template-columns: 1fr !important; }
+
+  /* ── Hymnal two-col ── */
+  .hymnal-layout { grid-template-columns: 1fr !important; }
+
+  /* ── About ── */
+  .about-mission-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .about-values-grid  { grid-template-columns: 1fr !important; }
+
+  /* ── Contact ── */
+  .contact-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+
+  /* ── Blog featured card ── */
+  .blog-featured-card { grid-template-columns: 1fr !important; }
+
+  /* ── General card padding ── */
+  .card { border-radius: 12px; }
+}
+
+@media (max-width: 480px) {
+  .btn { padding: 10px 18px !important; font-size: 0.8rem !important; }
+  .hero-ctas { flex-direction: column !important; align-items: center !important; }
+  .hero-ctas a { width: 100%; max-width: 280px; justify-content: center !important; }
+}
+
