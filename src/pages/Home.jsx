@@ -59,7 +59,7 @@ export default function Home() {
           {/* Android App Download */}
           <div style={{marginTop:28,display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
             <a
-              href="https://github.com/Great2008/CCGM/releases/download/latest/CCGWorld-latest.apk"
+              href={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/apk/CCGWorld-latest.apk`}
               target="_blank"
               rel="noreferrer"
               style={{
