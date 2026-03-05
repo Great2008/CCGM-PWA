@@ -6,7 +6,7 @@ import AdminCard from '../components/AdminCard'
 
 const EMPTY = {
   title:'', lesson_date:'', quarter:'', scripture:'', author:'',
-  summary:'', body:'', pdf_url:'', discussion_questions:'',
+  summary:'', body:'', pdf_url:'', discussion_questions:'', analysis:'', analysis_points:'',
   divine_message_speaker:'', divine_message_title:'', divine_message_scripture:'', divine_message_notes:'',
   evening_speaker:'', evening_title:'', evening_scripture:'', evening_notes:'',
   published:true
@@ -92,6 +92,19 @@ export default function AdminSabbath() {
             </div>
           )}
 
+          {form.analysis&&(
+            <div style={{marginTop:24,background:'var(--brand-pale)',borderRadius:10,padding:'16px 20px',border:'1.5px solid var(--brand-light)'}}>
+              <strong style={{color:'var(--brand-deep)'}}>🔍 Detailed Analysis</strong>
+              <div style={{marginTop:10,lineHeight:1.9,color:'var(--text-dark)',fontSize:'0.92rem'}}>{form.analysis.split('\n\n').map((p,i)=>(<p key={i} style={{marginBottom:12}}>{p}</p>))}</div>
+            </div>
+          )}
+          {form.analysis_points&&(
+            <div style={{marginTop:12,background:'#f0fdf4',borderRadius:10,padding:'16px 20px',border:'1.5px solid #bbf7d0'}}>
+              <strong style={{color:'#166534'}}>📌 Key Points</strong>
+              <div style={{marginTop:10}}>{form.analysis_points.split('\n').filter(Boolean).map((p,i)=><div key={i} style={{marginBottom:8,color:'var(--text-dark)'}}>{i+1}. {p.replace(/^\d+\.\s*/,'')}</div>)}</div>
+            </div>
+          )}
+
           {/* Divine Service Preview */}
           {(form.divine_message_title||form.divine_message_speaker)&&(
             <div style={{marginTop:24,background:'linear-gradient(135deg,var(--brand-pale),#f0f7ff)',borderRadius:12,padding:'18px 22px',border:'1.5px solid #bfdbfe'}}>
@@ -169,6 +182,22 @@ export default function AdminSabbath() {
               <label>Discussion Questions <span style={{fontWeight:400,fontSize:'0.75rem',color:'var(--text-light)'}}>One per line</span></label>
               <textarea {...F('discussion_questions')} rows={5} style={{resize:'vertical'}}
                 placeholder={"1. What does this lesson teach us about God's grace?\n2. How can you apply this in daily life?"} />
+            </div>
+
+            <div className="form-group" style={{gridColumn:'1/-1'}}>
+              <label>
+                Detailed Analysis
+                <span style={{fontWeight:400,fontSize:'0.75rem',color:'var(--text-light)',marginLeft:8}}>
+                  In-depth commentary and study notes. Use ## for headings, blank line between paragraphs
+                </span>
+              </label>
+              <textarea {...F('analysis')} rows={10} style={{resize:'vertical',fontFamily:'monospace',fontSize:'0.88rem',lineHeight:1.7}}
+                placeholder={"## Overview\n\nDetailed analysis here...\n\n## Key Themes\n\nMore analysis..."} />
+            </div>
+            <div className="form-group" style={{gridColumn:'1/-1'}}>
+              <label>Key Points <span style={{fontWeight:400,fontSize:'0.75rem',color:'var(--text-light)'}}>One per line — shown as numbered list in Analysis tab</span></label>
+              <textarea {...F('analysis_points')} rows={5} style={{resize:'vertical'}}
+                placeholder={"1. God's covenant is eternal\n2. Sabbath is a sign of sanctification\n3. Rest is a spiritual discipline"} />
             </div>
 
             {/* Divine Service Message */}
