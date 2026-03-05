@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { PullToRefresh } from '../hooks/usePullToRefresh.jsx'
 import supabase from '../lib/supabase'
 
 const CACHE_KEY = 'ccg-sabbath-lessons'
@@ -122,8 +121,7 @@ export default function SabbathSchool() {
   ]
 
   return (
-    <PullToRefresh onRefresh={refresh}>
-      <div>
+    <div>
         {offline && lessons.length > 0 && (
           <div style={{background:'#fff9f0',borderBottom:'2px solid #fed7aa',padding:'10px 20px',textAlign:'center',fontSize:'0.82rem',color:'#c2410c',fontWeight:600}}>
             Offline — showing {lessons.length} cached lesson{lessons.length !== 1 ? 's' : ''}
@@ -470,7 +468,6 @@ export default function SabbathSchool() {
             </div>
           </div>
         </div>
-      </div>
-    </PullToRefresh>
+    </div>
   )
 }
