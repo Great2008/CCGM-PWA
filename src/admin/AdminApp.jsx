@@ -17,12 +17,14 @@ import AdminAnalytics from './pages/AdminAnalytics'
 import AdminEmail    from './pages/AdminEmail'
 import AdminRegistrations from './pages/AdminRegistrations'
 import AdminNotifications from './pages/AdminNotifications'
+import AdminStudio from './pages/AdminStudio'
 
 export const AdminContext = createContext(null)
 export const useAdmin = () => useContext(AdminContext)
 
 const NAV = [
   ['dashboard', '📊', 'Dashboard'],
+  ['studio',    '🎬', 'CCG Studio'],
   ['sermons',   '🎙', 'Sermons'],
   ['events',    '📅', 'Events'],
   ['blog',      '✍️', 'Blog & Devotionals'],
@@ -39,7 +41,7 @@ const NAV = [
   ['registrations','📋','Registrations'],
   ['notifications','🔔','Push Notifications'],
 ]
-const PAGES = { dashboard:AdminDashboard, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
@@ -47,6 +49,7 @@ export default function AdminApp() {
   const [page, setPage] = useState('dashboard')
   const [toast, setToast] = useState(null)
   const [sideOpen, setSideOpen] = useState(false)
+  const [pendingCount, setPendingCount] = useState(0)
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -58,6 +61,18 @@ export default function AdminApp() {
     })
   }, [])
 
+  // Poll for pending studio submissions every 60s
+  useEffect(() => {
+    if (!authed) return
+    const check = async () => {
+      const { count } = await supabase.from('studio_items').select('*', { count: 'exact', head: true }).eq('status', 'pending')
+      setPendingCount(count || 0)
+    }
+    check()
+    const interval = setInterval(check, 60000)
+    return () => clearInterval(interval)
+  }, [authed])
+
   const showToast = (msg, type='success') => { setToast({msg,type}); setTimeout(()=>setToast(null), 3500) }
   const logout = () => { supabase.auth.signOut(); setAuthed(false) }
 
@@ -66,7 +81,7 @@ export default function AdminApp() {
 
   const Page = PAGES[page] || AdminDashboard
   return (
-    <AdminContext.Provider value={{ showToast, setPage }}>
+    <AdminContext.Provider value={{ showToast, setPage, pendingCount }}>
       <div style={{ display:'flex', minHeight:'100vh', fontFamily:'var(--font-body)', background:'#f0f4fa' }}>
         {/* Mobile overlay */}
         {sideOpen&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:99 }} onClick={()=>setSideOpen(false)} />}
@@ -99,7 +114,12 @@ export default function AdminApp() {
                 transition:'all 0.2s',
               }}>
                 <span style={{ fontSize:'1rem', width:20, textAlign:'center' }}>{icon}</span>
-                {label}
+                <span style={{ flex:1 }}>{label}</span>
+                {id === 'studio' && pendingCount > 0 && (
+                  <span style={{ background:'#f59e0b', color:'#0f1f3d', fontSize:'0.62rem', fontWeight:900, padding:'2px 7px', borderRadius:10, minWidth:18, textAlign:'center' }}>
+                    {pendingCount}
+                  </span>
+                )}
               </button>
             ))}
           </nav>

@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { to:'/',         label:'Home' },
   { to:'/sermons',  label:'Sermons' },
   { to:'/events',   label:'Events' },
+  { to:'/studio',   label:'🎬 Studio' },
   { to:'/about',    label:'About' },
   { to:'/blog',     label:'Blog' },
   { to:'/gallery',  label:'Gallery' },
