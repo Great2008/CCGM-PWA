@@ -30,13 +30,26 @@ function fmt(d) {
 function thisWeekLesson(lessons) {
   if (!lessons?.length) return null
   const today = new Date(); today.setHours(0,0,0,0)
+  // Find this week's Saturday (day 6). If today IS Saturday use today.
+  const thisSaturday = new Date(today)
+  const dayOfWeek = today.getDay() // 0=Sun,1=Mon,...,6=Sat
+  const daysUntilSaturday = dayOfWeek === 6 ? 0 : 6 - dayOfWeek
+  thisSaturday.setDate(today.getDate() + daysUntilSaturday)
+  thisSaturday.setHours(0,0,0,0)
+
+  // Try to find a lesson whose date matches this week's Saturday exactly
+  const thisWeek = lessons.find(l =>
+    new Date(l.lesson_date + 'T00:00:00').getTime() === thisSaturday.getTime()
+  )
+  if (thisWeek) return thisWeek
+
+  // Fallback: pick the closest lesson to today's date (past preferred)
   const todayMs = today.getTime()
-  // Sort by how close lesson_date is to today (past dates preferred over future)
   return [...lessons].sort((a, b) => {
     const aMs = new Date(a.lesson_date + 'T00:00:00').getTime()
     const bMs = new Date(b.lesson_date + 'T00:00:00').getTime()
-    const aDiff = aMs <= todayMs ? todayMs - aMs : (aMs - todayMs) * 10 // penalise future
-    const bDiff = bMs <= todayMs ? todayMs - bMs : (bMs - todayMs) * 10
+    const aDiff = aMs <= todayMs ? todayMs - aMs : (aMs - todayMs) * 2
+    const bDiff = bMs <= todayMs ? todayMs - bMs : (bMs - todayMs) * 2
     return aDiff - bDiff
   })[0]
 }
