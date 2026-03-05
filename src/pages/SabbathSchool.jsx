@@ -185,6 +185,9 @@ export default function SabbathSchool() {
           .ss-desktop-sidebar { display: none !important; }
           .ss-mobile-bar { display: flex !important; }
           .ss-content-wrap { display: block !important; }
+          .ss-outer { padding: 0 0 60px 0 !important; }
+          .ss-card { border-radius: 0 !important; border-left: none !important; border-right: none !important; box-shadow: none !important; }
+          .ss-hero { padding-left: 16px !important; padding-right: 16px !important; }
         }
         @media (min-width: 769px) {
           .ss-mobile-bar { display: none !important; }
@@ -201,7 +204,7 @@ export default function SabbathSchool() {
       )}
 
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(90px,14vw,130px) 5% 56px', textAlign: 'center' }}>
+      <div className="ss-hero" style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(90px,14vw,130px) 5% 56px', textAlign: 'center' }}>
         <span className="section-label">Every Saturday</span>
         <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2rem,5vw,3rem)', color: 'white', margin: '8px 0 16px' }}>
           Sabbath School
@@ -293,7 +296,7 @@ export default function SabbathSchool() {
       )}
 
       {/* ── MAIN LAYOUT ── */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 4% 80px' }}>
+      <div className="ss-outer" style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 4% 80px' }}>
         <div className="ss-content-wrap" style={{ display: 'block' }}>
 
           {/* Desktop Sidebar */}
@@ -338,7 +341,7 @@ export default function SabbathSchool() {
                 <div style={{ color: 'var(--text-light)' }}>Select a lesson to read</div>
               </div>
             ) : (
-              <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden' }}>
+              <div className="ss-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden' }}>
 
                 {/* Lesson Header */}
                 <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
