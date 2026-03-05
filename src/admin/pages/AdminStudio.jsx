@@ -9,13 +9,15 @@ const EMPTY = { type: 'video', title: '', media_url: '', thumbnail_url: '', cate
 
 export default function AdminStudio() {
   const { showToast } = useAdmin()
-  const [items, setItems]       = useState([])
-  const [pending, setPending]   = useState([])
-  const [form, setForm]         = useState(null)
-  const [saving, setSaving]     = useState(false)
-  const [loading, setLoading]   = useState(true)
-  const [tab, setTab]           = useState('all')   // all | pending
-  const [delId, setDelId]       = useState(null)
+  const [items, setItems]         = useState([])
+  const [pending, setPending]     = useState([])
+  const [form, setForm]           = useState(null)
+  const [saving, setSaving]       = useState(false)
+  const [loading, setLoading]     = useState(true)
+  const [tab, setTab]             = useState('all')
+  const [delId, setDelId]         = useState(null)
+  const [rejectTarget, setRejectTarget] = useState(null)  // item being rejected
+  const [rejectReason, setRejectReason] = useState('')
 
   const load = async () => {
     const [{ data: all }, { data: pend }] = await Promise.all([
@@ -49,11 +51,24 @@ export default function AdminStudio() {
     else showToast(error.message, 'error')
   }
 
-  const reject = async (item) => {
-    if (!window.confirm(`Reject "${item.title}"? This cannot be undone.`)) return
-    const { error } = await supabaseAdmin.from('studio_items').update({ status: 'rejected', published: false }).eq('id', item.id)
-    if (!error) { showToast(`"${item.title}" rejected.`, 'error'); load() }
+  const openReject = (item) => {
+    setRejectTarget(item)
+    setRejectReason('')
+  }
+
+  const confirmReject = async () => {
+    if (!rejectTarget) return
+    setSaving(true)
+    const { error } = await supabaseAdmin.from('studio_items').update({
+      status: 'rejected',
+      published: false,
+      rejection_reason: rejectReason.trim() || null,
+    }).eq('id', rejectTarget.id)
+    if (!error) { showToast(`"${rejectTarget.title}" rejected.`, 'error'); load() }
     else showToast(error.message, 'error')
+    setSaving(false)
+    setRejectTarget(null)
+    setRejectReason('')
   }
 
   const handleDelete = async () => {
@@ -178,7 +193,7 @@ export default function AdminStudio() {
               </div>
               <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
                 <button onClick={() => approve(item)} style={{ padding: '8px 18px', borderRadius: 8, border: 'none', background: '#16a34a', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.82rem' }}>✓ Approve</button>
-                <button onClick={() => reject(item)} style={{ padding: '8px 18px', borderRadius: 8, border: '1.5px solid #fca5a5', background: 'white', color: '#dc2626', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.82rem' }}>✗ Reject</button>
+                <button onClick={() => openReject(item)} style={{ padding: '8px 18px', borderRadius: 8, border: '1.5px solid #fca5a5', background: 'white', color: '#dc2626', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.82rem' }}>✗ Reject</button>
                 <button onClick={() => setForm({ ...item })} style={{ padding: '8px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.82rem' }}>✏️</button>
               </div>
             </AdminCard>
@@ -214,6 +229,49 @@ export default function AdminStudio() {
               </div>
             </AdminCard>
           ))}
+        </div>
+      )}
+
+      {/* ── REJECTION REASON MODAL ── */}
+      {rejectTarget && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div style={{ background: 'white', borderRadius: 16, padding: 32, maxWidth: 440, width: '100%' }}>
+            <div style={{ fontSize: '2rem', marginBottom: 12, textAlign: 'center' }}>✗</div>
+            <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', marginBottom: 4, textAlign: 'center' }}>Reject Submission</h3>
+            <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', marginBottom: 20, textAlign: 'center', lineHeight: 1.6 }}>
+              Tell <strong>{rejectTarget.title}</strong>'s submitter why their content was rejected so they can improve or resubmit.
+            </p>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: 6, letterSpacing: '0.05em' }}>
+                Reason for rejection <span style={{ color: 'var(--text-light)', fontWeight: 400 }}>(optional but recommended)</span>
+              </label>
+              <textarea
+                value={rejectReason}
+                onChange={e => setRejectReason(e.target.value)}
+                rows={4}
+                placeholder="e.g. Audio quality is too low. Please re-record with a better microphone and resubmit."
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.88rem', resize: 'vertical', boxSizing: 'border-box', lineHeight: 1.6, outline: 'none' }}
+                autoFocus
+              />
+              {!rejectReason.trim() && (
+                <div style={{ marginTop: 6, fontSize: '0.75rem', color: '#f59e0b', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  ⚠ Submitter won't know why their content was rejected without a reason.
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={confirmReject} disabled={saving}
+                style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#dc2626', color: 'white', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.9rem', opacity: saving ? 0.7 : 1 }}>
+                {saving ? '⏳ Rejecting...' : '✗ Confirm Rejection'}
+              </button>
+              <button onClick={() => { setRejectTarget(null); setRejectReason('') }}
+                style={{ flex: 1, padding: '11px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, color: 'var(--text-mid)', fontSize: '0.9rem' }}>
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

@@ -226,7 +226,7 @@ export default function Studio() {
 
   const loadMySubmissions = async () => {
     if (!user) return
-    const { data } = await supabase.from('studio_items').select('id,title,type,status,date').eq('submitted_by', user.id).order('created_at', { ascending: false })
+    const { data } = await supabase.from('studio_items').select('id,title,type,status,date,rejection_reason').eq('submitted_by', user.id).order('created_at', { ascending: false })
     setMySubmissions(data || [])
   }
 
@@ -291,16 +291,32 @@ export default function Studio() {
             <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 12 }}>My Submissions</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {mySubmissions.map(s => (
-                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 16px' }}>
-                  <span style={{ fontSize: '0.8rem' }}>{s.type === 'video' ? '🎬' : '🎵'}</span>
-                  <span style={{ flex: 1, color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>{s.title}</span>
-                  <span style={{
-                    fontSize: '0.68rem', fontWeight: 900, padding: '3px 10px', borderRadius: 20, letterSpacing: '0.1em', textTransform: 'uppercase',
-                    background: s.status === 'published' ? 'rgba(34,197,94,0.15)' : s.status === 'rejected' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)',
-                    color: s.status === 'published' ? '#4ade80' : s.status === 'rejected' ? '#f87171' : 'var(--gold)',
-                  }}>
-                    {s.status === 'published' ? '✓ Live' : s.status === 'rejected' ? '✗ Rejected' : '⏳ Pending'}
-                  </span>
+                <div key={s.id} style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${s.status === 'rejected' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.08)'}`, borderRadius: 10, overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px' }}>
+                    <span style={{ fontSize: '0.8rem' }}>{s.type === 'video' ? '🎬' : '🎵'}</span>
+                    <span style={{ flex: 1, color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>{s.title}</span>
+                    <span style={{
+                      fontSize: '0.68rem', fontWeight: 900, padding: '3px 10px', borderRadius: 20, letterSpacing: '0.1em', textTransform: 'uppercase', flexShrink: 0,
+                      background: s.status === 'published' ? 'rgba(34,197,94,0.15)' : s.status === 'rejected' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)',
+                      color: s.status === 'published' ? '#4ade80' : s.status === 'rejected' ? '#f87171' : 'var(--gold)',
+                    }}>
+                      {s.status === 'published' ? '✓ Live' : s.status === 'rejected' ? '✗ Rejected' : '⏳ Pending'}
+                    </span>
+                  </div>
+                  {s.status === 'rejected' && s.rejection_reason && (
+                    <div style={{ padding: '10px 16px 12px', borderTop: '1px solid rgba(239,68,68,0.15)', background: 'rgba(239,68,68,0.05)', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: '0.85rem', flexShrink: 0 }}>💬</span>
+                      <div>
+                        <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#f87171', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Admin's Reason</div>
+                        <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>{s.rejection_reason}</div>
+                      </div>
+                    </div>
+                  )}
+                  {s.status === 'rejected' && !s.rejection_reason && (
+                    <div style={{ padding: '8px 16px 10px', borderTop: '1px solid rgba(239,68,68,0.15)', background: 'rgba(239,68,68,0.05)', fontSize: '0.78rem', color: 'rgba(255,255,255,0.3)', fontStyle: 'italic' }}>
+                      No reason provided. Contact an admin for more details.
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
