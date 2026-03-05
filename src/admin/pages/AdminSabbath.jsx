@@ -20,6 +20,44 @@ function dateToQuarter(dateStr) {
   return `Q${q} ${d.getFullYear()}`
 }
 
+
+// Parses body/analysis text line by line — ## → h3, # → h4
+function parseBlocks(text) {
+  if (!text) return []
+  const lines = text.split('\n')
+  const blocks = []
+  let paraLines = []
+  const flushPara = () => {
+    const joined = paraLines.join(' ').trim()
+    if (joined) blocks.push(joined)
+    paraLines = []
+  }
+  lines.forEach(line => {
+    const trimmed = line.trim()
+    if (/^##/.test(trimmed) && trimmed.length > 2) {
+      flushPara(); blocks.push(trimmed)
+    } else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) {
+      flushPara(); blocks.push(trimmed)
+    } else if (trimmed === '') {
+      flushPara()
+    } else {
+      paraLines.push(trimmed)
+    }
+  })
+  flushPara()
+  return blocks.filter(Boolean)
+}
+
+function renderBlocks(text, baseStyle = {}) {
+  return parseBlocks(text).map((para, i) => (
+    /^##/.test(para)
+      ? <h3 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.1rem',margin:'20px 0 8px',borderBottom:'2px solid var(--brand-pale)',paddingBottom:4}}>{para.replace(/^##\s*/,'')}</h3>
+      : /^#/.test(para)
+      ? <h4 key={i} style={{color:'var(--brand-light)',fontSize:'1rem',margin:'16px 0 6px',fontWeight:700}}>{para.replace(/^#\s*/,'')}</h4>
+      : <p key={i} style={{lineHeight:1.9,color:'var(--text-dark)',marginBottom:14,...baseStyle}}>{para}</p>
+  ))
+}
+
 export default function AdminSabbath() {
   const { showToast } = useAdmin()
   const [items, setItems]   = useState([])
@@ -80,11 +118,7 @@ export default function AdminSabbath() {
           {form.scripture&&<div style={{background:'var(--gold)',display:'inline-block',color:'white',padding:'5px 14px',borderRadius:20,fontSize:'0.82rem',fontWeight:700,marginBottom:16}}>📜 {form.scripture}</div>}
           <div style={{color:'var(--text-light)',fontSize:'0.82rem',marginBottom:20}}>📅 {form.lesson_date}{form.author&&` · ${form.author}`}</div>
           {form.summary&&<div style={{background:'var(--brand-pale)',borderLeft:'4px solid var(--brand-light)',borderRadius:'0 10px 10px 0',padding:'14px 18px',marginBottom:24,fontStyle:'italic',color:'var(--brand-deep)',lineHeight:1.8}}>{form.summary}</div>}
-          {form.body&&form.body.split('\n\n').map((p,i)=>(
-            p.startsWith('##') ? <h3 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.1rem',margin:'20px 0 8px'}}>{p.replace(/^##\s*/,'')}</h3>
-            : p.startsWith('#') ? <h4 key={i} style={{color:'var(--brand-light)',fontSize:'1rem',margin:'16px 0 6px',fontWeight:700}}>{p.replace(/^#\s*/,'')}</h4>
-            : <p key={i} style={{lineHeight:1.9,color:'var(--text-dark)',marginBottom:16}}>{p}</p>
-          ))}
+          {form.body && renderBlocks(form.body)}
           {form.discussion_questions&&(
             <div style={{marginTop:24,background:'#fffbf0',borderRadius:10,padding:'16px 20px',border:'1.5px solid #fcd34d'}}>
               <strong style={{color:'#92400e'}}>💬 Discussion Questions</strong>
@@ -95,7 +129,7 @@ export default function AdminSabbath() {
           {form.analysis&&(
             <div style={{marginTop:24,background:'var(--brand-pale)',borderRadius:10,padding:'16px 20px',border:'1.5px solid var(--brand-light)'}}>
               <strong style={{color:'var(--brand-deep)'}}>🔍 Detailed Analysis</strong>
-              <div style={{marginTop:10,lineHeight:1.9,color:'var(--text-dark)',fontSize:'0.92rem'}}>{form.analysis.split('\n\n').map((p,i)=>(<p key={i} style={{marginBottom:12}}>{p}</p>))}</div>
+              <div style={{marginTop:10}}>{renderBlocks(form.analysis, {fontSize:'0.92rem'})}</div>
             </div>
           )}
           {form.analysis_points&&(

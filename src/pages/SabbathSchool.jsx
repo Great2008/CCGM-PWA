@@ -34,6 +34,50 @@ function thisWeekLesson(lessons) {
   return lessons.sort((a,b) => new Date(a.lesson_date) - new Date(b.lesson_date))[0]
 }
 
+
+function renderContent(text) {
+  if (!text) return null
+  // Split into lines first
+  const lines = text.split('\n')
+  const elements = []
+  let paraLines = []
+  let key = 0
+
+  const flushPara = () => {
+    if (paraLines.length === 0) return
+    const text = paraLines.join(' ').trim()
+    if (text) {
+      elements.push(<p key={key++} style={{marginBottom:18,lineHeight:1.9,color:'var(--text-dark)',fontSize:'0.95rem'}}>{text}</p>)
+    }
+    paraLines = []
+  }
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (trimmed.startsWith('## ') || trimmed === '##') {
+      flushPara()
+      elements.push(
+        <h3 key={key++} style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.15rem',margin:'28px 0 12px',borderBottom:'2px solid var(--brand-pale)',paddingBottom:6}}>
+          {trimmed.replace(/^##\s*/, '')}
+        </h3>
+      )
+    } else if (trimmed.startsWith('# ') || trimmed === '#') {
+      flushPara()
+      elements.push(
+        <h4 key={key++} style={{fontFamily:'var(--font-display)',color:'var(--brand-light)',fontSize:'1rem',margin:'20px 0 8px',fontWeight:700}}>
+          {trimmed.replace(/^#\s*/, '')}
+        </h4>
+      )
+    } else if (trimmed === '') {
+      flushPara()
+    } else {
+      paraLines.push(trimmed)
+    }
+  }
+  flushPara()
+  return elements
+}
+
 export default function SabbathSchool() {
   const [lessons, setLessons]   = useState([])
   const [selected, setSelected] = useState(null)
@@ -113,6 +157,39 @@ export default function SabbathSchool() {
       </div>
     </div>
   )
+
+
+  // Parses body/analysis text line by line
+  // ## Heading → h3, # Heading → h4, blank line → paragraph break
+  const parseBlocks = (text) => {
+    if (!text) return []
+    const lines = text.split('\n')
+    const blocks = []
+    let paraLines = []
+
+    const flushPara = () => {
+      const joined = paraLines.join(' ').trim()
+      if (joined) blocks.push(joined)
+      paraLines = []
+    }
+
+    lines.forEach(line => {
+      const trimmed = line.trim()
+      if (/^##/.test(trimmed) && trimmed.length > 2) {
+        flushPara()
+        blocks.push(trimmed)
+      } else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) {
+        flushPara()
+        blocks.push(trimmed)
+      } else if (trimmed === '') {
+        flushPara()
+      } else {
+        paraLines.push(trimmed)
+      }
+    })
+    flushPara()
+    return blocks.filter(Boolean)
+  }
 
   const tabs = [
     { id: 'lesson',    label: 'Lesson',    icon: 'book' },
@@ -280,12 +357,12 @@ export default function SabbathSchool() {
                         )}
                         {selected.body ? (
                           <div style={{lineHeight:1.9,color:'var(--text-dark)',fontSize:'0.95rem'}}>
-                            {selected.body.split('\n\n').map((para,i) => (
-                              para.startsWith('##') ? (
+                            {parseBlocks(selected.body).map((para,i) => (
+                              /^##/.test(para) ? (
                                 <h3 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.15rem',margin:'28px 0 12px',borderBottom:'2px solid var(--brand-pale)',paddingBottom:6}}>
                                   {para.replace(/^##\s*/,'')}
                                 </h3>
-                              ) : para.startsWith('#') ? (
+                              ) : /^#/.test(para) ? (
                                 <h4 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-light)',fontSize:'1rem',margin:'20px 0 8px',fontWeight:700}}>
                                   {para.replace(/^#\s*/,'')}
                                 </h4>
@@ -333,12 +410,12 @@ export default function SabbathSchool() {
 
                         {selected.analysis ? (
                           <div style={{lineHeight:1.9,color:'var(--text-dark)',fontSize:'0.95rem'}}>
-                            {selected.analysis.split('\n\n').map((para,i) => (
-                              para.startsWith('##') ? (
+                            {parseBlocks(selected.analysis).map((para,i) => (
+                              /^##/.test(para) ? (
                                 <h3 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.15rem',margin:'28px 0 12px',borderBottom:'2px solid var(--brand-pale)',paddingBottom:6}}>
                                   {para.replace(/^##\s*/,'')}
                                 </h3>
-                              ) : para.startsWith('#') ? (
+                              ) : /^#/.test(para) ? (
                                 <h4 key={i} style={{fontFamily:'var(--font-display)',color:'var(--brand-light)',fontSize:'1rem',margin:'20px 0 8px',fontWeight:700}}>
                                   {para.replace(/^#\s*/,'')}
                                 </h4>
