@@ -84,10 +84,11 @@ function AudioPlayer({ src }) {
 function StudioCard({ item, onClick }) {
   const ytId = getYouTubeId(item.media_url)
   const thumb = item.thumbnail_url || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null)
+  const isClickable = item.type === 'video' || ytId  // music with YT link opens modal too
 
   return (
-    <div onClick={() => item.type === 'video' && onClick(item)}
-      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden', cursor: item.type === 'video' ? 'pointer' : 'default', transition: 'transform 0.2s, border-color 0.2s', }}
+    <div onClick={() => isClickable && onClick(item)}
+      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden', cursor: isClickable ? 'pointer' : 'default', transition: 'transform 0.2s, border-color 0.2s' }}
       onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(245,158,11,0.4)' }}
       onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}>
 
@@ -100,7 +101,7 @@ function StudioCard({ item, onClick }) {
             {item.type === 'video' ? '🎬' : '🎵'}
           </div>
         )}
-        {item.type === 'video' && (
+        {isClickable && (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)', opacity: 0, transition: 'opacity 0.2s' }}
             onMouseEnter={e => e.currentTarget.style.opacity = 1}
             onMouseLeave={e => e.currentTarget.style.opacity = 0}>
@@ -122,7 +123,8 @@ function StudioCard({ item, onClick }) {
         {item.series && <div style={{ fontSize: '0.74rem', color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>📂 {item.series}</div>}
         {item.description && <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, marginBottom: 8, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.description}</p>}
         <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)' }}>{item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}</div>
-        {item.type === 'music' && item.media_url && <AudioPlayer src={item.media_url} />}
+        {/* Only show HTML5 audio player for non-YouTube direct audio links */}
+        {item.type === 'music' && item.media_url && !ytId && <AudioPlayer src={item.media_url} />}
       </div>
     </div>
   )
@@ -312,24 +314,34 @@ export default function Studio() {
               <span style={{ color: 'var(--gold)', fontSize: '0.72rem', fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase' }}>★ Featured</span>
             </div>
             <div className="studio-featured-inner" style={{ display: 'flex', gap: 0 }}>
-              <div style={{ flex: '0 0 55%', position: 'relative', paddingBottom: '31%', background: '#000', cursor: featured.type === 'video' ? 'pointer' : 'default' }}
-                onClick={() => featured.type === 'video' && setPlayingItem(featured)}>
-                {featuredThumb && <img src={featuredThumb} alt={featured.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />}
-                {featured.type === 'video' && (
-                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(245,158,11,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', boxShadow: '0 0 40px rgba(245,158,11,0.4)' }}>▶</div>
-                  </div>
-                )}
-              </div>
-              <div style={{ flex: 1, padding: 'clamp(20px,3vw,32px)' }}>
-                <div style={{ fontSize: '0.68rem', color: 'var(--gold)', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8 }}>{featured.category}</div>
-                <h2 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(1.1rem,2.5vw,1.6rem)', lineHeight: 1.3, marginBottom: 10 }}>{featured.title}</h2>
-                {featured.series && <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>📂 {featured.series}</div>}
-                {featured.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', lineHeight: 1.7, marginBottom: 16 }}>{featured.description}</p>}
-                {featured.type === 'video' ? (
-                  <button onClick={() => setPlayingItem(featured)} style={{ background: 'var(--gold)', color: 'var(--brand-deep)', border: 'none', borderRadius: 30, padding: '10px 24px', fontWeight: 900, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>▶ Watch Now</button>
-                ) : featured.media_url ? <AudioPlayer src={featured.media_url} /> : null}
-              </div>
+              {(() => {
+                const fytId = getYouTubeId(featured.media_url)
+                const featuredClickable = featured.type === 'video' || !!fytId
+                return (
+                  <>
+                    <div style={{ flex: '0 0 55%', position: 'relative', paddingBottom: '31%', background: '#000', cursor: featuredClickable ? 'pointer' : 'default' }}
+                      onClick={() => featuredClickable && setPlayingItem(featured)}>
+                      {featuredThumb && <img src={featuredThumb} alt={featured.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />}
+                      {featuredClickable && (
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(245,158,11,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', boxShadow: '0 0 40px rgba(245,158,11,0.4)' }}>▶</div>
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ flex: 1, padding: 'clamp(20px,3vw,32px)' }}>
+                      <div style={{ fontSize: '0.68rem', color: 'var(--gold)', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8 }}>{featured.category}</div>
+                      <h2 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(1.1rem,2.5vw,1.6rem)', lineHeight: 1.3, marginBottom: 10 }}>{featured.title}</h2>
+                      {featured.series && <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>📂 {featured.series}</div>}
+                      {featured.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', lineHeight: 1.7, marginBottom: 16 }}>{featured.description}</p>}
+                      {featuredClickable ? (
+                        <button onClick={() => setPlayingItem(featured)} style={{ background: 'var(--gold)', color: 'var(--brand-deep)', border: 'none', borderRadius: 30, padding: '10px 24px', fontWeight: 900, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>
+                          {featured.type === 'video' ? '▶ Watch Now' : '▶ Play Now'}
+                        </button>
+                      ) : featured.media_url ? <AudioPlayer src={featured.media_url} /> : null}
+                    </div>
+                  </>
+                )
+              })()}
             </div>
           </div>
         )}
