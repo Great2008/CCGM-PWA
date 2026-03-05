@@ -25,7 +25,7 @@ function AppInner() {
   return (
     <>
       <Navbar />
-      <main>
+      <main style={{ overflowX: 'hidden' }}>
         <Routes>
           <Route path="/"           element={<Home />} />
           <Route path="/sermons"    element={<Sermons />} />

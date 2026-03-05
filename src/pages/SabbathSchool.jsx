@@ -179,15 +179,16 @@ export default function SabbathSchool() {
   const nextLesson = filtered[lessonIdx - 1]
 
   return (
-    <div>
+    <div style={{ overflowX: 'hidden', width: '100%' }}>
       <style>{`
         @media (max-width: 768px) {
           .ss-desktop-sidebar { display: none !important; }
           .ss-mobile-bar { display: flex !important; }
           .ss-content-wrap { display: block !important; }
-          .ss-outer { padding: 0 0 60px 0 !important; }
+          .ss-outer { padding: 0 0 60px 0 !important; max-width: 100% !important; }
           .ss-card { border-radius: 0 !important; border-left: none !important; border-right: none !important; box-shadow: none !important; }
           .ss-hero { padding-left: 16px !important; padding-right: 16px !important; }
+          .ss-mobile-bar { left: 0 !important; right: 0 !important; width: 100% !important; box-sizing: border-box !important; }
         }
         @media (min-width: 769px) {
           .ss-mobile-bar { display: none !important; }
