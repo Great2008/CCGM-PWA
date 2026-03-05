@@ -30,9 +30,15 @@ function fmt(d) {
 function thisWeekLesson(lessons) {
   if (!lessons?.length) return null
   const today = new Date(); today.setHours(0,0,0,0)
-  const past = lessons.filter(l => new Date(l.lesson_date + 'T00:00:00') <= today)
-  if (past.length) return past.sort((a,b) => new Date(b.lesson_date) - new Date(a.lesson_date))[0]
-  return lessons.sort((a,b) => new Date(a.lesson_date) - new Date(b.lesson_date))[0]
+  const todayMs = today.getTime()
+  // Sort by how close lesson_date is to today (past dates preferred over future)
+  return [...lessons].sort((a, b) => {
+    const aMs = new Date(a.lesson_date + 'T00:00:00').getTime()
+    const bMs = new Date(b.lesson_date + 'T00:00:00').getTime()
+    const aDiff = aMs <= todayMs ? todayMs - aMs : (aMs - todayMs) * 10 // penalise future
+    const bDiff = bMs <= todayMs ? todayMs - bMs : (bMs - todayMs) * 10
+    return aDiff - bDiff
+  })[0]
 }
 
 const parseBlocks = (text) => {
@@ -88,6 +94,13 @@ export default function SabbathSchool() {
   const [fontSize, setFontSize]   = useState(() => {
     try { return parseInt(localStorage.getItem(FONT_SIZE_KEY)) || 17 } catch { return 17 }
   })
+
+  // Auto-scroll the sidebar list to highlight the active lesson
+  useEffect(() => {
+    if (!selected) return
+    const el = document.getElementById('ss-lesson-' + selected.id)
+    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }, [selected])
 
   const changeFontSize = (delta) => {
     setFontSize(prev => {
@@ -280,7 +293,7 @@ export default function SabbathSchool() {
                 const isSelected = selected?.id === l.id
                 const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                 return (
-                  <div key={l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
+                  <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
                     style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                       <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{l.title}</div>
@@ -319,7 +332,7 @@ export default function SabbathSchool() {
                   const isSelected = selected?.id === l.id
                   const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                   return (
-                    <div key={l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
+                    <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
                       style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                         <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{l.title}</div>
