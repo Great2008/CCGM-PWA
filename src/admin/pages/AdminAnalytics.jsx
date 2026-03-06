@@ -147,7 +147,7 @@ export default function AdminAnalytics() {
       />
 
       {/* Top stats */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:14,marginBottom:28}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:14,marginBottom:28}}>
         <StatBox icon="👥" label="Total Members" value={data.totalMembers} sub={`+${data.newMembers} this period`} color="var(--brand-light)" />
         <StatBox icon="⏳" label="Pending Approval" value={data.pendingMembers} sub="Awaiting review" color="#f59e0b" />
         <StatBox icon="💬" label="Timeline Posts" value={data.totalPosts} sub={`+${data.newPosts} new`} color="#8b5cf6" />
@@ -158,7 +158,7 @@ export default function AdminAnalytics() {
         <StatBox icon="📅" label="Events" value={data.totalEvents} color="#ea580c" />
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:20}} className="analytics-grid">
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:20,marginBottom:20}} className="analytics-grid">
 
         {/* Member Growth Chart */}
         <AdminCard>
@@ -237,7 +237,11 @@ export default function AdminAnalytics() {
         </AdminCard>
       )}
 
-      <style>{`@media(max-width:768px){.analytics-grid{grid-template-columns:1fr!important;}}`}</style>
+      <style>{`
+        .analytics-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+        @media(max-width:900px){ .analytics-grid { grid-template-columns: 1fr !important; } }
+        @media(max-width:600px){ .analytics-stat-grid { grid-template-columns: repeat(2,1fr) !important; } }
+      `}</style>
     </div>
   )
 }

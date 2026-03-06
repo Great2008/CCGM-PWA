@@ -134,7 +134,7 @@ export default function AdminApp() {
           ☰
         </button>
 
-        <main style={{ marginLeft:240, flex:1, minHeight:'100vh', padding:'32px 28px' }} className="admin-main">
+        <main style={{ marginLeft:240, flex:1, minHeight:'100vh', padding:'32px 28px', overflowX:'hidden', minWidth:0 }} className="admin-main">
           <Page />
         </main>
 

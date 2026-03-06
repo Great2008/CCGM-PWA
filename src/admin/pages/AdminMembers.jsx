@@ -84,7 +84,7 @@ export default function AdminMembers() {
       </div>
 
       {/* Two-pane layout */}
-      <div style={{display:'grid',gridTemplateColumns:selected?'1fr 360px':'1fr',gap:20,alignItems:'start'}}>
+      <div className="members-pane" style={{display:'grid',gridTemplateColumns:selected?'minmax(0,1fr) min(320px,35%)':'1fr',gap:20,alignItems:'start'}}>
         {/* Member list */}
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
           {filtered.length===0&&<div style={{background:'white',borderRadius:14,padding:'40px 20px',textAlign:'center',color:'var(--text-light)'}}>No members found.</div>}
@@ -164,6 +164,11 @@ export default function AdminMembers() {
       </div>
 
       {delId && <Confirm message="Permanently delete this member account? This cannot be undone." onConfirm={deleteUser} onCancel={()=>setDelId(null)} loading={saving} />}
+      <style>{`
+        @media(max-width:860px){
+          .members-pane { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }
