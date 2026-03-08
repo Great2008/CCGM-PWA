@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
+import ShareButton, { ShareButtonLight } from '../components/ShareButton'
 
 const CACHE_KEY = 'ccgworld_blog'
 
@@ -134,11 +135,17 @@ export default function Blog() {
                         {featured.excerpt}
                       </p>
                     )}
-                    {featured.body && (
-                      <button className="btn btn-green" onClick={() => setExpanded(expanded?.id === featured.id ? null : featured)}>
-                        {expanded?.id === featured.id ? 'Show Less ↑' : 'Read Full Article →'}
-                      </button>
-                    )}
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                      {featured.body && (
+                        <button className="btn btn-green" onClick={() => setExpanded(expanded?.id === featured.id ? null : featured)}>
+                          {expanded?.id === featured.id ? 'Show Less ↑' : 'Read Full Article →'}
+                        </button>
+                      )}
+                      <ShareButtonLight
+                        title={featured.title}
+                        text={featured.excerpt || featured.title}
+                      />
+                    </div>
                     {expanded?.id === featured.id && (
                       <div style={{ marginTop: 24, borderTop: '1px solid #eee', paddingTop: 20 }}>
                         {renderBody(featured.body)}
@@ -180,18 +187,24 @@ export default function Blog() {
                               {post.excerpt}
                             </p>
                           )}
-                          {post.body && (
-                            <>
-                              <button className="btn btn-outline-green" style={{ padding: '8px 20px', fontSize: '0.8rem' }}
-                                onClick={() => setExpanded(expanded?.id === post.id ? null : post)}>
-                                {expanded?.id === post.id ? 'Show Less ↑' : 'Read More →'}
-                              </button>
-                              {expanded?.id === post.id && (
-                                <div style={{ marginTop: 16, borderTop: '1px solid #eee', paddingTop: 16 }}>
-                                  {renderBody(post.body)}
-                                </div>
-                              )}
-                            </>
+                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                            {post.body && (
+                              <>
+                                <button className="btn btn-outline-green" style={{ padding: '8px 20px', fontSize: '0.8rem' }}
+                                  onClick={() => setExpanded(expanded?.id === post.id ? null : post)}>
+                                  {expanded?.id === post.id ? 'Show Less ↑' : 'Read More →'}
+                                </button>
+                              </>
+                            )}
+                            <ShareButtonLight
+                              title={post.title}
+                              text={post.excerpt || post.title}
+                            />
+                          </div>
+                          {expanded?.id === post.id && (
+                            <div style={{ marginTop: 16, borderTop: '1px solid #eee', paddingTop: 16 }}>
+                              {renderBody(post.body)}
+                            </div>
                           )}
                         </div>
                       </div>

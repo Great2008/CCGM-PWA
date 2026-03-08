@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSermonsContent } from '../hooks/useContent'
+import { ShareButtonLight } from '../components/ShareButton'
 
 export default function Sermons() {
   const { data: sermons, loading } = useSermonsContent()
@@ -125,7 +126,7 @@ export default function Sermons() {
                           </p>
                         )}
                         {(sermon.videoUrl || sermon.audioUrl) && (
-                          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
                             {sermon.videoUrl && (
                               <a href={sermon.videoUrl} target="_blank" rel="noreferrer" className="btn btn-green" style={{ padding: '9px 20px', fontSize: '0.8rem' }}>
                                 ▶ Watch
@@ -136,6 +137,19 @@ export default function Sermons() {
                                 🎧 Audio
                               </a>
                             )}
+                            <ShareButtonLight
+                              title={sermon.title}
+                              text={sermon.description || `${sermon.title}${sermon.pastor ? ` — ${sermon.pastor}` : ''}`}
+                              url={sermon.videoUrl || sermon.audioUrl || window.location.href}
+                            />
+                          </div>
+                        )}
+                        {!(sermon.videoUrl || sermon.audioUrl) && (
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <ShareButtonLight
+                              title={sermon.title}
+                              text={sermon.description || sermon.title}
+                            />
                           </div>
                         )}
                       </div>

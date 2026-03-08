@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
+import ShareButton from '../components/ShareButton'
 
 const CACHE_KEY    = 'ccgworld_devotionals'
 const BOOKMARKS_KEY = 'ccgworld_dev_bookmarks'
@@ -253,12 +254,19 @@ export default function Devotional() {
                           <h2 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(1.3rem,3vw,1.8rem)', margin: '0 0 6px' }}>{selected.title}</h2>
                           {selected.author && <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.65)' }}>By {selected.author}</div>}
                         </div>
-                        <button onClick={() => toggleBookmark(selected.id)} style={{
-                          background: bookmarked.includes(selected.id) ? 'var(--gold)' : 'rgba(255,255,255,0.15)',
-                          border: 'none', borderRadius: 30, padding: '8px 18px', cursor: 'pointer',
-                          color: bookmarked.includes(selected.id) ? 'var(--brand-deep)' : 'white',
-                          fontSize: '0.82rem', fontWeight: 700, fontFamily: 'var(--font-body)', flexShrink: 0,
-                        }}>{bookmarked.includes(selected.id) ? '⭐ Saved' : '☆ Save'}</button>
+                        <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                          <button onClick={() => toggleBookmark(selected.id)} style={{
+                            background: bookmarked.includes(selected.id) ? 'var(--gold)' : 'rgba(255,255,255,0.15)',
+                            border: 'none', borderRadius: 30, padding: '8px 18px', cursor: 'pointer',
+                            color: bookmarked.includes(selected.id) ? 'var(--brand-deep)' : 'white',
+                            fontSize: '0.82rem', fontWeight: 700, fontFamily: 'var(--font-body)',
+                          }}>{bookmarked.includes(selected.id) ? '⭐ Saved' : '☆ Save'}</button>
+                          <ShareButton
+                            title={selected.title}
+                            text={selected.excerpt || selected.title}
+                            label="Share"
+                          />
+                        </div>
                       </div>
 
                       {/* Scripture / excerpt highlight */}
