@@ -56,7 +56,7 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
         // Already subscribed — treat as success
         setStep('success')
       } else {
-        setErrMsg('Something went wrong. Please try again.')
+        setErrMsg(e.message || e.details || JSON.stringify(e))
         console.error(e)
       }
     } finally {
