@@ -70,7 +70,7 @@ export default function Devotional() {
         if (data && data.length > 0) {
           setDevotionals(data)
           setCached(data)
-          // Only update selected if nothing is selected yet
+          // Always update selected to get fresh fields (e.g. newly added image_url)
           setSelected(prev => {
             if (prev) return data.find(d => d.id === prev.id) || prev
             try {
@@ -245,7 +245,26 @@ export default function Devotional() {
                 {/* Detail pane */}
                 {selected && (
                   <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-md)', overflow: 'hidden', alignSelf: 'start' }}>
-                    <div style={{ background: 'linear-gradient(135deg, var(--brand-deep), var(--brand-mid))', padding: '28px 32px' }}>
+
+                    {/* Cover image */}
+                    {selected.image_url && (
+                      <div style={{ position: 'relative', height: 220, overflow: 'hidden', background: 'var(--brand-deep)' }}>
+                        <img
+                          src={selected.image_url}
+                          alt={selected.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={e => { e.target.style.display = 'none' }}
+                          referrerPolicy="no-referrer"
+                          crossOrigin="anonymous"
+                        />
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          background: 'linear-gradient(to bottom, transparent 40%, rgba(15,31,61,0.75) 100%)',
+                        }} />
+                      </div>
+                    )}
+
+                    <div style={{ background: selected.image_url ? 'var(--brand-deep)' : 'linear-gradient(135deg, var(--brand-deep), var(--brand-mid))', padding: '28px 32px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
                         <div>
                           <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 8 }}>
@@ -264,6 +283,7 @@ export default function Devotional() {
                           <ShareButton
                             title={selected.title}
                             text={selected.excerpt || selected.title}
+                            url={selected.image_url ? `${window.location.href}#${selected.id}` : undefined}
                             label="Share"
                           />
                         </div>
