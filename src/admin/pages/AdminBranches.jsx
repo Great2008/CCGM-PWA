@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
-import supabase from '../supabase'
+import supabase from '../../lib/supabaseAdmin'
 
 const EMPTY = { name: '', location: '', country: '', active: true }
 
