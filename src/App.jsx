@@ -20,6 +20,7 @@ import Notifications from './pages/Notifications'
 import FindChurch from './pages/FindChurch'
 import PrayerWall from './pages/PrayerWall'
 import Studio     from './pages/Studio'
+import Profile    from './pages/Profile'
 
 function AppInner() {
   const { user } = useAuth()
@@ -45,6 +46,7 @@ function AppInner() {
           <Route path="/find-church"     element={<FindChurch />} />
           <Route path="/prayer-wall"     element={<PrayerWall />} />
           <Route path="/studio"          element={<Studio />} />
+          <Route path="/profile"         element={<Profile />} />
         </Routes>
       </main>
       <Footer />

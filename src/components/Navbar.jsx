@@ -168,9 +168,11 @@ export default function Navbar() {
             {/* Auth */}
             {user ? (
               <div style={{display:'flex',alignItems:'center',gap:8,marginLeft:6}}>
-                <div style={{width:32,height:32,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-base),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:'0.9rem',flexShrink:0}}>
-                  {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{width:32,height:32,borderRadius:'50%',objectFit:'cover'}} /> : initials}
-                </div>
+                <Link to="/profile" title="My Profile" style={{display:'block',borderRadius:'50%',flexShrink:0,textDecoration:'none',transition:'opacity 0.2s'}} onMouseEnter={e=>e.currentTarget.style.opacity='0.8'} onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+                  <div style={{width:32,height:32,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-base),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:'0.9rem',flexShrink:0,overflow:'hidden'}}>
+                    {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{width:32,height:32,borderRadius:'50%',objectFit:'cover'}} /> : initials}
+                  </div>
+                </Link>
                 <button onClick={signOut} style={{color:'rgba(255,255,255,0.5)',background:'none',border:'none',cursor:'pointer',fontSize:'0.75rem',fontFamily:'var(--font-body)'}}>Sign out</button>
               </div>
             ) : (
@@ -242,7 +244,15 @@ export default function Navbar() {
         <div style={{padding:'16px 20px 32px',borderTop:'1px solid rgba(255,255,255,0.08)'}}>
           {user ? (
             <div>
-              <div style={{color:'rgba(255,255,255,0.6)',fontSize:'0.8rem',marginBottom:10}}>Signed in as {profile?.display_name||profile?.full_name}</div>
+              <Link to="/profile" style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,textDecoration:'none'}}>
+                <div style={{width:34,height:34,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-base),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:'0.9rem',flexShrink:0,overflow:'hidden'}}>
+                  {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{width:34,height:34,borderRadius:'50%',objectFit:'cover'}} /> : initials}
+                </div>
+                <div>
+                  <div style={{color:'white',fontSize:'0.85rem',fontWeight:700}}>{profile?.display_name||profile?.full_name}</div>
+                  <div style={{color:'rgba(255,255,255,0.4)',fontSize:'0.7rem'}}>View Profile →</div>
+                </div>
+              </Link>
               <button onClick={signOut} style={{width:'100%',padding:'11px',borderRadius:10,border:'1px solid rgba(255,255,255,0.15)',background:'transparent',color:'rgba(255,255,255,0.6)',cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'}}>Sign Out</button>
             </div>
           ) : (
