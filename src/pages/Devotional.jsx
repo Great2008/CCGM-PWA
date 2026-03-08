@@ -282,24 +282,24 @@ export default function Devotional() {
           <div style={{ marginTop: 'auto', background: 'white', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#e2e8f0' }} />
+              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1fae5' }} />
             </div>
-            <div style={{ padding: '8px 18px 14px', borderBottom: '1px solid #f1f5f9' }}>
+            <div style={{ padding: '8px 18px 14px', borderBottom: '1px solid #f0fdf4' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)', fontSize: '1rem' }}>All Devotionals</div>
                 <button onClick={() => { setShowBookmarks(b => !b) }} style={{
                   padding: '5px 12px', borderRadius: 20, border: '1.5px solid',
-                  borderColor: showBookmarks ? 'var(--gold)' : '#e2e8f0',
+                  borderColor: showBookmarks ? 'var(--gold)' : '#d1fae5',
                   background: showBookmarks ? 'var(--gold)' : 'white',
                   color: showBookmarks ? 'var(--brand-deep)' : 'var(--text-mid)',
                   fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
                 }}>⭐ {bookmarked.length}</button>
               </div>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search devotionals..."
-                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box', outline: 'none' }} />
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box', outline: 'none' }} />
               {categories.length > 2 && (
                 <select value={category} onChange={e => setCategory(e.target.value)}
-                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white', outline: 'none' }}>
+                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white', outline: 'none' }}>
                   {categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               )}
@@ -315,7 +315,7 @@ export default function Devotional() {
                 const isTod = d.date === today
                 return (
                   <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
-                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
+                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
                       <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{d.title}</div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -339,20 +339,20 @@ export default function Devotional() {
 
           {/* Desktop Sidebar */}
           <div className="dev-desktop-sidebar" style={{ display: 'none' }}>
-            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden', position: 'sticky', top: 24 }}>
-              <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f1f5f9' }}>
+            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
+              <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0fdf4' }}>
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search devotionals..."
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box', outline: 'none' }} />
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box', outline: 'none' }} />
                 {categories.length > 2 && (
                   <select value={category} onChange={e => setCategory(e.target.value)}
-                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white', outline: 'none' }}>
+                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white', outline: 'none' }}>
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 )}
                 <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                   <button onClick={() => setShowBookmarks(b => !b)} style={{
                     flex: 1, padding: '6px 10px', borderRadius: 8, border: '1.5px solid',
-                    borderColor: showBookmarks ? 'var(--gold)' : '#e2e8f0',
+                    borderColor: showBookmarks ? 'var(--gold)' : '#d1fae5',
                     background: showBookmarks ? 'var(--gold)' : 'white',
                     color: showBookmarks ? 'var(--brand-deep)' : 'var(--text-mid)',
                     fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
@@ -369,7 +369,7 @@ export default function Devotional() {
                   const isTod = d.date === today
                   return (
                     <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
-                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
+                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
                         <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{d.title}</div>
                         <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -389,7 +389,7 @@ export default function Devotional() {
           {/* Content Panel */}
           <div>
             {devs.length === 0 ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0' }}>
+              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>🌅</div>
                 <div style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.4rem', marginBottom: 10 }}>No Devotionals Yet</div>
                 <div style={{ color: 'var(--text-mid)', maxWidth: 360, margin: '0 auto', lineHeight: 1.7 }}>
@@ -397,12 +397,12 @@ export default function Devotional() {
                 </div>
               </div>
             ) : !selected ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0' }}>
+              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>🌅</div>
                 <div style={{ color: 'var(--text-light)' }}>Select a devotional to read</div>
               </div>
             ) : (
-              <div className="dev-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden' }}>
+              <div className="dev-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
 
                 {/* Header */}
                 <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
@@ -476,21 +476,21 @@ export default function Devotional() {
                   )}
 
                   {/* Offline badge + read time */}
-                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 24, paddingTop: 20, borderTop: '1px solid #f1f5f9', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 24, paddingTop: 20, borderTop: '1px solid #f0fdf4', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.72rem', color: 'var(--brand-light)', fontWeight: 700 }}>✅ Available Offline</span>
                     {selected.read_time && <span style={{ fontSize: '0.72rem', color: 'var(--text-light)' }}>⏱ {selected.read_time}</span>}
                   </div>
                 </div>
 
                 {/* Prev / Next */}
-                <div style={{ padding: '16px clamp(16px,4vw,28px)', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                <div style={{ padding: '16px clamp(16px,4vw,28px)', borderTop: '1px solid #f0fdf4', display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                   {prevDev ? (
-                    <button onClick={() => selectDev(prevDev)} style={{ background: 'none', border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'left', lineHeight: 1.4 }}>
+                    <button onClick={() => selectDev(prevDev)} style={{ background: 'none', border: '1.5px solid #d1fae5', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'left', lineHeight: 1.4 }}>
                       ← {prevDev.title.length > 30 ? prevDev.title.slice(0, 30) + '…' : prevDev.title}
                     </button>
                   ) : <div />}
                   {nextDev ? (
-                    <button onClick={() => selectDev(nextDev)} style={{ background: 'none', border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'right', lineHeight: 1.4 }}>
+                    <button onClick={() => selectDev(nextDev)} style={{ background: 'none', border: '1.5px solid #d1fae5', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'right', lineHeight: 1.4 }}>
                       {nextDev.title.length > 30 ? nextDev.title.slice(0, 30) + '…' : nextDev.title} →
                     </button>
                   ) : <div />}

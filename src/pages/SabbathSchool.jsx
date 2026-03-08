@@ -284,15 +284,15 @@ export default function SabbathSchool() {
           <div style={{ marginTop: 'auto', background: 'white', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#e2e8f0' }} />
+              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1fae5' }} />
             </div>
-            <div style={{ padding: '8px 18px 14px', borderBottom: '1px solid #f1f5f9' }}>
+            <div style={{ padding: '8px 18px 14px', borderBottom: '1px solid #f0fdf4' }}>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)', fontSize: '1rem', marginBottom: 10 }}>All Lessons</div>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search lessons..."
-                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box' }} />
               {quarters.length > 1 && (
                 <select value={quarter} onChange={e => setQuarter(e.target.value)}
-                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white' }}>
+                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white' }}>
                   <option value="all">All Quarters</option>
                   {quarters.map(q => <option key={q} value={q}>{q}</option>)}
                 </select>
@@ -307,7 +307,7 @@ export default function SabbathSchool() {
                 const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                 return (
                   <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
-                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
+                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                       <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{l.title}</div>
                       {isThisWeek && <span style={{ background: 'var(--gold)', color: 'white', fontSize: '0.62rem', padding: '3px 9px', borderRadius: 10, fontWeight: 900, flexShrink: 0, alignSelf: 'flex-start' }}>NOW</span>}
@@ -328,13 +328,13 @@ export default function SabbathSchool() {
 
           {/* Desktop Sidebar */}
           <div className="ss-desktop-sidebar" style={{ display: 'none' }}>
-            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden', position: 'sticky', top: 24 }}>
-              <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f1f5f9' }}>
+            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
+              <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0fdf4' }}>
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search lessons..."
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box' }} />
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box' }} />
                 {quarters.length > 1 && (
                   <select value={quarter} onChange={e => setQuarter(e.target.value)}
-                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white' }}>
+                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white' }}>
                     <option value="all">All Quarters</option>
                     {quarters.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
@@ -346,7 +346,7 @@ export default function SabbathSchool() {
                   const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                   return (
                     <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
-                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8fafc', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
+                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                         <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{l.title}</div>
                         {isThisWeek && <span style={{ background: 'var(--gold)', color: 'white', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 10, fontWeight: 900, flexShrink: 0 }}>NOW</span>}
@@ -363,12 +363,12 @@ export default function SabbathSchool() {
           {/* Content Panel */}
           <div>
             {!selected ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0' }}>
+              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>📖</div>
                 <div style={{ color: 'var(--text-light)' }}>Select a lesson to read</div>
               </div>
             ) : (
-              <div className="ss-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0', overflow: 'hidden' }}>
+              <div className="ss-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
 
                 {/* Lesson Header */}
                 <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
@@ -498,7 +498,7 @@ export default function SabbathSchool() {
                   {activeTab === 'divine' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                       {(selected.divine_message_title || selected.divine_message_speaker) && (
-                        <div style={{ background: 'linear-gradient(135deg,var(--brand-pale),#f0f7ff)', borderRadius: 16, padding: 'clamp(18px,4vw,28px)', border: '1.5px solid #bfdbfe' }}>
+                        <div style={{ background: 'linear-gradient(135deg,var(--brand-pale),#f0f7ff)', borderRadius: 16, padding: 'clamp(18px,4vw,28px)', border: '1.5px solid #bbf7d0' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                             <span style={{ fontSize: '1.6rem' }}>⛪</span>
                             <div>
@@ -575,14 +575,14 @@ export default function SabbathSchool() {
                 </div>
 
                 {/* Prev / Next */}
-                <div style={{ padding: '16px clamp(16px,4vw,28px)', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                <div style={{ padding: '16px clamp(16px,4vw,28px)', borderTop: '1px solid #f0fdf4', display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                   {prevLesson ? (
-                    <button onClick={() => selectLesson(prevLesson)} style={{ background: 'none', border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'left', lineHeight: 1.4 }}>
+                    <button onClick={() => selectLesson(prevLesson)} style={{ background: 'none', border: '1.5px solid #d1fae5', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'left', lineHeight: 1.4 }}>
                       ← {prevLesson.title.length > 30 ? prevLesson.title.slice(0, 30) + '…' : prevLesson.title}
                     </button>
                   ) : <div />}
                   {nextLesson ? (
-                    <button onClick={() => selectLesson(nextLesson)} style={{ background: 'none', border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'right', lineHeight: 1.4 }}>
+                    <button onClick={() => selectLesson(nextLesson)} style={{ background: 'none', border: '1.5px solid #d1fae5', borderRadius: 10, padding: '10px 16px', cursor: 'pointer', color: 'var(--text-mid)', fontFamily: 'var(--font-body)', fontSize: (fontSize - 3) + 'px', flex: 1, textAlign: 'right', lineHeight: 1.4 }}>
                       {nextLesson.title.length > 30 ? nextLesson.title.slice(0, 30) + '…' : nextLesson.title} →
                     </button>
                   ) : <div />}

@@ -85,7 +85,7 @@ export default function Sermons() {
                             onMouseLeave={e => e.target.style.transform = 'scale(1)'} />
                           <div style={{
                             position: 'absolute', inset: 0,
-                            background: 'linear-gradient(to top, rgba(15,31,61,0.7) 0%, transparent 60%)',
+                            background: 'linear-gradient(to top, rgba(10,38,18,0.7) 0%, transparent 60%)',
                             display: 'flex', alignItems: 'flex-end', padding: 14,
                           }}>
                             {sermon.duration && (

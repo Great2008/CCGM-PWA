@@ -91,7 +91,7 @@ export default function Navbar() {
     <>
       <nav style={{
         position:'fixed', top:0, left:0, right:0, zIndex:1000,
-        background: solid ? 'rgba(15,31,61,0.97)' : 'transparent',
+        background: solid ? 'rgba(10,38,18,0.97)' : 'transparent',
         backdropFilter: solid ? 'blur(14px)' : 'none',
         boxShadow: solid ? '0 2px 24px rgba(0,0,0,0.22)' : 'none',
         transition:'background 0.3s,box-shadow 0.3s',
@@ -159,7 +159,7 @@ export default function Navbar() {
             >
               <span style={{ fontSize: '1rem' }}>🔔</span>
               {unread > 0 && (
-                <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 8, background: '#ef4444', color: 'white', fontSize: '0.62rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px', border: '2px solid rgba(15,31,61,0.97)' }}>
+                <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 8, background: '#ef4444', color: 'white', fontSize: '0.62rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px', border: '2px solid rgba(10,38,18,0.97)' }}>
                   {unread > 9 ? '9+' : unread}
                 </span>
               )}
@@ -168,7 +168,7 @@ export default function Navbar() {
             {/* Auth */}
             {user ? (
               <div style={{display:'flex',alignItems:'center',gap:8,marginLeft:6}}>
-                <div style={{width:32,height:32,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:'0.9rem',flexShrink:0}}>
+                <div style={{width:32,height:32,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-base),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:'0.9rem',flexShrink:0}}>
                   {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{width:32,height:32,borderRadius:'50%',objectFit:'cover'}} /> : initials}
                 </div>
                 <button onClick={signOut} style={{color:'rgba(255,255,255,0.5)',background:'none',border:'none',cursor:'pointer',fontSize:'0.75rem',fontFamily:'var(--font-body)'}}>Sign out</button>
@@ -235,7 +235,7 @@ export default function Navbar() {
           {OFFLINE_LINKS.map(({to,label,sub})=>(
             <Link key={to} to={to} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 22px',color:'rgba(255,255,255,0.75)',fontSize:'0.9rem',textDecoration:'none'}}>
               <span>{label}</span>
-              <span style={{fontSize:'0.62rem',color:'var(--brand-glow)',fontWeight:700}}>✅ Offline</span>
+              <span style={{fontSize:'0.62rem',color:'var(--brand-light)',fontWeight:700}}>✅ Offline</span>
             </Link>
           ))}
         </nav>

@@ -1,35 +1,45 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* CCG World palette — deep navy + electric blue + gold accent */
-  --brand-deep:   #0f1f3d;   /* deep navy */
-  --brand-mid:    #1a3a6b;   /* rich blue */
-  --brand-light:  #2563eb;   /* electric blue */
-  --brand-glow:   #3b82f6;   /* bright blue */
-  --brand-pale:   #eff6ff;   /* ice blue */
-  --gold:         #f59e0b;   /* amber gold */
+  /* CCG World palette — forest green + gold accent */
+  --brand-deep:   #0a2612;   /* darkest forest green */
+  --brand-dark:   #14532d;   /* deep green */
+  --brand-mid:    #166534;   /* rich green */
+  --brand-base:   #16a34a;   /* main brand green */
+  --brand-light:  #22c55e;   /* bright green */
+  --brand-glow:   #4ade80;   /* vivid accent */
+  --brand-pale:   #dcfce7;   /* mint pale */
+  --brand-mist:   #f0fdf4;   /* near-white green tint */
+
+  --gold:         #f59e0b;
   --gold-light:   #fcd34d;
+
   --white:        #ffffff;
-  --cream:        #f8fafc;
-  --text-dark:    #0f172a;
-  --text-mid:     #334155;
-  --text-light:   #64748b;
+  --milk:         #fdfcf8;   /* warm milk white */
+  --cream:        #f5f0e8;   /* warm cream */
+  --off-white:    #f8faf8;   /* green-tinted off-white */
+
+  --text-dark:    #052e10;
+  --text-mid:     #1a4728;
+  --text-light:   #4a7c59;
+  --text-muted:   #86a892;
+
   --radius-sm:    8px;
   --radius-md:    14px;
   --radius-lg:    24px;
-  --shadow-sm:    0 2px 12px rgba(15,31,61,0.08);
-  --shadow-md:    0 8px 32px rgba(15,31,61,0.15);
-  --shadow-lg:    0 24px 64px rgba(15,31,61,0.22);
+  --shadow-sm:    0 2px 12px rgba(10,38,18,0.08);
+  --shadow-md:    0 8px 32px rgba(10,38,18,0.15);
+  --shadow-lg:    0 24px 64px rgba(10,38,18,0.22);
   --transition:   0.25s ease;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Lato', system-ui, sans-serif;
   --font-mono:    'Courier New', monospace;
 
-  /* Legacy green aliases — map to brand palette so Bible/Sermons/Events pages render correctly */
-  --green-deep:   #0f1f3d;
-  --green-mid:    #1a3a6b;
-  --green-light:  #3b82f6;
-  --green-pale:   #eff6ff;
+  /* Aliases — keep every page working without touching JSX */
+  --green-deep:   #0a2612;
+  --green-mid:    #166534;
+  --green-light:  #16a34a;
+  --green-pale:   #dcfce7;
 }
 
 html {
@@ -42,7 +52,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--text-dark);
-  background: var(--cream);
+  background: var(--off-white);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -56,8 +66,8 @@ img { display: block; max-width: 100%; }
 button { cursor: pointer; border: none; background: none; font-family: var(--font-body); }
 
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--brand-light); border-radius: 6px; }
+::-webkit-scrollbar-track { background: var(--off-white); }
+::-webkit-scrollbar-thumb { background: var(--brand-base); border-radius: 6px; }
 
 /* ── Layout ── */
 .container { max-width: 1160px; margin: 0 auto; padding: 0 5%; }
@@ -65,7 +75,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 
 .section-label {
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--brand-glow); display: block; margin-bottom: 8px;
+  text-transform: uppercase; color: var(--brand-base); display: block; margin-bottom: 8px;
 }
 .section-title {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -73,7 +83,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 }
 .section-divider {
   width: 52px; height: 4px;
-  background: linear-gradient(90deg, var(--brand-light), var(--gold));
+  background: linear-gradient(90deg, var(--brand-base), var(--gold));
   border-radius: 4px; margin-bottom: 28px;
 }
 .section-sub {
@@ -90,10 +100,10 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .btn:hover { transform: translateY(-2px); }
 
 .btn-blue {
-  background: var(--brand-light); color: white;
-  box-shadow: 0 4px 20px rgba(37,99,235,0.35);
+  background: var(--brand-base); color: white;
+  box-shadow: 0 4px 20px rgba(22,163,74,0.35);
 }
-.btn-blue:hover { background: var(--brand-mid); box-shadow: 0 8px 28px rgba(26,58,107,0.4); }
+.btn-blue:hover { background: var(--brand-mid); box-shadow: 0 8px 28px rgba(22,163,74,0.4); }
 
 .btn-gold {
   background: var(--gold); color: var(--brand-deep);
@@ -104,14 +114,14 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .btn-outline-white { border: 2px solid white; color: white; }
 .btn-outline-white:hover { background: white; color: var(--brand-deep); }
 
-.btn-outline-blue { border: 2px solid var(--brand-light); color: var(--brand-light); }
-.btn-outline-blue:hover { background: var(--brand-light); color: white; }
+.btn-outline-blue { border: 2px solid var(--brand-base); color: var(--brand-base); }
+.btn-outline-blue:hover { background: var(--brand-base); color: white; }
 
 /* keep green aliases for admin panel */
-.btn-green { background: var(--brand-light); color: white; box-shadow: 0 4px 20px rgba(37,99,235,0.35); }
+.btn-green { background: var(--brand-base); color: white; box-shadow: 0 4px 20px rgba(22,163,74,0.35); }
 .btn-green:hover { background: var(--brand-mid); }
-.btn-outline-green { border: 2px solid var(--brand-light); color: var(--brand-light); }
-.btn-outline-green:hover { background: var(--brand-light); color: white; }
+.btn-outline-green { border: 2px solid var(--brand-base); color: var(--brand-base); }
+.btn-outline-green:hover { background: var(--brand-base); color: white; }
 
 /* ── Card ── */
 .card {
@@ -125,7 +135,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .tag {
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
   padding: 4px 12px; border-radius: 20px;
-  background: var(--brand-pale); color: var(--brand-light); display: inline-block;
+  background: var(--brand-pale); color: var(--brand-mid); display: inline-block;
 }
 
 /* ── Forms ── */
@@ -147,8 +157,8 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: var(--brand-light);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  border-color: var(--brand-base);
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.1);
 }
 .form-group textarea { resize: vertical; min-height: 100px; }
 

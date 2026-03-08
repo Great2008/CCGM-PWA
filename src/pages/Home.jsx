@@ -36,7 +36,7 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         minHeight:'100vh',
-        background:`linear-gradient(160deg,rgba(15,31,61,0.92) 0%,rgba(26,58,107,0.85) 55%,rgba(37,99,235,0.4) 100%),url('https://images.unsplash.com/photo-1438232992991-995b671e4b8b?w=1600&q=80') center/cover no-repeat`,
+        background:`linear-gradient(160deg,rgba(10,38,18,0.92) 0%,rgba(22,100,52,0.85) 55%,rgba(22,163,74,0.4) 100%),url('https://images.unsplash.com/photo-1438232992991-995b671e4b8b?w=1600&q=80') center/cover no-repeat`,
         display:'flex',alignItems:'center',justifyContent:'center',
         textAlign:'center',padding:'clamp(100px,15vw,140px) 20px 80px',
         position:'relative',overflow:'hidden',
@@ -159,7 +159,7 @@ export default function Home() {
                 {latestSermon.thumbnail ? (
                   <>
                     <img src={latestSermon.thumbnail} alt={latestSermon.title} style={{width:'100%',borderRadius:16,boxShadow:'0 24px 60px rgba(0,0,0,0.4)'}} />
-                    <div style={{position:'absolute',inset:0,borderRadius:16,background:'rgba(15,31,61,0.3)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <div style={{position:'absolute',inset:0,borderRadius:16,background:'rgba(10,38,18,0.3)',display:'flex',alignItems:'center',justifyContent:'center'}}>
                       <div style={{width:64,height:64,borderRadius:'50%',background:'rgba(255,255,255,0.95)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.6rem',boxShadow:'0 8px 30px rgba(0,0,0,0.3)',cursor:'pointer',transition:'transform 0.2s'}}
                       onMouseEnter={e=>e.currentTarget.style.transform='scale(1.1)'}
                       onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>▶</div>
