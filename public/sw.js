@@ -1,11 +1,12 @@
-// CCG World Service Worker v4 — Full Offline PWA + Push Notifications
-const CACHE = 'ccgworld-v4'
+// CCG World Service Worker v5 — Full Offline PWA + Push Notifications
+const CACHE = 'ccgworld-v5'
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
   '/notifications',
+  '/splash.mp4',
 ]
 
 self.addEventListener('install', e => {
@@ -33,6 +34,20 @@ self.addEventListener('fetch', e => {
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(fetch(request).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } })))
+    return
+  }
+
+  // Video files: cache-first with range request support
+  if (request.destination === 'video' || url.pathname.endsWith('.mp4')) {
+    e.respondWith(
+      caches.open(CACHE).then(async cache => {
+        const cached = await cache.match(url.pathname)
+        if (cached) return cached
+        const res = await fetch(request).catch(() => null)
+        if (res && res.status === 200) cache.put(url.pathname, res.clone())
+        return res
+      })
+    )
     return
   }
 
