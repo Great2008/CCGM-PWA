@@ -135,7 +135,11 @@ export default function Profile() {
 
   const handleSave = async () => {
     setSaving(true); setSaveError('')
-    const err = await updateProfile(form)
+    const payload = {
+      ...form,
+      birthday: form.birthday?.trim() || null,
+    }
+    const err = await updateProfile(payload)
     if (err) setSaveError(err.message || 'Failed to save.')
     else { setSaved(true); setTimeout(() => setSaved(false), 2500) }
     setSaving(false)
