@@ -22,6 +22,7 @@ import FindChurch from './pages/FindChurch'
 import PrayerWall from './pages/PrayerWall'
 import Studio     from './pages/Studio'
 import Profile    from './pages/Profile'
+import Search     from './pages/Search'
 
 function AppInner() {
   const { user } = useAuth()
@@ -48,6 +49,7 @@ function AppInner() {
           <Route path="/prayer-wall"     element={<PrayerWall />} />
           <Route path="/studio"          element={<Studio />} />
           <Route path="/profile"         element={<Profile />} />
+          <Route path="/search"          element={<Search />} />
         </Routes>
       </main>
       <Footer />

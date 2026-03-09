@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
@@ -37,6 +37,9 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const { user, profile, signOut } = useAuth()
   const { dark, toggle: toggleTheme } = useTheme()
+  const navigate = useNavigate()
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQ, setSearchQ] = useState('')
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40)
@@ -151,6 +154,15 @@ export default function Navbar() {
 
             
 
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(s => !s)}
+              title="Search"
+              style={{ display:'flex', alignItems:'center', justifyContent:'center', width:34, height:34, borderRadius:'50%', background: searchOpen ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', fontSize:'1rem', flexShrink:0, transition:'background 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.16)'}
+              onMouseLeave={e => e.currentTarget.style.background = searchOpen ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.08)'}
+            >🔍</button>
+
             {/* Dark mode toggle */}
             <button
               onClick={toggleTheme}
@@ -227,6 +239,24 @@ export default function Navbar() {
           <button onClick={()=>setMenuOpen(false)} style={{color:'rgba(255,255,255,0.6)',background:'none',border:'none',fontSize:'1.4rem',cursor:'pointer',lineHeight:1}}>✕</button>
         </div>
         <nav style={{padding:'10px 0',flex:1}}>
+          {/* Mobile Search */}
+          <div style={{ padding: '10px 16px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                value={searchQ}
+                onChange={e => setSearchQ(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && searchQ.trim()) { navigate('/search?q=' + encodeURIComponent(searchQ.trim())); setMenuOpen(false); setSearchQ('') }
+                }}
+                placeholder="🔍 Search…"
+                style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 9, padding: '9px 14px', color: 'white', fontFamily: 'var(--font-body)', fontSize: '0.88rem', outline: 'none' }}
+              />
+              <button
+                onClick={() => { if (searchQ.trim()) { navigate('/search?q=' + encodeURIComponent(searchQ.trim())); setMenuOpen(false); setSearchQ('') } }}
+                style={{ background: 'var(--gold)', color: 'var(--brand-deep)', border: 'none', borderRadius: 9, padding: '9px 14px', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', fontFamily: 'var(--font-body)', flexShrink: 0 }}
+              >Go</button>
+            </div>
+          </div>
           {NAV_LINKS.map(({to,label})=>(
             <Link key={to} to={to} style={{
               display:'block',padding:'12px 22px',
