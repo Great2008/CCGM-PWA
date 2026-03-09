@@ -45,6 +45,7 @@ export default function Profile() {
   const [posts, setPosts] = useState([])
   const [prayers, setPrayers] = useState([])
   const [bookmarks, setBookmarks] = useState([])
+  const [hymnFavs, setHymnFavs] = useState([])
   const [activityLoading, setActivityLoading] = useState(false)
 
   // Settings state
@@ -106,10 +107,16 @@ export default function Profile() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5),
-    ]).then(([p, pr, bk]) => {
+      supabase.from('hymn_favourites')
+        .select('id, created_at, hymns(id, title, author, category)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(8),
+    ]).then(([p, pr, bk, hf]) => {
       setPosts(p.data || [])
       setPrayers(pr.data || [])
       setBookmarks(bk.data || [])
+      setHymnFavs(hf.data || [])
       setActivityLoading(false)
     })
   }, [tab, user])
@@ -395,6 +402,24 @@ export default function Profile() {
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{b.devotionals?.date || ''}</span>
                     </div>
                   ))}
+                </ActivitySection>
+
+                {/* Favourite Hymns */}
+                <ActivitySection title="❤️ Favourite Hymns" empty={hymnFavs.length === 0} emptyText="No favourite hymns yet — tap ❤️ on any hymn to save it.">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
+                    {hymnFavs.map(f => (
+                      <div key={f.id} style={{ padding: '12px 16px', borderRadius: 12, background: 'linear-gradient(135deg,var(--brand-pale),#f0fdf4)', border: '1px solid var(--brand-pale)', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ fontSize: '0.9rem' }}>🎵</span>
+                          <span style={{ color: 'var(--text-dark)', fontSize: '0.88rem', fontWeight: 700, fontFamily: 'var(--font-display)' }}>{f.hymns?.title || 'Hymn'}</span>
+                        </div>
+                        {f.hymns?.author && <span style={{ color: 'var(--text-light)', fontSize: '0.75rem' }}>{f.hymns.author}</span>}
+                        {f.hymns?.category && (
+                          <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '2px 8px', borderRadius: 10, background: 'var(--brand-pale)', color: 'var(--brand-mid)', alignSelf: 'flex-start', marginTop: 2 }}>{f.hymns.category}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </ActivitySection>
               </>
             )}
