@@ -284,7 +284,7 @@ export default function Profile() {
                 <Field label="Phone" value={form.phone} onChange={v => setForm(f => ({ ...f, phone: v }))} placeholder="+1 555 000 0000" type="tel" />
                 <Field label="Location / City" value={form.location} onChange={v => setForm(f => ({ ...f, location: v }))} placeholder="e.g. Accra, Ghana" />
                 <Field label="Occupation" value={form.occupation} onChange={v => setForm(f => ({ ...f, occupation: v }))} placeholder="e.g. Teacher, Engineer..." />
-                <Field label="Birthday" value={form.birthday} onChange={v => setForm(f => ({ ...f, birthday: v }))} type="date" />
+                <Field label="Birthday (optional)" value={form.birthday} onChange={v => setForm(f => ({ ...f, birthday: v }))} type="date" />
 
                 {/* Church Branch dropdown */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
