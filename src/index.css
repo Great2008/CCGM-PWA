@@ -42,6 +42,74 @@
   --green-pale:   #dcfce7;
 }
 
+/* ══════════════════════════════════════════
+   DARK MODE — variable overrides only
+   Applied via [data-theme="dark"] on <html>
+   ══════════════════════════════════════════ */
+[data-theme="dark"] {
+  /* Surfaces */
+  --white:      #1a2420;
+  --milk:       #1e2922;
+  --cream:      #1c2620;
+  --off-white:  #151e19;
+
+  /* Text — flip light/dark */
+  --text-dark:  #e8f5ee;
+  --text-mid:   #a8c9b4;
+  --text-light: #6fa882;
+  --text-muted: #4a7060;
+
+  /* Brand greens stay vivid but backgrounds soften */
+  --brand-pale: #0d2918;
+  --brand-mist: #0a1f12;
+
+  /* Shadows — deeper for dark bg */
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.35);
+  --shadow-md:  0 8px 32px rgba(0,0,0,0.5);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,0.65);
+
+  /* Aliases */
+  --green-pale: #0d2918;
+}
+
+/* Dark mode — common hardcoded whites in cards/inputs */
+[data-theme="dark"] body {
+  background: var(--off-white);
+  color: var(--text-dark);
+}
+
+/* Cards & white backgrounds used across pages */
+[data-theme="dark"] .card,
+[data-theme="dark"] [style*="background: white"],
+[data-theme="dark"] [style*="background:white"],
+[data-theme="dark"] [style*="background:'white'"] {
+  background: var(--white) !important;
+}
+
+/* Form inputs */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea,
+[data-theme="dark"] .form-group select {
+  background: #1e2922;
+  color: var(--text-dark);
+  border-color: #2a3d30;
+}
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group textarea:focus,
+[data-theme="dark"] .form-group select:focus {
+  border-color: var(--brand-base);
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.2);
+}
+
+/* Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-track { background: #151e19; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--brand-mid); }
+
+/* Generic white-background inline style override — catches most page cards */
+[data-theme="dark"] *[style] {
+  --white: #1a2420;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;

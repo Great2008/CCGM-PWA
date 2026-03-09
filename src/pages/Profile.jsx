@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
 
 function timeAgo(ts) {
@@ -26,6 +27,7 @@ const ROLE_LABELS = {
 
 export default function Profile() {
   const { user, profile, updateProfile, signOut } = useAuth()
+  const { dark, toggle: toggleTheme } = useTheme()
   const navigate = useNavigate()
   const fileRef = useRef(null)
 
@@ -420,6 +422,23 @@ export default function Profile() {
                 disabled={pwSaving || !pwForm.next || !pwForm.confirm}
                 style={{ marginTop: 18, padding: '10px 28px', borderRadius: 40, background: (pwSaving || !pwForm.next) ? '#9ca3af' : 'var(--brand-mid)', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', border: 'none', cursor: (pwSaving || !pwForm.next) ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}
               >{pwSaving ? 'Updating…' : 'Update Password'}</button>
+            </div>
+
+            {/* Dark Mode */}
+            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 18, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>{dark ? '☀️' : '🌙'} Appearance</h2>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                <div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-dark)', fontSize: '0.95rem', marginBottom: 4 }}>Dark Mode</div>
+                  <div style={{ color: 'var(--text-light)', fontSize: '0.82rem' }}>{dark ? 'Dark mode is on.' : 'Switch to a darker, easier-on-the-eyes theme.'}</div>
+                </div>
+                <button
+                  onClick={toggleTheme}
+                  style={{ width: 52, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer', background: dark ? 'var(--brand-base)' : '#d1d5db', position: 'relative', transition: 'background 0.25s', flexShrink: 0 }}
+                >
+                  <span style={{ position: 'absolute', top: 3, left: dark ? 26 : 3, width: 22, height: 22, borderRadius: '50%', background: 'white', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.25s' }} />
+                </button>
+              </div>
             </div>
 
             {/* Push Notifications */}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
 
 const BELL_SEEN_KEY = 'ccg-notif-last-seen'
@@ -35,6 +36,7 @@ export default function Navbar() {
   const [unread, setUnread]           = useState(0)
   const { pathname } = useLocation()
   const { user, profile, signOut } = useAuth()
+  const { dark, toggle: toggleTheme } = useTheme()
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40)
@@ -149,6 +151,15 @@ export default function Navbar() {
 
             
 
+            {/* Dark mode toggle */}
+            <button
+              onClick={toggleTheme}
+              title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+              style={{ display:'flex', alignItems:'center', justifyContent:'center', width:34, height:34, borderRadius:'50%', background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', fontSize:'1rem', flexShrink:0, transition:'background 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.16)'}
+              onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.08)'}
+            >{dark ? '☀️' : '🌙'}</button>
+
             {/* Notifications bell */}
             <Link to="/notifications"
               onClick={() => { localStorage.setItem(BELL_SEEN_KEY, new Date().toISOString()); setUnread(0) }}
@@ -233,6 +244,15 @@ export default function Navbar() {
             <span>🔔 Notifications</span>
             {unread > 0 && <span style={{ background: '#ef4444', color: 'white', borderRadius: 10, padding: '1px 7px', fontSize: '0.7rem', fontWeight: 900 }}>{unread}</span>}
           </Link>
+          {/* Dark mode toggle — mobile */}
+          <button
+            onClick={toggleTheme}
+            style={{ display:'flex', alignItems:'center', gap:12, width:'100%', padding:'12px 22px', background:'transparent', border:'none', cursor:'pointer', fontFamily:'var(--font-body)', color:'rgba(255,255,255,0.75)', fontSize:'0.95rem', borderLeft:'3px solid transparent', textAlign:'left' }}
+          >
+            <span>{dark ? '☀️' : '🌙'}</span>
+            <span>{dark ? 'Light Mode' : 'Dark Mode'}</span>
+          </button>
+
           <div style={{margin:'12px 20px 6px',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.35)'}}>Offline Resources</div>
           {OFFLINE_LINKS.map(({to,label,sub})=>(
             <Link key={to} to={to} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 22px',color:'rgba(255,255,255,0.75)',fontSize:'0.9rem',textDecoration:'none'}}>
