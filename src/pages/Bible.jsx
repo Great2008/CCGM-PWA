@@ -271,7 +271,7 @@ export default function Bible() {
           {tab === 'read' && (
             <div className="bible-reader-grid" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 24, paddingTop: 28 }}>
               <div>
-                <div style={{ background: 'white', borderRadius: 14, boxShadow: 'var(--shadow-sm)', overflow: 'hidden', marginBottom: 14 }}>
+                <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', overflow: 'hidden', marginBottom: 14 }}>
                   <button onClick={() => setBookOpen(o => !o)} style={{
                     width: '100%', padding: '13px 18px', background: 'var(--green-mid)', color: 'white',
                     border: 'none', cursor: 'pointer', fontFamily: 'var(--font-display)',
@@ -281,11 +281,11 @@ export default function Bible() {
                   </button>
                   {bookOpen && (
                     <div style={{ maxHeight: 360, overflowY: 'auto' }}>
-                      <div style={{ display: 'flex', borderBottom: '1px solid #eee', position: 'sticky', top: 0, background: 'white', zIndex: 1 }}>
+                      <div style={{ display: 'flex', borderBottom: '1px solid var(--brand-pale)', position: 'sticky', top: 0, background: 'var(--white, white)', zIndex: 1 }}>
                         {['OT','NT'].map(t => (
                           <button key={t} onClick={() => setBookTab(t)} style={{
                             flex: 1, padding: '9px', border: 'none', cursor: 'pointer',
-                            background: bookTab === t ? 'var(--green-pale)' : 'white',
+                            background: bookTab === t ? 'var(--green-pale)' : 'var(--white, white)',
                             color: bookTab === t ? 'var(--green-deep)' : 'var(--text-mid)',
                             fontWeight: 700, fontSize: '0.82rem', fontFamily: 'var(--font-body)',
                           }}>{t === 'OT' ? 'Old Testament' : 'New Testament'}</button>
@@ -297,7 +297,7 @@ export default function Bible() {
                           <button key={book.id} onClick={() => handleBook(book)} style={{
                             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                             width: '100%', padding: '9px 16px', border: 'none', cursor: 'pointer',
-                            background: selBook.id === book.id ? 'var(--green-pale)' : 'white',
+                            background: selBook.id === book.id ? 'var(--green-pale)' : 'var(--white, white)',
                             color: selBook.id === book.id ? 'var(--green-deep)' : 'var(--text-dark)',
                             fontWeight: selBook.id === book.id ? 700 : 400,
                             fontSize: '0.88rem', textAlign: 'left', fontFamily: 'var(--font-body)',
@@ -311,14 +311,14 @@ export default function Bible() {
                     </div>
                   )}
                 </div>
-                <div style={{ background: 'white', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: 14, marginBottom: 12 }}>
+                <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: 14, marginBottom: 12 }}>
                   <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-light)', marginBottom: 10 }}>Chapter</div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 5 }}>
                     {chNums.map(n => (
                       <button key={n} onClick={() => setSelChapter(n)} style={{
                         padding: '7px 4px', borderRadius: 7, border: '1.5px solid',
                         borderColor: selChapter === n ? 'var(--green-mid)' : '#eee',
-                        background: selChapter === n ? 'var(--green-mid)' : 'white',
+                        background: selChapter === n ? 'var(--green-mid)' : 'var(--white, white)',
                         color: selChapter === n ? 'white' : 'var(--text-dark)',
                         fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
                       }}>{n}</button>
@@ -331,7 +331,7 @@ export default function Bible() {
                 </div>
               </div>
 
-              <div style={{ background: 'white', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: '32px 36px', minHeight: 500 }}>
+              <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: '32px 36px', minHeight: 500 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, paddingBottom: 16, borderBottom: '2px solid var(--green-pale)' }}>
                   <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--green-deep)', fontSize: '1.5rem', margin: 0 }}>{selBook.name} {selChapter}</h2>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>{verses.length} verses</span>
@@ -373,7 +373,7 @@ export default function Bible() {
               )}
               {searchResults.map((r, i) => (
                 <div key={i} onClick={() => r.reference && goToVerse(r.book?.id, r.chapter, r.verse)} style={{
-                  background: 'white', borderRadius: 12, padding: '18px 22px', marginBottom: 12,
+                  background: 'var(--white, white)', borderRadius: 12, padding: '18px 22px', marginBottom: 12,
                   boxShadow: 'var(--shadow-sm)', borderLeft: `4px solid ${r.reference ? 'var(--green-mid)' : '#ddd'}`,
                   cursor: r.reference ? 'pointer' : 'default', transition: 'transform 0.15s',
                 }}
@@ -394,7 +394,7 @@ export default function Bible() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 18 }}>
                 {POPULAR.map(v => (
                   <div key={v.ref} onClick={() => goToVerse(v.book, v.ch, v.v)} style={{
-                    background: 'white', borderRadius: 14, padding: '22px',
+                    background: 'var(--white, white)', borderRadius: 14, padding: '22px',
                     boxShadow: 'var(--shadow-sm)', borderTop: '4px solid var(--green-mid)',
                     cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
                   }}

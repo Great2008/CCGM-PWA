@@ -54,7 +54,7 @@ function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin }
   }
 
   return (
-    <div style={{background:'white',borderRadius:16,boxShadow:'var(--shadow-sm)',overflow:'hidden',border:'1px solid rgba(15,31,61,0.05)',marginBottom:16}}>
+    <div style={{background: 'var(--white, white)',borderRadius:16,boxShadow:'var(--shadow-sm)',overflow:'hidden',border:'1px solid rgba(15,31,61,0.05)',marginBottom:16}}>
       {post.pinned && (
         <div style={{background:'linear-gradient(90deg,#fef3c7,#fffbeb)',padding:'6px 18px',fontSize:'0.75rem',fontWeight:700,color:'#92400e',display:'flex',alignItems:'center',gap:6}}>
           📌 Pinned by admin
@@ -142,7 +142,7 @@ function AuthModal({ onClose }) {
 
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999,padding:20}}>
-      <div style={{background:'white',borderRadius:20,padding:'36px 32px',width:'100%',maxWidth:420,boxShadow:'0 24px 80px rgba(0,0,0,0.28)',position:'relative'}}>
+      <div style={{background: 'var(--white, white)',borderRadius:20,padding:'36px 32px',width:'100%',maxWidth:420,boxShadow:'0 24px 80px rgba(0,0,0,0.28)',position:'relative'}}>
         <button onClick={onClose} style={{position:'absolute',top:16,right:18,background:'none',border:'none',cursor:'pointer',fontSize:'1.3rem',color:'var(--text-light)',lineHeight:1}}>✕</button>
         <div style={{textAlign:'center',marginBottom:28}}>
           <div style={{width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.4rem',margin:'0 auto 14px'}}>🌐</div>
@@ -188,7 +188,7 @@ function ProfileModal({ profile, onClose, onUpdate }) {
 
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999,padding:20}}>
-      <div style={{background:'white',borderRadius:18,padding:'28px 28px',width:'100%',maxWidth:400,boxShadow:'var(--shadow-lg)'}}>
+      <div style={{background: 'var(--white, white)',borderRadius:18,padding:'28px 28px',width:'100%',maxWidth:400,boxShadow:'var(--shadow-lg)'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:22}}>
           <h3 style={{margin:0,color:'var(--brand-deep)',fontFamily:'var(--font-display)'}}>Edit Profile</h3>
           <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',fontSize:'1.2rem',color:'var(--text-light)'}}>✕</button>
@@ -304,7 +304,7 @@ export default function Timeline() {
 
         {/* Compose box */}
         {canPost && (
-          <div style={{background:'white',borderRadius:16,boxShadow:'var(--shadow-sm)',padding:'20px',marginBottom:24,border:'1px solid rgba(15,31,61,0.05)'}}>
+          <div style={{background: 'var(--white, white)',borderRadius:16,boxShadow:'var(--shadow-sm)',padding:'20px',marginBottom:24,border:'1px solid rgba(15,31,61,0.05)'}}>
             <div style={{display:'flex',gap:12,marginBottom:14}}>
               <Avatar profile={profile} size={44} />
               <textarea

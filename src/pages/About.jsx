@@ -15,7 +15,7 @@ export default function About() {
       </div>
 
       {/* Mission & Vision */}
-      <section style={{ background: 'white', padding: '90px 5%' }}>
+      <section style={{ background: 'var(--white, white)', padding: '90px 5%' }}>
         <div className="container">
           <div className="about-mission-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
             <div>

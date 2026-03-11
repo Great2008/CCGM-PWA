@@ -91,7 +91,7 @@ export default function Blog() {
           {!loading && posts.length === 0 && (
             <div style={{
               textAlign: 'center', padding: '80px 20px',
-              background: 'white', borderRadius: 20, boxShadow: 'var(--shadow-sm)',
+              background: 'var(--white, white)', borderRadius: 20, boxShadow: 'var(--shadow-sm)',
             }}>
               <div style={{ fontSize: '4rem', marginBottom: 20 }}>✍️</div>
               <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.5rem', marginBottom: 12 }}>

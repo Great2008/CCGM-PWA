@@ -188,7 +188,7 @@ export default function Live() {
           <div style={{display:'inline-flex',alignItems:'center',gap:8,marginBottom:20}}>
             {isLive ? (
               <span style={{display:'flex',alignItems:'center',gap:8,background:'#dc2626',padding:'6px 20px',borderRadius:30,fontSize:'0.82rem',fontWeight:900,color:'white',letterSpacing:'0.1em',textTransform:'uppercase'}}>
-                <span style={{width:8,height:8,borderRadius:'50%',background:'white',animation:'blink 1s infinite',display:'inline-block'}} />
+                <span style={{width:8,height:8,borderRadius:'50%',background: 'var(--white, white)',animation:'blink 1s infinite',display:'inline-block'}} />
                 LIVE NOW
               </span>
             ) : (
@@ -289,7 +289,7 @@ export default function Live() {
               {schedule.filter(s=>s.day&&s.name).map((s,i)=>{
                 const isSat = s.day==='Saturday'
                 return (
-                  <div key={i} style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'var(--shadow-sm)',borderLeft:`4px solid ${isSat?'var(--gold)':'var(--brand-light)'}`,display:'flex',gap:14,alignItems:'flex-start'}}>
+                  <div key={i} style={{background: 'var(--white, white)',borderRadius:14,padding:'18px 20px',boxShadow:'var(--shadow-sm)',borderLeft:`4px solid ${isSat?'var(--gold)':'var(--brand-light)'}`,display:'flex',gap:14,alignItems:'flex-start'}}>
                     <div style={{fontSize:'1.6rem',flexShrink:0}}>{s.icon||'📡'}</div>
                     <div>
                       <div style={{fontWeight:900,fontSize:'0.72rem',letterSpacing:'0.12em',textTransform:'uppercase',color:isSat?'#b45309':'var(--brand-light)',marginBottom:3}}>{s.day}</div>
@@ -313,7 +313,7 @@ export default function Live() {
                 const target = parseEventDate(ev.date, ev.time)
                 const isPast = target < new Date()
                 return (
-                  <div key={i} style={{background:'white',borderRadius:16,padding:'22px 24px',boxShadow:'var(--shadow-sm)',border:'1.5px solid #e2e8f0'}}>
+                  <div key={i} style={{background: 'var(--white, white)',borderRadius:16,padding:'22px 24px',boxShadow:'var(--shadow-sm)',border:'1.5px solid #e2e8f0'}}>
                     {/* Header row */}
                     <div style={{display:'flex',gap:14,alignItems:'flex-start',marginBottom:ev.broadcast!==false&&!isPast?20:0}}>
                       <div style={{fontSize:'2.2rem',flexShrink:0,lineHeight:1}}>{ev.icon||'🎊'}</div>
@@ -346,7 +346,7 @@ export default function Live() {
               ['📱','Mobile','Watch right here on any device — phone, tablet or computer.'],
             ].map(([icon,title,desc])=>(
               <div key={title} style={{display:'flex',gap:12,alignItems:'flex-start'}}>
-                <div style={{width:36,height:36,borderRadius:10,background:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem',flexShrink:0,boxShadow:'var(--shadow-sm)'}}>{icon}</div>
+                <div style={{width:36,height:36,borderRadius:10,background: 'var(--white, white)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem',flexShrink:0,boxShadow:'var(--shadow-sm)'}}>{icon}</div>
                 <div>
                   <div style={{fontWeight:700,color:'var(--brand-deep)',fontSize:'0.9rem',marginBottom:3}}>{title}</div>
                   <div style={{fontSize:'0.82rem',color:'var(--text-mid)',lineHeight:1.6}}>{desc}</div>

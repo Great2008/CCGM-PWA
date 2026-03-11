@@ -82,7 +82,7 @@ export default function Contact() {
             </div>
 
             {/* Form */}
-            <div style={{ background:'white', borderRadius:20, padding:'clamp(24px,4vw,40px)', boxShadow:'var(--shadow-md)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius:20, padding:'clamp(24px,4vw,40px)', boxShadow:'var(--shadow-md)' }}>
               {submitted ? (
                 <div style={{ textAlign:'center', padding:'40px 20px' }}>
                   <div style={{ fontSize:'3.5rem', marginBottom:16 }}>🙏</div>
@@ -101,7 +101,7 @@ export default function Contact() {
                     <div className="form-group"><label>Phone</label><input name="phone" value={form.phone} onChange={handleChange} placeholder="+234 800 000 0000" /></div>
                     <div className="form-group">
                       <label>Subject</label>
-                      <select name="subject" value={form.subject} onChange={handleChange} style={{ padding:'10px 14px', borderRadius:8, border:'1.5px solid #e2e8f0', width:'100%', fontFamily:'var(--font-body)', fontSize:'0.9rem', background:'white' }}>
+                      <select name="subject" value={form.subject} onChange={handleChange} style={{ padding:'10px 14px', borderRadius:8, border:'1.5px solid #e2e8f0', width:'100%', fontFamily:'var(--font-body)', fontSize:'0.9rem', background: 'var(--white, white)' }}>
                         {['Prayer Request','General Inquiry','Event Information','Counseling','Partnership','Volunteer'].map(s=><option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>

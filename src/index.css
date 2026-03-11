@@ -69,7 +69,10 @@
   --shadow-lg:  0 24px 64px rgba(0,0,0,0.65);
 
   /* Aliases */
-  --green-pale: #0d2918;
+  --green-pale:   #0d2918;
+  --green-deep:   #a8d8b8;   /* was near-black, now readable light green */
+  --green-mid:    #4ade80;   /* was dark green, now vivid readable green */
+  --green-light:  #86efac;   /* stays bright */
 }
 
 /* Dark mode — common hardcoded whites in cards/inputs */
@@ -82,8 +85,66 @@
 [data-theme="dark"] .card,
 [data-theme="dark"] [style*="background: white"],
 [data-theme="dark"] [style*="background:white"],
-[data-theme="dark"] [style*="background:'white'"] {
+[data-theme="dark"] [style*="background:'white'"],
+[data-theme="dark"] [style*='background: "white"'],
+[data-theme="dark"] [style*='background:"white"'] {
   background: var(--white) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Inputs and selects with hardcoded white bg */
+[data-theme="dark"] input[style*="background"],
+[data-theme="dark"] select[style*="background: white"],
+[data-theme="dark"] select[style*="background:white"] {
+  background: #1e2922 !important;
+  color: var(--text-dark) !important;
+  border-color: #2a3d30 !important;
+}
+
+/* Hamburger bars — white spans in dark navbar */
+[data-theme="dark"] .hamburger span {
+  background: white !important;
+}
+
+/* Tag pills that use hardcoded white bg */
+[data-theme="dark"] .tag {
+  background: var(--brand-pale) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Light grey / near-white backgrounds that become invisible on dark bg */
+[data-theme="dark"] [style*="background: #f"],
+[data-theme="dark"] [style*="background:#f"],
+[data-theme="dark"] [style*="background: #e"],
+[data-theme="dark"] [style*="background:#e"] {
+  background: var(--white) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Borders that use hardcoded light colors */
+[data-theme="dark"] [style*="border-bottom: '1px solid #e"],
+[data-theme="dark"] [style*="borderBottom.*#e"] {
+  border-color: #2a3d30 !important;
+}
+
+/* Section backgrounds using --off-white or near-white */
+[data-theme="dark"] section[style*="background: var(--off-white)"],
+[data-theme="dark"] section[style*="background:var(--off-white)"],
+[data-theme="dark"] div[style*="background: var(--off-white)"] {
+  background: var(--off-white) !important;
+}
+
+/* Fix for any element using --green-pale as background text area */
+[data-theme="dark"] [style*="background: var(--green-pale)"],
+[data-theme="dark"] [style*="background:var(--green-pale)"] {
+  background: var(--green-pale) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Fix for --brand-pale backgrounds (used in cards) */
+[data-theme="dark"] [style*="background: var(--brand-pale)"],
+[data-theme="dark"] [style*="background:var(--brand-pale)"] {
+  color: var(--text-dark) !important;
 }
 
 /* Form inputs */

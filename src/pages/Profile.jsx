@@ -289,7 +289,7 @@ export default function Profile() {
         {/* ─── MY INFO TAB ─── */}
         {tab === 'info' && (
           <div style={{ display: 'grid', gap: 20 }}>
-            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,36px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,36px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.2rem', marginBottom: 24, paddingBottom: 14, borderBottom: '1px solid var(--brand-pale)' }}>Personal Information</h2>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
@@ -305,7 +305,7 @@ export default function Profile() {
                   <select
                     value={form.church_branch}
                     onChange={e => setForm(f => ({ ...f, church_branch: e.target.value }))}
-                    style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontSize: '0.9rem', color: form.church_branch ? 'var(--text-dark)' : '#9ca3af', fontFamily: 'var(--font-body)', outline: 'none', cursor: 'pointer', transition: 'border-color 0.2s', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a7c59' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: 36 }}
+                    style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'var(--white, white)', fontSize: '0.9rem', color: form.church_branch ? 'var(--text-dark)' : '#9ca3af', fontFamily: 'var(--font-body)', outline: 'none', cursor: 'pointer', transition: 'border-color 0.2s', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a7c59' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: 36 }}
                     onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
                     onBlur={e => e.target.style.borderColor = '#e2e8f0'}
                   >
@@ -431,7 +431,7 @@ export default function Profile() {
           <div style={{ display: 'grid', gap: 20 }}>
 
             {/* Change Password */}
-            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 20, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>🔐 Change Password</h2>
               <div style={{ display: 'grid', gap: 14, maxWidth: 400 }}>
                 <Field label="New Password" value={pwForm.next} onChange={v => setPwForm(f => ({ ...f, next: v }))} type="password" placeholder="At least 8 characters" />
@@ -450,7 +450,7 @@ export default function Profile() {
             </div>
 
             {/* Dark Mode */}
-            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 18, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>{dark ? '☀️' : '🌙'} Appearance</h2>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
                 <div>
@@ -461,13 +461,13 @@ export default function Profile() {
                   onClick={toggleTheme}
                   style={{ width: 52, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer', background: dark ? 'var(--brand-base)' : '#d1d5db', position: 'relative', transition: 'background 0.25s', flexShrink: 0 }}
                 >
-                  <span style={{ position: 'absolute', top: 3, left: dark ? 26 : 3, width: 22, height: 22, borderRadius: '50%', background: 'white', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.25s' }} />
+                  <span style={{ position: 'absolute', top: 3, left: dark ? 26 : 3, width: 22, height: 22, borderRadius: '50%', background: 'var(--white, white)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.25s' }} />
                 </button>
               </div>
             </div>
 
             {/* Push Notifications */}
-            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 18, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>🔔 Push Notifications</h2>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
                 <div>
@@ -480,13 +480,13 @@ export default function Profile() {
                   onClick={handleNotifToggle}
                   style={{ width: 52, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer', background: notifEnabled ? 'var(--brand-base)' : '#d1d5db', position: 'relative', transition: 'background 0.25s', flexShrink: 0 }}
                 >
-                  <span style={{ position: 'absolute', top: 3, left: notifEnabled ? 26 : 3, width: 22, height: 22, borderRadius: '50%', background: 'white', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.25s' }} />
+                  <span style={{ position: 'absolute', top: 3, left: notifEnabled ? 26 : 3, width: 22, height: 22, borderRadius: '50%', background: 'var(--white, white)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.25s' }} />
                 </button>
               </div>
             </div>
 
             {/* Account info */}
-            <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 18, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>👤 Account</h2>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
                 <div style={{ flex: 1, minWidth: 200 }}>
@@ -554,7 +554,7 @@ function Field({ label, value, onChange, placeholder, type = 'text' }) {
         placeholder={placeholder}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        style={{ padding: '10px 14px', borderRadius: 10, border: `1.5px solid ${focused ? 'var(--brand-base)' : '#e2e8f0'}`, fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', color: 'var(--text-dark)', background: 'white', transition: 'border-color 0.2s' }}
+        style={{ padding: '10px 14px', borderRadius: 10, border: `1.5px solid ${focused ? 'var(--brand-base)' : '#e2e8f0'}`, fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', color: 'var(--text-dark)', background: 'var(--white, white)', transition: 'border-color 0.2s' }}
       />
     </div>
   )
@@ -563,7 +563,7 @@ function Field({ label, value, onChange, placeholder, type = 'text' }) {
 // ── Activity section wrapper ──
 function ActivitySection({ title, children, empty, emptyText }) {
   return (
-    <div style={{ background: 'white', borderRadius: 18, padding: 'clamp(18px,3vw,28px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+    <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(18px,3vw,28px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
       <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.05rem', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>{title}</h3>
       {empty
         ? <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', textAlign: 'center', padding: '20px 0' }}>{emptyText}</p>

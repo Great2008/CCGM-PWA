@@ -281,7 +281,7 @@ export default function SabbathSchool() {
       {showList && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 500, background: 'rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column' }}
           onClick={() => setShowList(false)}>
-          <div style={{ marginTop: 'auto', background: 'white', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+          <div style={{ marginTop: 'auto', background: 'var(--white, white)', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
               <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1fae5' }} />
@@ -292,7 +292,7 @@ export default function SabbathSchool() {
                 style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box' }} />
               {quarters.length > 1 && (
                 <select value={quarter} onChange={e => setQuarter(e.target.value)}
-                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white' }}>
+                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'var(--white, white)' }}>
                   <option value="all">All Quarters</option>
                   {quarters.map(q => <option key={q} value={q}>{q}</option>)}
                 </select>
@@ -328,13 +328,13 @@ export default function SabbathSchool() {
 
           {/* Desktop Sidebar */}
           <div className="ss-desktop-sidebar" style={{ display: 'none' }}>
-            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
               <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0fdf4' }}>
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search lessons..."
                   style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box' }} />
                 {quarters.length > 1 && (
                   <select value={quarter} onChange={e => setQuarter(e.target.value)}
-                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white' }}>
+                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'var(--white, white)' }}>
                     <option value="all">All Quarters</option>
                     {quarters.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
@@ -363,12 +363,12 @@ export default function SabbathSchool() {
           {/* Content Panel */}
           <div>
             {!selected ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
+              <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>📖</div>
                 <div style={{ color: 'var(--text-light)' }}>Select a lesson to read</div>
               </div>
             ) : (
-              <div className="ss-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
+              <div className="ss-card" style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
 
                 {/* Lesson Header */}
                 <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
@@ -508,19 +508,19 @@ export default function SabbathSchool() {
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                             {selected.divine_message_title && (
-                              <div style={{ background: 'white', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
+                              <div style={{ background: 'var(--white, white)', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
                                 <div style={{ fontSize: (fontSize - 5) + 'px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--brand-light)', marginBottom: 6 }}>SERMON TITLE</div>
                                 <div style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: 'clamp(1rem,3vw,1.2rem)', lineHeight: 1.35 }}>{selected.divine_message_title}</div>
                               </div>
                             )}
                             {selected.divine_message_speaker && (
-                              <div style={{ background: 'white', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
+                              <div style={{ background: 'var(--white, white)', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
                                 <div style={{ fontSize: (fontSize - 5) + 'px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--brand-light)', marginBottom: 6 }}>PREACHER</div>
                                 <div style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: fontSize + 'px' }}>🎙 {selected.divine_message_speaker}</div>
                               </div>
                             )}
                             {selected.divine_message_scripture && (
-                              <div style={{ background: 'white', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
+                              <div style={{ background: 'var(--white, white)', borderRadius: 12, padding: 'clamp(12px,3vw,18px)', boxShadow: '0 1px 6px rgba(0,0,0,0.06)' }}>
                                 <div style={{ fontSize: (fontSize - 5) + 'px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--brand-light)', marginBottom: 6 }}>SCRIPTURE</div>
                                 <div style={{ fontWeight: 700, color: 'var(--gold)', fontSize: fontSize + 'px' }}>📜 {selected.divine_message_scripture}</div>
                               </div>

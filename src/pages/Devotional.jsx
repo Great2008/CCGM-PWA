@@ -311,7 +311,7 @@ export default function Devotional() {
       {showList && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 500, background: 'rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column' }}
           onClick={() => setShowList(false)}>
-          <div style={{ marginTop: 'auto', background: 'white', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+          <div style={{ marginTop: 'auto', background: 'var(--white, white)', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
               <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1fae5' }} />
@@ -331,7 +331,7 @@ export default function Devotional() {
                 style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box', outline: 'none' }} />
               {categories.length > 2 && (
                 <select value={category} onChange={e => setCategory(e.target.value)}
-                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'white', outline: 'none' }}>
+                  style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'var(--white, white)', outline: 'none' }}>
                   {categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               )}
@@ -371,13 +371,13 @@ export default function Devotional() {
 
           {/* Desktop Sidebar */}
           <div className="dev-desktop-sidebar" style={{ display: 'none' }}>
-            <div style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
               <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0fdf4' }}>
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search devotionals..."
                   style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box', outline: 'none' }} />
                 {categories.length > 2 && (
                   <select value={category} onChange={e => setCategory(e.target.value)}
-                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'white', outline: 'none' }}>
+                    style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'var(--white, white)', outline: 'none' }}>
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 )}
@@ -421,7 +421,7 @@ export default function Devotional() {
           {/* Content Panel */}
           <div>
             {devs.length === 0 ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
+              <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>🌅</div>
                 <div style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.4rem', marginBottom: 10 }}>No Devotionals Yet</div>
                 <div style={{ color: 'var(--text-mid)', maxWidth: 360, margin: '0 auto', lineHeight: 1.7 }}>
@@ -429,12 +429,12 @@ export default function Devotional() {
                 </div>
               </div>
             ) : !selected ? (
-              <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
+              <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 12 }}>🌅</div>
                 <div style={{ color: 'var(--text-light)' }}>Select a devotional to read</div>
               </div>
             ) : (
-              <div className="dev-card" style={{ background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
+              <div className="dev-card" style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
 
                 {/* Header */}
                 <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>

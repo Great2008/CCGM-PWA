@@ -33,7 +33,7 @@ function ResultCard({ result, query }) {
   return (
     <Link to={type.path} style={{ display: 'block', textDecoration: 'none' }}>
       <div
-        style={{ background: 'white', borderRadius: 14, padding: '16px 20px', border: '1.5px solid #e8f0e8', cursor: 'pointer', transition: 'all 0.18s', display: 'flex', gap: 14, alignItems: 'flex-start' }}
+        style={{ background: 'var(--white, white)', borderRadius: 14, padding: '16px 20px', border: '1.5px solid #e8f0e8', cursor: 'pointer', transition: 'all 0.18s', display: 'flex', gap: 14, alignItems: 'flex-start' }}
         onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--brand-base)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
         onMouseLeave={e => { e.currentTarget.style.borderColor = '#e8f0e8'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
       >
@@ -223,7 +223,7 @@ export default function Search() {
               onChange={e => handleInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search sermons, hymns, events, blog posts…"
-              style={{ width: '100%', padding: '18px 52px 18px 52px', borderRadius: '14px 14px 0 0', border: 'none', fontSize: '1.05rem', fontFamily: 'var(--font-body)', outline: 'none', background: 'white', color: 'var(--text-dark)', boxSizing: 'border-box', boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}
+              style={{ width: '100%', padding: '18px 52px 18px 52px', borderRadius: '14px 14px 0 0', border: 'none', fontSize: '1.05rem', fontFamily: 'var(--font-body)', outline: 'none', background: 'var(--white, white)', color: 'var(--text-dark)', boxSizing: 'border-box', boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}
             />
             {query && (
               <button onClick={() => handleInput('')} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', background: '#e2e8f0', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-mid)' }}>✕</button>
@@ -269,7 +269,7 @@ export default function Search() {
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 24 }}>
               {Object.entries(TYPES).map(([key, t]) => (
-                <span key={key} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 14px', borderRadius: 20, background: 'white', border: '1.5px solid #e2e8f0', fontSize: '0.8rem', color: 'var(--text-mid)', fontWeight: 600 }}>
+                <span key={key} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 14px', borderRadius: 20, background: 'var(--white, white)', border: '1.5px solid #e2e8f0', fontSize: '0.8rem', color: 'var(--text-mid)', fontWeight: 600 }}>
                   {t.icon} {t.label}s
                 </span>
               ))}

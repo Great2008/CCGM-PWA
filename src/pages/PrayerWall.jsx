@@ -52,7 +52,7 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
 
   return (
     <div style={{
-      background: 'white', borderRadius: 18, overflow: 'hidden',
+      background: 'var(--white, white)', borderRadius: 18, overflow: 'hidden',
       boxShadow: '0 2px 16px rgba(15,31,61,0.07)',
       border: '1.5px solid #e8f0fe',
       transition: 'box-shadow 0.2s',
@@ -115,7 +115,7 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
           style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '7px 14px', borderRadius: 30,
-            border: '1.5px solid #e2e8f0', background: 'white',
+            border: '1.5px solid #e2e8f0', background: 'var(--white, white)',
             color: 'var(--text-light)', fontSize: '0.82rem',
             cursor: 'pointer', fontFamily: 'var(--font-body)',
           }}>
@@ -132,7 +132,7 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, var(--gold), #f97316)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0 }}>
                 {(r.profiles?.display_name || r.profiles?.full_name || '?').charAt(0).toUpperCase()}
               </div>
-              <div style={{ flex: 1, background: 'white', borderRadius: 10, padding: '10px 14px', border: '1px solid #e8f0fe' }}>
+              <div style={{ flex: 1, background: 'var(--white, white)', borderRadius: 10, padding: '10px 14px', border: '1px solid #e8f0fe' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                   <span style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: '0.82rem' }}>
                     {r.profiles?.display_name || r.profiles?.full_name || 'Member'}
@@ -279,7 +279,7 @@ export default function PrayerWall() {
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '32px 5% 80px' }}>
 
         {/* Submit box — anyone can submit, no login needed */}
-        <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(20px,4vw,32px)', marginBottom: 32, boxShadow: 'var(--shadow-md)', border: '1.5px solid #e8f0fe' }}>
+        <div style={{ background: 'var(--white, white)', borderRadius: 20, padding: 'clamp(20px,4vw,32px)', marginBottom: 32, boxShadow: 'var(--shadow-md)', border: '1.5px solid #e8f0fe' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
             <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, var(--brand-light), var(--brand-mid))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>🙏</div>
             <div>
@@ -360,7 +360,7 @@ export default function PrayerWall() {
 
         {/* Empty */}
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '60px 20px', background: 'white', borderRadius: 16, boxShadow: 'var(--shadow-sm)' }}>
+          <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)' }}>
             <div style={{ fontSize: '3rem', marginBottom: 12 }}>🙏</div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)', marginBottom: 8 }}>
               {filter !== 'All' ? `No ${filter} requests yet` : 'No prayer requests yet'}

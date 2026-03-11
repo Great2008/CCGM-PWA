@@ -57,7 +57,7 @@ export default function FindChurch() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
             {/* How to use */}
-            <div style={{ background: 'white', borderRadius: 14, padding: '18px 20px', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0' }}>
+            <div style={{ background: 'var(--white, white)', borderRadius: 14, padding: '18px 20px', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #e2e8f0' }}>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)', fontSize: '0.95rem', marginBottom: 12 }}>
                 🗺️ Using the Map
               </div>

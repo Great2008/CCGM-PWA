@@ -85,7 +85,7 @@ export default function Home() {
           <div style={{marginTop:48,display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',alignItems:'center'}}>
             {isLive ? (
               <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:10,background:'#dc2626',border:'none',borderRadius:40,padding:'10px 24px',textDecoration:'none',animation:'pulse 1.5s infinite'}}>
-                <span style={{width:8,height:8,borderRadius:'50%',background:'white',display:'inline-block'}} />
+                <span style={{width:8,height:8,borderRadius:'50%',background: 'var(--white, white)',display:'inline-block'}} />
                 <span style={{color:'white',fontSize:'0.88rem',fontWeight:900}}>🔴 We Are Live — Watch Now</span>
               </Link>
             ) : (
@@ -115,7 +115,7 @@ export default function Home() {
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:12}}>
             {hp.serviceTimes.map(({icon,day,name,time})=>(
               <div key={day} style={{
-                background:'white',borderRadius:14,padding:'18px 12px',textAlign:'center',
+                background:'var(--white, white)',borderRadius:14,padding:'18px 12px',textAlign:'center',
                 borderTop:`4px solid ${day==='Saturday'?'var(--gold)':'var(--green-mid)'}`,
                 boxShadow:'var(--shadow-sm)',transition:'transform 0.2s',
               }}

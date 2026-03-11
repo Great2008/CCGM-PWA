@@ -139,7 +139,7 @@ export default function Navbar() {
                 display:'flex',alignItems:'center',gap:4,fontFamily:'var(--font-body)',whiteSpace:'nowrap',
               }}>📴 Offline <span style={{fontSize:'0.55rem',opacity:0.6}}>{offlineOpen?'▲':'▼'}</span></button>
               {offlineOpen&&(
-                <div style={{position:'absolute',top:'calc(100% + 8px)',right:0,background:'white',borderRadius:12,padding:8,boxShadow:'0 12px 40px rgba(0,0,0,0.18)',minWidth:210,border:'1px solid rgba(0,0,0,0.06)',zIndex:200}}>
+                <div style={{position:'absolute',top:'calc(100% + 8px)',right:0,background:'var(--white, white)',borderRadius:12,padding:8,boxShadow:'0 12px 40px rgba(0,0,0,0.18)',minWidth:210,border:'1px solid rgba(0,0,0,0.06)',zIndex:200}}>
                   {OFFLINE_LINKS.map(({to,label,sub})=>(
                     <Link key={to} to={to} style={{display:'block',padding:'10px 14px',borderRadius:8,textDecoration:'none',transition:'background 0.15s'}}
                     onMouseEnter={e=>e.currentTarget.style.background='var(--brand-pale)'}
@@ -209,7 +209,7 @@ export default function Navbar() {
             aria-label="Menu">
             {[0,1,2].map(i=>(
               <span key={i} style={{
-                display:'block',width:24,height:2.5,background:'white',borderRadius:2,
+                display:'block',width:24,height:2.5,background:'var(--text-dark)',borderRadius:2,
                 transform: menuOpen ? (i===0?'translateY(7.5px) rotate(45deg)':i===2?'translateY(-7.5px) rotate(-45deg)':'scaleX(0)') : 'none',
                 opacity: menuOpen&&i===1?0:1,
                 transition:'transform 0.28s,opacity 0.2s',
