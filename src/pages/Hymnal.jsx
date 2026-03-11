@@ -229,7 +229,7 @@ export default function Hymnal() {
       `}</style>
 
       {offline && hymns.length > 0 && (
-        <div style={{ background: '#fff9f0', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: '#c2410c', fontWeight: 600 }}>
+        <div style={{ background: 'var(--white, #fff9f0)', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-dark)', fontWeight: 600 }}>
           Offline — showing {hymns.length} cached hymn{hymns.length !== 1 ? 's' : ''}
         </div>
       )}
@@ -334,7 +334,7 @@ export default function Hymnal() {
                   return (
                     <div key={h.id} id={'hm-item-' + h.id} className="hm-item" onClick={() => selectHymn(h)}
                       style={{ padding: '11px 14px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSel ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSel ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: 7, background: isSel ? 'var(--brand-base)' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.7rem', color: isSel ? 'white' : 'var(--brand-mid)', flexShrink: 0 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 7, background: isSel ? 'var(--brand-base)' : 'var(--brand-mist, #f0fdf4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.7rem', color: isSel ? 'white' : 'var(--brand-mid)', flexShrink: 0 }}>
                         {h.sort_order ?? '—'}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>

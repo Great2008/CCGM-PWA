@@ -255,7 +255,7 @@ export default function Devotional() {
 
       {/* Offline banner */}
       {offline && devs.length > 0 && (
-        <div style={{ background: '#fff9f0', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: '#c2410c', fontWeight: 600 }}>
+        <div style={{ background: 'var(--white, #fff9f0)', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-dark)', fontWeight: 600 }}>
           Offline — showing {visibleDevs.length} devotional{visibleDevs.length !== 1 ? 's' : ''}
         </div>
       )}
@@ -347,7 +347,7 @@ export default function Devotional() {
                 const isTod = d.date === today
                 return (
                   <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
-                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
+                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
                       <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{d.title}</div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -401,7 +401,7 @@ export default function Devotional() {
                   const isTod = d.date === today
                   return (
                     <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
-                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
+                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
                         <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{d.title}</div>
                         <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>

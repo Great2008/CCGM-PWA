@@ -209,7 +209,7 @@ export default function Navbar() {
             aria-label="Menu">
             {[0,1,2].map(i=>(
               <span key={i} style={{
-                display:'block',width:24,height:2.5,background:'var(--text-dark)',borderRadius:2,
+                display:'block',width:24,height:2.5,background:'white',borderRadius:2,
                 transform: menuOpen ? (i===0?'translateY(7.5px) rotate(45deg)':i===2?'translateY(-7.5px) rotate(-45deg)':'scaleX(0)') : 'none',
                 opacity: menuOpen&&i===1?0:1,
                 transition:'transform 0.28s,opacity 0.2s',

@@ -70,9 +70,13 @@
 
   /* Aliases */
   --green-pale:   #0d2918;
-  --green-deep:   #a8d8b8;   /* was near-black, now readable light green */
-  --green-mid:    #4ade80;   /* was dark green, now vivid readable green */
-  --green-light:  #86efac;   /* stays bright */
+  --green-deep:   #a8d8b8;   /* readable on dark bg */
+  --green-mid:    #4ade80;
+  --green-light:  #86efac;
+
+  /* Brand colors used as TEXT — must flip to be readable on dark surfaces */
+  --brand-deep:   #a8d8b8;   /* was #0a2612 near-black → now light mint */
+  --brand-dark:   #6ee7a0;   /* was #14532d dark green → now medium green */
 }
 
 /* Dark mode — common hardcoded whites in cards/inputs */
@@ -145,6 +149,39 @@
 [data-theme="dark"] [style*="background: var(--brand-pale)"],
 [data-theme="dark"] [style*="background:var(--brand-pale)"] {
   color: var(--text-dark) !important;
+}
+
+/* ── Dark mode: explicit surface color for dark-themed card items ── */
+/* Notification, search, devotional list items on dark bg */
+[data-theme="dark"] [style*="border: '1.5px solid #f1f5f9'"],
+[data-theme="dark"] [style*="border: 1.5px solid #f1f5f9"] {
+  border-color: #2a3d30 !important;
+}
+
+/* Discussion questions box — keep it a warm dark on dark mode */  
+[data-theme="dark"] [style*="border: '1.5px solid #fcd34d'"],
+[data-theme="dark"] [style*="border: 1.5px solid #fcd34d"] {
+  background: #1a1500 !important;
+  border-color: #78350f !important;
+}
+[data-theme="dark"] [style*="border: '1.5px solid #fcd34d'"] h4,
+[data-theme="dark"] [style*="border: '1.5px solid #fcd34d'"] span,
+[data-theme="dark"] [style*="border: 1.5px solid #fcd34d"] h4,
+[data-theme="dark"] [style*="border: 1.5px solid #fcd34d"] span {
+  color: #fde68a !important;
+}
+
+/* Notification/list card borders */
+[data-theme="dark"] [style*="border: '1px solid #f1f5f9'"],
+[data-theme="dark"] [style*="border: 1px solid #f1f5f9"],
+[data-theme="dark"] [style*="borderBottom: '1px solid #f8faf8'"],
+[data-theme="dark"] [style*="border-bottom: 1px solid #f8faf8"] {
+  border-color: #1e2f22 !important;
+}
+
+/* Hamburger bars — always white regardless of theme */
+.hamburger span {
+  background: white !important;
 }
 
 /* Form inputs */

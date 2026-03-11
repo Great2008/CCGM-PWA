@@ -225,7 +225,7 @@ export default function SabbathSchool() {
       `}</style>
 
       {offline && lessons.length > 0 && (
-        <div style={{ background: '#fff9f0', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: '#c2410c', fontWeight: 600 }}>
+        <div style={{ background: 'var(--white, #fff9f0)', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-dark)', fontWeight: 600 }}>
           Offline — showing {lessons.length} cached lesson{lessons.length !== 1 ? 's' : ''}
         </div>
       )}
@@ -307,7 +307,7 @@ export default function SabbathSchool() {
                 const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                 return (
                   <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
-                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
+                    style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                       <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{l.title}</div>
                       {isThisWeek && <span style={{ background: 'var(--gold)', color: 'white', fontSize: '0.62rem', padding: '3px 9px', borderRadius: 10, fontWeight: 900, flexShrink: 0, alignSelf: 'flex-start' }}>NOW</span>}
@@ -346,7 +346,7 @@ export default function SabbathSchool() {
                   const isThisWeek = l.id === thisWeekLesson(lessons)?.id
                   return (
                     <div key={l.id} id={'ss-lesson-' + l.id} className="ss-lesson-item" onClick={() => selectLesson(l)}
-                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'white', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
+                      style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                         <div style={{ fontWeight: isSelected ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{l.title}</div>
                         {isThisWeek && <span style={{ background: 'var(--gold)', color: 'white', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 10, fontWeight: 900, flexShrink: 0 }}>NOW</span>}
@@ -444,8 +444,8 @@ export default function SabbathSchool() {
                         <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>No content available for this lesson.</div>
                       )}
                       {selected.discussion_questions && (
-                        <div style={{ marginTop: 32, background: '#fffbf0', borderRadius: 14, padding: '22px 24px', border: '1.5px solid #fcd34d' }}>
-                          <h4 style={{ fontFamily: 'var(--font-display)', color: '#92400e', margin: '0 0 16px', fontSize: (fontSize + 1) + 'px' }}>Discussion Questions</h4>
+                        <div style={{ marginTop: 32, background: 'var(--white, #fffbf0)', borderRadius: 14, padding: '22px 24px', border: '1.5px solid #fcd34d' }}>
+                          <h4 style={{ fontFamily: 'var(--font-display)', color: 'var(--text-dark)', margin: '0 0 16px', fontSize: (fontSize + 1) + 'px' }}>Discussion Questions</h4>
                           <div style={{ lineHeight: 1.9, fontSize: fontSize + 'px' }}>
                             {selected.discussion_questions.split('\n').filter(Boolean).map((q, i) => (
                               <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
