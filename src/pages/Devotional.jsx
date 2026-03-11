@@ -30,6 +30,33 @@ function getMonthDay() {
   return `${months[d.getMonth()]} ${d.getDate()}`
 }
 
+// Parse a "Jan 5" or "2025-01-05" style date string into a comparable Date (midnight local)
+function parseDevDate(dateStr) {
+  if (!dateStr) return null
+  // ISO format
+  if (/^\d{4}-/.test(dateStr)) return new Date(dateStr + 'T00:00:00')
+  // "Jan 5" or "Jan 05"
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const parts = dateStr.trim().split(/\s+/)
+  if (parts.length < 2) return null
+  const month = months.indexOf(parts[0])
+  const day = parseInt(parts[1], 10)
+  if (month === -1 || isNaN(day)) return null
+  const now = new Date()
+  // Use current year; if date would be far in the future, try previous year
+  const d = new Date(now.getFullYear(), month, day)
+  return d
+}
+
+// Returns true if the devotional's date is today or in the past
+function isAvailableToday(dateStr) {
+  const devDate = parseDevDate(dateStr)
+  if (!devDate) return true // no date = always show
+  const today = new Date()
+  today.setHours(23, 59, 59, 999) // end of today
+  return devDate <= today
+}
+
 function fmt(dateStr) {
   if (!dateStr) return ''
   // Handle "Jan 1", "Jan 01" style dates directly
@@ -85,7 +112,9 @@ function ReadingContent({ blocks, fontSize }) {
 }
 
 function todaysDev(devs, today) {
-  return devs.find(d => d.date === today) || devs[0] || null
+  // Only pick from devotionals that are available (today or past)
+  const available = devs.filter(d => isAvailableToday(d.date))
+  return available.find(d => d.date === today) || available[0] || null
 }
 
 export default function Devotional() {
@@ -161,9 +190,12 @@ export default function Devotional() {
     if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
   }, [selected])
 
-  const categories = ['All', ...new Set(devs.map(d => d.category).filter(Boolean))]
+  // All devs are cached (including future) but only past+today are visible
+  const visibleDevs = devs.filter(d => isAvailableToday(d.date))
 
-  const filtered = devs.filter(d => {
+  const categories = ['All', ...new Set(visibleDevs.map(d => d.category).filter(Boolean))]
+
+  const filtered = visibleDevs.filter(d => {
     const matchCat = category === 'All' || d.category === category
     const matchSearch = !search ||
       (d.title || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -224,7 +256,7 @@ export default function Devotional() {
       {/* Offline banner */}
       {offline && devs.length > 0 && (
         <div style={{ background: '#fff9f0', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: '#c2410c', fontWeight: 600 }}>
-          Offline — showing {devs.length} cached devotional{devs.length !== 1 ? 's' : ''}
+          Offline — showing {visibleDevs.length} devotional{visibleDevs.length !== 1 ? 's' : ''}
         </div>
       )}
 
