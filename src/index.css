@@ -47,36 +47,36 @@
    Applied via [data-theme="dark"] on <html>
    ══════════════════════════════════════════ */
 [data-theme="dark"] {
-  /* Surfaces */
-  --white:      #1a2420;
-  --milk:       #1e2922;
-  --cream:      #1c2620;
-  --off-white:  #151e19;
+  /* Surfaces — deep forest tones */
+  --white:      #111a15;
+  --milk:       #141d18;
+  --cream:      #131c17;
+  --off-white:  #0d1510;
 
-  /* Text — flip light/dark */
-  --text-dark:  #e8f5ee;
-  --text-mid:   #a8c9b4;
-  --text-light: #6fa882;
-  --text-muted: #4a7060;
+  /* Text — warm off-white, not stark */
+  --text-dark:  #d4e8da;
+  --text-mid:   #8aad98;
+  --text-light: #5a8a6a;
+  --text-muted: #3a5a48;
 
-  /* Brand greens stay vivid but backgrounds soften */
-  --brand-pale: #0d2918;
-  --brand-mist: #0a1f12;
+  /* Brand greens — deeper, richer */
+  --brand-pale: #0a2016;
+  --brand-mist: #081810;
 
   /* Shadows — deeper for dark bg */
-  --shadow-sm:  0 2px 12px rgba(0,0,0,0.35);
-  --shadow-md:  0 8px 32px rgba(0,0,0,0.5);
-  --shadow-lg:  0 24px 64px rgba(0,0,0,0.65);
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.4);
+  --shadow-md:  0 8px 32px rgba(0,0,0,0.55);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,0.7);
 
   /* Aliases */
-  --green-pale:   #0d2918;
-  --green-deep:   #a8d8b8;   /* readable on dark bg */
-  --green-mid:    #4ade80;
-  --green-light:  #86efac;
+  --green-pale:   #0a2016;
+  --green-deep:   #6dbf8a;   /* muted sage — not too bright */
+  --green-mid:    #34c870;   /* rich mid-green */
+  --green-light:  #5dd68a;
 
-  /* Brand colors used as TEXT — must flip to be readable on dark surfaces */
-  --brand-deep:   #a8d8b8;   /* was #0a2612 near-black → now light mint */
-  --brand-dark:   #6ee7a0;   /* was #14532d dark green → now medium green */
+  /* Brand text colors — readable but not washed out */
+  --brand-deep:   #6dbf8a;   /* muted sage green for headings/titles */
+  --brand-dark:   #4aab6e;   /* slightly deeper for sub-headings */
 }
 
 /* Dark mode — common hardcoded whites in cards/inputs */
