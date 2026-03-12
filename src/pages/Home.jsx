@@ -64,7 +64,7 @@ export default function Home() {
               rel="noreferrer"
               style={{
                 display:'inline-flex',alignItems:'center',gap:10,
-                background:'linear-gradient(135deg,#16a34a,#15803d)',
+                background:'linear-gradient(135deg,#0a2612,#166534)',
                 border:'none',borderRadius:40,padding:'13px 28px',
                 textDecoration:'none',boxShadow:'0 6px 24px rgba(22,163,74,0.35)',
                 transition:'transform 0.2s,box-shadow 0.2s',
@@ -219,7 +219,7 @@ export default function Home() {
         </section>
       )}
 
-      <section style={{background:'linear-gradient(135deg,var(--green-deep),var(--green-mid))',padding:'clamp(50px,7vw,80px) 5%'}}>
+      <section className="stats-section" style={{padding:'clamp(50px,7vw,80px) 5%'}}>
         <div className="container">
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:24,textAlign:'center'}}>
             {hp.stats.map(s=>(
