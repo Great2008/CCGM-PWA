@@ -68,15 +68,17 @@
   --shadow-md:  0 8px 32px rgba(0,0,0,0.55);
   --shadow-lg:  0 24px 64px rgba(0,0,0,0.7);
 
-  /* Aliases */
-  --green-pale:   #0a2016;
-  --green-deep:   #6dbf8a;   /* muted sage — not too bright */
-  --green-mid:    #34c870;   /* rich mid-green */
-  --green-light:  #5dd68a;
+  /* brand-deep/mid/base stay DARK (used for hero section backgrounds).
+     Do NOT override them here — gradients must remain dark green.
+     Text readability on dark cards is handled below via [data-theme="dark"] selectors. */
 
-  /* Brand text colors — readable but not washed out */
-  --brand-deep:   #6dbf8a;   /* muted sage green for headings/titles */
-  --brand-dark:   #4aab6e;   /* slightly deeper for sub-headings */
+  /* brand-dark: used as text on white cards → must be readable on dark card bg */
+  --brand-dark:   #5aab7a;
+
+  /* green-deep/mid: used as text labels → must be readable on dark surfaces */
+  --green-deep:   #6dbf8a;
+  --green-mid:    #3ab86e;
+  --green-light:  #4dd68a;
 }
 
 /* Dark mode — common hardcoded whites in cards/inputs */
@@ -149,6 +151,31 @@
 [data-theme="dark"] [style*="background: var(--brand-pale)"],
 [data-theme="dark"] [style*="background:var(--brand-pale)"] {
   color: var(--text-dark) !important;
+}
+
+/* ── Stats section: gradient bg using green vars ── */
+.stats-section {
+  background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+}
+[data-theme="dark"] .stats-section {
+  background: linear-gradient(135deg, #0d2918, #14412a) !important;
+}
+
+/* ── Dark mode: brand-deep text on dark surfaces must be readable ── */
+/* brand-deep (#0a2612) is used as text color on cards — flip to light on dark bg */
+[data-theme="dark"] h2[style*="color: var(--brand-deep)"],
+[data-theme="dark"] h3[style*="color: var(--brand-deep)"],
+[data-theme="dark"] h4[style*="color: var(--brand-deep)"],
+[data-theme="dark"] div[style*="color: var(--brand-deep)"],
+[data-theme="dark"] span[style*="color: var(--brand-deep)"],
+[data-theme="dark"] p[style*="color: var(--brand-deep)"],
+[data-theme="dark"] a[style*="color: var(--brand-deep)"] {
+  color: var(--green-deep) !important;  /* #6dbf8a — muted sage readable on dark */
+}
+
+/* brand-mid (#166534) as text → lighten */
+[data-theme="dark"] [style*="color: var(--brand-mid)"] {
+  color: var(--green-mid) !important;
 }
 
 /* ── Dark mode: explicit surface color for dark-themed card items ── */
