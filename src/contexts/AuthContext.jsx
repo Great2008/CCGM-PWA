@@ -28,11 +28,64 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signUp = async (email, password, fullName) => {
+  const signUp = async (email, password, profileData = {}) => {
+    const { fullName = '', ...rest } = profileData
     const { error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { full_name: fullName, display_name: fullName.split(' ')[0] } }
+      options: {
+        data: { full_name: fullName, display_name: fullName.split(' ')[0] },
+        emailRedirectTo: undefined,   // disable magic link — we use OTP
+      }
     })
+    // Store extra profile fields to apply after OTP verify
+    if (!error && Object.keys(rest).length) {
+      sessionStorage.setItem('ccgm_pending_profile', JSON.stringify({ ...rest, full_name: fullName }))
+    }
+    return error
+  }
+
+  const verifyOtp = async (email, token) => {
+    const { error } = await supabase.auth.verifyOtp({ email, token, type: 'signup' })
+    if (!error) {
+      // Apply any extra profile fields saved during signup
+      try {
+        const pending = JSON.parse(sessionStorage.getItem('ccgm_pending_profile') || 'null')
+        if (pending) {
+          const { data: { user: u } } = await supabase.auth.getUser()
+          if (u) {
+            const { full_name, phone, location, occupation, birthday, church_branch, bio, unlisted_branch } = pending
+            const updates = {
+              display_name: full_name?.split(' ')[0] || '',
+              full_name,
+              ...(phone && { phone }),
+              ...(location && { location }),
+              ...(occupation && { occupation }),
+              ...(birthday && { birthday }),
+              ...(church_branch && { church_branch }),
+              ...(bio && { bio }),
+              // Mark as unverified_branch if they used "Not Listed" — clears when admin approves
+              ...(unlisted_branch?.name && { unverified_branch: true }),
+            }
+            await supabase.from('profiles').update(updates).eq('id', u.id)
+            // Save unlisted branch request for admin review
+            if (unlisted_branch?.name) {
+              await supabase.from('branch_suggestions').insert({
+                user_id: u.id,
+                branch_name: unlisted_branch.name,
+                city: unlisted_branch.city || '',
+                status: 'pending',
+              })
+            }
+            sessionStorage.removeItem('ccgm_pending_profile')
+          }
+        }
+      } catch (_) {}
+    }
+    return error
+  }
+
+  const resendOtp = async (email) => {
+    const { error } = await supabase.auth.resend({ type: 'signup', email })
     return error
   }
 
@@ -50,7 +103,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signUp, signIn, signOut, updateProfile, isAdmin: profile?.role === 'admin', isApproved: !!user }}>
+    <AuthContext.Provider value={{ user, profile, loading, signUp, verifyOtp, resendOtp, signIn, signOut, updateProfile, isAdmin: profile?.role === 'admin', isApproved: !!user }}>
       {children}
     </AuthContext.Provider>
   )

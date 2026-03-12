@@ -122,52 +122,367 @@ function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin }
 
 /* ── Auth modal ── */
 function AuthModal({ onClose }) {
-  const { signIn, signUp } = useAuth()
-  const [mode, setMode]     = useState('signin')
-  const [email, setEmail]   = useState('')
-  const [pass, setPass]     = useState('')
-  const [name, setName]     = useState('')
+  const { signIn, signUp, verifyOtp, resendOtp } = useAuth()
+
+  // 'signin' | 'signup' | 'verify'
+  const [mode, setMode]       = useState('signin')
+  const [step, setStep]       = useState(1) // signup: 1=creds, 2=profile, 3=otp
+  const [email, setEmail]     = useState('')
+  const [pass, setPass]       = useState('')
+  const [confirm, setConfirm] = useState('')
+
+  // Profile fields (step 2)
+  const [fullName, setFullName]   = useState('')
+  const [branch, setBranch]       = useState('')
+  const [branches, setBranches]   = useState([])
+  const [notListed, setNotListed] = useState(false)
+  const [unlistedName, setUnlistedName] = useState('')
+  const [unlistedCity, setUnlistedCity] = useState('')
+  const [phone, setPhone]         = useState('')
+  const [location, setLocation]   = useState('')
+  const [occupation, setOccupation] = useState('')
+  const [birthday, setBirthday]   = useState('')
+
+  // OTP (step 3)
+  const [otp, setOtp]           = useState(['','','','','',''])
+  const otpRefs                 = Array.from({length:6}, () => useRef(null))
+  const [resendCooldown, setResendCooldown] = useState(0)
+
   const [err, setErr]       = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handle = async e => {
+  // Load branches on mount
+  useEffect(() => {
+    supabase.from('church_branches').select('id,name,location').eq('active', true).order('name')
+      .then(({ data }) => setBranches(data || []))
+  }, [])
+
+  // Resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown <= 0) return
+    const t = setTimeout(() => setResendCooldown(c => c - 1), 1000)
+    return () => clearTimeout(t)
+  }, [resendCooldown])
+
+  const otpValue = otp.join('')
+
+  const handleOtpInput = (i, val) => {
+    const digit = val.replace(/\D/g, '').slice(-1)
+    const next = [...otp]
+    next[i] = digit
+    setOtp(next)
+    if (digit && i < 5) otpRefs[i + 1].current?.focus()
+    if (!digit && i > 0) otpRefs[i - 1].current?.focus()
+  }
+
+  const handleOtpPaste = (e) => {
+    const text = e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6)
+    if (text.length === 6) {
+      setOtp(text.split(''))
+      otpRefs[5].current?.focus()
+    }
+    e.preventDefault()
+  }
+
+  // Step 1: credentials
+  const handleCredsNext = async e => {
+    e.preventDefault(); setErr('')
+    if (pass.length < 6) { setErr('Password must be at least 6 characters.'); return }
+    if (pass !== confirm) { setErr('Passwords do not match.'); return }
+    setStep(2)
+  }
+
+  // Step 2: profile → trigger signup + send OTP
+  const handleProfileNext = async e => {
+    e.preventDefault(); setErr('')
+    if (!fullName.trim()) { setErr('Full name is required.'); return }
+    if (!notListed && !branch) { setErr('Please select your church branch.'); return }
+    if (notListed && !unlistedName.trim()) { setErr('Please enter your branch name.'); return }
+    setLoading(true)
+    const profileData = {
+      fullName: fullName.trim(),
+      church_branch: notListed ? `[Unlisted] ${unlistedName.trim()}` : branch,
+      ...(phone && { phone }),
+      ...(location && { location }),
+      ...(occupation && { occupation }),
+      ...(birthday && { birthday }),
+      ...(notListed && { unlisted_branch: { name: unlistedName.trim(), city: unlistedCity.trim() } }),
+    }
+    const error = await signUp(email, pass, profileData)
+    if (error) { setErr(error.message); setLoading(false); return }
+    setStep(3)
+    setResendCooldown(60)
+    setLoading(false)
+  }
+
+  // Step 3: verify OTP
+  const handleVerify = async e => {
+    e.preventDefault(); setErr('')
+    if (otpValue.length < 6) { setErr('Please enter the full 6-digit code.'); return }
+    setLoading(true)
+    const error = await verifyOtp(email, otpValue)
+    if (error) { setErr('Invalid or expired code. Please try again.'); setLoading(false); return }
+    onClose()
+  }
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return
+    setErr('')
+    const error = await resendOtp(email)
+    if (error) setErr(error.message)
+    else setResendCooldown(60)
+  }
+
+  // Sign in
+  const handleSignIn = async e => {
     e.preventDefault(); setErr(''); setLoading(true)
-    const error = mode==='signin'
-      ? await signIn(email, pass)
-      : await signUp(email, pass, name)
+    const error = await signIn(email, pass)
     if (error) setErr(error.message)
     else onClose()
     setLoading(false)
   }
 
+  const overlay = { position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:16 }
+  const card = { background:'var(--white, white)', borderRadius:22, padding:'32px 28px', width:'100%', maxWidth:440, boxShadow:'0 24px 80px rgba(0,0,0,0.3)', position:'relative', maxHeight:'92vh', overflowY:'auto' }
+  const inputStyle = { width:'100%', padding:'11px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontSize:'0.92rem', fontFamily:'var(--font-body)', outline:'none', color:'var(--text-dark)', boxSizing:'border-box', background:'var(--white, white)' }
+  const label = { fontSize:'0.72rem', fontWeight:700, color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', display:'block', marginBottom:5 }
+
+  const Header = ({ title, sub }) => (
+    <div style={{textAlign:'center', marginBottom:24}}>
+      <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.3rem',margin:'0 auto 12px'}}>🌐</div>
+      <h2 style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.35rem',margin:'0 0 4px'}}>{title}</h2>
+      <p style={{color:'var(--text-light)',fontSize:'0.83rem',margin:0}}>{sub}</p>
+    </div>
+  )
+
+  const ErrBox = () => err ? (
+    <div style={{background:'#fff5f5',border:'1px solid #fecaca',borderRadius:8,padding:'10px 14px',color:'#dc2626',fontSize:'0.84rem',marginBottom:14}}>❌ {err}</div>
+  ) : null
+
   return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999,padding:20}}>
-      <div style={{background: 'var(--white, white)',borderRadius:20,padding:'36px 32px',width:'100%',maxWidth:420,boxShadow:'0 24px 80px rgba(0,0,0,0.28)',position:'relative'}}>
-        <button onClick={onClose} style={{position:'absolute',top:16,right:18,background:'none',border:'none',cursor:'pointer',fontSize:'1.3rem',color:'var(--text-light)',lineHeight:1}}>✕</button>
-        <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.4rem',margin:'0 auto 14px'}}>🌐</div>
-          <h2 style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.4rem',margin:'0 0 4px'}}>
-            {mode==='signin'?'Welcome Back':'Join CCG World'}
-          </h2>
-          <p style={{color:'var(--text-light)',fontSize:'0.84rem',margin:0}}>
-            {mode==='signin'?'Sign in to join the Timeline':'Create your member account'}
-          </p>
-        </div>
-        <form onSubmit={handle}>
-          {mode==='signup'&&<div className="form-group"><label>Full Name</label><input value={name} onChange={e=>setName(e.target.value)} required placeholder="Your name" /></div>}
-          <div className="form-group"><label>Email</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="your@email.com" /></div>
-          <div className="form-group"><label>Password</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} required placeholder="••••••••" /></div>
-          {err&&<div style={{background:'#fff5f5',border:'1px solid #fecaca',borderRadius:8,padding:'10px 14px',color:'#dc2626',fontSize:'0.85rem',marginBottom:14}}>❌ {err}</div>}
-          {mode==='signup'&&<p style={{fontSize:'0.78rem',color:'var(--text-light)',marginBottom:14,lineHeight:1.6}}>ℹ️ New accounts need admin approval before accessing the Timeline.</p>}
-          <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px'}} disabled={loading}>
-            {loading?'⏳ Please wait...':(mode==='signin'?'Sign In →':'Create Account →')}
-          </button>
-        </form>
-        <div style={{textAlign:'center',marginTop:18}}>
-          <button onClick={()=>setMode(m=>m==='signin'?'signup':'signin')} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.85rem',fontFamily:'var(--font-body)',fontWeight:600}}>
-            {mode==='signin'?'No account? Sign up free →':'Already have an account? Sign in'}
-          </button>
-        </div>
+    <div style={overlay} onClick={e => { if (e.target === e.currentTarget) onClose() }}>
+      <div style={card}>
+        <button onClick={onClose} style={{position:'absolute',top:14,right:16,background:'none',border:'none',cursor:'pointer',fontSize:'1.2rem',color:'var(--text-light)',lineHeight:1}}>✕</button>
+
+        {/* ── SIGN IN ── */}
+        {mode === 'signin' && (
+          <>
+            <Header title="Welcome Back" sub="Sign in to your CCG World account" />
+            <form onSubmit={handleSignIn}>
+              <div style={{marginBottom:14}}>
+                <label style={label}>Email</label>
+                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="your@email.com"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <div style={{marginBottom:18}}>
+                <label style={label}>Password</label>
+                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} required placeholder="••••••••"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <ErrBox />
+              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px'}} disabled={loading}>
+                {loading ? '⏳ Signing in…' : 'Sign In →'}
+              </button>
+            </form>
+            <div style={{textAlign:'center',marginTop:16}}>
+              <button onClick={()=>{setMode('signup');setStep(1);setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.85rem',fontFamily:'var(--font-body)',fontWeight:600}}>
+                No account? Sign up free →
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* ── SIGNUP STEP 1: Credentials ── */}
+        {mode === 'signup' && step === 1 && (
+          <>
+            <Header title="Join CCG World" sub="Step 1 of 3 — Create your login" />
+            <div style={{display:'flex',gap:6,marginBottom:22}}>
+              {[1,2,3].map(s=>(
+                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=1?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
+              ))}
+            </div>
+            <form onSubmit={handleCredsNext}>
+              <div style={{marginBottom:14}}>
+                <label style={label}>Email *</label>
+                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="your@email.com"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <div style={{marginBottom:14}}>
+                <label style={label}>Password *</label>
+                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} required placeholder="At least 6 characters"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <div style={{marginBottom:18}}>
+                <label style={label}>Confirm Password *</label>
+                <input style={inputStyle} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} required placeholder="Re-enter password"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <ErrBox />
+              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px'}}>
+                Continue →
+              </button>
+            </form>
+            <div style={{textAlign:'center',marginTop:16}}>
+              <button onClick={()=>{setMode('signin');setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.85rem',fontFamily:'var(--font-body)',fontWeight:600}}>
+                Already have an account? Sign in
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* ── SIGNUP STEP 2: Profile ── */}
+        {mode === 'signup' && step === 2 && (
+          <>
+            <Header title="Your Profile" sub="Step 2 of 3 — Tell us about yourself" />
+            <div style={{display:'flex',gap:6,marginBottom:22}}>
+              {[1,2,3].map(s=>(
+                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=2?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
+              ))}
+            </div>
+            <form onSubmit={handleProfileNext}>
+
+              {/* Required */}
+              <div style={{marginBottom:14}}>
+                <label style={label}>Full Name *</label>
+                <input style={inputStyle} value={fullName} onChange={e=>setFullName(e.target.value)} required placeholder="e.g. Samuel Adeyemi"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+
+              {/* Church Branch — required */}
+              <div style={{marginBottom:14}}>
+                <label style={label}>Church Branch *</label>
+                {!notListed ? (
+                  <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={branch} onChange={e=>{ if(e.target.value==='__not_listed__'){setNotListed(true);setBranch('')}else{setBranch(e.target.value)} }}
+                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
+                    <option value="">Select your branch…</option>
+                    {branches.map(b => (
+                      <option key={b.id} value={b.name}>{b.name}{b.location ? ` — ${b.location}` : ''}</option>
+                    ))}
+                    <option value="__not_listed__">🔍 My branch isn't listed</option>
+                  </select>
+                ) : (
+                  <div>
+                    <input style={{...inputStyle, marginBottom:8}} value={unlistedName} onChange={e=>setUnlistedName(e.target.value)} placeholder="Branch name"
+                      onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+                    <input style={inputStyle} value={unlistedCity} onChange={e=>setUnlistedCity(e.target.value)} placeholder="City / State (optional)"
+                      onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+                  </div>
+                )}
+                {/* Toggle not listed */}
+                <button type="button"
+                  onClick={() => { setNotListed(v=>!v); setBranch(''); setUnlistedName(''); setUnlistedCity('') }}
+                  style={{marginTop:6, background:'none', border:'none', cursor:'pointer', color:'var(--brand-light)', fontSize:'0.8rem', fontFamily:'var(--font-body)', fontWeight:600, padding:0}}>
+                  {notListed ? '← Back to branch list' : '🔍 My branch isn't listed'}
+                </button>
+                {notListed && (
+                  <div style={{fontSize:'0.77rem',color:'var(--text-light)',marginTop:4,lineHeight:1.5}}>
+                    ℹ️ Your branch info will be sent to admins for review and possible addition.
+                  </div>
+                )}
+              </div>
+
+              {/* Optional divider */}
+              <div style={{display:'flex',alignItems:'center',gap:10,margin:'18px 0 14px'}}>
+                <div style={{flex:1,height:1,background:'#e2e8f0'}} />
+                <span style={{fontSize:'0.72rem',color:'var(--text-light)',fontWeight:600}}>OPTIONAL</span>
+                <div style={{flex:1,height:1,background:'#e2e8f0'}} />
+              </div>
+
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
+                <div>
+                  <label style={label}>Phone</label>
+                  <input style={inputStyle} value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+1 555 000 0000"
+                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+                </div>
+                <div>
+                  <label style={label}>Birthday</label>
+                  <input style={inputStyle} type="date" value={birthday} onChange={e=>setBirthday(e.target.value)}
+                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+                </div>
+              </div>
+              <div style={{marginBottom:12}}>
+                <label style={label}>Location / City</label>
+                <input style={inputStyle} value={location} onChange={e=>setLocation(e.target.value)} placeholder="e.g. Accra, Ghana"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+              <div style={{marginBottom:20}}>
+                <label style={label}>Occupation</label>
+                <input style={inputStyle} value={occupation} onChange={e=>setOccupation(e.target.value)} placeholder="e.g. Teacher, Engineer…"
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+              </div>
+
+              <ErrBox />
+              <div style={{display:'flex',gap:10}}>
+                <button type="button" onClick={()=>{setStep(1);setErr('')}}
+                  style={{padding:'11px 18px',borderRadius:10,border:'1.5px solid #e2e8f0',background:'transparent',color:'var(--text-mid)',fontWeight:600,fontSize:'0.88rem',fontFamily:'var(--font-body)',cursor:'pointer'}}>
+                  ← Back
+                </button>
+                <button type="submit" className="btn btn-blue" style={{flex:1,justifyContent:'center',padding:'12px'}} disabled={loading}>
+                  {loading ? '⏳ Creating account…' : 'Create Account →'}
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+
+        {/* ── SIGNUP STEP 3: OTP Verification ── */}
+        {mode === 'signup' && step === 3 && (
+          <>
+            <Header title="Verify Your Email" sub={`We sent a 6-digit code to ${email}`} />
+            <div style={{display:'flex',gap:6,marginBottom:22}}>
+              {[1,2,3].map(s=>(
+                <div key={s} style={{flex:1,height:4,borderRadius:2,background:'var(--brand-base)',transition:'background 0.3s'}} />
+              ))}
+            </div>
+
+            <div style={{textAlign:'center',marginBottom:24}}>
+              <div style={{fontSize:'2.8rem',marginBottom:8}}>📧</div>
+              <p style={{color:'var(--text-mid)',fontSize:'0.88rem',lineHeight:1.6,margin:0}}>
+                Check your inbox for a 6-digit verification code.<br/>
+                <span style={{fontSize:'0.8rem',color:'var(--text-light)'}}>It may take a minute. Check your spam folder too.</span>
+              </p>
+            </div>
+
+            <form onSubmit={handleVerify}>
+              {/* 6 separate digit boxes */}
+              <div style={{display:'flex',gap:8,justifyContent:'center',marginBottom:20}}>
+                {otp.map((digit, i) => (
+                  <input
+                    key={i}
+                    ref={otpRefs[i]}
+                    value={digit}
+                    onChange={e=>handleOtpInput(i, e.target.value)}
+                    onPaste={i===0?handleOtpPaste:undefined}
+                    onKeyDown={e=>{ if(e.key==='Backspace'&&!digit&&i>0) otpRefs[i-1].current?.focus() }}
+                    maxLength={1}
+                    inputMode="numeric"
+                    style={{
+                      width:44, height:54, textAlign:'center', fontSize:'1.4rem', fontWeight:700,
+                      borderRadius:10, border:`2px solid ${digit?'var(--brand-base)':'#e2e8f0'}`,
+                      background:'var(--white, white)', color:'var(--text-dark)',
+                      outline:'none', transition:'border-color 0.2s', fontFamily:'var(--font-body)',
+                    }}
+                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'}
+                    onBlur={e=>e.target.style.borderColor=digit?'var(--brand-base)':'#e2e8f0'}
+                  />
+                ))}
+              </div>
+
+              <ErrBox />
+              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:12}} disabled={loading||otpValue.length<6}>
+                {loading ? '⏳ Verifying…' : '✅ Verify & Join →'}
+              </button>
+            </form>
+
+            <div style={{textAlign:'center'}}>
+              <button onClick={handleResend} disabled={resendCooldown>0}
+                style={{background:'none',border:'none',cursor:resendCooldown>0?'default':'pointer',color:resendCooldown>0?'var(--text-light)':'var(--brand-light)',fontSize:'0.84rem',fontFamily:'var(--font-body)',fontWeight:600}}>
+                {resendCooldown>0 ? `Resend code in ${resendCooldown}s` : 'Resend code'}
+              </button>
+            </div>
+          </>
+        )}
+
       </div>
     </div>
   )

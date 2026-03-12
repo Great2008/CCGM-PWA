@@ -12,6 +12,33 @@ export default function AdminBranches() {
   const [editing, setEditing] = useState(null) // branch id being edited
   const [saving, setSaving] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [suggestions, setSuggestions] = useState([])
+  const [sugTab, setSugTab] = useState('branches') // 'branches' | 'suggestions'
+
+  const loadSuggestions = async () => {
+    const { data } = await supabase.from('branch_suggestions')
+      .select('*, profiles(display_name, full_name, email)')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+    setSuggestions(data || [])
+  }
+
+  const approveSuggestion = async (sug) => {
+    // Add as new branch
+    await supabase.from('church_branches').insert({ name: sug.branch_name, location: sug.city || '', country: '', active: true })
+    // Update user's profile: set proper branch name + clear unverified flag
+    await supabase.from('profiles').update({ church_branch: sug.branch_name, unverified_branch: false }).eq('id', sug.user_id)
+    // Mark suggestion resolved
+    await supabase.from('branch_suggestions').update({ status: 'approved' }).eq('id', sug.id)
+    showToast('Branch approved and added!')
+    loadSuggestions(); load()
+  }
+
+  const dismissSuggestion = async (id) => {
+    await supabase.from('branch_suggestions').update({ status: 'dismissed' }).eq('id', id)
+    showToast('Suggestion dismissed.')
+    loadSuggestions()
+  }
 
   const load = async () => {
     setLoading(true)
@@ -20,7 +47,7 @@ export default function AdminBranches() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { load(); loadSuggestions() }, [])
 
   const openNew = () => { setForm(EMPTY); setEditing(null); setShowForm(true) }
 
@@ -62,17 +89,67 @@ export default function AdminBranches() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--brand-deep)', marginBottom: 4 }}>⛪ Church Branches</h1>
           <p style={{ color: 'var(--text-light)', fontSize: '0.85rem' }}>Manage branches available in the member profile dropdown.</p>
         </div>
-        <button
-          onClick={openNew}
-          style={{ padding: '10px 22px', borderRadius: 40, background: 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: 7 }}
-        >+ Add Branch</button>
+        {sugTab === 'branches' && (
+          <button onClick={openNew}
+            style={{ padding: '10px 22px', borderRadius: 40, background: 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: 7 }}
+          >+ Add Branch</button>
+        )}
       </div>
 
+      {/* Tab switcher */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+        {[
+          { key: 'branches', label: '⛪ All Branches' },
+          { key: 'suggestions', label: `📬 Suggestions${suggestions.length ? ` (${suggestions.length})` : ''}` },
+        ].map(t => (
+          <button key={t.key} onClick={() => setSugTab(t.key)}
+            style={{ padding: '8px 20px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem',
+              background: sugTab === t.key ? 'var(--brand-mid)' : '#f1f5f9',
+              color: sugTab === t.key ? 'white' : 'var(--text-mid)',
+            }}>{t.label}</button>
+        ))}
+      </div>
+
+      {sugTab === 'suggestions' && (
+        <div>
+          {suggestions.length === 0 ? (
+            <div style={{ background: 'white', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '2rem', marginBottom: 10 }}>📭</div>
+              <div style={{ color: 'var(--text-light)' }}>No pending branch suggestions</div>
+            </div>
+          ) : suggestions.map(sug => (
+            <div key={sug.id} style={{ background: 'white', borderRadius: 14, padding: '20px 22px', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #fef3c7', marginBottom: 14 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontWeight: 700, color: 'var(--text-dark)', fontSize: '1rem', marginBottom: 3 }}>🏛 {sug.branch_name}</div>
+                  {sug.city && <div style={{ color: 'var(--text-mid)', fontSize: '0.85rem', marginBottom: 3 }}>📍 {sug.city}</div>}
+                  <div style={{ color: 'var(--text-light)', fontSize: '0.8rem' }}>
+                    Submitted by: <strong>{sug.profiles?.display_name || sug.profiles?.full_name || 'Unknown'}</strong>
+                    {sug.profiles?.email && ` (${sug.profiles.email})`}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                  <button onClick={() => approveSuggestion(sug)}
+                    style={{ padding: '8px 18px', borderRadius: 8, border: 'none', background: 'var(--brand-pale)', color: 'var(--brand-mid)', fontWeight: 700, fontSize: '0.82rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}>
+                    ✅ Add Branch
+                  </button>
+                  <button onClick={() => dismissSuggestion(sug.id)}
+                    style={{ padding: '8px 14px', borderRadius: 8, border: '1px solid #fecaca', background: 'transparent', color: '#dc2626', fontWeight: 600, fontSize: '0.82rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}>
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {sugTab === 'branches' && <>
       {/* Add/Edit form */}
       {showForm && (
         <div style={{ background: 'white', borderRadius: 16, padding: '24px 28px', boxShadow: 'var(--shadow-md)', border: '1.5px solid var(--brand-pale)', marginBottom: 28 }}>
@@ -163,6 +240,7 @@ export default function AdminBranches() {
           </div>
         </div>
       )}
+    </>
     </div>
   )
 }
