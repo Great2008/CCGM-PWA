@@ -133,7 +133,7 @@ export default function Home() {
 
       {/* LATEST SERMON */}
       {latestSermon && (
-        <section style={{background:'var(--green-deep)',padding:'clamp(60px,8vw,90px) 5%'}}>
+        <section style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(60px,8vw,90px) 5%'}}>
           <div className="container">
             <div className="sermon-grid">
               <div>
