@@ -372,7 +372,7 @@ function AuthModal({ onClose }) {
                 <button type="button"
                   onClick={() => { setNotListed(v=>!v); setBranch(''); setUnlistedName(''); setUnlistedCity('') }}
                   style={{marginTop:6, background:'none', border:'none', cursor:'pointer', color:'var(--brand-light)', fontSize:'0.8rem', fontFamily:'var(--font-body)', fontWeight:600, padding:0}}>
-                  {notListed ? '← Back to branch list' : '🔍 My branch isn't listed'}
+                  {notListed ? '← Back to branch list' : '🔍 My branch isn\'t listed'}
                 </button>
                 {notListed && (
                   <div style={{fontSize:'0.77rem',color:'var(--text-light)',marginTop:4,lineHeight:1.5}}>
