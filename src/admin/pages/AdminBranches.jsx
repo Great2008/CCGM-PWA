@@ -149,7 +149,7 @@ export default function AdminBranches() {
         </div>
       )}
 
-      {sugTab === 'branches' && <>
+      {sugTab === 'branches' && <div>
       {/* Add/Edit form */}
       {showForm && (
         <div style={{ background: 'white', borderRadius: 16, padding: '24px 28px', boxShadow: 'var(--shadow-md)', border: '1.5px solid var(--brand-pale)', marginBottom: 28 }}>
@@ -240,7 +240,7 @@ export default function AdminBranches() {
           </div>
         </div>
       )}
-    </>
+    </div>
     </div>
   )
 }
