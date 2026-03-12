@@ -169,7 +169,8 @@
 [data-theme="dark"] div[style*="color: var(--brand-deep)"],
 [data-theme="dark"] span[style*="color: var(--brand-deep)"],
 [data-theme="dark"] p[style*="color: var(--brand-deep)"],
-[data-theme="dark"] a[style*="color: var(--brand-deep)"] {
+[data-theme="dark"] a[style*="color: var(--brand-deep)"],
+[data-theme="dark"] strong[style*="color: var(--green-deep)"] {
   color: var(--green-deep) !important;  /* #6dbf8a — muted sage readable on dark */
 }
 

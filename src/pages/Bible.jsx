@@ -228,7 +228,7 @@ export default function Bible() {
 
   return (
     <>
-      <div style={{ background: 'linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%)', padding: 'clamp(80px,12vw,120px) 5% 0' }}>
+      <div style={{ background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)', padding: 'clamp(80px,12vw,120px) 5% 0' }}>
         <div className="container">
           <div className="bible-header-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, paddingBottom: 24 }}>
             <div>
@@ -273,7 +273,7 @@ export default function Bible() {
               <div>
                 <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', overflow: 'hidden', marginBottom: 14 }}>
                   <button onClick={() => setBookOpen(o => !o)} style={{
-                    width: '100%', padding: '13px 18px', background: 'var(--green-mid)', color: 'white',
+                    width: '100%', padding: '13px 18px', background: 'var(--brand-base)', color: 'white',
                     border: 'none', cursor: 'pointer', fontFamily: 'var(--font-display)',
                     fontSize: '1rem', fontWeight: 700, textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   }}>
@@ -285,7 +285,7 @@ export default function Bible() {
                         {['OT','NT'].map(t => (
                           <button key={t} onClick={() => setBookTab(t)} style={{
                             flex: 1, padding: '9px', border: 'none', cursor: 'pointer',
-                            background: bookTab === t ? 'var(--green-pale)' : 'var(--white, white)',
+                            background: bookTab === t ? 'var(--brand-pale)' : 'var(--white, white)',
                             color: bookTab === t ? 'var(--green-deep)' : 'var(--text-mid)',
                             fontWeight: 700, fontSize: '0.82rem', fontFamily: 'var(--font-body)',
                           }}>{t === 'OT' ? 'Old Testament' : 'New Testament'}</button>
@@ -317,8 +317,8 @@ export default function Bible() {
                     {chNums.map(n => (
                       <button key={n} onClick={() => setSelChapter(n)} style={{
                         padding: '7px 4px', borderRadius: 7, border: '1.5px solid',
-                        borderColor: selChapter === n ? 'var(--green-mid)' : '#eee',
-                        background: selChapter === n ? 'var(--green-mid)' : 'var(--white, white)',
+                        borderColor: selChapter === n ? 'var(--brand-base)' : '#eee',
+                        background: selChapter === n ? 'var(--brand-base)' : 'var(--white, white)',
                         color: selChapter === n ? 'white' : 'var(--text-dark)',
                         fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
                       }}>{n}</button>
