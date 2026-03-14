@@ -19,6 +19,7 @@ import AdminRegistrations from './pages/AdminRegistrations'
 import AdminNotifications from './pages/AdminNotifications'
 import AdminStudio from './pages/AdminStudio'
 import AdminBulkMessage from './pages/AdminBulkMessage'
+import AdminSignature   from './pages/AdminSignature'
 import AdminBranches from './pages/AdminBranches'
 import AdminMemberDirectory from './pages/AdminMemberDirectory'
 
@@ -45,9 +46,10 @@ const NAV = [
   ['notifications','🔔','Push Notifications'],
   ['branches',    '⛪', 'Church Branches'],
   ['bulk-message', '📣', 'Bulk Message'],
+  ['signature',    '✍️', 'Admin Signature'],
   ['directory',   '🗂', 'Member Directory'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
