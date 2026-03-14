@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
@@ -429,6 +429,17 @@ export default function Profile() {
         {/* ─── SETTINGS TAB ─── */}
         {tab === 'settings' && (
           <div style={{ display: 'grid', gap: 20 }}>
+
+            {/* Membership Certificate */}
+            <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: '22px 24px', boxShadow: 'var(--shadow-sm)', border: '1px solid #e2e8f0', marginBottom: 20 }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>🏅 Membership Certificate</h2>
+              <p style={{ color: 'var(--text-mid)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: 16 }}>
+                Download your official CCG World membership certificate as a shareable image.
+              </p>
+              <Link to="/certificate" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 24px', borderRadius: 30, background: 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color: 'white', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none' }}>
+                🏅 Get My Certificate →
+              </Link>
+            </div>
 
             {/* Change Password */}
             <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>

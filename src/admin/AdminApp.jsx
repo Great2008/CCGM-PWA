@@ -18,6 +18,7 @@ import AdminEmail    from './pages/AdminEmail'
 import AdminRegistrations from './pages/AdminRegistrations'
 import AdminNotifications from './pages/AdminNotifications'
 import AdminStudio from './pages/AdminStudio'
+import AdminBulkMessage from './pages/AdminBulkMessage'
 import AdminBranches from './pages/AdminBranches'
 import AdminMemberDirectory from './pages/AdminMemberDirectory'
 
