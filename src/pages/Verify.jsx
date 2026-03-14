@@ -140,9 +140,9 @@ export default function Verify() {
                     ['Member Since',    joinDate || 'N/A'],
                     ...(certType === 'birth' && birthday ? [['Date of Birth', birthday]] : []),
                   ].map(([k, v]) => (
-                    <div key={k} style={{ background: '#f8fafc', borderRadius: 10, padding: '12px 14px' }}>
-                      <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>{k}</div>
-                      <div style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.88rem' }}>{v}</div>
+                    <div key={k} style={{ background: '#f1f5f9', borderRadius: 10, padding: '12px 14px' }}>
+                      <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>{k}</div>
+                      <div style={{ color: '#0f172a', fontWeight: 600, fontSize: '0.88rem' }}>{v}</div>
                     </div>
                   ))}
                 </div>
