@@ -67,6 +67,49 @@ function drawCapeBadge(ctx, W, y, stripes, churchTitle) {
   ctx.restore()
 }
 
+// ── Corner stripe indicator (top-right of header) ────────────────
+function drawCornerStripes(ctx, W, stripes) {
+  if (stripes === null) return
+  const size = 90  // corner triangle size
+  ctx.save()
+  ctx.beginPath()
+  ctx.moveTo(W - 36, 30)   // top-right of header area (inside border)
+  ctx.lineTo(W - 36, 30 + size)
+  ctx.lineTo(W - 36 - size, 30)
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(255,255,255,0.08)'
+  ctx.fill()
+
+  // Draw stripes as diagonal lines across the corner
+  const stripeColor = '#fbbf24'
+  const stripeWidth = stripes === 0 ? 0 : 4
+  ctx.strokeStyle = stripeColor
+  ctx.lineWidth = stripeWidth
+  ctx.lineCap = 'round'
+
+  if (stripes >= 1) {
+    ctx.beginPath()
+    ctx.moveTo(W - 36 - 55, 30)
+    ctx.lineTo(W - 36, 30 + 55)
+    ctx.stroke()
+  }
+  if (stripes === 2) {
+    ctx.beginPath()
+    ctx.moveTo(W - 36 - 30, 30)
+    ctx.lineTo(W - 36, 30 + 30)
+    ctx.stroke()
+  }
+
+  ctx.restore()
+}
+
+// ── Title prefix for name on certificate ─────────────────────────
+function getTitlePrefix(churchTitle, gender) {
+  if (churchTitle && !['Brother','Sister'].includes(churchTitle)) return churchTitle
+  if (gender === 'Female') return 'Sister'
+  return 'Brother'
+}
+
 // ── Format date nicely ───────────────────────────────────────────
 function fmtDate(iso) {
   if (!iso) return ''
@@ -116,6 +159,9 @@ export default function Certificate() {
 
   const name      = profile.full_name || profile.display_name || 'Member'
   const branch    = profile.church_branch || 'CCG World'
+  const gender    = profile.gender || null
+  const titlePrefix = getTitlePrefix(churchTitle, gender)
+  const displayName = `${titlePrefix} ${name}`
   const joinDate  = fmtDate(profile.created_at)
   const birthday  = profile.birthday ? fmtBirthday(profile.birthday) : null
   const certId    = 'CCG-' + (user.id || '').slice(0, 8).toUpperCase()
@@ -163,6 +209,9 @@ export default function Certificate() {
       ctx.drawImage(logo, 56, 42, 106, 106)
     } catch (_) {}
 
+    // Corner stripes (top-right of header)
+    drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
+
     // Church name in header
     ctx.fillStyle = '#fbbf24'
     ctx.font = 'bold 21px Georgia, serif'
@@ -199,8 +248,8 @@ export default function Certificate() {
     ctx.fillText('This is to certify that', W / 2, bodyStartY)
     const yOff = bodyStartY - 318
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 44px Georgia, serif'
-    ctx.fillText(name, W / 2, 384 + yOff)
-    const nw = ctx.measureText(name).width
+    ctx.fillText(displayName, W / 2, 384 + yOff)
+    const nw = ctx.measureText(displayName).width
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
     ctx.beginPath(); ctx.moveTo(W/2-nw/2, 398 + yOff); ctx.lineTo(W/2+nw/2, 398 + yOff); ctx.stroke()
     ctx.fillStyle = '#374151'; ctx.font = '20px Georgia, serif'
@@ -279,6 +328,9 @@ export default function Certificate() {
       ctx.drawImage(logo, 60, 46, 110, 110)
     } catch (_) {}
 
+    // Corner stripes
+    drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
+
     // Header text
     ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 22px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('CHRISTIAN CHURCH OF GOD MISSION', W/2, 86)
@@ -305,8 +357,8 @@ export default function Certificate() {
     ctx.fillText('This is to certify that', W/2, 376)
 
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 46px Georgia, serif'
-    ctx.fillText(name, W/2, 444)
-    const nw = ctx.measureText(name).width
+    ctx.fillText(displayName, W/2, 444)
+    const nw = ctx.measureText(displayName).width
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
     ctx.beginPath(); ctx.moveTo(W/2-nw/2,460); ctx.lineTo(W/2+nw/2,460); ctx.stroke()
 

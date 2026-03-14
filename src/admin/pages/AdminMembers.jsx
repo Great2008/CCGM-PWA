@@ -43,9 +43,32 @@ export default function AdminMembers() {
   const { showToast, isSuperAdmin } = useAdmin()
   const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
-  const [tab, setTab]         = useState('active') // 'active' | 'suspended'
+  const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
   const [selected, setSelected] = useState(null)
   const [saving, setSaving]   = useState(false)
+
+  const pendingPosts = members.filter(m => m.pending_church_post && !m.suspended)
+
+  const approvePost = async (m) => {
+    setSaving(true)
+    try {
+      await update(m.id, { church_title: m.pending_church_post, pending_church_post: null })
+      showToast(`${m.pending_church_post} approved for ${m.full_name || m.display_name}`)
+      if (selected?.id === m.id) setSelected(s => ({ ...s, church_title: s.pending_church_post, pending_church_post: null }))
+      reload()
+    } catch (e) { showToast(e.message, 'error') }
+    setSaving(false)
+  }
+
+  const rejectPost = async (m) => {
+    setSaving(true)
+    try {
+      await update(m.id, { pending_church_post: null })
+      showToast(`Post request rejected for ${m.full_name || m.display_name}`)
+      reload()
+    } catch (e) { showToast(e.message, 'error') }
+    setSaving(false)
+  }
 
   // Suspend modal
   const [showSuspend, setShowSuspend]     = useState(false)
@@ -60,7 +83,8 @@ export default function AdminMembers() {
   const activeMembers = members.filter(m => !m.suspended)
   const suspendedMembers = members.filter(m => m.suspended === true)
 
-  const list = (tab === 'active' ? activeMembers : suspendedMembers).filter(m => {
+  const listSource = tab === 'active' ? activeMembers : tab === 'suspended' ? suspendedMembers : pendingPosts
+  const list = listSource.filter(m => {
     const q = search.toLowerCase()
     return !q || (m.full_name || '').toLowerCase().includes(q) || (m.email || '').toLowerCase().includes(q)
   })
@@ -210,6 +234,10 @@ export default function AdminMembers() {
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'suspended' ? '#dc2626' : '#f1f5f9', color: tab === 'suspended' ? 'white' : 'var(--text-mid)' }}>
           🚫 Suspended ({suspendedMembers.length})
         </button>
+        <button onClick={() => { setTab('pending_posts'); setSelected(null) }}
+          style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'pending_posts' ? '#d97706' : '#f1f5f9', color: tab === 'pending_posts' ? 'white' : 'var(--text-mid)', position: 'relative' }}>
+          ✝️ Posts {pendingPosts.length > 0 && <span style={{ background: '#dc2626', color: 'white', borderRadius: 10, fontSize: '0.65rem', fontWeight: 900, padding: '1px 6px', marginLeft: 4 }}>{pendingPosts.length}</span>}
+        </button>
       </div>
 
       {/* Search */}
@@ -219,7 +247,43 @@ export default function AdminMembers() {
           style={{ width: '100%', padding: '10px 14px 10px 40px', borderRadius: 30, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }} />
       </div>
 
+      {/* ── Pending Church Post Approvals ── */}
+      {tab === 'pending_posts' && (
+        <div>
+          {pendingPosts.length === 0 ? (
+            <div style={{ background: 'white', borderRadius: 14, padding: '48px 20px', textAlign: 'center', color: 'var(--text-light)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '2rem', marginBottom: 10 }}>✝️</div>
+              No pending church post requests.
+            </div>
+          ) : pendingPosts.map(m => (
+            <div key={m.id} style={{ background: 'white', borderRadius: 12, padding: '16px 20px', marginBottom: 12, boxShadow: '0 1px 8px rgba(0,0,0,0.06)', border: '1.5px solid #fef3c7', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg,var(--brand-light),var(--gold))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
+                {m.avatar_url ? <img src={m.avatar_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }} /> : (m.display_name || m.full_name || '?').charAt(0).toUpperCase()}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, color: 'var(--text-dark)', fontSize: '0.95rem' }}>{m.full_name || m.display_name || 'Unknown'}</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>{m.email} · {m.church_branch || '—'}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700, padding: '4px 14px', borderRadius: 20, background: '#fef3c7', color: '#92400e' }}>
+                  ✝️ Requesting: {m.pending_church_post}
+                </span>
+                <button onClick={() => approvePost(m)} disabled={saving}
+                  style={{ padding: '7px 16px', borderRadius: 8, border: 'none', background: 'var(--brand-pale)', color: 'var(--brand-mid)', fontWeight: 700, fontSize: '0.82rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}>
+                  ✅ Approve
+                </button>
+                <button onClick={() => rejectPost(m)} disabled={saving}
+                  style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid #fecaca', background: 'transparent', color: '#dc2626', fontWeight: 600, fontSize: '0.82rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}>
+                  Reject
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Two-pane */}
+      {tab !== 'pending_posts' && (
       <div className="members-pane" style={{ display: 'grid', gridTemplateColumns: selected ? 'minmax(0,1fr) min(340px,38%)' : '1fr', gap: 20, alignItems: 'start' }}>
 
         {/* List */}
@@ -378,6 +442,7 @@ export default function AdminMembers() {
           </div>
         )}
       </div>
+      )}
 
       {/* Suspend Modal */}
       {showSuspend && (

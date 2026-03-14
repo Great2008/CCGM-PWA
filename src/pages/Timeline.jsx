@@ -141,6 +141,8 @@ function AuthModal({ onClose }) {
   const [phone, setPhone]         = useState('')
   const [location, setLocation]   = useState('')
   const [occupation, setOccupation] = useState('')
+  const [gender, setGender]       = useState('')
+  const [churchPost, setChurchPost] = useState('')
   const [birthday, setBirthday]   = useState('')
 
   // OTP (step 3)
@@ -196,12 +198,23 @@ function AuthModal({ onClose }) {
   const handleProfileNext = async e => {
     e.preventDefault(); setErr('')
     if (!fullName.trim()) { setErr('Full name is required.'); return }
+    if (!gender) { setErr('Please select your gender.'); return }
     if (!notListed && !branch) { setErr('Please select your church branch.'); return }
     if (notListed && !unlistedName.trim()) { setErr('Please enter your branch name.'); return }
     setLoading(true)
+
+    // Auto-assign church_title for Brother/Sister; others are pending admin approval
+    const selectedPost = churchPost || (gender === 'Female' ? 'Sister' : 'Brother')
+    const isAutoApproved = ['Brother', 'Sister'].includes(selectedPost)
+
     const profileData = {
       fullName: fullName.trim(),
       church_branch: notListed ? `[Unlisted] ${unlistedName.trim()}` : branch,
+      gender,
+      ...(isAutoApproved
+        ? { church_title: selectedPost }
+        : { pending_church_post: selectedPost }
+      ),
       ...(phone && { phone }),
       ...(location && { location }),
       ...(occupation && { occupation }),
@@ -342,11 +355,55 @@ function AuthModal({ onClose }) {
             <form onSubmit={handleProfileNext}>
 
               {/* Required */}
-              <div style={{marginBottom:14}}>
+              <div style={{marginBottom:14}}>\
                 <label style={label}>Full Name *</label>
                 <input style={inputStyle} value={fullName} onChange={e=>setFullName(e.target.value)} required placeholder="e.g. Samuel Adeyemi"
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
+
+              {/* Gender — required */}
+              <div style={{marginBottom:14}}>
+                <label style={label}>Gender *</label>
+                <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={gender} onChange={e=>{ setGender(e.target.value); setChurchPost('') }}
+                  onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
+                  <option value="">Select gender…</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+              {/* Church Post — required after gender selected */}
+              {gender && (
+                <div style={{marginBottom:14}}>
+                  <label style={label}>Church Post *</label>
+                  <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={churchPost} onChange={e=>setChurchPost(e.target.value)}
+                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
+                    <option value="">Select your post…</option>
+                    {gender === 'Male' && <>
+                      <option value="Brother">Brother</option>
+                      <option value="Deacon">Deacon</option>
+                      <option value="Elder">Elder</option>
+                      <option value="Evangelist">Evangelist</option>
+                      <option value="Prophet">Prophet</option>
+                      <option value="Pastor">Pastor</option>
+                      <option value="Apostle">Apostle</option>
+                    </>}
+                    {gender === 'Female' && <>
+                      <option value="Sister">Sister</option>
+                      <option value="Deaconess">Deaconess</option>
+                      <option value="Evangelist">Evangelist</option>
+                      <option value="Prophet">Prophet</option>
+                      <option value="Pastor">Pastor</option>
+                      <option value="Apostle">Apostle</option>
+                    </>}
+                  </select>
+                  {churchPost && !['Brother','Sister'].includes(churchPost) && (
+                    <div style={{fontSize:'0.76rem',color:'#92400e',marginTop:4,background:'#fff7ed',padding:'6px 10px',borderRadius:6}}>
+                      ⏳ <strong>{churchPost}</strong> requires admin approval before it shows on your profile.
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Church Branch — required */}
               <div style={{marginBottom:14}}>
@@ -524,7 +581,7 @@ function ProfileModal({ profile, onClose, onUpdate }) {
 
 /* ── Main Timeline Page ── */
 export default function Timeline() {
-  const { user, profile, loading: authLoading, signOut, canModerate, updateProfile } = useAuth()
+  const { user, profile, loading: authLoading, signOut, isAdmin, updateProfile } = useAuth()
   const [posts, setPosts]       = useState([])
   const [loading, setLoading]   = useState(true)
   const [body, setBody]         = useState('')
@@ -672,7 +729,7 @@ export default function Timeline() {
             </div>
           )}
           {posts.map(post=>(
-            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={canModerate} />
+            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} />
           ))}
         </div>
       </div>

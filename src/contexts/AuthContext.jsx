@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
         if (pending) {
           const { data: { user: u } } = await supabase.auth.getUser()
           if (u) {
-            const { full_name, phone, location, occupation, birthday, church_branch, bio, unlisted_branch } = pending
+            const { full_name, phone, location, occupation, birthday, church_branch, bio, unlisted_branch, gender, church_title, pending_church_post } = pending
             const updates = {
               display_name: full_name?.split(' ')[0] || '',
               full_name,
@@ -69,6 +69,9 @@ export function AuthProvider({ children }) {
               ...(birthday && { birthday }),
               ...(church_branch && { church_branch }),
               ...(bio && { bio }),
+              ...(gender && { gender }),
+              ...(church_title && { church_title }),
+              ...(pending_church_post && { pending_church_post }),
               // Mark as unverified_branch if they used "Not Listed" — clears when admin approves
               ...(unlisted_branch?.name && { unverified_branch: true }),
             }
