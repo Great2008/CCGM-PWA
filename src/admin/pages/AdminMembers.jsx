@@ -101,6 +101,21 @@ export default function AdminMembers() {
         user_id: selected.id,
       })
 
+      // Email notification
+      const untilStr = expiresAt
+        ? new Date(expiresAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null
+      await supabaseAdmin.functions.invoke('send-suspension-email', {
+        body: {
+          type: 'suspension',
+          email: selected.email,
+          name: selected.full_name || selected.display_name || 'Member',
+          reason: fullReason,
+          period: suspendPeriod.months ? suspendPeriod.label : 'Indefinite',
+          until: untilStr,
+        }
+      })
+
       showToast((selected.full_name || 'Member') + ' suspended for ' + (suspendPeriod.months ? suspendPeriod.label : 'indefinitely') + '.')
       setShowSuspend(false)
       setSelected(s => ({ ...s, suspended: true, suspension_reason: fullReason, suspension_expires_at: expiresAt }))
@@ -129,6 +144,15 @@ export default function AdminMembers() {
         sent_at: new Date().toISOString(),
         user_id: selected.id,
       })
+      // Email notification
+      await supabaseAdmin.functions.invoke('send-suspension-email', {
+        body: {
+          type: 'reinstatement',
+          email: selected.email,
+          name: selected.full_name || selected.display_name || 'Member',
+        }
+      })
+
       showToast((selected.full_name || 'Member') + ' has been reinstated.')
       setShowUnsuspend(false)
       setSelected(null)
