@@ -26,7 +26,7 @@ const ROLE_LABELS = {
 }
 
 export default function Profile() {
-  const { user, profile, updateProfile, signOut } = useAuth()
+  const { user, profile, updateProfile, signOut, churchTitle } = useAuth()
   const { dark, toggle: toggleTheme } = useTheme()
   const navigate = useNavigate()
   const fileRef = useRef(null)
@@ -179,6 +179,12 @@ export default function Profile() {
 
   const role = profile?.role || 'member'
   const roleInfo = ROLE_LABELS[role] || ROLE_LABELS.member
+
+  // Cape stripes: null = no cape, 0 = plain green, 1 = one stripe, 2 = two stripes
+  const capeStripes = churchTitle === 'Apostle' ? 2
+    : churchTitle === 'Elder' ? 1
+    : ['Pastor','Evangelist','Deacon','Deaconess','Prophet'].includes(churchTitle) ? 0
+    : null
   const memberSince = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : ''
@@ -232,7 +238,26 @@ export default function Profile() {
                 <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '3px 12px', borderRadius: 20, background: roleInfo.bg, color: roleInfo.color, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   {roleInfo.label}
                 </span>
+                {churchTitle && (
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '3px 12px', borderRadius: 20, background: 'rgba(255,255,255,0.15)', color: '#fbbf24', letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(255,255,255,0.25)' }}>
+                    ✝️ {churchTitle}
+                  </span>
+                )}
               </div>
+
+              {/* Cape stripe indicator */}
+              {capeStripes !== null && (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                  <div style={{ position: 'relative', width: 56, height: 16, borderRadius: 4, background: '#166534', overflow: 'hidden', flexShrink: 0 }}>
+                    {capeStripes >= 1 && (
+                      <div style={{ position: 'absolute', left: 4, right: 4, top: capeStripes === 2 ? 4 : '50%', transform: capeStripes === 1 ? 'translateY(-50%)' : 'none', height: 2, background: '#fbbf24', borderRadius: 1 }} />
+                    )}
+                    {capeStripes === 2 && (
+                      <div style={{ position: 'absolute', left: 4, right: 4, bottom: 4, height: 2, background: '#fbbf24', borderRadius: 1 }} />
+                    )}
+                  </div>
+                </div>
+              )}
               {profile.display_name && profile.display_name !== profile.full_name && (
                 <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem', marginBottom: 4 }}>@{profile.display_name}</div>
               )}
@@ -291,6 +316,22 @@ export default function Profile() {
           <div style={{ display: 'grid', gap: 20 }}>
             <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,36px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.2rem', marginBottom: 24, paddingBottom: 14, borderBottom: '1px solid var(--brand-pale)' }}>Personal Information</h2>
+
+              {/* Church title + cape display (read-only, set by admin) */}
+              {churchTitle && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: '12px 16px', borderRadius: 12, background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', border: '1.5px solid #bbf7d0' }}>
+                  <div style={{ position: 'relative', width: 48, height: 18, borderRadius: 4, background: '#166534', flexShrink: 0 }}>
+                    {capeStripes >= 1 && (
+                      <div style={{ position: 'absolute', left: 4, right: 4, top: capeStripes === 2 ? 4 : '50%', transform: capeStripes === 1 ? 'translateY(-50%)' : 'none', height: 2, background: '#fbbf24', borderRadius: 1 }} />
+                    )}
+                    {capeStripes === 2 && (
+                      <div style={{ position: 'absolute', left: 4, right: 4, bottom: 4, height: 2, background: '#fbbf24', borderRadius: 1 }} />
+                    )}
+                  </div>
+                  <div style={{ fontWeight: 700, color: '#166534', fontSize: '0.95rem' }}>✝️ {churchTitle}</div>
+                  <div style={{ marginLeft: 'auto', fontSize: '0.7rem', color: '#6b7280' }}>Set by admin</div>
+                </div>
+              )}
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
                 <Field label="Display Name" value={form.display_name} onChange={v => setForm(f => ({ ...f, display_name: v }))} placeholder="How others see you" />

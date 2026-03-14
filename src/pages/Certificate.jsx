@@ -20,6 +20,53 @@ async function loadImage(src) {
   })
 }
 
+// ── Cape stripe config by church title ───────────────────────────
+function getCapeStripes(churchTitle) {
+  if (!churchTitle) return null
+  if (churchTitle === 'Apostle')  return 2
+  if (churchTitle === 'Elder')    return 1
+  // Pastor, Evangelist, Deacon, Deaconess, Prophet → plain (0 stripes but has cape)
+  const hasCape = ['Pastor','Evangelist','Deacon','Deaconess','Prophet'].includes(churchTitle)
+  return hasCape ? 0 : null // null = no cape at all
+}
+
+// ── Draw cape stripe band on canvas ──────────────────────────────
+// Draws a green band with 0, 1, or 2 gold stripes beneath the cert title
+function drawCapeBadge(ctx, W, y, stripes, churchTitle) {
+  const bandH = 38
+  const bandW = 320
+  const x = (W - bandW) / 2
+
+  // Green cape band
+  ctx.save()
+  ctx.beginPath()
+  ctx.roundRect(x, y, bandW, bandH, 6)
+  ctx.fillStyle = '#166534'
+  ctx.fill()
+
+  // Gold stripes (horizontal lines inside the band)
+  if (stripes >= 1) {
+    ctx.strokeStyle = '#fbbf24'
+    ctx.lineWidth = 3
+    const stripeY1 = stripes === 2 ? y + 12 : y + bandH / 2
+    ctx.beginPath(); ctx.moveTo(x + 20, stripeY1); ctx.lineTo(x + bandW - 20, stripeY1); ctx.stroke()
+  }
+  if (stripes === 2) {
+    ctx.strokeStyle = '#fbbf24'
+    ctx.lineWidth = 3
+    const stripeY2 = y + 26
+    ctx.beginPath(); ctx.moveTo(x + 20, stripeY2); ctx.lineTo(x + bandW - 20, stripeY2); ctx.stroke()
+  }
+
+  // Church title text
+  ctx.fillStyle = stripes > 0 ? '#fbbf24' : 'rgba(255,255,255,0.9)'
+  ctx.font = `bold 15px Georgia, serif`
+  ctx.textAlign = 'center'
+  ctx.fillText(churchTitle.toUpperCase(), W / 2, y + bandH / 2 + 5)
+
+  ctx.restore()
+}
+
 // ── Format date nicely ───────────────────────────────────────────
 function fmtDate(iso) {
   if (!iso) return ''
@@ -36,7 +83,7 @@ function fmtBirthday(iso) {
 const APP_URL = 'https://ccgm-pwa.vercel.app'
 
 export default function Certificate() {
-  const { user, profile } = useAuth()
+  const { user, profile, churchTitle } = useAuth()
   const [searchParams] = useSearchParams()
   const [adminSig, setAdminSig] = useState(null) // base64 signature from site_settings
   const [tab, setTab] = useState(searchParams.get('type') === 'birth' ? 'birth' : 'membership')
@@ -139,48 +186,57 @@ export default function Certificate() {
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5
     ctx.beginPath(); ctx.moveTo(W/2-280,270); ctx.lineTo(W/2+280,270); ctx.stroke()
 
+    // Cape stripe badge (only for titled members)
+    const stripes = getCapeStripes(churchTitle)
+    let bodyStartY = 318
+    if (stripes !== null) {
+      drawCapeBadge(ctx, W, 282, stripes, churchTitle)
+      bodyStartY = 346
+    }
+
     // Body
     ctx.fillStyle = '#374151'; ctx.font = 'italic 21px Georgia, serif'
-    ctx.fillText('This is to certify that', W / 2, 318)
+    ctx.fillText('This is to certify that', W / 2, bodyStartY)
+    const yOff = bodyStartY - 318
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 44px Georgia, serif'
-    ctx.fillText(name, W / 2, 384)
+    ctx.fillText(name, W / 2, 384 + yOff)
     const nw = ctx.measureText(name).width
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
-    ctx.beginPath(); ctx.moveTo(W/2-nw/2,398); ctx.lineTo(W/2+nw/2,398); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(W/2-nw/2, 398 + yOff); ctx.lineTo(W/2+nw/2, 398 + yOff); ctx.stroke()
     ctx.fillStyle = '#374151'; ctx.font = '20px Georgia, serif'
-    ctx.fillText('is a recognized member of the', W / 2, 442)
+    ctx.fillText('is a recognized member of the', W / 2, 442 + yOff)
     ctx.fillStyle = '#166534'; ctx.font = 'bold 23px Georgia, serif'
-    ctx.fillText(branch, W / 2, 478)
+    ctx.fillText(branch, W / 2, 478 + yOff)
     ctx.fillStyle = '#374151'; ctx.font = '20px Georgia, serif'
-    ctx.fillText('branch of the Christian Church of God Mission', W / 2, 512)
-    if (joinDate) ctx.fillText('Member since ' + joinDate, W / 2, 546)
+    ctx.fillText('branch of the Christian Church of God Mission', W / 2, 512 + yOff)
+    if (joinDate) ctx.fillText('Member since ' + joinDate, W / 2, 546 + yOff)
 
     // Gold divider
-    ctx.fillStyle = '#d97706'; ctx.fillRect(W/2-180,574,360,2)
+    ctx.fillStyle = '#d97706'; ctx.fillRect(W/2-180, 574 + yOff, 360, 2)
 
     // Issued / Cert ID
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
-    ctx.fillText('Issued:', 120, 640)
+    ctx.fillText('Issued:', 120, 640 + yOff)
     ctx.fillStyle = '#0a2612'; ctx.font = '16px Georgia, serif'
-    ctx.fillText(today, 120, 660)
+    ctx.fillText(today, 120, 660 + yOff)
     ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
-    ctx.fillText('Certificate ID:', W - 120, 640)
+    ctx.fillText('Certificate ID:', W - 120, 640 + yOff)
     ctx.fillStyle = '#0a2612'; ctx.font = '16px Georgia, serif'
-    ctx.fillText(certId, W - 120, 660)
+    ctx.fillText(certId, W - 120, 660 + yOff)
 
     // QR code
     try {
       const qr = await loadImage(qrDataUrl(verifyUrl, 110))
-      ctx.drawImage(qr, W/2 - 55, 600, 110, 110)
+      ctx.drawImage(qr, W/2 - 55, 600 + yOff, 110, 110)
       ctx.textAlign = 'center'; ctx.fillStyle = '#6b7280'; ctx.font = '11px Georgia, serif'
-      ctx.fillText('Scan to verify', W/2, 722)
+      ctx.fillText('Scan to verify', W/2, 722 + yOff)
     } catch (_) {}
 
     // Footer
     ctx.textAlign = 'center'; ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 12px Georgia, serif'
-    ctx.fillText('✦ Issued digitally by CCG World ✦', W / 2, 790)
+    ctx.fillText('✦ Issued digitally by CCG World ✦', W / 2, 790 + yOff)
     ctx.font = '11px Georgia, serif'
-    ctx.fillText('Verify at: ' + verifyUrl, W / 2, 810)
+    ctx.fillText('Verify at: ' + verifyUrl, W / 2, 810 + yOff)
 
     setGenerating(false)
     setMemberDone(true)
@@ -356,7 +412,7 @@ export default function Certificate() {
             <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: '24px 28px', boxShadow: 'var(--shadow-sm)', border: '1px solid #e2e8f0', marginBottom: 24 }}>
               <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', margin: '0 0 16px' }}>Certificate Details</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px,1fr))', gap: 12 }}>
-                {[['👤 Name', name], ['⛪ Branch', branch], ['📅 Member Since', joinDate||'N/A'], ['🔖 Certificate ID', certId]].map(([l,v]) => (
+                {[['👤 Name', name], ['⛪ Branch', branch], ['📅 Member Since', joinDate||'N/A'], ['🔖 Certificate ID', certId], ...(churchTitle ? [['✝️ Church Title', churchTitle]] : [])].map(([l,v]) => (
                   <div key={l} style={{ background: '#f8fafc', borderRadius: 10, padding: '11px 14px' }}>
                     <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>{l}</div>
                     <div style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.9rem' }}>{v}</div>

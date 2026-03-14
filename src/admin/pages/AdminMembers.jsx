@@ -317,19 +317,19 @@ export default function AdminMembers() {
                             onClick={() => setRole(selected.id, r.value)}
                             disabled={saving || selected.role === r.value}
                             style={{
-                              padding: '9px 14px', borderRadius: 10, border: '1.5px solid',
+                              padding: '10px 14px', borderRadius: 10, border: '1.5px solid',
                               borderColor: selected.role === r.value ? r.color : '#e2e8f0',
                               background: selected.role === r.value ? r.bg : 'white',
                               color: selected.role === r.value ? r.color : 'var(--text-mid)',
                               fontWeight: selected.role === r.value ? 700 : 500,
                               cursor: selected.role === r.value ? 'default' : 'pointer',
                               fontFamily: 'var(--font-body)', fontSize: '0.84rem',
-                              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                              transition: 'all 0.15s',
+                              display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2,
+                              transition: 'all 0.15s', width: '100%', textAlign: 'left',
                             }}
                           >
                             <span>{r.label} {selected.role === r.value ? '✓' : ''}</span>
-                            <span style={{ fontSize: '0.72rem', opacity: 0.65 }}>{r.desc}</span>
+                            <span style={{ fontSize: '0.71rem', opacity: 0.6, fontWeight: 400 }}>{r.desc}</span>
                           </button>
                         ))}
                       </div>
