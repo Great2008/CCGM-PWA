@@ -34,12 +34,17 @@ export default function Profile() {
   const [tab, setTab] = useState('info')
   const [form, setForm] = useState({
     display_name: '', bio: '', phone: '', location: '',
-    occupation: '', church_branch: '', birthday: '',
+    occupation: '', church_branch: '', birthday: '', gender: '',
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+
+  // Church post request state
+  const [postRequest, setPostRequest] = useState('')
+  const [postSaving, setPostSaving] = useState(false)
+  const [postMsg, setPostMsg] = useState('')
 
   // Activity state
   const [posts, setPosts] = useState([])
@@ -74,6 +79,7 @@ export default function Profile() {
         occupation: profile.occupation || '',
         church_branch: profile.church_branch || '',
         birthday: profile.birthday || '',
+        gender: profile.gender || '',
       })
     }
   }, [profile])
@@ -148,10 +154,35 @@ export default function Profile() {
       ...form,
       birthday: form.birthday?.trim() || null,
     }
+    // If gender is being set for the first time and no church_title exists,
+    // auto-assign Brother or Sister
+    if (form.gender && !profile?.church_title && !profile?.pending_church_post) {
+      payload.church_title = form.gender === 'Female' ? 'Sister' : 'Brother'
+    }
     const err = await updateProfile(payload)
     if (err) setSaveError(err.message || 'Failed to save.')
     else { setSaved(true); setTimeout(() => setSaved(false), 2500) }
     setSaving(false)
+  }
+
+  const handlePostRequest = async () => {
+    if (!postRequest) return
+    setPostSaving(true); setPostMsg('')
+    const autoApproved = ['Brother', 'Sister'].includes(postRequest)
+    const updates = autoApproved
+      ? { church_title: postRequest, pending_church_post: null }
+      : { pending_church_post: postRequest }
+    const err = await updateProfile(updates)
+    if (err) {
+      setPostMsg('Failed to submit request.')
+    } else {
+      setPostMsg(autoApproved
+        ? `✅ Post updated to ${postRequest}.`
+        : `⏳ Request for "${postRequest}" submitted — awaiting admin approval.`
+      )
+      setPostRequest('')
+    }
+    setPostSaving(false)
   }
 
   const handlePasswordChange = async () => {
@@ -340,6 +371,22 @@ export default function Profile() {
                 <Field label="Occupation" value={form.occupation} onChange={v => setForm(f => ({ ...f, occupation: v }))} placeholder="e.g. Teacher, Engineer..." />
                 <Field label="Birthday (optional)" value={form.birthday} onChange={v => setForm(f => ({ ...f, birthday: v }))} type="date" />
 
+                {/* Gender */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Gender</label>
+                  <select
+                    value={form.gender}
+                    onChange={e => setForm(f => ({ ...f, gender: e.target.value }))}
+                    style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'var(--white, white)', fontSize: '0.9rem', color: form.gender ? 'var(--text-dark)' : '#9ca3af', fontFamily: 'var(--font-body)', outline: 'none', cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a7c59' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: 36 }}
+                    onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
+                    onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                  >
+                    <option value="">— Select gender —</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+
                 {/* Church Branch dropdown */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Church Branch</label>
@@ -391,6 +438,98 @@ export default function Profile() {
                 </button>
                 {saved && <span style={{ color: 'var(--brand-base)', fontWeight: 700, fontSize: '0.88rem', animation: 'fadeIn 0.3s ease' }}>✅ Saved!</span>}
               </div>
+            </div>
+
+            {/* ── Church Post ── */}
+            <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,36px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.2rem', marginBottom: 6, paddingBottom: 14, borderBottom: '1px solid var(--brand-pale)' }}>✝️ Church Post</h2>
+
+              {/* Current post status */}
+              <div style={{ display: 'flex', gap: 10, marginBottom: 18, flexWrap: 'wrap', alignItems: 'center' }}>
+                {profile?.church_title && (
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, padding: '4px 14px', borderRadius: 20, background: '#f0fdf4', color: '#166534', border: '1.5px solid #bbf7d0' }}>
+                    ✅ Current: {profile.church_title}
+                  </span>
+                )}
+                {profile?.pending_church_post && (
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, padding: '4px 14px', borderRadius: 20, background: '#fef3c7', color: '#92400e', border: '1.5px solid #fde68a' }}>
+                    ⏳ Pending approval: {profile.pending_church_post}
+                  </span>
+                )}
+                {!profile?.church_title && !profile?.pending_church_post && (
+                  <span style={{ fontSize: '0.82rem', color: 'var(--text-light)' }}>No post assigned yet.</span>
+                )}
+              </div>
+
+              {/* Request a new post */}
+              {!profile?.pending_church_post && (
+                <div>
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-mid)', marginBottom: 14, lineHeight: 1.6 }}>
+                    {profile?.church_title
+                      ? 'Request a change to your church post. Brother and Sister are instant — all others require admin approval.'
+                      : 'Select your church post. Brother and Sister are assigned immediately — all others require admin approval.'
+                    }
+                  </p>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                    <div style={{ flex: 1, minWidth: 200 }}>
+                      <select
+                        value={postRequest}
+                        onChange={e => setPostRequest(e.target.value)}
+                        style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'var(--white, white)', fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', cursor: 'pointer', appearance: 'none', color: postRequest ? 'var(--text-dark)' : '#9ca3af' }}
+                        onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
+                        onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                      >
+                        <option value="">— Select post —</option>
+                        {(form.gender || profile?.gender) === 'Male' || (!form.gender && !profile?.gender) ? <>
+                          <option value="Brother">Brother ✓ instant</option>
+                          <option value="Deacon">Deacon</option>
+                          <option value="Elder">Elder</option>
+                          <option value="Evangelist">Evangelist</option>
+                          <option value="Prophet">Prophet</option>
+                          <option value="Pastor">Pastor</option>
+                          <option value="Apostle">Apostle</option>
+                        </> : null}
+                        {(form.gender || profile?.gender) === 'Female' ? <>
+                          <option value="Sister">Sister ✓ instant</option>
+                          <option value="Deaconess">Deaconess</option>
+                          <option value="Evangelist">Evangelist</option>
+                          <option value="Prophet">Prophet</option>
+                          <option value="Pastor">Pastor</option>
+                          <option value="Apostle">Apostle</option>
+                        </> : null}
+                      </select>
+                    </div>
+                    <button
+                      onClick={handlePostRequest}
+                      disabled={postSaving || !postRequest}
+                      style={{ padding: '10px 24px', borderRadius: 40, border: 'none', background: (!postRequest || postSaving) ? '#9ca3af' : 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', cursor: (!postRequest || postSaving) ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}
+                    >
+                      {postSaving ? 'Submitting…' : ['Brother','Sister'].includes(postRequest) ? 'Update Post' : 'Request Post'}
+                    </button>
+                  </div>
+                  {postRequest && !['Brother','Sister'].includes(postRequest) && (
+                    <div style={{ marginTop: 10, fontSize: '0.78rem', color: '#92400e', background: '#fff7ed', padding: '8px 12px', borderRadius: 8 }}>
+                      ⏳ <strong>{postRequest}</strong> requires admin approval. Your current post stays active until it's approved.
+                    </div>
+                  )}
+                  {postMsg && (
+                    <div style={{ marginTop: 12, fontSize: '0.84rem', fontWeight: 600, color: postMsg.startsWith('✅') ? '#166534' : '#dc2626' }}>
+                      {postMsg}
+                    </div>
+                  )}
+                </div>
+              )}
+              {profile?.pending_church_post && (
+                <div style={{ fontSize: '0.83rem', color: '#92400e', lineHeight: 1.6 }}>
+                  Your request for <strong>{profile.pending_church_post}</strong> is under review. You'll see your current post updated once an admin approves it.
+                  <button
+                    onClick={async () => { await updateProfile({ pending_church_post: null }); setPostMsg('') }}
+                    style={{ marginLeft: 12, fontSize: '0.78rem', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', textDecoration: 'underline' }}
+                  >
+                    Cancel request
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
