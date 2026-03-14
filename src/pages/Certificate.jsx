@@ -20,7 +20,19 @@ async function loadImage(src) {
   })
 }
 
-// ── Cape stripe config by church title ───────────────────────────
+// ── Draw official stamp on canvas ────────────────────────────────
+// Draws the circular stamp semi-transparently, rotated slightly, at given position
+async function drawStamp(ctx, x, y, size = 160) {
+  try {
+    const stamp = await loadImage('/stamp.png')
+    ctx.save()
+    ctx.globalAlpha = 0.55
+    ctx.translate(x, y)
+    ctx.rotate(-15 * Math.PI / 180)  // slight tilt like a real stamp
+    ctx.drawImage(stamp, -size / 2, -size / 2, size, size)
+    ctx.restore()
+  } catch (_) {}
+}
 function getCapeStripes(churchTitle) {
   if (!churchTitle) return null
   if (churchTitle === 'Apostle')  return 2
@@ -273,7 +285,7 @@ export default function Certificate() {
 
     // Issued / Cert ID
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
-    ctx.fillText('Printed:', 120, 640 + yOff)
+    ctx.fillText('Issued:', 120, 640 + yOff)
     ctx.fillStyle = '#0a2612'; ctx.font = '16px Georgia, serif'
     ctx.fillText(today, 120, 660 + yOff)
     ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
@@ -288,6 +300,9 @@ export default function Certificate() {
       ctx.textAlign = 'center'; ctx.fillStyle = '#6b7280'; ctx.font = '11px Georgia, serif'
       ctx.fillText('Scan to verify', W/2, 722 + yOff)
     } catch (_) {}
+
+    // Official stamp — bottom right, semi-transparent, tilted
+    await drawStamp(ctx, W - 160, 680 + yOff, 155)
 
     // Footer
     ctx.textAlign = 'center'; ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 12px Georgia, serif'
@@ -390,28 +405,35 @@ export default function Certificate() {
     // Gold divider
     ctx.fillStyle = '#d97706'; ctx.fillRect(W/2-200,638,400,2)
 
-    // Signature area
+    // Signature area — right side
     if (adminSig) {
       try {
         const sig = await loadImage(adminSig)
-        // Draw signature on right side
         ctx.drawImage(sig, W - 340, 648, 220, 70)
         ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1
         ctx.beginPath(); ctx.moveTo(W-340,722); ctx.lineTo(W-120,722); ctx.stroke()
         ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'; ctx.textAlign = 'right'
         ctx.fillText('Authorised Signature', W-120, 740)
-      } catch (_) {}
+      } catch (_) {
+        // Fallback line if sig fails to load
+        ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1; ctx.textAlign = 'right'
+        ctx.beginPath(); ctx.moveTo(W-340,720); ctx.lineTo(W-120,720); ctx.stroke()
+        ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'
+        ctx.fillText('Authorised Signature', W-120, 738)
+      }
     } else {
-      // Placeholder signature line
       ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1; ctx.textAlign = 'right'
       ctx.beginPath(); ctx.moveTo(W-340,720); ctx.lineTo(W-120,720); ctx.stroke()
       ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'
       ctx.fillText('Authorised Signature', W-120, 738)
     }
 
+    // Official stamp — overlaid bottom-right, semi-transparent, tilted
+    await drawStamp(ctx, W - 155, 690, 160)
+
     // Issue / ID
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
-    ctx.fillText('Printed:', 120, 672)
+    ctx.fillText('Issued:', 120, 672)
     ctx.fillStyle = '#0a2612'; ctx.font = '15px Georgia, serif'
     ctx.fillText(today, 120, 692)
     ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
