@@ -52,6 +52,7 @@ function AppInner() {
           <Route path="/studio"          element={<Studio />} />
           <Route path="/profile"         element={<Profile />} />
           <Route path="/search"          element={<Search />} />
+          <Route path="/certificate"      element={<Certificate />} />
         </Routes>
       </main>
       <Footer />
