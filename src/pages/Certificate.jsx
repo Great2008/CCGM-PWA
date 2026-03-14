@@ -70,7 +70,7 @@ export default function Certificate() {
 
     ctx.fillStyle = 'rgba(255,255,255,0.7)'
     ctx.font = '16px Georgia, serif'
-    ctx.fillText('CCG World — Established 1924', W / 2, 112)
+    ctx.fillText('CCG Mission — Re-established 1954', W / 2, 112)
 
     // Certificate title
     ctx.fillStyle = '#0a2612'
