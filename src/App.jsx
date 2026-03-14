@@ -23,6 +23,7 @@ import PrayerWall from './pages/PrayerWall'
 import Studio     from './pages/Studio'
 import Profile    from './pages/Profile'
 import Search     from './pages/Search'
+import SuspensionNotice from './components/SuspensionNotice'
 
 function AppInner() {
   const { user } = useAuth()
@@ -54,6 +55,7 @@ function AppInner() {
       </main>
       <Footer />
       <PushPrompt user={user} />
+      <SuspensionNotice />
     </>
   )
 }
