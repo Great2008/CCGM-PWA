@@ -65,7 +65,8 @@ export default function AdminAnalytics() {
     const [
       { count: totalMembers },
       { count: newMembers },
-      { count: pendingMembers },
+      { count: moderatorCount },
+      { count: adminCount },
       { count: totalPosts },
       { count: newPosts },
       { count: totalReactions },
@@ -82,7 +83,8 @@ export default function AdminAnalytics() {
     ] = await Promise.all([
       supabaseAdmin.from('profiles').select('*',{count:'exact',head:true}),
       supabaseAdmin.from('profiles').select('*',{count:'exact',head:true}).gte('created_at',sinceStr),
-      supabaseAdmin.from('profiles').select('*',{count:'exact',head:true}).eq('role','admin').not('role','eq','admin'),
+      supabaseAdmin.from('profiles').select('*',{count:'exact',head:true}).eq('role','moderator'),
+      supabaseAdmin.from('profiles').select('*',{count:'exact',head:true}).in('role',['admin','super_admin']),
       supabaseAdmin.from('timeline_posts').select('*',{count:'exact',head:true}),
       supabaseAdmin.from('timeline_posts').select('*',{count:'exact',head:true}).gte('created_at',sinceStr),
       supabaseAdmin.from('timeline_reactions').select('*',{count:'exact',head:true}).gte('created_at',sinceStr),
@@ -111,7 +113,7 @@ export default function AdminAnalytics() {
     const growthSeries = Object.entries(growthMap).map(([date,count])=>({date,count}))
 
     setData({
-      totalMembers:totalMembers||0, newMembers:newMembers||0, pendingMembers:pendingMembers||0,
+      totalMembers:totalMembers||0, newMembers:newMembers||0, moderatorCount:moderatorCount||0, adminCount:adminCount||0,
       totalPosts:totalPosts||0, newPosts:newPosts||0,
       totalReactions:totalReactions||0, totalComments:totalComments||0,
       totalSermons:totalSermons||0, totalEvents:totalEvents||0,
@@ -149,7 +151,8 @@ export default function AdminAnalytics() {
       {/* Top stats */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:14,marginBottom:28}}>
         <StatBox icon="👥" label="Total Members" value={data.totalMembers} sub={`+${data.newMembers} this period`} color="var(--brand-light)" />
-        <StatBox icon="⏳" label="Pending Approval" value={data.pendingMembers} sub="Awaiting review" color="#f59e0b" />
+        <StatBox icon="🛡" label="Admins & Super Admins" value={data.adminCount} sub="Full panel access" color="#7c3aed" />
+        <StatBox icon="🔰" label="Moderators" value={data.moderatorCount} sub="Moderation access" color="#059669" />
         <StatBox icon="💬" label="Timeline Posts" value={data.totalPosts} sub={`+${data.newPosts} new`} color="#8b5cf6" />
         <StatBox icon="🔥" label="Engagement" value={engagement} sub={`reactions + comments`} color="#dc2626" />
         <StatBox icon="🎙" label="Sermons" value={data.totalSermons} color="#059669" />

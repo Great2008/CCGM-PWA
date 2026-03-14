@@ -524,7 +524,7 @@ function ProfileModal({ profile, onClose, onUpdate }) {
 
 /* ── Main Timeline Page ── */
 export default function Timeline() {
-  const { user, profile, loading: authLoading, signOut, isAdmin, updateProfile } = useAuth()
+  const { user, profile, loading: authLoading, signOut, canModerate, updateProfile } = useAuth()
   const [posts, setPosts]       = useState([])
   const [loading, setLoading]   = useState(true)
   const [body, setBody]         = useState('')
@@ -672,7 +672,7 @@ export default function Timeline() {
             </div>
           )}
           {posts.map(post=>(
-            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} />
+            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={canModerate} />
           ))}
         </div>
       </div>

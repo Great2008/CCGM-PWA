@@ -4,7 +4,16 @@ import { useTable } from '../useSupabaseAdmin'
 import supabaseAdmin from '../../lib/supabaseAdmin'
 import { Confirm } from '../components/CrudShell'
 
-const ROLE_COLORS = { admin: '#7c3aed', member: '#2563eb' }
+// ── App roles (permissions) ────────────────────────────────────────────────
+const APP_ROLES = [
+  { value: 'member',      label: 'Member',      color: '#2563eb', bg: '#eff6ff', desc: 'Standard member experience' },
+  { value: 'moderator',   label: 'Moderator',   color: '#059669', bg: '#f0fdf4', desc: 'Timeline & Prayer Wall moderation' },
+  { value: 'admin',       label: 'Admin',       color: '#7c3aed', bg: '#f5f3ff', desc: 'Full admin panel access' },
+  { value: 'super_admin', label: 'Super Admin', color: '#dc2626', bg: '#fff1f2', desc: 'All access including role management' },
+]
+// ── Church titles (display only, no permissions) ───────────────────────────
+const CHURCH_TITLES = ['', 'Apostle', 'Prophet', 'Evangelist', 'Pastor', 'Elder', 'Deacon', 'Deaconess']
+const ROLE_COLORS = Object.fromEntries(APP_ROLES.map(r => [r.value, r.color]))
 
 const SUSPEND_REASONS = [
   'Violation of community guidelines',
@@ -31,7 +40,7 @@ function addMonths(date, n) {
 }
 
 export default function AdminMembers() {
-  const { showToast } = useAdmin()
+  const { showToast, isSuperAdmin } = useAdmin()
   const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
   const [tab, setTab]         = useState('active') // 'active' | 'suspended'
@@ -58,8 +67,22 @@ export default function AdminMembers() {
 
   const setRole = async (id, role) => {
     setSaving(true)
-    try { await update(id, { role }); showToast('Role updated to ' + role) }
-    catch (e) { showToast(e.message, 'error') }
+    try {
+      await update(id, { role })
+      const label = APP_ROLES.find(r => r.value === role)?.label || role
+      showToast('App role updated to ' + label)
+      setSelected(s => ({ ...s, role }))
+    } catch (e) { showToast(e.message, 'error') }
+    setSaving(false)
+  }
+
+  const setChurchTitle = async (id, church_title) => {
+    setSaving(true)
+    try {
+      await update(id, { church_title })
+      showToast(church_title ? 'Church title set to ' + church_title : 'Church title cleared')
+      setSelected(s => ({ ...s, church_title }))
+    } catch (e) { showToast(e.message, 'error') }
     setSaving(false)
   }
 
@@ -227,7 +250,7 @@ export default function AdminMembers() {
                   <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: '#fee2e2', color: '#dc2626' }}>🚫 Suspended</span>
                 ) : (
                   <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: (ROLE_COLORS[m.role] || '#94a3b8') + '20', color: ROLE_COLORS[m.role] || '#94a3b8' }}>
-                    {m.role || 'member'}
+                    {APP_ROLES.find(r=>r.value===m.role)?.label || 'Member'}
                   </span>
                 )}
               </div>
@@ -282,23 +305,65 @@ export default function AdminMembers() {
                   </div>
                 )}
 
-                {/* Actions */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {!selected.suspended && selected.role !== 'admin' && (
-                    <button onClick={() => setRole(selected.id, 'admin')} disabled={saving}
-                      style={{ padding: '10px', borderRadius: 10, border: '1.5px solid var(--brand-light)', background: 'white', color: 'var(--brand-light)', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.88rem' }}>
-                      🛡 Make Admin
-                    </button>
+                  {/* ── App Role (permissions) ── */}
+                  {isSuperAdmin && (
+                    <div style={{ marginBottom: 4 }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>App Role</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {APP_ROLES.map(r => (
+                          <button
+                            key={r.value}
+                            onClick={() => setRole(selected.id, r.value)}
+                            disabled={saving || selected.role === r.value}
+                            style={{
+                              padding: '9px 14px', borderRadius: 10, border: '1.5px solid',
+                              borderColor: selected.role === r.value ? r.color : '#e2e8f0',
+                              background: selected.role === r.value ? r.bg : 'white',
+                              color: selected.role === r.value ? r.color : 'var(--text-mid)',
+                              fontWeight: selected.role === r.value ? 700 : 500,
+                              cursor: selected.role === r.value ? 'default' : 'pointer',
+                              fontFamily: 'var(--font-body)', fontSize: '0.84rem',
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                              transition: 'all 0.15s',
+                            }}
+                          >
+                            <span>{r.label} {selected.role === r.value ? '✓' : ''}</span>
+                            <span style={{ fontSize: '0.72rem', opacity: 0.65 }}>{r.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                  {!selected.suspended && selected.role === 'admin' && (
-                    <button onClick={() => setRole(selected.id, 'member')} disabled={saving}
-                      style={{ padding: '10px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.88rem' }}>
-                      👤 Remove Admin Role
-                    </button>
+                  {!isSuperAdmin && !selected.suspended && (
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-light)', background: '#f8fafc', borderRadius: 10, padding: '10px 12px' }}>
+                      Role: <strong style={{ color: ROLE_COLORS[selected.role] || '#94a3b8' }}>{APP_ROLES.find(r=>r.value===selected.role)?.label || 'Member'}</strong>
+                      <br/><span style={{ fontSize: '0.72rem' }}>Only Super Admins can change roles.</span>
+                    </div>
                   )}
+
+                  {/* ── Church Title (display only) ── */}
+                  {!selected.suspended && (
+                    <div style={{ marginTop: 8, marginBottom: 4 }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Church Title</div>
+                      <select
+                        value={selected.church_title || ''}
+                        onChange={e => setChurchTitle(selected.id, e.target.value)}
+                        disabled={saving}
+                        style={{ width: '100%', padding: '9px 12px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: '0.88rem', fontFamily: 'var(--font-body)', background: 'white', color: 'var(--text-dark)', cursor: 'pointer', outline: 'none' }}
+                      >
+                        {CHURCH_TITLES.map(t => (
+                          <option key={t} value={t}>{t || '— None —'}</option>
+                        ))}
+                      </select>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 4 }}>Display badge only — no permissions attached.</div>
+                    </div>
+                  )}
+
+                  {/* ── Suspend / Reinstate ── */}
                   {!selected.suspended ? (
                     <button onClick={openSuspend}
-                      style={{ padding: '10px', borderRadius: 10, border: '1.5px solid #fecaca', background: '#fff5f5', color: '#dc2626', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.88rem' }}>
+                      style={{ padding: '10px', borderRadius: 10, border: '1.5px solid #fecaca', background: '#fff5f5', color: '#dc2626', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.88rem', marginTop: 4 }}>
                       🚫 Suspend Member
                     </button>
                   ) : (

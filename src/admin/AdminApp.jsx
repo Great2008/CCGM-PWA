@@ -59,11 +59,19 @@ export default function AdminApp() {
   const [sideOpen, setSideOpen] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
 
+  const [adminRole, setAdminRole] = useState(null) // 'super_admin' | 'admin' | 'moderator'
+
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-        setAuthed(p?.role === 'admin')
+        const role = p?.role
+        // super_admin and admin get full panel; moderator gets restricted panel
+        const allowed = ['super_admin', 'admin', 'moderator']
+        if (allowed.includes(role)) {
+          setAdminRole(role)
+          setAuthed(true)
+        }
       }
       setChecking(false)
     })
@@ -87,9 +95,16 @@ export default function AdminApp() {
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
   if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />
 
-  const Page = PAGES[page] || AdminDashboard
+  // Moderators see only moderation-relevant pages
+  const isSuperAdmin = adminRole === 'super_admin'
+  const isFullAdmin  = adminRole === 'admin' || isSuperAdmin
+  const visibleNav   = isFullAdmin
+    ? NAV
+    : NAV.filter(([id]) => ['timeline', 'prayer'].includes(id))
+
+  const Page = PAGES[page] || (isFullAdmin ? AdminDashboard : AdminTimeline)
   return (
-    <AdminContext.Provider value={{ showToast, setPage, pendingCount }}>
+    <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin }}>
       <div style={{ display:'flex', minHeight:'100vh', fontFamily:'var(--font-body)', background:'#f0f4fa' }}>
         {/* Mobile overlay */}
         {sideOpen&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:99 }} onClick={()=>setSideOpen(false)} />}
@@ -110,7 +125,7 @@ export default function AdminApp() {
             </div>
           </div>
           <nav style={{ flex:1, padding:'10px 0', overflowY:'auto' }}>
-            {NAV.map(([id,icon,label]) => (
+            {visibleNav.map(([id,icon,label]) => (
               <button key={id} onClick={() => { setPage(id); setSideOpen(false) }} style={{
                 display:'flex', alignItems:'center', gap:12,
                 width:'100%', padding:'11px 18px', border:'none', cursor:'pointer',

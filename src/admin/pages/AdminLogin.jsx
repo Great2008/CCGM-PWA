@@ -11,11 +11,12 @@ export default function AdminLogin({ onLogin }) {
     e.preventDefault(); setErr(''); setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
     if (error) { setErr(error.message); setLoading(false); return }
-    // Check admin role
+    // Check role — super_admin, admin, and moderator all get panel access
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
-    if (profile?.role !== 'admin') {
+    const allowed = ['super_admin', 'admin', 'moderator']
+    if (!allowed.includes(profile?.role)) {
       await supabase.auth.signOut()
-      setErr('Access denied. This account does not have admin privileges.')
+      setErr('Access denied. This account does not have admin or moderator privileges.')
       setLoading(false); return
     }
     onLogin()
@@ -38,7 +39,7 @@ export default function AdminLogin({ onLogin }) {
           </button>
         </form>
         <p style={{ textAlign:'center', marginTop:24, fontSize:'0.78rem', color:'var(--text-light)', lineHeight:1.7 }}>
-          Create your admin user in Supabase Dashboard<br/>then set their role to <code style={{ background:'#f0f9ff', padding:'1px 6px', borderRadius:4 }}>admin</code> in the profiles table.
+          Create your admin user in Supabase Dashboard<br/>then set their <code style={{ background:'#f0f9ff', padding:'1px 6px', borderRadius:4 }}>role</code> to <code style={{ background:'#f0f9ff', padding:'1px 6px', borderRadius:4 }}>super_admin</code>, <code style={{ background:'#f0f9ff', padding:'1px 6px', borderRadius:4 }}>admin</code>, or <code style={{ background:'#f0f9ff', padding:'1px 6px', borderRadius:4 }}>moderator</code> in the profiles table.
         </p>
       </div>
     </div>

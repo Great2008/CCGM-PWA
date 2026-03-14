@@ -102,7 +102,7 @@ export default function AdminBulkMessage() {
 
   const TARGET_TYPES = [
     { key: 'all',      label: '👥 All Members',      desc: members.length + ' members' },
-    { key: 'role',     label: '🛡 By Role',           desc: 'Admins or members only' },
+    { key: 'role',     label: '🛡 By Role',           desc: 'Target by app role (member/moderator/admin)' },
     { key: 'branch',   label: '⛪ By Branch',         desc: 'Target a specific branch' },
     { key: 'specific', label: '🎯 Specific Members',  desc: 'Hand-pick recipients' },
   ]
@@ -136,11 +136,16 @@ export default function AdminBulkMessage() {
 
             {/* Role picker */}
             {targetType === 'role' && (
-              <div style={{ display: 'flex', gap: 8 }}>
-                {['member', 'admin'].map(r => (
-                  <button key={r} onClick={() => setTargetRole(r)}
-                    style={{ flex: 1, padding: '10px', borderRadius: 10, border: '1.5px solid', borderColor: targetRole === r ? 'var(--brand-base)' : '#e2e8f0', background: targetRole === r ? 'var(--brand-pale)' : 'white', fontWeight: 700, fontSize: '0.86rem', cursor: 'pointer', fontFamily: 'var(--font-body)', color: targetRole === r ? 'var(--brand-mid)' : 'var(--text-mid)', textTransform: 'capitalize' }}>
-                    {r === 'admin' ? '🛡 Admins' : '👤 Members'}
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {[
+                  { value: 'member',      label: '👤 Members' },
+                  { value: 'moderator',   label: '🔰 Moderators' },
+                  { value: 'admin',       label: '🛡 Admins' },
+                  { value: 'super_admin', label: '⭐ Super Admins' },
+                ].map(r => (
+                  <button key={r.value} onClick={() => setTargetRole(r.value)}
+                    style={{ flex: 1, minWidth: 120, padding: '10px', borderRadius: 10, border: '1.5px solid', borderColor: targetRole === r.value ? 'var(--brand-base)' : '#e2e8f0', background: targetRole === r.value ? 'var(--brand-pale)' : 'white', fontWeight: 700, fontSize: '0.86rem', cursor: 'pointer', fontFamily: 'var(--font-body)', color: targetRole === r.value ? 'var(--brand-mid)' : 'var(--text-mid)' }}>
+                    {r.label}
                   </button>
                 ))}
               </div>

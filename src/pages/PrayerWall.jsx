@@ -171,7 +171,7 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
 const CATEGORIES = ['All', 'Health', 'Family', 'Finance', 'Guidance', 'Thanksgiving', 'Relationships', 'Other']
 
 export default function PrayerWall() {
-  const { user } = useAuth()
+  const { user, canModerate } = useAuth()
   const [prayers, setPrayers]       = useState([])
   const [loading, setLoading]       = useState(true)
   const [request, setRequest]       = useState('')
@@ -376,7 +376,7 @@ export default function PrayerWall() {
               key={prayer.id}
               prayer={prayer}
               currentUserId={user?.id}
-              isAdmin={false}
+              isAdmin={canModerate}
               onPray={handlePray}
               onDelete={handleDelete}
               onReply={() => {}}

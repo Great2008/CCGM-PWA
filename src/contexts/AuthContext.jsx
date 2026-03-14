@@ -108,8 +108,26 @@ export function AuthProvider({ children }) {
     return error
   }
 
+  // ── Role helpers ──────────────────────────────────────────────────────────
+  // App roles (permissions):   super_admin > admin > moderator > member
+  // Church titles (display):   stored in profile.church_title, no permissions attached
+  const appRole        = profile?.role || 'member'
+  const isSuperAdmin   = appRole === 'super_admin'
+  const isAdmin        = appRole === 'admin' || isSuperAdmin
+  const isModerator    = appRole === 'moderator' || isAdmin
+  const canModerate    = isModerator   // shorthand: can delete posts, manage prayer wall
+  const churchTitle    = profile?.church_title || null   // e.g. 'Pastor', 'Elder', 'Deacon'
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signUp, verifyOtp, resendOtp, signIn, signOut, updateProfile, isAdmin: profile?.role === 'admin', isApproved: !!user }}>
+    <AuthContext.Provider value={{
+      user, profile, loading,
+      signUp, verifyOtp, resendOtp, signIn, signOut, updateProfile,
+      // Role flags
+      appRole, isSuperAdmin, isAdmin, isModerator, canModerate,
+      churchTitle,
+      // Legacy alias (keep for any components not yet updated)
+      isApproved: !!user,
+    }}>
       {children}
     </AuthContext.Provider>
   )
