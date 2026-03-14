@@ -11,7 +11,13 @@ export function AuthProvider({ children }) {
 
   const fetchProfile = async (uid) => {
     const { data } = await supabase.from('profiles').select('*').eq('id', uid).single()
-    setProfile(data || null)
+    // If profile just went from suspended → not suspended, flag for reinstatement notice
+    setProfile(prev => {
+      if (prev?.suspended === true && data?.suspended === false) {
+        sessionStorage.setItem('ccgm_reinstated_notice', '1')
+      }
+      return data || null
+    })
   }
 
   useEffect(() => {
