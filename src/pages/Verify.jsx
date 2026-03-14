@@ -19,11 +19,21 @@ export default function Verify() {
     // Extract user ID prefix from cert ID (CCG-XXXXXXXX or CCGB-XXXXXXXX)
     const prefix = certId.replace(/^CCG[B]?-/, '').toLowerCase()
 
+    // UUIDs can't use ilike directly. Use gte/lt range matching on UUID prefix.
+    // UUID prefix '55a6aa61' means IDs from '55a6aa61-0000...' to '55a6aa61-ffff...'
+    const lo = prefix + '-0000-0000-0000-000000000000'
+    const hi = prefix + '-ffff-ffff-ffff-ffffffffffff'
     supabase
       .from('profiles')
       .select('id, full_name, display_name, church_branch, role, created_at, birthday, suspended')
-      .ilike('id', prefix + '%')
-      .single()
+      .gte('id', lo)
+      .lte('id', hi)
+      .limit(1)
+      .then(({ data, error }) => {
+        const single = data?.[0]
+        const error2 = error || (!single ? { message: 'not found' } : null)
+        return { data: single, error: error2 }
+      })
       .then(({ data, error }) => {
         if (error || !data) { setStatus('invalid'); return }
         if (data.suspended) { setStatus('suspended'); setMember(data); return }
