@@ -273,7 +273,7 @@ export default function Certificate() {
 
     // Issued / Cert ID
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
-    ctx.fillText('Issued:', 120, 640 + yOff)
+    ctx.fillText('Printed:', 120, 640 + yOff)
     ctx.fillStyle = '#0a2612'; ctx.font = '16px Georgia, serif'
     ctx.fillText(today, 120, 660 + yOff)
     ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 16px Georgia, serif'
@@ -411,7 +411,7 @@ export default function Certificate() {
 
     // Issue / ID
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
-    ctx.fillText('Issued:', 120, 672)
+    ctx.fillText('Printed:', 120, 672)
     ctx.fillStyle = '#0a2612'; ctx.font = '15px Georgia, serif'
     ctx.fillText(today, 120, 692)
     ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
