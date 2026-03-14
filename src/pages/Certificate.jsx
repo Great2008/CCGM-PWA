@@ -247,7 +247,15 @@ export default function Certificate() {
     ctx.fillStyle = '#374151'; ctx.font = 'italic 21px Georgia, serif'
     ctx.fillText('This is to certify that', W / 2, bodyStartY)
     const yOff = bodyStartY - 318
-    ctx.fillStyle = '#0a2612'; ctx.font = 'bold 44px Georgia, serif'
+    ctx.fillStyle = '#0a2612'
+    // Scale font down for long names to prevent overflow
+    const maxNameWidth = W - 240
+    let nameFontSize = 44
+    ctx.font = `bold ${nameFontSize}px Georgia, serif`
+    while (ctx.measureText(displayName).width > maxNameWidth && nameFontSize > 24) {
+      nameFontSize -= 2
+      ctx.font = `bold ${nameFontSize}px Georgia, serif`
+    }
     ctx.fillText(displayName, W / 2, 384 + yOff)
     const nw = ctx.measureText(displayName).width
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
@@ -356,7 +364,14 @@ export default function Certificate() {
     ctx.fillStyle = '#374151'; ctx.font = 'italic 21px Georgia, serif'
     ctx.fillText('This is to certify that', W/2, 376)
 
-    ctx.fillStyle = '#0a2612'; ctx.font = 'bold 46px Georgia, serif'
+    ctx.fillStyle = '#0a2612'
+    const maxNameWidthB = W - 240
+    let nameFontSizeB = 46
+    ctx.font = `bold ${nameFontSizeB}px Georgia, serif`
+    while (ctx.measureText(displayName).width > maxNameWidthB && nameFontSizeB > 24) {
+      nameFontSizeB -= 2
+      ctx.font = `bold ${nameFontSizeB}px Georgia, serif`
+    }
     ctx.fillText(displayName, W/2, 444)
     const nw = ctx.measureText(displayName).width
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2

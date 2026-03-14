@@ -36,13 +36,18 @@ export function AuthProvider({ children }) {
 
   const signUp = async (email, password, profileData = {}) => {
     const { fullName = '', ...rest } = profileData
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email, password,
       options: {
         data: { full_name: fullName, display_name: fullName.split(' ')[0] },
         emailRedirectTo: undefined,   // disable magic link — we use OTP
       }
     })
+    // Supabase silently succeeds for existing emails but returns empty identities
+    // Detect this and surface a clear error instead of hanging on OTP step
+    if (!error && data?.user && data.user.identities?.length === 0) {
+      return { message: 'An account with this email already exists. Please sign in instead.' }
+    }
     // Store extra profile fields to apply after OTP verify
     if (!error && Object.keys(rest).length) {
       sessionStorage.setItem('ccgm_pending_profile', JSON.stringify({ ...rest, full_name: fullName }))
