@@ -45,7 +45,7 @@ function getCapeStripes(t) {
 function drawCapeBadge(ctx, W, y, stripes, title) {
   const bH = 42, bW = 360, x = (W - bW) / 2
   ctx.save()
-  ctx.beginPath(); ctx.roundRect(x, y, bW, bH, 7)
+  roundRect(ctx, x, y, bW, bH, 7)
   ctx.fillStyle = '#166534'; ctx.fill()
   if (stripes >= 1) {
     ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3
@@ -138,6 +138,21 @@ function fmtBirthday(iso) {
   return d.toLocaleDateString('en-GB',{ day:'numeric',month:'long',year:'numeric' }).replace(/^\d+/, day+s)
 }
 
+// Safe roundRect polyfill — ctx.roundRect missing in older WebViews
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+  ctx.lineTo(x + r, y + h)
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+  ctx.lineTo(x, y + r)
+  ctx.quadraticCurveTo(x, y, x + r, y)
+  ctx.closePath()
+}
+
 const APP_URL = 'https://ccgm-pwa.vercel.app'
 const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
 
@@ -158,6 +173,7 @@ export default function Certificate() {
   const idCanvasRef     = useRef(null)
 
   const [generating, setGenerating] = useState(false)
+  const [genError,   setGenError]   = useState('')
   const [memberDone,  setMemberDone]  = useState(false)
   const [birthDone,   setBirthDone]   = useState(false)
   const [idDone,      setIdDone]      = useState(false)
@@ -202,7 +218,8 @@ export default function Certificate() {
 
   // ── MEMBERSHIP CERTIFICATE — A5 Landscape (1748 × 1240 px) ──────
   const generateMembership = async () => {
-    setGenerating(true)
+    setGenerating(true); setGenError('')
+    try {
     const canvas = memberCanvasRef.current
     // A5 landscape at 300dpi: 210mm × 148mm = 2480 × 1748px
     // At 150dpi (screen-friendly): 1240 × 874px — scale up 1.4x for quality
@@ -318,13 +335,16 @@ export default function Certificate() {
     ctx.font = '13px Georgia, serif'
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
-    setGenerating(false); setMemberDone(true)
+    setMemberDone(true)
+    } catch(e) { console.error('Membership cert error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    finally { setGenerating(false) }
   }
 
   // ── BIRTH CERTIFICATE — A5 Portrait (1240 × 1748 px) ─────────────
   const generateBirth = async () => {
     if (!birthday) return
-    setGenerating(true)
+    setGenerating(true); setGenError('')
+    try {
     const canvas = birthCanvasRef.current
     const W = 1240, H = 1748
     canvas.width = W; canvas.height = H
@@ -454,13 +474,16 @@ export default function Certificate() {
     ctx.font = '12px Georgia, serif'
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
-    setGenerating(false); setBirthDone(true)
+    setBirthDone(true)
+    } catch(e) { console.error('Birth cert error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    finally { setGenerating(false) }
   }
 
   // ── ID CARD — Portrait CR80 (638 × 1012 px @ 2x) ─────────────────
   // Physical CR80: 54mm × 85.6mm
   const generateId = async () => {
-    setGenerating(true)
+    setGenerating(true); setGenError('')
+    try {
     const canvas = idCanvasRef.current
     const W = 638, H = 1012
     canvas.width = W; canvas.height = H
@@ -531,7 +554,7 @@ export default function Certificate() {
     // Post badge — straddles band/body divide
     const badgeY = bandH - 22
     ctx.fillStyle = '#d97706'
-    ctx.beginPath(); ctx.roundRect(W/2-90,badgeY,180,34,17); ctx.fill()
+    roundRect(ctx, W/2-90,badgeY,180,34,17); ctx.fill()
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 13px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText((churchTitle||'Member').toUpperCase(), W/2, badgeY+22)
 
@@ -597,7 +620,9 @@ export default function Certificate() {
     ctx.fillStyle = '#9ca3af'; ctx.font = '9px Georgia, serif'
     ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
 
-    setGenerating(false); setIdDone(true)
+    setIdDone(true)
+    } catch(e) { console.error('ID card error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    finally { setGenerating(false) }
   }
 
   // ── Download helper ────────────────────────────────────────────
@@ -685,6 +710,15 @@ export default function Certificate() {
         <div style={{ display:'flex', gap:10, marginBottom:32, flexWrap:'wrap' }}>
           {tabs.map(t => <TabBtn key={t.key} k={t.key} />)}
         </div>
+
+
+        {/* Generation error banner */}
+        {genError && (
+          <div style={{ background:'#fff5f5', border:'1px solid #fecaca', borderRadius:12, padding:'12px 18px', color:'#dc2626', fontSize:'0.88rem', marginBottom:16, display:'flex', gap:10, alignItems:'center' }}>
+            ❌ {genError}
+            <button onClick={() => setGenError('')} style={{ marginLeft:'auto', background:'none', border:'none', cursor:'pointer', color:'#dc2626', fontSize:'1rem' }}>✕</button>
+          </div>
+        )}
 
         {/* ── MEMBERSHIP ── */}
         {tab === 'membership' && (
