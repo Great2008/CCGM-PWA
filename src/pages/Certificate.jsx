@@ -420,7 +420,7 @@ export default function Certificate() {
     const canvas = birthCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
     try {
-    const W = 874, H = 1240
+    const W = 623, H = 874
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
     if (!ctx) { setGenError('Canvas context unavailable'); return }
@@ -448,105 +448,117 @@ export default function Certificate() {
     drawOrnateCorner(ctx,W-16,H-16,80,-1,-1)
 
     // Side border dots
-    for (let x=120;x<W-110;x+=18) {
+    for (let x=85;x<W-78;x+=13) {
       ctx.save(); ctx.globalAlpha=0.3
-      ctx.beginPath(); ctx.arc(x,19,2,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
-      ctx.beginPath(); ctx.arc(x,H-19,2,0,Math.PI*2); ctx.fill()
+      ctx.beginPath(); ctx.arc(x,14,1.5,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
+      ctx.beginPath(); ctx.arc(x,H-14,1.5,0,Math.PI*2); ctx.fill()
       ctx.restore()
     }
-    for (let y=120;y<H-110;y+=18) {
+    for (let y=85;y<H-78;y+=13) {
       ctx.save(); ctx.globalAlpha=0.3
-      ctx.beginPath(); ctx.arc(19,y,2,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
-      ctx.beginPath(); ctx.arc(W-19,y,2,0,Math.PI*2); ctx.fill()
+      ctx.beginPath(); ctx.arc(14,y,1.5,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
+      ctx.beginPath(); ctx.arc(W-14,y,1.5,0,Math.PI*2); ctx.fill()
       ctx.restore()
     }
 
     // Header
     const grad = ctx.createLinearGradient(0,0,0,200)
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(0.6,'#14532d'); grad.addColorStop(1,'#b45309')
-    ctx.fillStyle = grad; ctx.fillRect(34,34,W-68,200)
-    try { const logo = await loadImage('/logo.png'); ctx.drawImage(logo,60,54,130,130) } catch(_){}
+    ctx.fillStyle = grad; ctx.fillRect(34,34,W-68,142)
+    try { const logo = await loadImage('/logo.png'); ctx.drawImage(logo,42,38,92,92) } catch(_){}
     drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
 
-    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 24px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('CHRISTIAN CHURCH OF GOD MISSION', W/2, 102)
-    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '14px Georgia, serif'
-    ctx.fillText('(Registered in Nig. No. 451)', W/2, 126)
-    ctx.fillStyle = 'rgba(255,255,255,0.78)'; ctx.font = '16px Georgia, serif'
-    ctx.fillText('CCG Mission — Re-established 1st October, 1954', W/2, 154)
-    ctx.fillStyle = '#fbbf24'; ctx.font = '14px Georgia, serif'
-    ctx.fillText('ccgm-pwa.vercel.app', W/2, 178)
-    ctx.fillStyle = '#d97706'; ctx.fillRect(34,234,W-68,2)
+    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 17px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('CHRISTIAN CHURCH OF GOD MISSION', W/2, 72)
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '10px Georgia, serif'
+    ctx.fillText('(Registered in Nig. No. 451)', W/2, 89)
+    ctx.fillStyle = 'rgba(255,255,255,0.78)'; ctx.font = '11px Georgia, serif'
+    ctx.fillText('CCG Mission — Re-established 1st October, 1954', W/2, 109)
+    ctx.fillStyle = '#fbbf24'; ctx.font = '10px Georgia, serif'
+    ctx.fillText('ccgm-pwa.vercel.app', W/2, 126)
+    ctx.fillStyle = '#d97706'; ctx.fillRect(34,166,W-68,2)
 
     // Printed / No. row
-    ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
-    ctx.fillText('Printed:', 58, 268)
-    ctx.fillStyle = '#0a2612'; ctx.font = '15px Georgia, serif'; ctx.fillText(today, 138, 268)
-    ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'
-    ctx.fillText('No.', W-160, 268)
-    ctx.fillStyle = '#0a2612'; ctx.font = '15px Georgia, serif'
-    ctx.fillText(birthId.replace('CCGB-',''), W-60, 268)
+    ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 11px Georgia, serif'
+    ctx.fillText('Printed:', 41, 190)
+    ctx.fillStyle = '#0a2612'; ctx.font = '11px Georgia, serif'; ctx.fillText(today, 98, 190)
+    ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 11px Georgia, serif'
+    ctx.fillText('No.', W-114, 190)
+    ctx.fillStyle = '#0a2612'; ctx.font = '11px Georgia, serif'
+    ctx.fillText(birthId.replace('CCGB-',''), W-43, 190)
 
     // Title
-    ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 62px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Certificate of Birth', W/2, 360)
+    ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 42px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Certificate of Birth', W/2, 256)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
-    ctx.beginPath(); ctx.moveTo(W/2-310,382); ctx.lineTo(W/2+310,382); ctx.stroke()
-    ctx.fillStyle = '#92400e'; ctx.font = 'italic 19px Georgia, serif'
-    ctx.fillText('In the Name of the Lord', W/2, 416)
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 21px Georgia, serif'
-    ctx.fillText('This is to Certify that', W/2, 458)
+    ctx.beginPath(); ctx.moveTo(W/2-220,271); ctx.lineTo(W/2+220,271); ctx.stroke()
+    ctx.fillStyle = '#92400e'; ctx.font = 'italic 13px Georgia, serif'
+    ctx.fillText('In the Name of the Lord', W/2, 296)
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 14px Georgia, serif'
+    ctx.fillText('This is to Certify that', W/2, 324)
 
     // Fields
-    const LX = 62, LW = W - 124
-    let fy = 514
+    const LX = 44, LW = W - 88
+    // A6-sized field line — smaller font than the global drawFieldLine
+    const fieldLine = (label, value, y) => {
+      ctx.textAlign = 'left'
+      ctx.fillStyle = '#374151'; ctx.font = '10px Georgia, serif'
+      ctx.fillText(label, LX, y)
+      const lw = ctx.measureText(String(label||'')).width
+      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.6; ctx.setLineDash([2,3])
+      ctx.beginPath(); ctx.moveTo(LX+lw+4,y+2); ctx.lineTo(LX+LW,y+2); ctx.stroke()
+      ctx.setLineDash([])
+      ctx.fillStyle = '#0a2612'; ctx.font = 'bold 10px Georgia, serif'
+      ctx.fillText(value == null ? '—' : String(value), LX+lw+8, y)
+    }
+    let fy = 365
 
-    drawFieldLine(ctx,'Name of Child...',displayName,LX,fy,LW); fy+=54
-    drawFieldLine(ctx,'Date of Birth...',birthday,LX,fy,LW); fy+=54
-    drawFieldLine(ctx,'Place of Birth...',placeOfBirth||'—',LX,fy,LW); fy+=70
+    fieldLine('Name of Child...',displayName,fy); fy+=38
+    fieldLine('Date of Birth...',birthday,fy); fy+=38
+    fieldLine('Place of Birth...',placeOfBirth||'—',fy); fy+=50
 
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Was born by', W/2, fy); fy+=40
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 12px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Was born by', W/2, fy); fy+=28
 
-    drawFieldLine(ctx,"Father's Name...",fatherName||'—',LX,fy,LW); fy+=54
-    drawFieldLine(ctx,"Mother's Name...",motherName||'—',LX,fy,LW); fy+=54
-    drawFieldLine(ctx,'Home Town/Village...',hometown||'—',LX,fy,LW); fy+=54
-    drawFieldLine(ctx,'L.G. Area/Division...',lga||'—',LX,fy,LW); fy+=54
-    drawFieldLine(ctx,'Church Branch...',branch,LX,fy,LW); fy+=54
-    if (churchTitle) { drawFieldLine(ctx,'Church Post...',churchTitle,LX,fy,LW); fy+=54 }
+    fieldLine("Father's Name...",fatherName||'—',fy); fy+=38
+    fieldLine("Mother's Name...",motherName||'—',fy); fy+=38
+    fieldLine('Home Town/Village...',hometown||'—',fy); fy+=38
+    fieldLine('L.G. Area/Division...',lga||'—',fy); fy+=38
+    fieldLine('Church Branch...',branch,fy); fy+=38
+    if (churchTitle) { fieldLine('Church Post...',churchTitle,fy); fy+=38 }
 
     // Divider
     fy += 12
-    ctx.fillStyle = '#d97706'; ctx.fillRect(LX,fy,LW,1.5); fy+=36
+    ctx.fillStyle = '#d97706'; ctx.fillRect(LX,fy,LW,1.5); fy+=26
 
     // Witness text
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 14px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('In witness whereof the undersigned who accepted the above particulars to be correct and true.', W/2, fy); fy+=48
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 10px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('In witness whereof the undersigned who accepted the above particulars to be correct and true.', W/2, fy); fy+=34
 
     // Bottom row: Signature | QR | Stamp
     if (adminSig) {
-      try { const sig = await loadImage(adminSig); ctx.drawImage(sig, LX, fy, 220, 70) } catch(_){}
+      try { const sig = await loadImage(adminSig); ctx.drawImage(sig, LX, fy, 156, 50) } catch(_){}
     }
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1
-    ctx.beginPath(); ctx.moveTo(LX,fy+84); ctx.lineTo(LX+250,fy+84); ctx.stroke()
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Signature of Church Minister', LX+125, fy+102)
+    ctx.beginPath(); ctx.moveTo(LX,fy+60); ctx.lineTo(LX+178,fy+60); ctx.stroke()
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 10px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Signature of Church Minister', LX+89, fy+73)
 
     try {
       const qr = await loadImage(qrDataUrl(birthVerifyUrl, 110))
-      ctx.drawImage(qr, W/2-55, fy, 110, 110)
-      ctx.fillStyle = '#6b7280'; ctx.font = '12px Georgia, serif'; ctx.textAlign = 'center'
-      ctx.fillText('Scan to verify', W/2, fy+128)
+      ctx.drawImage(qr, W/2-39, fy, 78, 78)
+      ctx.fillStyle = '#6b7280'; ctx.font = '9px Georgia, serif'; ctx.textAlign = 'center'
+      ctx.fillText('Scan to verify', W/2, fy+90)
     } catch(_){}
 
-    await drawStamp(ctx, W-160, fy+68, 160)
+    await drawStamp(ctx, W-114, fy+48, 114)
 
     // Footer
-    const footY = H - 56
-    ctx.fillStyle = '#d97706'; ctx.fillRect(34, footY-22, W-68, 1.5)
-    ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 13px Georgia, serif'; ctx.textAlign = 'center'
+    const footY = H - 40
+    ctx.fillStyle = '#d97706'; ctx.fillRect(34, footY-16, W-68, 1)
+    ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 9px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('✦ Printed digitally by CCG World ✦', W/2, footY)
-    ctx.font = '12px Georgia, serif'
+    ctx.font = '8px Georgia, serif'
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
     setBirthDone(true)
