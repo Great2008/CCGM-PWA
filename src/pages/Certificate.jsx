@@ -28,16 +28,26 @@ function roundRect(ctx, x, y, w, h, r) {
 // Safe ellipse: polyfill for Android WebViews that lack ctx.ellipse
 function safeEllipse(ctx, cx, cy, rx, ry, rotation, startAngle, endAngle) {
   if (typeof ctx.ellipse === 'function') {
-    safeEllipse(ctx, cx, cy, rx, ry, rotation, startAngle, endAngle)
+    ctx.ellipse(cx, cy, rx, ry, rotation, startAngle, endAngle)
     return
   }
-  // Fallback: approximate with bezier curves
-  ctx.save()
-  ctx.translate(cx, cy)
-  ctx.rotate(rotation)
-  ctx.scale(rx, ry)
-  ctx.arc(0, 0, 1, startAngle, endAngle)
-  ctx.restore()
+  // Fallback for Android WebViews without ctx.ellipse:
+  // Draw ellipse using 8-segment bezier approximation (Kappa = 0.5522847498)
+  const KAPPA = 0.5522847498
+  const cos = Math.cos(rotation), sin = Math.sin(rotation)
+  // Transform helper: rotate a point around cx,cy
+  const pt = (dx, dy) => [cx + dx * cos - dy * sin, cy + dx * sin + dy * cos]
+  const [x0, y0] = pt(rx, 0)
+  ctx.moveTo(x0, y0)
+  const segments = [
+    [pt(rx,  KAPPA*ry), pt(KAPPA*rx,  ry), pt(0,  ry)],
+    [pt(-KAPPA*rx,  ry), pt(-rx,  KAPPA*ry), pt(-rx, 0)],
+    [pt(-rx, -KAPPA*ry), pt(-KAPPA*rx, -ry), pt(0, -ry)],
+    [pt(KAPPA*rx, -ry), pt(rx, -KAPPA*ry), pt(rx, 0)],
+  ]
+  for (const [[c1x,c1y],[c2x,c2y],[ex,ey]] of segments) {
+    ctx.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey)
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────
