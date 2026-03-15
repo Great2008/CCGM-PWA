@@ -360,6 +360,9 @@ export default function Certificate() {
     ctx.font = '13px Georgia, serif'
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
+    // Push result to visible <img> preview
+    const memberImg = document.getElementById('member-preview')
+    if (memberImg) memberImg.src = canvas.toDataURL('image/png')
     setMemberDone(true)
     } catch(e) { console.error('Membership cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
@@ -502,6 +505,8 @@ export default function Certificate() {
     ctx.font = '12px Georgia, serif'
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
+    const birthImg = document.getElementById('birth-preview')
+    if (birthImg) birthImg.src = canvas.toDataURL('image/png')
     setBirthDone(true)
     } catch(e) { console.error('Birth cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
@@ -651,6 +656,8 @@ export default function Certificate() {
     ctx.fillStyle = '#9ca3af'; ctx.font = '9px Georgia, serif'
     ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
 
+    const idImg = document.getElementById('id-preview')
+    if (idImg) idImg.src = canvas.toDataURL('image/png')
     setIdDone(true)
     } catch(e) { console.error('ID card FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
@@ -735,6 +742,13 @@ export default function Certificate() {
         </p>
       </div>
 
+      {/* Hidden canvases — always mounted so refs are always valid */}
+      <div style={{ position:'absolute', left:'-9999px', top:0, pointerEvents:'none', visibility:'hidden' }}>
+        <canvas ref={memberCanvasRef} />
+        <canvas ref={birthCanvasRef} />
+        <canvas ref={idCanvasRef} />
+      </div>
+
       <div className="container" style={{ maxWidth:900, padding:'40px 5% 80px' }}>
 
         {/* Tabs */}
@@ -742,11 +756,10 @@ export default function Certificate() {
           {tabs.map(t => <TabBtn key={t.key} k={t.key} />)}
         </div>
 
-
         {/* Generation error banner */}
         {genError && (
           <div style={{ background:'#fff5f5', border:'1px solid #fecaca', borderRadius:12, padding:'12px 18px', color:'#dc2626', fontSize:'0.88rem', marginBottom:16, display:'flex', gap:10, alignItems:'center' }}>
-            ❌ {genError.split(' | ').map((line, i) => <span key={i} style={{display:'block', fontSize: i===0 ? '0.88rem' : '0.72rem', opacity: i===0 ? 1 : 0.7}}>{line}</span>)}
+            ❌ <span>{genError}</span>
             <button onClick={() => setGenError('')} style={{ marginLeft:'auto', background:'none', border:'none', cursor:'pointer', color:'#dc2626', fontSize:'1rem' }}>✕</button>
           </div>
         )}
@@ -770,7 +783,17 @@ export default function Certificate() {
                 : <><GenBtn onClick={() => download(memberCanvasRef,'CCG-Membership-'+name.replace(/\s+/g,'-')+'.png')} disabled={false} label="⬇️ Download PNG" /><RegenBtn onClick={() => { setMemberDone(false); generateMembership() }} /></>
               }
             </div>
-            <Preview done={memberDone} canvasRef={memberCanvasRef} placeholder='Click "Generate Certificate" to preview and download' emoji="🏅" />
+            {memberDone && (
+              <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
+                <img id="member-preview" style={{ width:'100%', display:'block' }} alt="Membership Certificate" />
+              </div>
+            )}
+            {!memberDone && (
+              <div style={{ background:'var(--brand-pale)', borderRadius:14, padding:'48px 32px', textAlign:'center', color:'var(--text-light)' }}>
+                <div style={{ fontSize:'3rem', marginBottom:12 }}>🏅</div>
+                <div>Click "Generate Certificate" to preview and download</div>
+              </div>
+            )}
           </div>
         )}
 
@@ -806,7 +829,17 @@ export default function Certificate() {
                     : <><GenBtn onClick={() => download(birthCanvasRef,'CCG-Birth-Certificate-'+name.replace(/\s+/g,'-')+'.png')} disabled={false} label="⬇️ Download PNG" color="#b45309" /><RegenBtn onClick={() => { setBirthDone(false); generateBirth() }} /></>
                   }
                 </div>
-                <Preview done={birthDone} canvasRef={birthCanvasRef} placeholder='Click "Generate Birth Certificate" to preview and download' emoji="🎂" />
+                {birthDone && (
+                  <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
+                    <img id="birth-preview" style={{ width:'100%', display:'block' }} alt="Birth Certificate" />
+                  </div>
+                )}
+                {!birthDone && (
+                  <div style={{ background:'var(--brand-pale)', borderRadius:14, padding:'48px 32px', textAlign:'center', color:'var(--text-light)' }}>
+                    <div style={{ fontSize:'3rem', marginBottom:12 }}>🎂</div>
+                    <div>Click "Generate Birth Certificate" to preview and download</div>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -832,7 +865,17 @@ export default function Certificate() {
               }
             </div>
             <div style={{ maxWidth:360 }}>
-              <Preview done={idDone} canvasRef={idCanvasRef} placeholder='Click "Generate ID Card" to preview and download' emoji="🪪" />
+              {idDone && (
+                <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
+                  <img id="id-preview" style={{ width:'100%', display:'block' }} alt="ID Card" />
+                </div>
+              )}
+              {!idDone && (
+                <div style={{ background:'var(--brand-pale)', borderRadius:14, padding:'48px 32px', textAlign:'center', color:'var(--text-light)' }}>
+                  <div style={{ fontSize:'3rem', marginBottom:12 }}>🪪</div>
+                  <div>Click "Generate ID Card" to preview and download</div>
+                </div>
+              )}
             </div>
           </div>
         )}
