@@ -113,13 +113,13 @@ function drawOrnateCorner(ctx, x, y, size, fx, fy) {
 function drawFieldLine(ctx, label, value, x, y, maxW) {
   ctx.textAlign = 'left'
   ctx.fillStyle = '#374151'; ctx.font = '14px Georgia, serif'
-  ctx.fillText(label, x, y)
-  const lw = ctx.measureText(label).width
+  safeFill(ctx, label, x, y)
+  const lw = ctx.measureText(String(label||'')).width
   ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.8; ctx.setLineDash([2,4])
   ctx.beginPath(); ctx.moveTo(x+lw+5,y+2); ctx.lineTo(x+maxW,y+2); ctx.stroke()
   ctx.setLineDash([])
   ctx.fillStyle = '#0a2612'; ctx.font = 'bold 14px Georgia, serif'
-  ctx.fillText(value, x+lw+10, y)
+  safeFill(ctx, value == null ? '—' : value, x+lw+10, y)
 }
 
 function getTitlePrefix(churchTitle, gender) {
@@ -136,6 +136,11 @@ function fmtBirthday(iso) {
   const d = new Date(iso), day = d.getDate()
   const s = day===1||day===21||day===31?'st':day===2||day===22?'nd':day===3||day===23?'rd':'th'
   return d.toLocaleDateString('en-GB',{ day:'numeric',month:'long',year:'numeric' }).replace(/^\d+/, day+s)
+}
+
+// Safe fillText — never throws on null/undefined value
+function safeFill(ctx, value, x, y) {
+  ctx.fillText(value == null ? '' : String(value), x, y)
 }
 
 // Safe roundRect polyfill — ctx.roundRect missing in older WebViews
@@ -221,11 +226,13 @@ export default function Certificate() {
     setGenerating(true); setGenError('')
     try {
     const canvas = memberCanvasRef.current
+    if (!canvas) { setGenError('Canvas not available'); return }
     // A5 landscape at 300dpi: 210mm × 148mm = 2480 × 1748px
     // At 150dpi (screen-friendly): 1240 × 874px — scale up 1.4x for quality
     const W = 1748, H = 1240
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
+    if (!ctx) { setGenError('Canvas context unavailable'); return }
 
     // Background
     ctx.fillStyle = '#fdf9f0'; ctx.fillRect(0,0,W,H)
@@ -346,9 +353,11 @@ export default function Certificate() {
     setGenerating(true); setGenError('')
     try {
     const canvas = birthCanvasRef.current
+    if (!canvas) { setGenError('Canvas not available'); return }
     const W = 1240, H = 1748
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
+    if (!ctx) { setGenError('Canvas context unavailable'); return }
 
     // Background
     ctx.fillStyle = '#fffef5'; ctx.fillRect(0,0,W,H)
@@ -485,9 +494,11 @@ export default function Certificate() {
     setGenerating(true); setGenError('')
     try {
     const canvas = idCanvasRef.current
+    if (!canvas) { setGenError('Canvas not available'); return }
     const W = 638, H = 1012
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
+    if (!ctx) { setGenError('Canvas context unavailable'); return }
 
     // Top green band (~36% height)
     const bandH = 368
