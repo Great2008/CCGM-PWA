@@ -175,7 +175,8 @@ export default function Profile() {
   const handlePostRequest = async () => {
     if (!postRequest) return
     setPostSaving(true); setPostMsg('')
-    const autoApproved = ['Brother', 'Sister'].includes(postRequest)
+    const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
+    const autoApproved = !ORDAINED.includes(postRequest)
     const updates = autoApproved
       ? { church_title: postRequest, pending_church_post: null }
       : { pending_church_post: postRequest }
@@ -488,8 +489,8 @@ export default function Profile() {
                 <div>
                   <p style={{ fontSize: '0.84rem', color: 'var(--text-mid)', marginBottom: 14, lineHeight: 1.6 }}>
                     {profile?.church_title
-                      ? 'Request a change to your church post. Brother and Sister are instant — all others require admin approval.'
-                      : 'Select your church post. Brother and Sister are assigned immediately — all others require admin approval.'
+                      ? 'Request a change to your church post. Brother and Sister are instant — ordained titles require admin approval.'
+                      : 'Select your church post. Brother and Sister are assigned immediately — ordained titles require admin approval.'
                     }
                   </p>
                   <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -504,20 +505,20 @@ export default function Profile() {
                         <option value="">— Select post —</option>
                         {(form.gender || profile?.gender) === 'Male' || (!form.gender && !profile?.gender) ? <>
                           <option value="Brother">Brother ✓ instant</option>
-                          <option value="Deacon">Deacon</option>
-                          <option value="Elder">Elder</option>
-                          <option value="Evangelist">Evangelist</option>
-                          <option value="Prophet">Prophet</option>
-                          <option value="Pastor">Pastor</option>
-                          <option value="Apostle">Apostle</option>
+                          <option value="Deacon">Deacon — needs approval</option>
+                          <option value="Elder">Elder — needs approval</option>
+                          <option value="Evangelist">Evangelist — needs approval</option>
+                          <option value="Prophet">Prophet — needs approval</option>
+                          <option value="Pastor">Pastor — needs approval</option>
+                          <option value="Apostle">Apostle — needs approval</option>
                         </> : null}
                         {(form.gender || profile?.gender) === 'Female' ? <>
                           <option value="Sister">Sister ✓ instant</option>
-                          <option value="Deaconess">Deaconess</option>
-                          <option value="Evangelist">Evangelist</option>
-                          <option value="Prophet">Prophet</option>
-                          <option value="Pastor">Pastor</option>
-                          <option value="Apostle">Apostle</option>
+                          <option value="Deaconess">Deaconess — needs approval</option>
+                          <option value="Evangelist">Evangelist — needs approval</option>
+                          <option value="Prophet">Prophet — needs approval</option>
+                          <option value="Pastor">Pastor — needs approval</option>
+                          <option value="Apostle">Apostle — needs approval</option>
                         </> : null}
                       </select>
                     </div>
@@ -526,10 +527,10 @@ export default function Profile() {
                       disabled={postSaving || !postRequest}
                       style={{ padding: '10px 24px', borderRadius: 40, border: 'none', background: (!postRequest || postSaving) ? '#9ca3af' : 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', cursor: (!postRequest || postSaving) ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}
                     >
-                      {postSaving ? 'Submitting…' : ['Brother','Sister'].includes(postRequest) ? 'Update Post' : 'Request Post'}
+                      {postSaving ? 'Submitting…' : ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle'].includes(postRequest) ? 'Request Post' : 'Update Post'}
                     </button>
                   </div>
-                  {postRequest && !['Brother','Sister'].includes(postRequest) && (
+                  {postRequest && ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle'].includes(postRequest) && (
                     <div style={{ marginTop: 10, fontSize: '0.78rem', color: '#92400e', background: '#fff7ed', padding: '8px 12px', borderRadius: 8 }}>
                       ⏳ <strong>{postRequest}</strong> requires admin approval. Your current post stays active until it's approved.
                     </div>

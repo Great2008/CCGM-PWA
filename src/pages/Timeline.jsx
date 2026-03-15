@@ -203,9 +203,11 @@ function AuthModal({ onClose }) {
     if (notListed && !unlistedName.trim()) { setErr('Please enter your branch name.'); return }
     setLoading(true)
 
-    // Auto-assign church_title for Brother/Sister; others are pending admin approval
+    // Auto-assign church_title for Brother/Sister only
+    // All ordained titles require admin approval
+    const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
     const selectedPost = churchPost || (gender === 'Female' ? 'Sister' : 'Brother')
-    const isAutoApproved = ['Brother', 'Sister'].includes(selectedPost)
+    const isAutoApproved = !ORDAINED.includes(selectedPost)
 
     const profileData = {
       fullName: fullName.trim(),
@@ -397,7 +399,7 @@ function AuthModal({ onClose }) {
                       <option value="Apostle">Apostle</option>
                     </>}
                   </select>
-                  {churchPost && !['Brother','Sister'].includes(churchPost) && (
+                  {churchPost && ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle'].includes(churchPost) && (
                     <div style={{fontSize:'0.76rem',color:'#92400e',marginTop:4,background:'#fff7ed',padding:'6px 10px',borderRadius:6}}>
                       ⏳ <strong>{churchPost}</strong> requires admin approval before it shows on your profile.
                     </div>
