@@ -369,7 +369,7 @@ export default function Certificate() {
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
     setMemberDone(true)
-    } catch(e) { console.error('Membership cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
+    } catch(e) { console.error('Membership cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
   }
 
@@ -510,7 +510,7 @@ export default function Certificate() {
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
     setBirthDone(true)
-    } catch(e) { console.error('Birth cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
+    } catch(e) { console.error('Birth cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
   }
 
@@ -658,7 +658,7 @@ export default function Certificate() {
     ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
 
     setIdDone(true)
-    } catch(e) { console.error('ID card FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
+    } catch(e) { console.error('ID card FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
     finally { setGenerating(false) }
   }
 
@@ -752,7 +752,7 @@ export default function Certificate() {
         {/* Generation error banner */}
         {genError && (
           <div style={{ background:'#fff5f5', border:'1px solid #fecaca', borderRadius:12, padding:'12px 18px', color:'#dc2626', fontSize:'0.88rem', marginBottom:16, display:'flex', gap:10, alignItems:'center' }}>
-            ❌ {genError}
+            ❌ {genError.split(' | ').map((line, i) => <span key={i} style={{display:'block', fontSize: i===0 ? '0.88rem' : '0.72rem', opacity: i===0 ? 1 : 0.7}}>{line}</span>)}
             <button onClick={() => setGenError('')} style={{ marginLeft:'auto', background:'none', border:'none', cursor:'pointer', color:'#dc2626', fontSize:'1rem' }}>✕</button>
           </div>
         )}
