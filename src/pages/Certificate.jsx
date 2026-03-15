@@ -25,6 +25,21 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath()
 }
 
+// Safe ellipse: polyfill for Android WebViews that lack ctx.ellipse
+function safeEllipse(ctx, cx, cy, rx, ry, rotation, startAngle, endAngle) {
+  if (typeof ctx.ellipse === 'function') {
+    safeEllipse(ctx, cx, cy, rx, ry, rotation, startAngle, endAngle)
+    return
+  }
+  // Fallback: approximate with bezier curves
+  ctx.save()
+  ctx.translate(cx, cy)
+  ctx.rotate(rotation)
+  ctx.scale(rx, ry)
+  ctx.arc(0, 0, 1, startAngle, endAngle)
+  ctx.restore()
+}
+
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────
@@ -118,7 +133,7 @@ function drawOrnateCorner(ctx, x, y, size, fx, fy) {
   // Leaf buds
   [[50,19],[64,12],[19,50],[12,64]].forEach(([bx,by]) => {
     ctx.save(); ctx.globalAlpha = 0.5
-    ctx.beginPath(); ctx.ellipse(bx,by,3,5,Math.PI/4,0,Math.PI*2)
+    ctx.beginPath(); safeEllipse(ctx, bx,by,3,5,Math.PI/4,0,Math.PI*2)
     ctx.fillStyle = '#d97706'; ctx.fill(); ctx.restore()
   })
   // Edge dots
@@ -243,7 +258,8 @@ export default function Certificate() {
     if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
     const canvas = memberCanvasRef.current
-    if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
+    if (!canvas) { setGenError('Canvas not available — refresh and try again'); setGenerating(false); return }
+    let _step = 'init'
     try {
     // A5 landscape at 300dpi: 210mm × 148mm = 2480 × 1748px
     // At 150dpi (screen-friendly): 1240 × 874px — scale up 1.4x for quality
@@ -252,10 +268,10 @@ export default function Certificate() {
     const ctx = canvas.getContext('2d')
     if (!ctx) { setGenError('Canvas context unavailable'); return }
 
-    // Background
+    _step = 'background'
     ctx.fillStyle = '#fdf9f0'; ctx.fillRect(0,0,W,H)
 
-    // Logo watermark
+    _step = 'logo-watermark'
     try {
       const logo = await loadImage('/logo.png')
       ctx.save(); ctx.globalAlpha = 0.04
@@ -263,18 +279,18 @@ export default function Certificate() {
       ctx.restore()
     } catch(_){}
 
-    // Triple border
+    _step = 'border'
     ctx.strokeStyle = '#b45309'; ctx.lineWidth = 8;  ctx.strokeRect(16,16,W-32,H-32)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5; ctx.strokeRect(28,28,W-56,H-56)
     ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;   ctx.strokeRect(36,36,W-72,H-72)
 
-    // Ornate corners
+    _step = 'ornate-corners'
     drawOrnateCorner(ctx,18,18,80,  1, 1)
     drawOrnateCorner(ctx,W-18,18,80,-1, 1)
     drawOrnateCorner(ctx,18,H-18,80, 1,-1)
     drawOrnateCorner(ctx,W-18,H-18,80,-1,-1)
 
-    // Header gradient
+    _step = 'header'
     const grad = ctx.createLinearGradient(0,0,W,0)
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(1,'#166534')
     ctx.fillStyle = grad; ctx.fillRect(36,36,W-72,190)
@@ -296,7 +312,7 @@ export default function Certificate() {
     // Gold divider under header
     ctx.fillStyle = '#d97706'; ctx.fillRect(36,226,W-72,3)
 
-    // Title
+    _step = 'title'
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 72px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('Certificate of Membership', W/2, 356)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
@@ -343,7 +359,7 @@ export default function Certificate() {
     ctx.fillStyle = '#0a2612'; ctx.font = '18px Georgia, serif'
     ctx.fillText(certId, W-160, 928+yOff)
 
-    // QR code
+    _step = 'qr-code'
     try {
       const qr = await loadImage(qrDataUrl(verifyUrl, 130))
       ctx.drawImage(qr, W/2-65, 848+yOff, 130, 130)
@@ -364,7 +380,7 @@ export default function Certificate() {
     const memberImg = document.getElementById('member-preview')
     if (memberImg) memberImg.src = canvas.toDataURL('image/png')
     setMemberDone(true)
-    } catch(e) { console.error('Membership cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
+    } catch(e) { const msg = `[${_step}] ${e?.message || 'unknown'}`; console.error('Membership cert ERROR at step:', _step, e); setGenError(msg) }
     finally { setGenerating(false) }
   }
 
@@ -508,7 +524,7 @@ export default function Certificate() {
     const birthImg = document.getElementById('birth-preview')
     if (birthImg) birthImg.src = canvas.toDataURL('image/png')
     setBirthDone(true)
-    } catch(e) { console.error('Birth cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
+    } catch(e) { const msg = `[birth] ${e?.message || 'unknown'}`; console.error('Birth cert ERROR:', e); setGenError(msg) }
     finally { setGenerating(false) }
   }
 
@@ -659,7 +675,7 @@ export default function Certificate() {
     const idImg = document.getElementById('id-preview')
     if (idImg) idImg.src = canvas.toDataURL('image/png')
     setIdDone(true)
-    } catch(e) { console.error('ID card FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError((e?.message || 'unknown') + ' | ' + (e?.stack?.split('\n').slice(0,3).join(' | ') || '')) }
+    } catch(e) { const msg = `[id-card] ${e?.message || 'unknown'}`; console.error('ID card ERROR:', e); setGenError(msg) }
     finally { setGenerating(false) }
   }
 
