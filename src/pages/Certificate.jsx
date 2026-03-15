@@ -26,29 +26,7 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 // Safe ellipse: polyfill for Android WebViews that lack ctx.ellipse
-function safeEllipse(ctx, cx, cy, rx, ry, rotation, startAngle, endAngle) {
-  if (typeof ctx.ellipse === 'function') {
-    ctx.ellipse(cx, cy, rx, ry, rotation, startAngle, endAngle)
-    return
-  }
-  // Fallback for Android WebViews without ctx.ellipse:
-  // Draw ellipse using 8-segment bezier approximation (Kappa = 0.5522847498)
-  const KAPPA = 0.5522847498
-  const cos = Math.cos(rotation), sin = Math.sin(rotation)
-  // Transform helper: rotate a point around cx,cy
-  const pt = (dx, dy) => [cx + dx * cos - dy * sin, cy + dx * sin + dy * cos]
-  const [x0, y0] = pt(rx, 0)
-  ctx.moveTo(x0, y0)
-  const segments = [
-    [pt(rx,  KAPPA*ry), pt(KAPPA*rx,  ry), pt(0,  ry)],
-    [pt(-KAPPA*rx,  ry), pt(-rx,  KAPPA*ry), pt(-rx, 0)],
-    [pt(-rx, -KAPPA*ry), pt(-KAPPA*rx, -ry), pt(0, -ry)],
-    [pt(KAPPA*rx, -ry), pt(rx, -KAPPA*ry), pt(rx, 0)],
-  ]
-  for (const [[c1x,c1y],[c2x,c2y],[ex,ey]] of segments) {
-    ctx.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey)
-  }
-}
+// safeEllipse removed — replaced with arc calls
 
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
@@ -140,10 +118,10 @@ function drawOrnateCorner(ctx, x, y, size, fx, fy) {
   ctx.beginPath(); ctx.moveTo(26,38)
   ctx.bezierCurveTo(26,50,16,52,15,63)
   ctx.bezierCurveTo(14,70,7,72,7,76); ctx.stroke()
-  // Leaf buds
+  // Leaf buds (simple circles — no ellipse needed)
   [[50,19],[64,12],[19,50],[12,64]].forEach(([bx,by]) => {
     ctx.save(); ctx.globalAlpha = 0.5
-    ctx.beginPath(); safeEllipse(ctx, bx,by,3,5,Math.PI/4,0,Math.PI*2)
+    ctx.beginPath(); ctx.arc(bx, by, 3.5, 0, Math.PI*2)
     ctx.fillStyle = '#d97706'; ctx.fill(); ctx.restore()
   })
   // Edge dots
