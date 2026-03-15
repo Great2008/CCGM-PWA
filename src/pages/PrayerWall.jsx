@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import { auditLog } from '../lib/auditLog'
 
 function timeAgo(ts) {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000)
@@ -236,9 +237,15 @@ export default function PrayerWall() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this prayer request?')) return
+    const prayer = prayers.find(p => p.id === id)
     await supabase.from('prayer_prays').delete().eq('prayer_id', id)
     await supabase.from('prayer_replies').delete().eq('prayer_id', id)
     await supabase.from('prayer_requests').delete().eq('id', id)
+    // Log if moderator/admin deleted someone else's prayer
+    if (prayer && prayer.user_id !== user?.id) {
+      const authorName = prayer.profiles?.display_name || prayer.profiles?.full_name || 'member'
+      auditLog('prayer_delete', `Deleted prayer request by ${authorName}`, authorName)
+    }
     await loadPrayers()
   }
 

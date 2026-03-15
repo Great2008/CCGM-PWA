@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import { auditLog } from '../lib/auditLog'
 import { Link } from 'react-router-dom'
 
 const POST_TYPES = [
@@ -638,9 +639,17 @@ export default function Timeline() {
 
   const handleDelete = async (postId) => {
     if (!window.confirm('Delete this post?')) return
+    const post = posts.find(p => p.id === postId)
     await supabase.from('timeline_reactions').delete().eq('post_id', postId)
     await supabase.from('timeline_comments').delete().eq('post_id', postId)
     await supabase.from('timeline_posts').delete().eq('id', postId)
+    // Log if a moderator/admin deleted someone else's post
+    if (post && post.user_id !== user?.id) {
+      const authorName = post.profiles?.display_name || post.profiles?.full_name || 'member'
+      auditLog('timeline_delete', `Deleted timeline post by ${authorName}`, authorName)
+    }
+    setPosts(p => p.filter(x => x.id !== postId))
+  }
     await loadPosts()
   }
 

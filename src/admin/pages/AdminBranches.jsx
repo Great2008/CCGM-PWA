@@ -5,7 +5,7 @@ import supabase from '../../lib/supabaseAdmin'
 const EMPTY = { name: '', location: '', country: '', active: true }
 
 export default function AdminBranches() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [branches, setBranches] = useState([])
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState(EMPTY)
@@ -45,11 +45,11 @@ export default function AdminBranches() {
     if (editing) {
       const { error } = await supabase.from('church_branches').update(form).eq('id', editing)
       if (error) showToast('Failed to update branch.', 'error')
-      else { showToast('Branch updated!'); cancel(); load() }
+      else { showToast('Branch updated!'); logAction('branch_edit', `Updated branch: ${form.name}`, form.name); cancel(); load() }
     } else {
       const { error } = await supabase.from('church_branches').insert(form)
       if (error) showToast('Failed to add branch.', 'error')
-      else { showToast('Branch added!'); cancel(); load() }
+      else { showToast('Branch added!'); logAction('branch_add', `Added branch: ${form.name}`, form.name); cancel(); load() }
     }
     setSaving(false)
   }
@@ -62,7 +62,7 @@ export default function AdminBranches() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this branch? Members who selected it will keep their saved value.')) return
     await supabase.from('church_branches').delete().eq('id', id)
-    showToast('Branch deleted.'); load()
+    showToast('Branch deleted.'); logAction('branch_delete', `Deleted branch`, null); load()
   }
 
   const approveSuggestion = async (sug) => {

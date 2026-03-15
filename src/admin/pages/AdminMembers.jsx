@@ -40,7 +40,7 @@ function addMonths(date, n) {
 }
 
 export default function AdminMembers() {
-  const { showToast, isSuperAdmin } = useAdmin()
+  const { showToast, isSuperAdmin, logAction } = useAdmin()
   const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
   const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
@@ -53,7 +53,9 @@ export default function AdminMembers() {
     setSaving(true)
     try {
       await update(m.id, { church_title: m.pending_church_post, pending_church_post: null })
-      showToast(`${m.pending_church_post} approved for ${m.full_name || m.display_name}`)
+      const memberName = m.full_name || m.display_name
+      showToast(`${m.pending_church_post} approved for ${memberName}`)
+      logAction('post_approved', `Approved post: ${m.pending_church_post}`, memberName)
       if (selected?.id === m.id) setSelected(s => ({ ...s, church_title: s.pending_church_post, pending_church_post: null }))
       reload()
     } catch (e) { showToast(e.message, 'error') }
@@ -64,7 +66,9 @@ export default function AdminMembers() {
     setSaving(true)
     try {
       await update(m.id, { pending_church_post: null })
-      showToast(`Post request rejected for ${m.full_name || m.display_name}`)
+      const memberName = m.full_name || m.display_name
+      showToast(`Post request rejected for ${memberName}`)
+      logAction('post_rejected', `Rejected post request: ${m.pending_church_post}`, memberName)
       reload()
     } catch (e) { showToast(e.message, 'error') }
     setSaving(false)
@@ -94,7 +98,9 @@ export default function AdminMembers() {
     try {
       await update(id, { role })
       const label = APP_ROLES.find(r => r.value === role)?.label || role
+      const memberName = selected?.full_name || selected?.display_name || 'Member'
       showToast('App role updated to ' + label)
+      logAction('role_change', `Changed role to ${label}`, memberName)
       setSelected(s => ({ ...s, role }))
     } catch (e) { showToast(e.message, 'error') }
     setSaving(false)
@@ -164,6 +170,7 @@ export default function AdminMembers() {
       })
 
       showToast((selected.full_name || 'Member') + ' suspended for ' + (suspendPeriod.months ? suspendPeriod.label : 'indefinitely') + '.')
+      logAction('suspend', `Suspended for ${suspendPeriod.months ? suspendPeriod.label : 'indefinitely'}: ${fullReason}`, selected.full_name || selected.display_name)
       setShowSuspend(false)
       setSelected(s => ({ ...s, suspended: true, suspension_reason: fullReason, suspension_expires_at: expiresAt }))
       reload()
@@ -201,6 +208,7 @@ export default function AdminMembers() {
       })
 
       showToast((selected.full_name || 'Member') + ' has been reinstated.')
+      logAction('reinstate', 'Account reinstated', selected.full_name || selected.display_name)
       setShowUnsuspend(false)
       setSelected(null)
       reload()

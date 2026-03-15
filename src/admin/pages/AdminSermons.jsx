@@ -7,7 +7,7 @@ import { getAll, insert, update, remove } from '../supabase'
 const EMPTY = { title:'', preacher:'', date:'', series:'', scripture:'', video_url:'', audio_url:'', description:'', duration:'', thumbnail:'' }
 
 export default function AdminSermons() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems]   = useState([])
   const [form, setForm]     = useState(null)
   const [saving, setSaving] = useState(false)
@@ -21,7 +21,7 @@ export default function AdminSermons() {
     e.preventDefault(); setSaving(true)
     const { id, ...rest } = form
     const { error } = id ? await update('sermons', id, rest) : await insert('sermons', rest)
-    if (!error) { showToast(id?'Sermon updated!':'Sermon added!'); setForm(null); load() }
+    if (!error) { showToast(id?'Sermon updated!':'Sermon added!'); logAction(id?'sermon_edit':'sermon_add', (id?'Updated':'Added')+' sermon: '+(form.title||''), form.title||null); setForm(null); load() }
     else showToast(error.message, 'error')
     setSaving(false)
   }
@@ -29,7 +29,7 @@ export default function AdminSermons() {
   const handleDelete = async () => {
     setSaving(true)
     const err = await remove('sermons', delId)
-    if (!err) { showToast('Deleted'); setItems(i=>i.filter(x=>x.id!==delId)) }
+    if (!err) { showToast('Deleted'); logAction('sermon_delete','Deleted sermon',null); setItems(i=>i.filter(x=>x.id!==delId)) }
     else showToast(err.message, 'error')
     setSaving(false); setDelId(null)
   }

@@ -7,7 +7,7 @@ import { getAll, insert, remove } from '../supabase'
 const CATS=['Worship','Events','Community','Outreach','Youth','Leadership','Baptism','Christmas','Easter']
 
 export default function AdminGallery() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems] = useState([])
   const [form, setForm]   = useState(null)
   const [saving, setSaving] = useState(false)
@@ -22,7 +22,7 @@ export default function AdminGallery() {
   const handleSubmit = async e => {
     e.preventDefault(); setSaving(true)
     const { error } = await insert('gallery', { url:form.url, title:form.title, caption:form.caption, category:form.category, date:form.date||new Date().toISOString().split('T')[0] })
-    if (!error) { showToast('Photo added!'); setForm(null); load() }
+    if (!error) { showToast('Photo added!'); logAction('gallery_add','Added photo: '+(form.title||form.url||''), form.title||null); setForm(null); load() }
     else showToast(error.message,'error')
     setSaving(false)
   }
@@ -38,7 +38,7 @@ export default function AdminGallery() {
 
   const handleDelete = async () => {
     const err = await remove('gallery', delId)
-    if (!err) { showToast('Removed'); setItems(i=>i.filter(x=>x.id!==delId)) }
+    if (!err) { showToast('Removed'); logAction('gallery_delete','Deleted photo',null); setItems(i=>i.filter(x=>x.id!==delId)) }
     else showToast(err.message,'error'); setDelId(null)
   }
   const F = k => ({ value:form?.[k]||'', onChange:e=>setForm(f=>({...f,[k]:e.target.value})) })

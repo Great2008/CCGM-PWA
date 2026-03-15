@@ -8,7 +8,7 @@ const EMPTY = { title:'', author:'', date:'', category:'', type:'blog', excerpt:
 const CATS = ['Devotional','Sermon Notes','Announcement','Ministry','Testimony','Teaching']
 
 export default function AdminBlog() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems] = useState([])
   const [form, setForm]   = useState(null)
   const [saving, setSaving] = useState(false)
@@ -31,13 +31,13 @@ export default function AdminBlog() {
     const { error } = id
       ? await supabaseAdmin.from('posts').update(payload).eq('id', id)
       : await supabaseAdmin.from('posts').insert(payload)
-    if (!error) { showToast(id?'Post updated!':'Post published!'); setForm(null); load() }
+    if (!error) { showToast(id?'Post updated!':'Post published!'); logAction(id?'blog_edit':'blog_add', (id?'Updated':'Published')+' post: '+(form.title||''), form.title||null); setForm(null); load() }
     else showToast(error.message,'error')
     setSaving(false)
   }
   const handleDelete = async () => {
     const { error: err } = await supabaseAdmin.from('posts').delete().eq('id', delId)
-    if (!err) { showToast('Deleted'); setItems(i=>i.filter(x=>x.id!==delId)) }
+    if (!err) { showToast('Deleted'); logAction('blog_delete','Deleted blog post',null); setItems(i=>i.filter(x=>x.id!==delId)) }
     else showToast(err.message,'error')
     setDelId(null)
   }

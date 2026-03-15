@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import supabase from '../lib/supabase'
+import supabaseAdmin from '../lib/supabaseAdmin'
 import AdminLogin     from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminSermons   from './pages/AdminSermons'
@@ -22,6 +23,7 @@ import AdminBulkMessage from './pages/AdminBulkMessage'
 import AdminSignature   from './pages/AdminSignature'
 import AdminBranches from './pages/AdminBranches'
 import AdminMemberDirectory from './pages/AdminMemberDirectory'
+import AdminLog from './pages/AdminLog'
 
 export const AdminContext = createContext(null)
 export const useAdmin = () => useContext(AdminContext)
@@ -48,8 +50,9 @@ const NAV = [
   ['bulk-message', '📣', 'Bulk Message'],
   ['signature',    '✍️', 'Admin Signature'],
   ['directory',   '🗂', 'Member Directory'],
+  ['audit-log',   '📋', 'Audit Log'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
@@ -60,16 +63,17 @@ export default function AdminApp() {
   const [pendingCount, setPendingCount] = useState(0)
 
   const [adminRole, setAdminRole] = useState(null) // 'super_admin' | 'admin' | 'moderator'
+  const [adminUser, setAdminUser] = useState(null) // { id, email }
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
         const role = p?.role
-        // super_admin and admin get full panel; moderator gets restricted panel
         const allowed = ['super_admin', 'admin', 'moderator']
         if (allowed.includes(role)) {
           setAdminRole(role)
+          setAdminUser({ id: session.user.id, email: session.user.email })
           setAuthed(true)
         }
       }
@@ -92,6 +96,21 @@ export default function AdminApp() {
   const showToast = (msg, type='success') => { setToast({msg,type}); setTimeout(()=>setToast(null), 3500) }
   const logout = () => { supabase.auth.signOut(); setAuthed(false) }
 
+  // ── Audit logging ─────────────────────────────────────────────
+  const logAction = async (action, detail, targetName = null) => {
+    if (!adminUser?.id) return
+    try {
+      await supabaseAdmin.from('admin_audit_log').insert({
+        admin_id:    adminUser.id,
+        action,
+        detail:      detail || null,
+        target_name: targetName || null,
+      })
+    } catch(e) {
+      console.warn('Audit log failed:', e.message)
+    }
+  }
+
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
   if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />
 
@@ -104,7 +123,7 @@ export default function AdminApp() {
 
   const Page = PAGES[page] || (isFullAdmin ? AdminDashboard : AdminTimeline)
   return (
-    <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin }}>
+    <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin, logAction }}>
       <div style={{ display:'flex', minHeight:'100vh', fontFamily:'var(--font-body)', background:'#f0f4fa' }}>
         {/* Mobile overlay */}
         {sideOpen&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:99 }} onClick={()=>setSideOpen(false)} />}

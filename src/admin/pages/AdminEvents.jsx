@@ -8,7 +8,7 @@ const EMPTY = { title:'', date:'', end_date:'', time:'', location:'', category:'
 const CATS = ['Worship','Fellowship','Youth','Outreach','Conference','Prayer','Special']
 
 export default function AdminEvents() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems] = useState([])
   const [form, setForm]   = useState(null)
   const [saving, setSaving] = useState(false)
@@ -22,13 +22,13 @@ export default function AdminEvents() {
     e.preventDefault(); setSaving(true)
     const { id, ...rest } = form
     const { error } = id ? await update('events',id,rest) : await insert('events',rest)
-    if (!error) { showToast(id?'Event updated!':'Event added!'); setForm(null); load() }
+    if (!error) { showToast(id?'Event updated!':'Event added!'); logAction(id?'event_edit':'event_add', (id?'Updated':'Added')+' event: '+(form.title||''), form.title||null); setForm(null); load() }
     else showToast(error.message,'error')
     setSaving(false)
   }
   const handleDelete = async () => {
     setSaving(true); const err = await remove('events',delId)
-    if (!err) { showToast('Deleted'); setItems(i=>i.filter(x=>x.id!==delId)) }
+    if (!err) { showToast('Deleted'); logAction('event_delete','Deleted event',null); setItems(i=>i.filter(x=>x.id!==delId)) }
     else showToast(err.message,'error'); setSaving(false); setDelId(null)
   }
   const F = k => ({ value:form?.[k]||'', onChange:e=>setForm(f=>({...f,[k]:e.target.value})) })
