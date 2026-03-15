@@ -3,6 +3,28 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useSearchParams } from 'react-router-dom'
 import supabase from '../lib/supabase'
 
+// ── Primitive helpers — defined first so all functions below can use them ──
+
+// Safe fillText: never throws on null/undefined
+function safeFill(ctx, value, x, y) {
+  ctx.fillText(value == null ? '' : String(value), x, y)
+}
+
+// roundRect polyfill: ctx.roundRect missing in older Android WebViews
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+  ctx.lineTo(x + r, y + h)
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+  ctx.lineTo(x, y + r)
+  ctx.quadraticCurveTo(x, y, x + r, y)
+  ctx.closePath()
+}
+
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────
@@ -152,26 +174,6 @@ function fmtBirthday(iso) {
   } catch(_) { return '' }
 }
 
-// Safe fillText — never throws on null/undefined value
-function safeFill(ctx, value, x, y) {
-  ctx.fillText(value == null ? '' : String(value), x, y)
-}
-
-// Safe roundRect polyfill — ctx.roundRect missing in older WebViews
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath()
-  ctx.moveTo(x + r, y)
-  ctx.lineTo(x + w - r, y)
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r)
-  ctx.lineTo(x + w, y + h - r)
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
-  ctx.lineTo(x + r, y + h)
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r)
-  ctx.lineTo(x, y + r)
-  ctx.quadraticCurveTo(x, y, x + r, y)
-  ctx.closePath()
-}
-
 const APP_URL = 'https://ccgm-pwa.vercel.app'
 const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
 
@@ -237,6 +239,16 @@ export default function Certificate() {
 
   // ── MEMBERSHIP CERTIFICATE — A5 Landscape (1748 × 1240 px) ──────
   const generateMembership = async () => {
+    // DIAGNOSTIC — remove after fixing
+    console.log('CERT DEBUG:', {
+      profile: !!profile,
+      user: !!user,
+      churchTitle,
+      name, branch, gender, displayName,
+      joinDate, birthday, today,
+      certId, verifyUrl,
+      fatherName, motherName, placeOfBirth, hometown, lga
+    })
     setGenerating(true); setGenError('')
     const canvas = memberCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
@@ -357,7 +369,7 @@ export default function Certificate() {
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
     setMemberDone(true)
-    } catch(e) { console.error('Membership cert error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    } catch(e) { console.error('Membership cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
     finally { setGenerating(false) }
   }
 
@@ -498,7 +510,7 @@ export default function Certificate() {
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
     setBirthDone(true)
-    } catch(e) { console.error('Birth cert error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    } catch(e) { console.error('Birth cert FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
     finally { setGenerating(false) }
   }
 
@@ -646,7 +658,7 @@ export default function Certificate() {
     ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
 
     setIdDone(true)
-    } catch(e) { console.error('ID card error:', e); setGenError('Generation failed: ' + (e?.message || 'unknown error. Check console.')) }
+    } catch(e) { console.error('ID card FULL ERROR:', e?.message, '\nSTACK:', e?.stack); setGenError('Error: ' + (e?.message || 'unknown')) }
     finally { setGenerating(false) }
   }
 
