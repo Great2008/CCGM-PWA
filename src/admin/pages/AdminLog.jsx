@@ -50,27 +50,6 @@ const ACTION_COLORS = {
   'prayer_delete':  { bg: '#fff7ed', color: '#c2410c' },
 }
 
-const ACTION_COLORS = {
-  'role_change':   { bg: '#f5f3ff', color: '#7c3aed' },
-  'suspend':       { bg: '#fff5f5', color: '#dc2626' },
-  'reinstate':     { bg: '#f0fdf4', color: '#166534' },
-  'post_approved': { bg: '#f0fdf4', color: '#166534' },
-  'post_rejected': { bg: '#fff5f5', color: '#dc2626' },
-  'branch_add':    { bg: '#f0fdf4', color: '#0369a1' },
-  'branch_edit':   { bg: '#eff6ff', color: '#0369a1' },
-  'branch_delete': { bg: '#fff5f5', color: '#dc2626' },
-  'sermon_add':    { bg: '#f0fdf4', color: '#166534' },
-  'sermon_edit':   { bg: '#eff6ff', color: '#0369a1' },
-  'sermon_delete': { bg: '#fff5f5', color: '#dc2626' },
-  'event_add':     { bg: '#f0fdf4', color: '#166534' },
-  'event_edit':    { bg: '#eff6ff', color: '#0369a1' },
-  'event_delete':  { bg: '#fff5f5', color: '#dc2626' },
-  'blog_add':      { bg: '#f0fdf4', color: '#166534' },
-  'blog_edit':     { bg: '#eff6ff', color: '#0369a1' },
-  'blog_delete':   { bg: '#fff5f5', color: '#dc2626' },
-  'gallery_add':   { bg: '#f0fdf4', color: '#166534' },
-  'gallery_delete':{ bg: '#fff5f5', color: '#dc2626' },
-}
 
 const CATEGORIES = [
   { value: 'all',        label: 'All Actions' },
