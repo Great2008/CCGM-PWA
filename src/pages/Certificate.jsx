@@ -127,15 +127,29 @@ function getTitlePrefix(churchTitle, gender) {
   return gender === 'Female' ? 'Sister' : 'Brother'
 }
 
+const MONTHS = ['January','February','March','April','May','June',
+                 'July','August','September','October','November','December']
+
 function fmtDate(iso) {
   if (!iso) return ''
-  return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })
+  try {
+    // Parse manually to avoid timezone-shift issues with date-only strings
+    const parts = iso.split('T')[0].split('-')
+    const y = parseInt(parts[0]), m = parseInt(parts[1])-1, d = parseInt(parts[2])
+    if (isNaN(y)||isNaN(m)||isNaN(d)) return ''
+    return `${d} ${MONTHS[m]} ${y}`
+  } catch(_) { return '' }
 }
+
 function fmtBirthday(iso) {
   if (!iso) return ''
-  const d = new Date(iso), day = d.getDate()
-  const s = day===1||day===21||day===31?'st':day===2||day===22?'nd':day===3||day===23?'rd':'th'
-  return d.toLocaleDateString('en-GB',{ day:'numeric',month:'long',year:'numeric' }).replace(/^\d+/, day+s)
+  try {
+    const parts = iso.split('T')[0].split('-')
+    const y = parseInt(parts[0]), m = parseInt(parts[1])-1, d = parseInt(parts[2])
+    if (isNaN(y)||isNaN(m)||isNaN(d)) return ''
+    const s = d===1||d===21||d===31?'st':d===2||d===22?'nd':d===3||d===23?'rd':'th'
+    return `${d}${s} ${MONTHS[m]} ${y}`
+  } catch(_) { return '' }
 }
 
 // Safe fillText — never throws on null/undefined value
