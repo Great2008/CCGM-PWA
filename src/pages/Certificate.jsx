@@ -234,6 +234,9 @@ export default function Certificate() {
   const memberCanvasRef = useRef(null)
   const birthCanvasRef  = useRef(null)
   const idCanvasRef     = useRef(null)
+  const memberImgRef    = useRef(null)
+  const birthImgRef     = useRef(null)
+  const idImgRef        = useRef(null)
 
   const [generating, setGenerating] = useState(false)
   const [genError,   setGenError]   = useState('')
@@ -403,9 +406,8 @@ export default function Certificate() {
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
     // Push result to visible <img> preview
-    const memberImg = document.getElementById('member-preview')
-    if (memberImg) memberImg.src = canvas.toDataURL('image/png')
     setMemberDone(true)
+    setTimeout(() => { if (memberImgRef.current) memberImgRef.current.src = canvas.toDataURL('image/png') }, 50)
     } catch(e) { const msg = `[${_step}] ${e?.message || 'unknown'}`; console.error('Membership cert ERROR at step:', _step, e); setGenError(msg) }
     finally { setGenerating(false) }
   }
@@ -418,7 +420,7 @@ export default function Certificate() {
     const canvas = birthCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
     try {
-    const W = 1240, H = 1748
+    const W = 874, H = 1240
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
     if (!ctx) { setGenError('Canvas context unavailable'); return }
@@ -547,9 +549,8 @@ export default function Certificate() {
     ctx.font = '12px Georgia, serif'
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+20)
 
-    const birthImg = document.getElementById('birth-preview')
-    if (birthImg) birthImg.src = canvas.toDataURL('image/png')
     setBirthDone(true)
+    setTimeout(() => { if (birthImgRef.current) birthImgRef.current.src = canvas.toDataURL('image/png') }, 50)
     } catch(e) { const msg = `[birth] ${e?.message || 'unknown'}`; console.error('Birth cert ERROR:', e); setGenError(msg) }
     finally { setGenerating(false) }
   }
@@ -698,9 +699,8 @@ export default function Certificate() {
     ctx.fillStyle = '#9ca3af'; ctx.font = '9px Georgia, serif'
     ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
 
-    const idImg = document.getElementById('id-preview')
-    if (idImg) idImg.src = canvas.toDataURL('image/png')
     setIdDone(true)
+    setTimeout(() => { if (idImgRef.current) idImgRef.current.src = canvas.toDataURL('image/png') }, 50)
     } catch(e) { const msg = `[id-card] ${e?.message || 'unknown'}`; console.error('ID card ERROR:', e); setGenError(msg) }
     finally { setGenerating(false) }
   }
@@ -827,7 +827,7 @@ export default function Certificate() {
             </div>
             {memberDone && (
               <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
-                <img id="member-preview" style={{ width:'100%', display:'block' }} alt="Membership Certificate" />
+                <img ref={memberImgRef} style={{ width:'100%', display:'block' }} alt="Membership Certificate" />
               </div>
             )}
             {!memberDone && (
@@ -873,7 +873,7 @@ export default function Certificate() {
                 </div>
                 {birthDone && (
                   <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
-                    <img id="birth-preview" style={{ width:'100%', display:'block' }} alt="Birth Certificate" />
+                    <img ref={birthImgRef} style={{ width:'100%', display:'block' }} alt="Birth Certificate" />
                   </div>
                 )}
                 {!birthDone && (
@@ -909,7 +909,7 @@ export default function Certificate() {
             <div style={{ maxWidth:360 }}>
               {idDone && (
                 <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0' }}>
-                  <img id="id-preview" style={{ width:'100%', display:'block' }} alt="ID Card" />
+                  <img ref={idImgRef} style={{ width:'100%', display:'block' }} alt="ID Card" />
                 </div>
               )}
               {!idDone && (
