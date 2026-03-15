@@ -649,7 +649,6 @@ export default function Timeline() {
       auditLog('timeline_delete', `Deleted timeline post by ${authorName}`, authorName)
     }
     setPosts(p => p.filter(x => x.id !== postId))
-  }
     await loadPosts()
   }
 
