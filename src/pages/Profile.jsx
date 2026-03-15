@@ -35,6 +35,8 @@ export default function Profile() {
   const [form, setForm] = useState({
     display_name: '', bio: '', phone: '', location: '',
     occupation: '', church_branch: '', birthday: '', gender: '',
+    father_name: '', mother_name: '', place_of_birth: '',
+    hometown: '', lga: '',
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -80,6 +82,11 @@ export default function Profile() {
         church_branch: profile.church_branch || '',
         birthday: profile.birthday || '',
         gender: profile.gender || '',
+        father_name: profile.father_name || '',
+        mother_name: profile.mother_name || '',
+        place_of_birth: profile.place_of_birth || '',
+        hometown: profile.hometown || '',
+        lga: profile.lga || '',
       })
     }
   }, [profile])
@@ -360,7 +367,7 @@ export default function Profile() {
                     )}
                   </div>
                   <div style={{ fontWeight: 700, color: '#166534', fontSize: '0.95rem' }}>✝️ {churchTitle}</div>
-                  
+                  <div style={{ marginLeft: 'auto', fontSize: '0.7rem', color: '#6b7280' }}>Set by admin</div>
                 </div>
               )}
 
@@ -420,6 +427,21 @@ export default function Profile() {
                   onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
                   onBlur={e => e.target.style.borderColor = '#e2e8f0'}
                 />
+              </div>
+
+              {/* Birth Record — used on Birth Certificate */}
+              <div style={{ marginTop: 28, paddingTop: 20, borderTop: '1px solid var(--brand-pale)' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1rem', marginBottom: 6 }}>🎂 Birth Record</h3>
+                <p style={{ color: 'var(--text-light)', fontSize: '0.78rem', marginBottom: 16, lineHeight: 1.5 }}>
+                  This information appears on your Church Birth Certificate.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
+                  <Field label="Father's Name" value={form.father_name} onChange={v => setForm(f => ({ ...f, father_name: v }))} placeholder="e.g. John Okara" />
+                  <Field label="Mother's Name" value={form.mother_name} onChange={v => setForm(f => ({ ...f, mother_name: v }))} placeholder="e.g. Mary Okara" />
+                  <Field label="Place of Birth" value={form.place_of_birth} onChange={v => setForm(f => ({ ...f, place_of_birth: v }))} placeholder="e.g. Igwuruta" />
+                  <Field label="Home Town / Village" value={form.hometown} onChange={v => setForm(f => ({ ...f, hometown: v }))} placeholder="e.g. Omoku" />
+                  <Field label="L.G. Area / Division" value={form.lga} onChange={v => setForm(f => ({ ...f, lga: v }))} placeholder="e.g. Ogba/Egbema/Ndoni" />
+                </div>
               </div>
 
               {saveError && (

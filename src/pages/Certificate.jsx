@@ -162,6 +162,12 @@ export default function Certificate() {
   const birthVerifyUrl = APP_URL + '/verify?id=' + birthId
   const hasPost     = !!churchTitle
   const hasBirthday = !!profile.birthday
+  // Birth record fields
+  const fatherName    = profile.father_name || ''
+  const motherName    = profile.mother_name || ''
+  const placeOfBirth  = profile.place_of_birth || ''
+  const hometown      = profile.hometown || ''
+  const lga           = profile.lga || ''
 
   // ── MEMBERSHIP CERTIFICATE ────────────────────────────────────────
   const generateMembership = async () => {
@@ -181,13 +187,14 @@ export default function Certificate() {
       ctx.restore()
     } catch(_){}
 
-    // Borders
-    ctx.strokeStyle = '#b45309'; ctx.lineWidth = 6; ctx.strokeRect(18,18,W-36,H-36)
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2; ctx.strokeRect(30,30,W-60,H-60)
-    drawCornerOrnament(ctx,22,22,42,false,false)
-    drawCornerOrnament(ctx,W-22,22,42,true,false)
-    drawCornerOrnament(ctx,22,H-22,42,false,true)
-    drawCornerOrnament(ctx,W-22,H-22,42,true,true)
+    // Ornate border overlay (landscape version)
+    try {
+      const border = await loadImage('/cert_border_land.png')
+      ctx.drawImage(border, 0, 0, W, H)
+    } catch(_) {
+      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 6; ctx.strokeRect(18,18,W-36,H-36)
+      ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2; ctx.strokeRect(30,30,W-60,H-60)
+    }
 
     // Header
     const grad = ctx.createLinearGradient(0,0,W,130)
@@ -258,12 +265,12 @@ export default function Certificate() {
     setGenerating(false); setMemberDone(true)
   }
 
-  // ── BIRTH CERTIFICATE (portrait, physical layout) ─────────────────
+  // ── BIRTH CERTIFICATE (portrait A4, physical layout + ornate border) ─────
   const generateBirth = async () => {
     if (!birthday) return
     setGenerating(true)
     const canvas = birthCanvasRef.current
-    const W = 850, H = 1150
+    const W = 850, H = 1200
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
 
@@ -272,19 +279,68 @@ export default function Certificate() {
     // Logo watermark
     try {
       const logo = await loadImage('/logo.png')
-      ctx.save(); ctx.globalAlpha = 0.045
-      ctx.drawImage(logo, W/2-130, H/2-130, 260, 260)
+      ctx.save(); ctx.globalAlpha = 0.04
+      ctx.drawImage(logo, W/2-140, H/2-140, 280, 280)
       ctx.restore()
     } catch(_){}
 
-    // Triple border
-    ctx.strokeStyle = '#b45309'; ctx.lineWidth = 7; ctx.strokeRect(14,14,W-28,H-28)
-    ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2; ctx.strokeRect(24,24,W-48,H-48)
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1; ctx.strokeRect(32,32,W-64,H-64)
-    drawCornerOrnament(ctx,16,16,52,false,false)
-    drawCornerOrnament(ctx,W-16,16,52,true,false)
-    drawCornerOrnament(ctx,16,H-16,52,false,true)
-    drawCornerOrnament(ctx,W-16,H-16,52,true,true)
+    // Outer gold frames
+    ctx.strokeStyle = '#b45309'; ctx.lineWidth = 8; ctx.strokeRect(12,12,W-24,H-24)
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 3; ctx.strokeRect(22,22,W-44,H-44)
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.strokeRect(28,28,W-56,H-56)
+
+    // Ornate corner flourishes
+    const drawOrnateCorner = (x, y, fx, fy) => {
+      ctx.save()
+      ctx.translate(x, y); ctx.scale(fx, fy)
+      ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.85
+      ctx.beginPath(); ctx.moveTo(0,72); ctx.lineTo(0,0); ctx.lineTo(72,0); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0,60); ctx.lineTo(0,10); ctx.lineTo(60,10); ctx.stroke()
+      // Rosette
+      ctx.beginPath(); ctx.arc(24,24,11,0,Math.PI*2)
+      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 1.5; ctx.stroke()
+      ctx.beginPath(); ctx.arc(24,24,5,0,Math.PI*2)
+      ctx.fillStyle = '#d97706'; ctx.globalAlpha = 1; ctx.fill()
+      // Tendrils
+      ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.85
+      ctx.beginPath(); ctx.moveTo(35,24)
+      ctx.bezierCurveTo(46,24,48,15,58,14)
+      ctx.bezierCurveTo(65,13,66,7,70,7); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(24,35)
+      ctx.bezierCurveTo(24,46,15,48,14,58)
+      ctx.bezierCurveTo(13,65,7,66,7,70); ctx.stroke()
+      // Leaf buds
+      [[46,18],[60,11],[18,46],[11,60]].forEach(([bx,by]) => {
+        ctx.save(); ctx.globalAlpha = 0.55
+        ctx.beginPath(); ctx.ellipse(bx,by,3,5,Math.PI/4,0,Math.PI*2)
+        ctx.fillStyle = '#d97706'; ctx.fill(); ctx.restore()
+      })
+      // Filigree dots along edges
+      for (let i=0;i<5;i++) {
+        ctx.beginPath(); ctx.arc(18+i*12,5,1.5,0,Math.PI*2)
+        ctx.fillStyle='#d97706'; ctx.globalAlpha=0.45; ctx.fill()
+        ctx.beginPath(); ctx.arc(5,18+i*12,1.5,0,Math.PI*2); ctx.fill()
+      }
+      ctx.restore()
+    }
+    drawOrnateCorner(14,14,1,1); drawOrnateCorner(W-14,14,-1,1)
+    drawOrnateCorner(14,H-14,1,-1); drawOrnateCorner(W-14,H-14,-1,-1)
+
+    // Side border dots
+    for (let x=100;x<W-90;x+=16) {
+      ctx.save(); ctx.globalAlpha=0.3
+      ctx.beginPath(); ctx.arc(x,17,1.8,0,Math.PI*2)
+      ctx.fillStyle='#d97706'; ctx.fill()
+      ctx.beginPath(); ctx.arc(x,H-17,1.8,0,Math.PI*2); ctx.fill()
+      ctx.restore()
+    }
+    for (let y=100;y<H-90;y+=16) {
+      ctx.save(); ctx.globalAlpha=0.3
+      ctx.beginPath(); ctx.arc(17,y,1.8,0,Math.PI*2)
+      ctx.fillStyle='#d97706'; ctx.fill()
+      ctx.beginPath(); ctx.arc(W-17,y,1.8,0,Math.PI*2); ctx.fill()
+      ctx.restore()
+    }
 
     // Header
     const grad = ctx.createLinearGradient(0,0,0,155)
@@ -302,75 +358,69 @@ export default function Certificate() {
     ctx.fillText('ccgm-pwa.vercel.app', W/2, 140)
     ctx.fillStyle = '#d97706'; ctx.fillRect(32,180,W-64,2)
 
-    // Printed / No. row
-    ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'
+    // Printed / No.
+    ctx.textAlign='left'; ctx.fillStyle='#374151'; ctx.font='italic 13px Georgia, serif'
     ctx.fillText('Printed:', 50, 212)
-    ctx.fillStyle = '#0a2612'; ctx.font = '13px Georgia, serif'; ctx.fillText(today, 118, 212)
-    ctx.textAlign = 'right'; ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'
+    ctx.fillStyle='#0a2612'; ctx.font='13px Georgia, serif'; ctx.fillText(today, 118, 212)
+    ctx.textAlign='right'; ctx.fillStyle='#374151'; ctx.font='italic 13px Georgia, serif'
     ctx.fillText('No.', W-130, 212)
-    ctx.fillStyle = '#0a2612'; ctx.font = '13px Georgia, serif'
+    ctx.fillStyle='#0a2612'; ctx.font='13px Georgia, serif'
     ctx.fillText(birthId.replace('CCGB-',''), W-50, 212)
 
     // Title
-    ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 46px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Certificate of Birth', W/2, 282)
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5
-    ctx.beginPath(); ctx.moveTo(W/2-220,300); ctx.lineTo(W/2+220,300); ctx.stroke()
-    ctx.fillStyle = '#92400e'; ctx.font = 'italic 15px Georgia, serif'
-    ctx.fillText('In the Name of the Lord', W/2, 326)
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'
-    ctx.fillText('This is to Certify that', W/2, 360)
+    ctx.fillStyle='#0a2612'; ctx.font='bold italic 46px Georgia, serif'; ctx.textAlign='center'
+    ctx.fillText('Certificate of Birth', W/2, 278)
+    ctx.strokeStyle='#d97706'; ctx.lineWidth=1.5
+    ctx.beginPath(); ctx.moveTo(W/2-220,296); ctx.lineTo(W/2+220,296); ctx.stroke()
+    ctx.fillStyle='#92400e'; ctx.font='italic 15px Georgia, serif'
+    ctx.fillText('In the Name of the Lord', W/2, 322)
+    ctx.fillStyle='#374151'; ctx.font='italic 17px Georgia, serif'
+    ctx.fillText('This is to Certify that', W/2, 356)
 
     // Fields
-    const LX = 50, LW = W - 100
-    let fy = 408
-
+    const LX=50, LW=W-100; let fy=404
     drawFieldLine(ctx,'Name of Child...',displayName,LX,fy,LW); fy+=44
     drawFieldLine(ctx,'Date of Birth...',birthday,LX,fy,LW); fy+=44
-    drawFieldLine(ctx,'Place of Birth...',branch+' Parish',LX,fy,LW); fy+=54
+    drawFieldLine(ctx,'Place of Birth...',placeOfBirth||'—',LX,fy,LW); fy+=54
 
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 14px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillStyle='#374151'; ctx.font='italic 14px Georgia, serif'; ctx.textAlign='center'
     ctx.fillText('Was born by', W/2, fy); fy+=32
 
+    drawFieldLine(ctx,"Father's Name...",fatherName||'—',LX,fy,LW); fy+=44
+    drawFieldLine(ctx,"Mother's Name...",motherName||'—',LX,fy,LW); fy+=44
+    drawFieldLine(ctx,'Home Town/Village...',hometown||'—',LX,fy,LW); fy+=44
+    drawFieldLine(ctx,'L.G. Area/Division...',lga||'—',LX,fy,LW); fy+=44
     drawFieldLine(ctx,'Church Branch...',branch,LX,fy,LW); fy+=44
-    drawFieldLine(ctx,'Member Since...',joinDate||'—',LX,fy,LW); fy+=44
     if (churchTitle) { drawFieldLine(ctx,'Church Post...',churchTitle,LX,fy,LW); fy+=44 }
 
-    // Divider
-    fy += 10
-    ctx.fillStyle = '#d97706'; ctx.fillRect(LX,fy,LW,1.5); fy+=28
+    fy+=8; ctx.fillStyle='#d97706'; ctx.fillRect(LX,fy,LW,1.5); fy+=28
 
-    // Witness text
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 12px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillStyle='#374151'; ctx.font='italic 12px Georgia, serif'; ctx.textAlign='center'
     ctx.fillText('In witness whereof the undersigned who accepted the above particulars to be correct and true.',W/2,fy); fy+=40
 
-    // Signature | QR | Stamp
     if (adminSig) {
-      try {
-        const sig = await loadImage(adminSig); ctx.drawImage(sig, LX, fy, 180, 56)
-      } catch(_){}
+      try { const sig=await loadImage(adminSig); ctx.drawImage(sig,LX,fy,180,56) } catch(_){}
     }
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1
+    ctx.strokeStyle='#d97706'; ctx.lineWidth=1
     ctx.beginPath(); ctx.moveTo(LX,fy+68); ctx.lineTo(LX+200,fy+68); ctx.stroke()
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 11px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillStyle='#374151'; ctx.font='italic 11px Georgia, serif'; ctx.textAlign='center'
     ctx.fillText('Signature of Church Minister', LX+100, fy+84)
 
     try {
-      const qr = await loadImage(qrDataUrl(birthVerifyUrl,90))
+      const qr=await loadImage(qrDataUrl(birthVerifyUrl,90))
       ctx.drawImage(qr, W/2-45, fy, 90, 90)
-      ctx.fillStyle = '#6b7280'; ctx.font = '10px Georgia, serif'; ctx.textAlign = 'center'
+      ctx.fillStyle='#6b7280'; ctx.font='10px Georgia, serif'; ctx.textAlign='center'
       ctx.fillText('Scan to verify', W/2, fy+106)
     } catch(_){}
 
     await drawStamp(ctx, W-110, fy+55, 130)
 
-    // Footer
-    const footY = H - 44
-    ctx.fillStyle = '#d97706'; ctx.fillRect(32, footY-18, W-64, 1)
-    ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 11px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('✦ Printed digitally by CCG World ✦', W/2, footY)
-    ctx.font = '10px Georgia, serif'
-    ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+16)
+    const footY=H-44
+    ctx.fillStyle='#d97706'; ctx.fillRect(32,footY-18,W-64,1)
+    ctx.fillStyle='#9ca3af'; ctx.font='bold 11px Georgia, serif'; ctx.textAlign='center'
+    ctx.fillText('✶ Printed digitally by CCG World ✶', W/2, footY)
+    ctx.font='10px Georgia, serif'
+    ctx.fillText('Verify at: '+birthVerifyUrl, W/2, footY+16)
 
     setGenerating(false); setBirthDone(true)
   }
