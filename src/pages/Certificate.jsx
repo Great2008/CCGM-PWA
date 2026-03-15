@@ -197,36 +197,36 @@ export default function Certificate() {
     </div>
   )
 
-  // ── Derived values ───────────────────────────────────────────────
-  const name           = profile.full_name || profile.display_name || 'Member'
-  const branch         = profile.church_branch || 'CCG World'
-  const gender         = profile.gender || null
+  // ── Derived values (all null-safe) ──────────────────────────────
+  const name           = profile?.full_name || profile?.display_name || 'Member'
+  const branch         = profile?.church_branch || 'CCG World'
+  const gender         = profile?.gender || null
   const titlePrefix    = getTitlePrefix(churchTitle, gender)
   const displayName    = `${titlePrefix} ${name}`
-  const joinDate       = fmtDate(profile.created_at)
-  const birthday       = profile.birthday ? fmtBirthday(profile.birthday) : null
-  const certId         = 'CCG-'  + (user.id||'').slice(0,8).toUpperCase()
-  const birthId        = 'CCGB-' + (user.id||'').slice(0,8).toUpperCase()
+  const joinDate       = fmtDate(profile?.created_at)
+  const birthday       = profile?.birthday ? fmtBirthday(profile.birthday) : null
+  const certId         = 'CCG-'  + (user?.id||'').slice(0,8).toUpperCase()
+  const birthId        = 'CCGB-' + (user?.id||'').slice(0,8).toUpperCase()
   const today          = fmtDate(new Date().toISOString())
   const verifyUrl      = `${APP_URL}/verify?id=${certId}`
   const birthVerifyUrl = `${APP_URL}/verify?id=${birthId}`
-  const hasBirthday    = !!profile.birthday
+  const hasBirthday    = !!profile?.birthday
   // ID card only for ordained posts; Brother/Sister get badge but no card
   const hasIdCard      = !!churchTitle && ORDAINED.includes(churchTitle)
 
-  // Birth record fields
-  const fatherName   = profile.father_name   || ''
-  const motherName   = profile.mother_name   || ''
-  const placeOfBirth = profile.place_of_birth || ''
-  const hometown     = profile.hometown      || ''
-  const lga          = profile.lga           || ''
+  // Birth record fields — safe fallbacks if columns don't exist yet
+  const fatherName   = profile?.father_name   || ''
+  const motherName   = profile?.mother_name   || ''
+  const placeOfBirth = profile?.place_of_birth || ''
+  const hometown     = profile?.hometown      || ''
+  const lga          = profile?.lga           || ''
 
   // ── MEMBERSHIP CERTIFICATE — A5 Landscape (1748 × 1240 px) ──────
   const generateMembership = async () => {
     setGenerating(true); setGenError('')
-    try {
     const canvas = memberCanvasRef.current
-    if (!canvas) { setGenError('Canvas not available'); return }
+    if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
+    try {
     // A5 landscape at 300dpi: 210mm × 148mm = 2480 × 1748px
     // At 150dpi (screen-friendly): 1240 × 874px — scale up 1.4x for quality
     const W = 1748, H = 1240
@@ -351,9 +351,9 @@ export default function Certificate() {
   const generateBirth = async () => {
     if (!birthday) return
     setGenerating(true); setGenError('')
-    try {
     const canvas = birthCanvasRef.current
-    if (!canvas) { setGenError('Canvas not available'); return }
+    if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
+    try {
     const W = 1240, H = 1748
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
@@ -492,9 +492,9 @@ export default function Certificate() {
   // Physical CR80: 54mm × 85.6mm
   const generateId = async () => {
     setGenerating(true); setGenError('')
-    try {
     const canvas = idCanvasRef.current
-    if (!canvas) { setGenError('Canvas not available'); return }
+    if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
+    try {
     const W = 638, H = 1012
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')

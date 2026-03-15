@@ -10,7 +10,8 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async (uid) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', uid).single()
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', uid).single()
+    if (error) console.error('fetchProfile error (possible RLS block):', error.message, error.code)
     // If profile just went from suspended → not suspended, flag for reinstatement notice
     setProfile(prev => {
       if (prev?.suspended === true && data?.suspended === false) {
