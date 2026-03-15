@@ -97,41 +97,79 @@ function drawCornerStripes(ctx, W, stripes) {
   ctx.restore()
 }
 
-// Ornate corner flourish (mirrored with scale)
-function drawOrnateCorner(ctx, x, y, size, fx, fy) {
-  ctx.save()
-  ctx.translate(x, y); ctx.scale(fx, fy)
-  ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.8
-  // L-bracket
-  ctx.beginPath(); ctx.moveTo(0,size); ctx.lineTo(0,0); ctx.lineTo(size,0); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(0,size-14); ctx.lineTo(0,10); ctx.lineTo(size-14,10); ctx.stroke()
-  // Rosette
-  ctx.beginPath(); ctx.arc(26,26,12,0,Math.PI*2)
-  ctx.strokeStyle = '#b45309'; ctx.lineWidth = 1.8; ctx.stroke()
-  ctx.beginPath(); ctx.arc(26,26,5,0,Math.PI*2)
-  ctx.fillStyle = '#d97706'; ctx.globalAlpha = 1; ctx.fill()
-  // Tendrils
-  ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.3; ctx.globalAlpha = 0.8
-  ctx.beginPath(); ctx.moveTo(38,26)
-  ctx.bezierCurveTo(50,26,52,16,63,15)
-  ctx.bezierCurveTo(70,14,72,7,76,7); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(26,38)
-  ctx.bezierCurveTo(26,50,16,52,15,63)
-  ctx.bezierCurveTo(14,70,7,72,7,76); ctx.stroke()
-  // Leaf buds (simple circles — no ellipse needed)
-  [[50,19],[64,12],[19,50],[12,64]].forEach(([bx,by]) => {
-    ctx.save(); ctx.globalAlpha = 0.5
-    ctx.beginPath(); ctx.arc(bx, by, 3.5, 0, Math.PI*2)
-    ctx.fillStyle = '#d97706'; ctx.fill(); ctx.restore()
-  })
-  // Edge dots
-  for (let i=0;i<6;i++) {
-    ctx.save(); ctx.globalAlpha = 0.4
-    ctx.beginPath(); ctx.arc(20+i*11,5,1.8,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
-    ctx.beginPath(); ctx.arc(5,20+i*11,1.8,0,Math.PI*2); ctx.fill()
+// Ornate corner flourish — draws directly at absolute coords, no scale(-1) needed
+// ox/oy = corner origin, sx/sy = direction (+1 or -1 for mirroring)
+function drawOrnateCorner(ctx, ox, oy, size, sx, sy) {
+  try {
+    // Helper: map local coords to absolute
+    const ax = (lx) => ox + lx * sx
+    const ay = (ly) => oy + ly * sy
+
+    ctx.save()
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.8
+
+    // L-bracket outer
+    ctx.beginPath()
+    ctx.moveTo(ax(0), ay(size))
+    ctx.lineTo(ax(0), ay(0))
+    ctx.lineTo(ax(size), ay(0))
+    ctx.stroke()
+
+    // L-bracket inner
+    ctx.beginPath()
+    ctx.moveTo(ax(0), ay(size-14))
+    ctx.lineTo(ax(0), ay(10))
+    ctx.lineTo(ax(size-14), ay(10))
+    ctx.stroke()
+
+    // Rosette ring
+    ctx.beginPath()
+    ctx.arc(ax(26), ay(26), 12, 0, Math.PI*2)
+    ctx.strokeStyle = '#b45309'; ctx.lineWidth = 1.8; ctx.stroke()
+
+    // Rosette fill
+    ctx.beginPath()
+    ctx.arc(ax(26), ay(26), 5, 0, Math.PI*2)
+    ctx.fillStyle = '#d97706'; ctx.globalAlpha = 1; ctx.fill()
+
+    // Tendril along X axis
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.3; ctx.globalAlpha = 0.8
+    ctx.beginPath()
+    ctx.moveTo(ax(38), ay(26))
+    ctx.bezierCurveTo(ax(50),ay(26), ax(52),ay(16), ax(63),ay(15))
+    ctx.bezierCurveTo(ax(70),ay(14), ax(72),ay(7),  ax(76),ay(7))
+    ctx.stroke()
+
+    // Tendril along Y axis
+    ctx.beginPath()
+    ctx.moveTo(ax(26), ay(38))
+    ctx.bezierCurveTo(ax(26),ay(50), ax(16),ay(52), ax(15),ay(63))
+    ctx.bezierCurveTo(ax(14),ay(70), ax(7), ay(72), ax(7), ay(76))
+    ctx.stroke()
+
+    // Leaf buds
+    var buds = [[50,19],[64,12],[19,50],[12,64]]
+    for (var b=0; b<buds.length; b++) {
+      ctx.beginPath()
+      ctx.arc(ax(buds[b][0]), ay(buds[b][1]), 3.5, 0, Math.PI*2)
+      ctx.fillStyle = '#d97706'; ctx.globalAlpha = 0.5; ctx.fill()
+    }
+
+    // Edge dots
+    for (var i=0; i<6; i++) {
+      ctx.beginPath()
+      ctx.arc(ax(20+i*11), ay(5), 1.8, 0, Math.PI*2)
+      ctx.fillStyle = '#d97706'; ctx.globalAlpha = 0.4; ctx.fill()
+      ctx.beginPath()
+      ctx.arc(ax(5), ay(20+i*11), 1.8, 0, Math.PI*2)
+      ctx.fill()
+    }
+
     ctx.restore()
+  } catch(e) {
+    // If ornament fails for any reason, silently skip — cert still generates
+    try { ctx.restore() } catch(_) {}
   }
-  ctx.restore()
 }
 
 // Field line with dotted leader (like physical cert)
