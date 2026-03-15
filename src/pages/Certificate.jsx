@@ -181,7 +181,8 @@ const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','
 // COMPONENT
 // ─────────────────────────────────────────────────────────────────
 export default function Certificate() {
-  const { user, profile, churchTitle } = useAuth()
+  const { user, profile, churchTitle: rawChurchTitle } = useAuth()
+  const churchTitle = rawChurchTitle ?? null
   const [searchParams] = useSearchParams()
   const [adminSig, setAdminSig] = useState(null)
   const [tab, setTab] = useState(
@@ -239,16 +240,7 @@ export default function Certificate() {
 
   // ── MEMBERSHIP CERTIFICATE — A5 Landscape (1748 × 1240 px) ──────
   const generateMembership = async () => {
-    // DIAGNOSTIC — remove after fixing
-    console.log('CERT DEBUG:', {
-      profile: !!profile,
-      user: !!user,
-      churchTitle,
-      name, branch, gender, displayName,
-      joinDate, birthday, today,
-      certId, verifyUrl,
-      fatherName, motherName, placeOfBirth, hometown, lga
-    })
+    if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
     const canvas = memberCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
@@ -376,6 +368,7 @@ export default function Certificate() {
   // ── BIRTH CERTIFICATE — A5 Portrait (1240 × 1748 px) ─────────────
   const generateBirth = async () => {
     if (!birthday) return
+    if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
     const canvas = birthCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
@@ -517,6 +510,7 @@ export default function Certificate() {
   // ── ID CARD — Portrait CR80 (638 × 1012 px @ 2x) ─────────────────
   // Physical CR80: 54mm × 85.6mm
   const generateId = async () => {
+    if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
     const canvas = idCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
@@ -681,7 +675,7 @@ export default function Certificate() {
       fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.86rem',
       background: tab===k ? 'var(--brand-mid)' : '#f1f5f9',
       color: tab===k ? 'white' : 'var(--text-mid)', transition:'all 0.2s'
-    }}>{tabs.find(t=>t.key===k)?.label}</button>
+    }}>{tabs.find(t=>t.key===k)?.label ?? k}</button>
   )
 
   const GenBtn = ({ onClick, disabled, label, color='var(--brand-mid)' }) => (
