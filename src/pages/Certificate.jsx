@@ -520,8 +520,30 @@ export default function Certificate() {
 
     let fy = 512
 
-    // Name full width, larger
-    fieldLine('Name of Child...', name, LX, fy, W-120, 20, 24); fy += 68
+    // Name — larger font, wraps to second line if it overflows
+    const nameFont = 'bold 28px Georgia, serif'
+    const nameLabelFont = '20px Georgia, serif'
+    ctx.font = nameLabelFont; ctx.fillStyle = '#374151'; ctx.textAlign = 'left'
+    ctx.fillText('Name of Child...', LX, fy)
+    const nameLabelW = ctx.measureText('Name of Child...').width
+    ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.9; ctx.setLineDash([2,4])
+    ctx.beginPath(); ctx.moveTo(LX+nameLabelW+5, fy+3); ctx.lineTo(LX + W - 120, fy+3); ctx.stroke()
+    ctx.setLineDash([])
+    ctx.font = nameFont; ctx.fillStyle = '#0a2612'
+    const nameAvailW = (W - 120) - nameLabelW - 20
+    if (ctx.measureText(name).width <= nameAvailW) {
+      // Fits on same line
+      ctx.fillText(name, LX + nameLabelW + 10, fy)
+      fy += 68
+    } else {
+      // Wrap: put value on next line, full width
+      ctx.fillText(name, LX, fy + 32)
+      // Dotted line under wrapped name
+      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.9; ctx.setLineDash([2,4])
+      ctx.beginPath(); ctx.moveTo(LX, fy+38); ctx.lineTo(LX + W - 120, fy+38); ctx.stroke()
+      ctx.setLineDash([])
+      fy += 100
+    }
 
     // DOB + POB same row
     fieldLine('Date of Birth...', birthday, LX, fy, COL_W)
