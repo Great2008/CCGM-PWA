@@ -489,107 +489,93 @@ export default function Certificate() {
     ctx.fillText(birthId.replace('CCGB-',''), W-60, 264)
 
     // Title
-    ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 58px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Certificate of Birth', W/2, 358)
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
-    ctx.beginPath(); ctx.moveTo(W/2-320,376); ctx.lineTo(W/2+320,376); ctx.stroke()
-    ctx.fillStyle = '#92400e'; ctx.font = 'italic 18px Georgia, serif'
-    ctx.fillText('In the Name of the Lord', W/2, 410)
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 20px Georgia, serif'
-    ctx.fillText('This is to Certify that', W/2, 448)
+    ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 72px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Certificate of Birth', W/2, 368)
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5
+    ctx.beginPath(); ctx.moveTo(W/2-380,392); ctx.lineTo(W/2+380,392); ctx.stroke()
+    ctx.fillStyle = '#92400e'; ctx.font = 'italic 24px Georgia, serif'
+    ctx.fillText('In the Name of the Lord', W/2, 432)
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 26px Georgia, serif'
+    ctx.fillText('This is to Certify that', W/2, 476)
 
-    // ── Field layout: 2 columns for space efficiency ──────────────
-    const LX = 60, RX = W/2 + 30
-    const COL_W = W/2 - 90  // width of each column\'s field line
+    // Fields
+    const LX = 60, RX = W/2 + 40
+    const COL_W = W/2 - 100
 
-    const fieldLine = (label, value, x, y, lineW) => {
+    const fieldLine = (label, value, x, y, lineW, lSz=18, vSz=18) => {
       ctx.textAlign = 'left'
-      ctx.fillStyle = '#374151'; ctx.font = '16px Georgia, serif'
+      ctx.fillStyle = '#374151'; ctx.font = lSz + 'px Georgia, serif'
       ctx.fillText(label, x, y)
       const lw = ctx.measureText(String(label||'')).width
-      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.8; ctx.setLineDash([2,4])
-      ctx.beginPath(); ctx.moveTo(x+lw+5,y+2); ctx.lineTo(x+lineW,y+2); ctx.stroke()
+      ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.9; ctx.setLineDash([2,4])
+      ctx.beginPath(); ctx.moveTo(x+lw+5,y+3); ctx.lineTo(x+lineW,y+3); ctx.stroke()
       ctx.setLineDash([])
-      ctx.fillStyle = '#0a2612'; ctx.font = 'bold 16px Georgia, serif'
+      ctx.fillStyle = '#0a2612'; ctx.font = 'bold ' + vSz + 'px Georgia, serif'
       const val = value == null ? '—' : String(value)
-      // Truncate if too wide
-      let displayVal = val
-      ctx.font = 'bold 16px Georgia, serif'
-      while (ctx.measureText(displayVal).width > lineW - lw - 20 && displayVal.length > 1) {
-        displayVal = displayVal.slice(0, -1)
-      }
-      if (displayVal !== val) displayVal += '…'
-      ctx.fillText(displayVal, x+lw+10, y)
+      let dv = val
+      while (ctx.measureText(dv).width > lineW - lw - 20 && dv.length > 1) dv = dv.slice(0,-1)
+      if (dv !== val) dv += '…'
+      ctx.fillText(dv, x+lw+10, y)
     }
 
-    let fy = 492
+    let fy = 512
 
-    // Name spans full width
-    fieldLine('Name of Child...', name, LX, fy, W - 120); fy += 52
+    // Name full width, larger
+    fieldLine('Name of Child...', name, LX, fy, W-120, 20, 24); fy += 68
 
-    // DOB + POB on same line (two columns)
+    // DOB + POB same row
     fieldLine('Date of Birth...', birthday, LX, fy, COL_W)
     fieldLine('Place of Birth...', placeOfBirth||'—', RX, fy, COL_W)
-    fy += 56
+    fy += 66
 
     // Was born by
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Was born by', W/2, fy); fy += 44
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 22px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Was born by', W/2, fy); fy += 54
 
-    // Father + Mother on same line
-    fieldLine("Father\'s Name...", fatherName||'—', LX, fy, COL_W)
-    fieldLine("Mother\'s Name...", motherName||'—', RX, fy, COL_W)
-    fy += 52
+    // Father + Mother same row
+    fieldLine("Father's Name...", fatherName||'—', LX, fy, COL_W)
+    fieldLine("Mother's Name...", motherName||'—', RX, fy, COL_W)
+    fy += 66
 
-    // Hometown + LGA on same line
+    // Hometown + LGA same row
     fieldLine('Home Town/Village...', hometown||'—', LX, fy, COL_W)
     fieldLine('L.G. Area/Division...', lga||'—', RX, fy, COL_W)
-    fy += 52
+    fy += 66
 
     // Divider
-    fy += 14
-    ctx.fillStyle = '#d97706'; ctx.fillRect(LX, fy, W-120, 1.5); fy += 32
+    fy += 20
+    ctx.fillStyle = '#d97706'; ctx.fillRect(LX, fy, W-120, 1.5); fy += 38
 
     // Witness text
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 14px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('In witness whereof the undersigned who accepted the above particulars to be correct and true.', W/2, fy)
-    fy += 44
+    fy += 56
 
-    // ── Bottom row: Signature | QR | Stamp — evenly spaced ────────
+    // Bottom row: Signature left | QR centre | Stamp right
     const botY = fy
-    const sigX  = 100                // signature left anchor
-    const qrX   = W/2 - 55          // QR centre
-    const stX   = W - 240            // stamp centre
 
-    // Signature
     if (adminSig) {
-      try {
-        const sig = await loadImage(adminSig)
-        ctx.drawImage(sig, sigX, botY, 220, 70)
-      } catch(_){}
+      try { const sig = await loadImage(adminSig); ctx.drawImage(sig, 100, botY, 260, 80) } catch(_){}
     }
-    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1
-    ctx.beginPath(); ctx.moveTo(sigX, botY+80); ctx.lineTo(sigX+260, botY+80); ctx.stroke()
-    ctx.fillStyle = '#374151'; ctx.font = 'italic 13px Georgia, serif'; ctx.textAlign = 'center'
-    ctx.fillText('Signature of Church Minister', sigX+130, botY+98)
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5
+    ctx.beginPath(); ctx.moveTo(100, botY+96); ctx.lineTo(400, botY+96); ctx.stroke()
+    ctx.fillStyle = '#374151'; ctx.font = 'italic 15px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillText('Signature of Church Minister', 250, botY+116)
 
-    // QR code — centred
     try {
-      const qr = await loadImage(qrDataUrl(birthVerifyUrl, 110))
-      ctx.drawImage(qr, qrX, botY, 110, 110)
-      ctx.fillStyle = '#6b7280'; ctx.font = '12px Georgia, serif'; ctx.textAlign = 'center'
-      ctx.fillText('Scan to verify', W/2, botY+128)
+      const qr = await loadImage(qrDataUrl(birthVerifyUrl, 130))
+      ctx.drawImage(qr, W/2-65, botY, 130, 130)
+      ctx.fillStyle = '#6b7280'; ctx.font = '13px Georgia, serif'; ctx.textAlign = 'center'
+      ctx.fillText('Scan to verify', W/2, botY+150)
     } catch(_){}
 
-    // Stamp — right side
-    await drawStamp(ctx, stX, botY+70, 155)
+    await drawStamp(ctx, W-220, botY+80, 180)
 
-    // Footer
     const footY = H - 44
-    ctx.fillStyle = '#d97706'; ctx.fillRect(34, footY-18, W-68, 1)
-    ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 13px Georgia, serif'; ctx.textAlign = 'center'
+    ctx.fillStyle = '#d97706'; ctx.fillRect(34, footY-18, W-68, 1.5)
+    ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 14px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('✶ Printed digitally by CCG World ✶', W/2, footY)
-    ctx.font = '11px Georgia, serif'
+    ctx.font = '12px Georgia, serif'
     ctx.fillText('Verify at: ' + birthVerifyUrl, W/2, footY+18)
 
     setBirthDone(true)
