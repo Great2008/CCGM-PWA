@@ -108,7 +108,7 @@ function suspensionHtml(name: string, reason: string, period: string, until: str
 </body></html>`
 }
 
-function reinstatedHtml(name: string) {
+function reinstatedHtml(name: string, note: string | null = null) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"/>
@@ -129,6 +129,10 @@ function reinstatedHtml(name: string) {
             <p style="color:#374151;font-size:0.95rem;line-height:1.7;margin:0 0 24px;">
               Your CCG World account suspension has been lifted. You now have full access and can participate in the community again.
             </p>
+            ${note ? `<div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:16px 20px;margin:0 0 24px;">
+              <div style="font-size:0.72rem;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Note from Admin</div>
+              <p style="color:#14532d;font-size:0.92rem;line-height:1.6;margin:0;">${note}</p>
+            </div>` : ''}
             <p style="text-align:center;margin:0 0 28px;">
               <a href="${APP_URL}/timeline" style="display:inline-block;padding:13px 32px;background:#16a34a;color:#fff;font-weight:700;font-size:0.92rem;text-decoration:none;border-radius:10px;">Back to Timeline →</a>
             </p>
@@ -145,19 +149,51 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: CORS })
 
   try {
-    const { type, email, name, reason, period, until } = await req.json()
-    if (!email) throw new Error('email is required')
+    const body = await req.json()
+    const { type, email, name, reason, period, until, note, authorName, postBody, reportCount, adminPanelUrl } = body
+
     if (!GMAIL_USER || !GMAIL_PASS) throw new Error('GMAIL_USER and GMAIL_APP_PASSWORD secrets not set')
+
+    // ── Admin alert for auto-suspension ──────────────────────────
+    if (type === 'auto_suspension_admin_alert') {
+      const adminEmail = GMAIL_USER
+      const subject = `⚠️ Auto-suspension triggered: ${authorName}`
+      const html = `<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px;background:#fffef5">
+        <div style="background:#0a2612;padding:24px 28px;border-radius:12px 12px 0 0;text-align:center">
+          <h2 style="color:#fbbf24;margin:0;font-size:1.4rem">⚠️ Auto-Suspension Alert</h2>
+        </div>
+        <div style="background:white;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:28px">
+          <p style="color:#374151">A member has been <strong>automatically suspended</strong> after their post received <strong>${reportCount} reports</strong>.</p>
+          <div style="background:#fff5f5;border:1.5px solid #fecaca;border-radius:10px;padding:16px;margin:16px 0">
+            <div style="font-size:0.75rem;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Member</div>
+            <div style="color:#7f1d1d;font-weight:700">${authorName}</div>
+          </div>
+          ${postBody ? `<div style="background:#f8fafc;border-radius:10px;padding:16px;margin:16px 0;font-style:italic;color:#64748b">"${postBody}${postBody.length >= 120 ? '…' : ''}"</div>` : ''}
+          <p style="color:#374151">Please review this suspension in the admin panel.</p>
+          <a href="${adminPanelUrl || APP_URL + '/admin'}" style="display:inline-block;padding:12px 28px;background:#166534;color:white;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">
+            Open Admin Panel →
+          </a>
+        </div>
+      </body></html>`
+      const plain = `Auto-suspension alert: ${authorName} was auto-suspended after ${reportCount} reports.\n\nReview at: ${adminPanelUrl || APP_URL + '/admin'}`
+      await sendEmail(adminEmail, subject, html, plain)
+      return new Response(JSON.stringify({ success: true }), { headers: { 'Content-Type': 'application/json', ...CORS } })
+    }
+
+    // ── User-facing emails ────────────────────────────────────────
+    if (!email) throw new Error('email is required')
 
     const isReinstatement = type === 'reinstatement'
     const subject = isReinstatement
       ? 'Your CCG World Account Has Been Reinstated'
       : 'Your CCG World Account Has Been Suspended'
+
     const html = isReinstatement
-      ? reinstatedHtml(name || 'Member')
+      ? reinstatedHtml(name || 'Member', note || null)
       : suspensionHtml(name || 'Member', reason || 'Community guideline violation', period || 'Unspecified', until || null)
+
     const plain = isReinstatement
-      ? `Dear ${name},\n\nYour CCG World account suspension has been lifted. Welcome back!\n\n${APP_URL}/timeline`
+      ? `Dear ${name},\n\nYour CCG World account suspension has been lifted. Welcome back!\n${note ? '\nNote from admin: ' + note + '\n' : ''}\n${APP_URL}/timeline`
       : `Dear ${name},\n\nYour account has been suspended.\nReason: ${reason}\nDuration: ${period}\nUntil: ${until ?? 'Indefinite'}\n\nContact us: ${APP_URL}/contact`
 
     await sendEmail(email, subject, html, plain)

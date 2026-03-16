@@ -82,7 +82,21 @@ export default function AdminMembers() {
   const [suspendPeriod, setSuspendPeriod] = useState(SUSPEND_PERIODS[0])
 
   // Unsuspend confirm
-  const [showUnsuspend, setShowUnsuspend] = useState(false)
+  const [showUnsuspend, setShowUnsuspend]     = useState(false)
+  const [reinstatementNote, setReinstatementNote] = useState('')
+
+  // Suspension log for selected member
+  const [suspLog, setSuspLog]   = useState([])
+  const [suspLogLoading, setSuspLogLoading] = useState(false)
+
+  const loadSuspLog = async (userId) => {
+    setSuspLogLoading(true)
+    const { data } = await supabaseAdmin.from('suspension_logs')
+      .select('*').eq('user_id', userId)
+      .order('created_at', { ascending: false })
+    setSuspLog(data || [])
+    setSuspLogLoading(false)
+  }
 
   const activeMembers = members.filter(m => !m.suspended)
   const suspendedMembers = members.filter(m => m.suspended === true)
@@ -186,30 +200,35 @@ export default function AdminMembers() {
         suspended_at: null,
         suspension_reason: null,
         suspension_expires_at: null,
+        auto_suspended: false,
+      })
+      // Log reinstatement
+      await supabaseAdmin.from('suspension_logs').insert({
+        user_id: selected.id,
+        action: 'reinstated',
+        reason: reinstatementNote.trim() || 'Reinstated by admin',
       })
       await supabaseAdmin.from('notification_logs').insert({
         title: '✅ Account Reinstated',
         body: 'Your account suspension has been lifted. Welcome back to CCG World!',
         url: '/timeline',
         tag: 'reinstatement',
-        recipients: 1,
-        delivered: 1,
-        failed: 0,
+        recipients: 1, delivered: 1, failed: 0,
         sent_at: new Date().toISOString(),
         user_id: selected.id,
       })
-      // Email notification
       await supabaseAdmin.functions.invoke('send-suspension-email', {
         body: {
           type: 'reinstatement',
           email: selected.email,
           name: selected.full_name || selected.display_name || 'Member',
+          note: reinstatementNote.trim() || null,
         }
       })
-
       showToast((selected.full_name || 'Member') + ' has been reinstated.')
-      logAction('reinstate', 'Account reinstated', selected.full_name || selected.display_name)
+      logAction('reinstate', reinstatementNote.trim() || 'Account reinstated', selected.full_name || selected.display_name)
       setShowUnsuspend(false)
+      setReinstatementNote('')
       setSelected(null)
       reload()
     } catch (e) { showToast(e.message, 'error') }
@@ -302,7 +321,7 @@ export default function AdminMembers() {
             </div>
           )}
           {list.map(m => (
-            <div key={m.id} onClick={() => setSelected(m)}
+            <div key={m.id} onClick={() => { setSelected(m); loadSuspLog(m.id) }}
               style={{ background: 'white', borderRadius: 12, padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 1px 8px rgba(0,0,0,0.06)', border: '1.5px solid ' + (selected?.id === m.id ? 'var(--brand-light)' : 'transparent'), transition: 'border-color 0.15s' }}>
               <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg,var(--brand-light),var(--gold))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
                 {m.avatar_url ? <img src={m.avatar_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }} /> : initials(m)}
@@ -314,12 +333,16 @@ export default function AdminMembers() {
                   <div style={{ fontSize: '0.72rem', color: '#dc2626', marginTop: 2 }}>Until {fmtDate(m.suspension_expires_at)}</div>
                 )}
                 {m.suspended && !m.suspension_expires_at && (
-                  <div style={{ fontSize: '0.72rem', color: '#dc2626', marginTop: 2 }}>Indefinite suspension</div>
+                  <div style={{ fontSize: '0.72rem', color: '#dc2626', marginTop: 2 }}>
+                    {m.auto_suspended ? '🤖 Auto-suspended — pending review' : 'Indefinite suspension'}
+                  </div>
                 )}
               </div>
-              <div style={{ flexShrink: 0 }}>
+              <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
                 {m.suspended ? (
-                  <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: '#fee2e2', color: '#dc2626' }}>🚫 Suspended</span>
+                  <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: m.auto_suspended ? '#fff7ed' : '#fee2e2', color: m.auto_suspended ? '#c2410c' : '#dc2626' }}>
+                    {m.auto_suspended ? '🤖 Auto' : '🚫 Suspended'}
+                  </span>
                 ) : (
                   <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: (ROLE_COLORS[m.role] || '#94a3b8') + '20', color: ROLE_COLORS[m.role] || '#94a3b8' }}>
                     {APP_ROLES.find(r=>r.value===m.role)?.label || 'Member'}
@@ -514,14 +537,69 @@ export default function AdminMembers() {
         </div>
       )}
 
-      {/* Reinstate confirm */}
+      {/* Reinstate modal with note + suspension log */}
       {showUnsuspend && (
-        <Confirm
-          message={'Reinstate ' + (selected?.full_name || 'this member') + '? They will regain full access immediately and receive a notification.'}
-          onConfirm={confirmUnsuspend}
-          onCancel={() => setShowUnsuspend(false)}
-          loading={saving}
-        />
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9000, padding:20 }}>
+          <div style={{ background:'white', borderRadius:18, padding:'28px', width:'100%', maxWidth:500, boxShadow:'0 24px 80px rgba(0,0,0,0.3)', maxHeight:'90vh', overflowY:'auto' }}>
+            <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 6px', fontSize:'1.2rem' }}>
+              🎉 Reinstate {selected?.full_name || selected?.display_name}
+            </h3>
+            <p style={{ color:'var(--text-light)', fontSize:'0.84rem', margin:'0 0 20px' }}>
+              They will regain full access and receive an email notification.
+            </p>
+
+            {/* Suspension log for this member */}
+            <div style={{ marginBottom:20 }}>
+              <div style={{ fontSize:'0.72rem', fontWeight:700, color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:8 }}>Suspension History</div>
+              {suspLogLoading ? (
+                <div style={{ color:'var(--text-light)', fontSize:'0.84rem', padding:'12px 0' }}>Loading…</div>
+              ) : suspLog.length === 0 ? (
+                <div style={{ color:'var(--text-light)', fontSize:'0.84rem' }}>No history found.</div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                  {suspLog.map((entry, i) => (
+                    <div key={i} style={{ background: entry.action==='reinstated'?'#f0fdf4':entry.action==='review_requested'?'#eff6ff':'#fff5f5', border:`1px solid ${entry.action==='reinstated'?'#bbf7d0':entry.action==='review_requested'?'#bfdbfe':'#fecaca'}`, borderRadius:10, padding:'10px 14px', fontSize:'0.82rem' }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                        <span style={{ fontWeight:700, color: entry.action==='reinstated'?'#166534':entry.action==='review_requested'?'#1d4ed8':'#dc2626' }}>
+                          {entry.action==='auto_suspended'?'🚫 Auto-suspended':entry.action==='suspended'?'🚫 Suspended':entry.action==='reinstated'?'✅ Reinstated':entry.action==='review_requested'?'📨 Review requested':'📝 '+entry.action}
+                        </span>
+                        <span style={{ color:'var(--text-light)', fontSize:'0.75rem' }}>
+                          {new Date(entry.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+                        </span>
+                      </div>
+                      {entry.reason && <div style={{ color:'var(--text-mid)' }}>{entry.reason}</div>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Reinstatement note */}
+            <div style={{ marginBottom:20 }}>
+              <label style={{ fontSize:'0.78rem', fontWeight:700, color:'var(--text-mid)', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:6 }}>
+                Reinstatement Note <span style={{ color:'var(--text-light)', fontWeight:400, textTransform:'none' }}>(sent to member)</span>
+              </label>
+              <textarea
+                value={reinstatementNote}
+                onChange={e => setReinstatementNote(e.target.value)}
+                placeholder="e.g. After review, we have decided to reinstate your account. Please ensure future posts follow our community guidelines."
+                rows={3}
+                style={{ width:'100%', padding:'10px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.88rem', outline:'none', resize:'vertical', lineHeight:1.6, boxSizing:'border-box' }}
+              />
+            </div>
+
+            <div style={{ display:'flex', gap:10 }}>
+              <button onClick={confirmUnsuspend} disabled={saving}
+                style={{ flex:1, padding:'12px', borderRadius:10, border:'none', background:'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color:'white', fontWeight:700, fontFamily:'var(--font-body)', cursor:saving?'not-allowed':'pointer' }}>
+                {saving ? 'Reinstating…' : '✅ Confirm Reinstatement'}
+              </button>
+              <button onClick={() => { setShowUnsuspend(false); setReinstatementNote('') }}
+                style={{ padding:'12px 20px', borderRadius:10, border:'1.5px solid #e2e8f0', background:'white', color:'var(--text-mid)', fontWeight:600, fontFamily:'var(--font-body)', cursor:'pointer' }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <style>{`

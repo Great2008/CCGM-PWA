@@ -25,7 +25,7 @@ function Avatar({ profile, size=40 }) {
     : <div style={{width:size,height:size,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:size*0.38,flexShrink:0}}>{init}</div>
 }
 
-function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin }) {
+function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin, onReport, reportedByMe }) {
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments]         = useState([])
   const [commentText, setCommentText]   = useState('')
@@ -70,9 +70,17 @@ function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin }
           </div>
           <div style={{fontSize:'0.72rem',color:'var(--text-light)',marginTop:2}}>{timeAgo(post.created_at)}</div>
         </div>
-        {(currentUserId===post.user_id||isAdmin)&&(
-          <button onClick={()=>onDelete(post.id)} style={{color:'#ef4444',background:'none',border:'none',cursor:'pointer',fontSize:'1rem',opacity:0.5,padding:4,flexShrink:0}} title="Delete">🗑</button>
-        )}
+        <div style={{display:'flex',gap:4,alignItems:'center',flexShrink:0}}>
+          {currentUserId && currentUserId !== post.user_id && !isAdmin && (
+            <button onClick={()=>onReport(post)} title={reportedByMe?'Already reported':'Report post'}
+              style={{color:reportedByMe?'#f59e0b':'var(--text-light)',background:'none',border:'none',cursor:reportedByMe?'default':'pointer',fontSize:'0.9rem',opacity:reportedByMe?0.8:0.4,padding:4,flexShrink:0}}>
+              🚩
+            </button>
+          )}
+          {(currentUserId===post.user_id||isAdmin)&&(
+            <button onClick={()=>onDelete(post.id)} style={{color:'#ef4444',background:'none',border:'none',cursor:'pointer',fontSize:'1rem',opacity:0.5,padding:4,flexShrink:0}} title="Delete">🗑</button>
+          )}
+        </div>
       </div>
 
       <div style={{padding:'0 20px 14px'}}>
@@ -594,6 +602,22 @@ export default function Timeline() {
   const [showProfile, setShowProfile] = useState(false)
   const listRef = useRef(null)
 
+  // Report state
+  const [reportPost, setReportPost]     = useState(null)   // post being reported
+  const [reportReason, setReportReason] = useState('')
+  const [reportOther, setReportOther]   = useState('')
+  const [reportSending, setReportSending] = useState(false)
+  const [reportDone, setReportDone]     = useState(false)
+  const [myReports, setMyReports]       = useState([])     // post_ids I've already reported
+
+  const REPORT_REASONS = [
+    'Spam or irrelevant content',
+    'Inappropriate or offensive content',
+    'Harassment or bullying',
+    'False information / misinformation',
+    'Other',
+  ]
+
   const canPost = !!user
 
   const loadPosts = async () => {
@@ -606,7 +630,15 @@ export default function Timeline() {
     setLoading(false)
   }
 
-  useEffect(() => { loadPosts() }, [])
+  // Load posts I've already reported (so flag shows as already-reported)
+  const loadMyReports = async () => {
+    if (!user) return
+    const { data } = await supabase.from('post_reports')
+      .select('post_id').eq('reporter_id', user.id)
+    setMyReports((data || []).map(r => r.post_id))
+  }
+
+  useEffect(() => { loadPosts(); loadMyReports() }, [user])
 
   // Realtime subscription
   useEffect(() => {
@@ -649,6 +681,83 @@ export default function Timeline() {
       auditLog('timeline_delete', `Deleted timeline post by ${authorName}`, authorName)
     }
     setPosts(p => p.filter(x => x.id !== postId))
+  }
+
+  const handleReport = (post) => {
+    if (!user) { setShowAuth(true); return }
+    setReportPost(post)
+    setReportReason('')
+    setReportOther('')
+    setReportDone(false)
+  }
+
+  const submitReport = async () => {
+    if (!reportReason || !reportPost || !user) return
+    setReportSending(true)
+    const reason = reportReason === 'Other' ? (reportOther.trim() || 'Other') : reportReason
+
+    // Insert report (unique constraint on reporter_id + post_id prevents duplicates)
+    const { error } = await supabase.from('post_reports').insert({
+      post_id:     reportPost.id,
+      reporter_id: user.id,
+      reason,
+    })
+
+    if (error) { setReportSending(false); return }
+
+    // Update local state
+    setMyReports(r => [...r, reportPost.id])
+
+    // Count unique reports on this post
+    const { count } = await supabase.from('post_reports')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', reportPost.id)
+
+    // Auto-suspend if 10 unique reports reached
+    if (count >= 10) {
+      const authorId = reportPost.user_id
+      const now = new Date().toISOString()
+      const reason_text = `Auto-suspended: post received ${count} reports`
+
+      // Suspend the user
+      await supabase.from('profiles').update({
+        suspended: true,
+        suspended_at: now,
+        suspension_reason: reason_text,
+        suspension_expires_at: null,  // indefinite
+        auto_suspended: true,
+      }).eq('id', authorId)
+
+      // Log to suspension_logs
+      await supabase.from('suspension_logs').insert({
+        user_id: authorId,
+        action: 'auto_suspended',
+        reason: reason_text,
+        post_id: reportPost.id,
+        created_at: now,
+      })
+
+      // Audit log
+      const authorName = reportPost.profiles?.display_name || reportPost.profiles?.full_name || 'Member'
+      auditLog('suspend', reason_text, authorName)
+
+      // Notify admin via email
+      try {
+        await supabase.functions.invoke('send-suspension-email', {
+          body: {
+            type: 'auto_suspension_admin_alert',
+            authorName,
+            postBody: reportPost.body?.slice(0, 120),
+            reportCount: count,
+            adminPanelUrl: 'https://ccgm-pwa.vercel.app/admin',
+          }
+        })
+      } catch(_) {}
+    }
+
+    setReportSending(false)
+    setReportDone(true)
+  }
     await loadPosts()
   }
 
@@ -739,12 +848,66 @@ export default function Timeline() {
             </div>
           )}
           {posts.map(post=>(
-            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} />
+            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} onReport={handleReport} reportedByMe={myReports.includes(post.id)} />
           ))}
         </div>
       </div>
 
       {showAuth && <AuthModal onClose={()=>setShowAuth(false)} />}
+
+      {/* ── Report Modal ── */}
+      {reportPost && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:20 }}>
+          <div style={{ background:'white', borderRadius:18, padding:'28px', width:'100%', maxWidth:420, boxShadow:'0 24px 80px rgba(0,0,0,0.3)' }}>
+            {reportDone ? (
+              <>
+                <div style={{ textAlign:'center', padding:'16px 0' }}>
+                  <div style={{ fontSize:'2.5rem', marginBottom:12 }}>🚩</div>
+                  <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 10px' }}>Report Submitted</h3>
+                  <p style={{ color:'var(--text-mid)', fontSize:'0.88rem', lineHeight:1.6 }}>
+                    Thank you. Our team will review this post. If it violates our guidelines, action will be taken.
+                  </p>
+                </div>
+                <button onClick={() => setReportPost(null)}
+                  style={{ width:'100%', marginTop:16, padding:'11px', borderRadius:10, border:'none', background:'var(--brand-mid)', color:'white', fontWeight:700, fontFamily:'var(--font-body)', cursor:'pointer' }}>
+                  Done
+                </button>
+              </>
+            ) : (
+              <>
+                <h3 style={{ fontFamily:'var(--font-display)', color:'#dc2626', fontSize:'1.1rem', margin:'0 0 6px' }}>🚩 Report Post</h3>
+                <p style={{ color:'var(--text-light)', fontSize:'0.83rem', margin:'0 0 20px' }}>
+                  Why are you reporting this post?
+                </p>
+                <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:16 }}>
+                  {REPORT_REASONS.map(r => (
+                    <label key={r} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', borderRadius:10, border:`1.5px solid ${reportReason===r?'#dc2626':'#e2e8f0'}`, background:reportReason===r?'#fff5f5':'white', cursor:'pointer' }}>
+                      <input type="radio" name="reason" checked={reportReason===r} onChange={() => setReportReason(r)} style={{ accentColor:'#dc2626' }} />
+                      <span style={{ fontSize:'0.88rem', color:'var(--text-dark)' }}>{r}</span>
+                    </label>
+                  ))}
+                </div>
+                {reportReason === 'Other' && (
+                  <textarea value={reportOther} onChange={e=>setReportOther(e.target.value)}
+                    placeholder="Please describe the issue..."
+                    rows={3}
+                    style={{ width:'100%', padding:'10px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.88rem', outline:'none', resize:'vertical', boxSizing:'border-box', marginBottom:16 }} />
+                )}
+                <div style={{ display:'flex', gap:10 }}>
+                  <button onClick={submitReport} disabled={!reportReason || reportSending}
+                    style={{ flex:1, padding:'11px', borderRadius:10, border:'none', background:(!reportReason||reportSending)?'#9ca3af':'#dc2626', color:'white', fontWeight:700, fontFamily:'var(--font-body)', cursor:(!reportReason||reportSending)?'not-allowed':'pointer' }}>
+                    {reportSending ? 'Submitting…' : 'Submit Report'}
+                  </button>
+                  <button onClick={() => setReportPost(null)}
+                    style={{ padding:'11px 20px', borderRadius:10, border:'1.5px solid #e2e8f0', background:'white', color:'var(--text-mid)', fontWeight:600, fontFamily:'var(--font-body)', cursor:'pointer' }}>
+                    Cancel
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       {showProfile && <ProfileModal profile={profile} onClose={()=>setShowProfile(false)} onUpdate={updateProfile} />}
 
       <style>{`
