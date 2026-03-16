@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { auditLog } from '../lib/auditLog'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const POST_TYPES = [
   { id:'update',    label:'📝 Update',    color:'var(--brand-light)' },
@@ -246,6 +246,8 @@ function AuthModal({ onClose }) {
     setLoading(true)
     const error = await verifyOtp(email, otpValue)
     if (error) { setErr('Invalid or expired code. Please try again.'); setLoading(false); return }
+    // Flag new user so Timeline shows guidelines popup
+    sessionStorage.setItem('ccgm_new_user_guides', '1')
     onClose()
   }
 
@@ -599,6 +601,13 @@ export default function Timeline() {
   const [postType, setPostType] = useState('update')
   const [posting, setPosting]   = useState(false)
   const [showAuth, setShowAuth] = useState(false)
+  // Guidelines banner — dismissed per session; new-user popup — shown once after signup
+  const [guidesBannerDismissed, setGuidesBannerDismissed] = useState(
+    () => typeof window !== 'undefined' && !!sessionStorage.getItem('ccgm_guides_dismissed')
+  )
+  const [showNewUserGuides, setShowNewUserGuides] = useState(
+    () => typeof window !== 'undefined' && !!sessionStorage.getItem('ccgm_new_user_guides')
+  )
   const [showProfile, setShowProfile] = useState(false)
   const listRef = useRef(null)
 
@@ -832,6 +841,29 @@ export default function Timeline() {
 
         {/* Posts */}
         <div ref={listRef}>
+
+          {/* ── Community Guidelines Banner ── */}
+          {!guidesBannerDismissed && (
+            <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', borderRadius:14, padding:'16px 20px', marginBottom:18, display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+              <span style={{ fontSize:'1.4rem', flexShrink:0 }}>📖</span>
+              <div style={{ flex:1, minWidth:180 }}>
+                <div style={{ fontWeight:700, color:'white', fontSize:'0.92rem', marginBottom:3 }}>Community Guidelines</div>
+                <div style={{ color:'rgba(255,255,255,0.72)', fontSize:'0.8rem', lineHeight:1.5 }}>
+                  Keep this a Spirit-filled space. Read our guidelines to understand what's welcome here.
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:8, flexShrink:0 }}>
+                <Link to="/guidelines" style={{ padding:'7px 16px', borderRadius:20, background:'rgba(255,255,255,0.15)', color:'white', textDecoration:'none', fontSize:'0.78rem', fontWeight:700, border:'1px solid rgba(255,255,255,0.25)', backdropFilter:'blur(8px)' }}>
+                  Read Guidelines →
+                </Link>
+                <button onClick={() => { sessionStorage.setItem('ccgm_guides_dismissed','1'); setGuidesBannerDismissed(true) }}
+                  style={{ padding:'7px 12px', borderRadius:20, background:'none', color:'rgba(255,255,255,0.6)', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', fontSize:'0.78rem', fontWeight:600 }}>
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+
           {loading && (
             <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
               <div style={{fontSize:'2rem',marginBottom:12,animation:'pulse 1.5s infinite'}}>🌐</div>
@@ -852,6 +884,49 @@ export default function Timeline() {
       </div>
 
       {showAuth && <AuthModal onClose={()=>setShowAuth(false)} />}
+
+      {/* ── New User Guidelines Popup ── */}
+      {showNewUserGuides && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.65)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9500, padding:20 }}>
+          <div style={{ background:'white', borderRadius:20, width:'100%', maxWidth:460, boxShadow:'0 32px 80px rgba(0,0,0,0.4)', overflow:'hidden' }}>
+            {/* Header */}
+            <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'28px 28px 24px', textAlign:'center', position:'relative' }}>
+              <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity:0.05, fontSize:'8rem', pointerEvents:'none' }}>✝</div>
+              <div style={{ fontSize:'2.5rem', marginBottom:12 }}>🙏</div>
+              <h2 style={{ fontFamily:'var(--font-display)', color:'white', fontSize:'1.4rem', margin:'0 0 8px', fontWeight:800 }}>Welcome to CCG World!</h2>
+              <p style={{ color:'rgba(255,255,255,0.75)', fontSize:'0.88rem', margin:0, lineHeight:1.6 }}>
+                Before you dive in, please take a moment to read our Community Guidelines.
+              </p>
+            </div>
+            {/* Body */}
+            <div style={{ padding:'24px 28px' }}>
+              <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:22 }}>
+                {[
+                  ['✝️', 'Honour God in all your posts and interactions'],
+                  ['💬', 'Speak the truth in love — disagreements are fine, hostility is not'],
+                  ['🚫', 'No spam, harassment, false info, or inappropriate content'],
+                  ['🚩', 'Use the report button if you see a violation — don\'t engage'],
+                ].map(([icon, text]) => (
+                  <div key={text} style={{ display:'flex', alignItems:'flex-start', gap:12, padding:'10px 14px', background:'var(--brand-pale,#e8f5e9)', borderRadius:10 }}>
+                    <span style={{ fontSize:'1rem', flexShrink:0, marginTop:1 }}>{icon}</span>
+                    <span style={{ fontSize:'0.86rem', color:'var(--text-dark)', lineHeight:1.55 }}>{text}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+                <Link to="/guidelines" onClick={() => { sessionStorage.removeItem('ccgm_new_user_guides'); setShowNewUserGuides(false) }}
+                  style={{ display:'block', textAlign:'center', padding:'12px', borderRadius:10, background:'white', color:'var(--brand-mid)', fontWeight:700, fontSize:'0.9rem', textDecoration:'none', border:'1.5px solid var(--brand-mid)' }}>
+                  📖 Read Full Guidelines
+                </Link>
+                <button onClick={() => { sessionStorage.removeItem('ccgm_new_user_guides'); setShowNewUserGuides(false) }}
+                  style={{ padding:'12px', borderRadius:10, border:'none', background:'linear-gradient(135deg,var(--brand-base),var(--brand-mid))', color:'white', fontWeight:700, fontFamily:'var(--font-body)', cursor:'pointer', fontSize:'0.9rem' }}>
+                  I Understand — Take Me to the Timeline →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Report Modal ── */}
       {reportPost && (

@@ -24,6 +24,7 @@ import Studio     from './pages/Studio'
 import Profile    from './pages/Profile'
 import Search       from './pages/Search'
 import Certificate  from './pages/Certificate'
+import Guidelines  from './pages/Guidelines'
 import Verify       from './pages/Verify'
 import SuspensionNotice from './components/SuspensionNotice'
 
@@ -55,6 +56,7 @@ function AppInner() {
           <Route path="/search"          element={<Search />} />
           <Route path="/certificate"      element={<Certificate />} />
           <Route path="/verify"           element={<Verify />} />
+          <Route path="/guidelines"       element={<Guidelines />} />
         </Routes>
       </main>
       <Footer />
