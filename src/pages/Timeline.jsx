@@ -758,8 +758,6 @@ export default function Timeline() {
     setReportSending(false)
     setReportDone(true)
   }
-    await loadPosts()
-  }
 
   if (authLoading) return <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center'}}>⏳</div>
 
