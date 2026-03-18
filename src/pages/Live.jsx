@@ -123,10 +123,20 @@ function LiveChat({ isLive }) {
   useEffect(() => {
     if (!open) return
     loadMessages()
-    const sub = supabase.channel('live-chat')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat' }, () => loadMessages())
-      .subscribe()
-    return () => supabase.removeChannel(sub)
+    // Poll every 5 seconds as fallback (works even without realtime enabled on table)
+    const pollId = setInterval(loadMessages, 5000)
+    // Also try realtime
+    let sub = null
+    try {
+      sub = supabase.channel('live-chat-' + Date.now())
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat' },
+          () => loadMessages())
+        .subscribe()
+    } catch(_) {}
+    return () => {
+      clearInterval(pollId)
+      if (sub) supabase.removeChannel(sub)
+    }
   }, [open])
 
   useEffect(() => {
@@ -285,11 +295,22 @@ export default function Live() {
   const description = settings?.liveDescription || ''
   const schedule    = settings?.schedule || []
   const nextService = getNextService(schedule)
+  const ttUrl       = settings?.tiktokUrl || ''
   const hasYT = !!ytUrl
   const hasFB = !!fbUrl
+  const hasTT = !!ttUrl
   const ytId = ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|live\/|embed\/))([^?&\s]+)/)?.[1]
   const ytEmbed = ytId ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0` : null
   const fbEmbed = fbUrl ? `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(fbUrl)}&width=800&show_text=false&autoplay=true` : null
+  // TikTok live embed — extract video/live ID
+  const ttId = ttUrl.match(/tiktok\.com\/@[^/]+\/(?:video|live)\/([0-9]+)/)?.[1]
+  const ttUser = ttUrl.match(/tiktok\.com\/@([^/\?]+)/)?.[1]
+  // TikTok embeds via their oembed iframe
+  const ttEmbed = ttId
+    ? `https://www.tiktok.com/embed/v2/${ttId}`
+    : ttUser
+    ? `https://www.tiktok.com/embed/@${ttUser}/live`
+    : null
 
   if (loading) return (
     <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--brand-deep)',color:'white',flexDirection:'column',gap:16}}>
@@ -335,16 +356,20 @@ export default function Live() {
         {isLive && (hasYT || hasFB) && (
           <div style={{marginBottom:40}}>
             <div style={{position:'relative',paddingBottom:'56.25%',height:0,borderRadius:16,overflow:'hidden',boxShadow:'0 24px 64px rgba(0,0,0,0.3)',border:'2px solid #dc2626'}}>
-              {(activeTab==='youtube'||!hasFB) && ytEmbed && (
+              {(activeTab==='youtube'||(!hasFB&&activeTab!=='tiktok')) && ytEmbed && (
                 <iframe src={ytEmbed} title="Live Stream" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} />
               )}
               {(activeTab==='facebook'||!hasYT) && fbEmbed && (
                 <iframe src={fbEmbed} title="Live Stream - Facebook" allow="autoplay;clipboard-write;encrypted-media;picture-in-picture;web-share" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} />
               )}
+              {activeTab==='tiktok' && ttEmbed && (
+                <iframe src={ttEmbed} title="Live Stream - TikTok" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} sandbox="allow-scripts allow-same-origin allow-popups" />
+              )}
             </div>
             <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:16,flexWrap:'wrap'}}>
               {ytUrl && <a href={ytUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#ff0000',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>▶ Watch on YouTube</a>}
               {fbUrl && <a href={fbUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#1877f2',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>📘 Watch on Facebook</a>}
+              {ttUrl && <a href={ttUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#010101',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>♪ Watch on TikTok</a>}
             </div>
           </div>
         )}

@@ -14,6 +14,7 @@ const DEFAULT = {
   liveDescription: 'Join us live as we worship together.',
   youtubeUrl: '',
   facebookUrl: '',
+  tiktokUrl: '',
   schedule: [
     { day:'Sunday',    name:'Meetings of Different Bodies', time:'', icon:'🤝', broadcast:false },
     { day:'Monday',    name:"Children's Prayer",            time:'', icon:'🙏', broadcast:false },
@@ -155,6 +156,10 @@ export default function AdminLive() {
             <div className="form-group" style={{margin:0}}>
               <label>📘 Facebook Live URL</label>
               <input value={data.facebookUrl} onChange={e=>setData(d=>({...d,facebookUrl:e.target.value}))} placeholder="https://facebook.com/..." />
+            </div>
+            <div className="form-group">
+              <label>♪ TikTok Live URL</label>
+              <input value={data.tiktokUrl||''} onChange={e=>setData(d=>({...d,tiktokUrl:e.target.value}))} placeholder="https://www.tiktok.com/@yourhandle/live" />
               <small style={{color:'var(--text-light)',fontSize:'0.74rem'}}>Paste the Facebook live video URL</small>
             </div>
           </div>
