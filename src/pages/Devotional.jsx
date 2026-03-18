@@ -18,14 +18,12 @@ function loadCache() {
 }
 
 function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data })) } catch {}
+  try {
+    localStorage.removeItem(CACHE_KEY)
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data }))
+  } catch {}
 }
 
-function cacheIsStale(cached, fresh) {
-  if (!cached || cached.length !== fresh.length) return true
-  const cachedMap = Object.fromEntries(cached.map(d => [d.id, d.updated_at || d.date]))
-  return fresh.some(d => cachedMap[d.id] !== (d.updated_at || d.date))
-}
 
 function fmt(dateStr) {
   if (!dateStr) return ''
@@ -157,7 +155,7 @@ export default function Devotional() {
         .eq('published', true)
         .order('date', { ascending: false })
       if (data && data.length > 0) {
-        if (cacheIsStale(cached, data)) saveCache(data)
+        saveCache(data)
         setDevs(data)
         setSelected(todaysDev(data))
         setOffline(false)

@@ -16,16 +16,12 @@ function loadCache() {
 }
 
 function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data })) } catch {}
+  try {
+    localStorage.removeItem(CACHE_KEY)
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data }))
+  } catch {}
 }
 
-// Compare fresh data to cache — return true if anything is new/changed
-function cacheIsStale(cached, fresh) {
-  if (!cached || cached.length !== fresh.length) return true
-  // Check if any lesson id or updated_at differs
-  const cachedMap = Object.fromEntries(cached.map(l => [l.id, l.updated_at || l.lesson_date]))
-  return fresh.some(l => cachedMap[l.id] !== (l.updated_at || l.lesson_date))
-}
 
 function fmt(d) {
   if (!d) return ''
@@ -142,10 +138,7 @@ export default function SabbathSchool() {
         .select('*').eq('published', true)
         .order('lesson_date', { ascending: false })
       if (data && data.length > 0) {
-        // If fresh data differs from cache, bust old cache and write new
-        if (cacheIsStale(cached, data)) {
-          saveCache(data)
-        }
+        saveCache(data)
         setLessons(data)
         // Always recompute correct lesson from fresh data
         setSelected(thisWeekLesson(data))
