@@ -24,39 +24,6 @@ function saveCache(data) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() })) } catch {}
 }
 
-function getMonthDay() {
-  const d = new Date()
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  return `${months[d.getMonth()]} ${d.getDate()}`
-}
-
-// Parse a "Jan 5" or "2025-01-05" style date string into a comparable Date (midnight local)
-function parseDevDate(dateStr) {
-  if (!dateStr) return null
-  // ISO format
-  if (/^\d{4}-/.test(dateStr)) return new Date(dateStr + 'T00:00:00')
-  // "Jan 5" or "Jan 05"
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  const parts = dateStr.trim().split(/\s+/)
-  if (parts.length < 2) return null
-  const month = months.indexOf(parts[0])
-  const day = parseInt(parts[1], 10)
-  if (month === -1 || isNaN(day)) return null
-  const now = new Date()
-  // Use current year; if date would be far in the future, try previous year
-  const d = new Date(now.getFullYear(), month, day)
-  return d
-}
-
-// Returns true if the devotional's date is today or in the past
-function isAvailableToday(dateStr) {
-  const devDate = parseDevDate(dateStr)
-  if (!devDate) return true // no date = always show
-  const today = new Date()
-  today.setHours(23, 59, 59, 999) // end of today
-  return devDate <= today
-}
-
 function fmt(dateStr) {
   if (!dateStr) return ''
   // Handle "Jan 1", "Jan 01" style dates directly
@@ -111,15 +78,43 @@ function ReadingContent({ blocks, fontSize }) {
   )
 }
 
-function todaysDev(devs, today) {
-  // Only pick from devotionals that are available (today or past)
-  const available = devs.filter(d => isAvailableToday(d.date))
-  return available.find(d => d.date === today) || available[0] || null
+// Normalise any date string to YYYY-MM-DD for comparison
+function toISO(dateStr) {
+  if (!dateStr) return null
+  if (/^\d{4}-/.test(dateStr)) return dateStr.slice(0,10)
+  // "Jan 5" or "Mar 18" style — no year stored, use current year
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const parts = dateStr.trim().split(/\s+/)
+  if (parts.length < 2) return null
+  const m = months.indexOf(parts[0])
+  const d = parseInt(parts[1], 10)
+  if (m === -1 || isNaN(d)) return null
+  const year = new Date().getFullYear()
+  return `${year}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+}
+
+function todayISO() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+}
+
+function todaysDev(devs) {
+  if (!devs?.length) return null
+  const today = todayISO()
+  // All devs past or equal to today (available)
+  const available = devs.filter(d => {
+    const iso = toISO(d.date)
+    return !iso || iso <= today
+  })
+  if (!available.length) return devs[0] // fallback: show something
+  // Prefer exact match for today
+  const exact = available.find(d => toISO(d.date) === today)
+  if (exact) return exact
+  // Otherwise most recent past entry (available is already ordered desc from DB)
+  return available[0]
 }
 
 export default function Devotional() {
-  const today = getMonthDay()
-
   const [devs, setDevs]       = useState([])
   const [loading, setLoading] = useState(true)
   const [offline, setOffline] = useState(false)
@@ -160,7 +155,7 @@ export default function Devotional() {
         .order('date', { ascending: false })
       if (data && data.length > 0) {
         setDevs(data)
-        setSelected(prev => prev ? (data.find(d => d.id === prev.id) || todaysDev(data, today)) : todaysDev(data, today))
+        setSelected(prev => prev ? (data.find(d => d.id === prev.id) || todaysDev(data)) : todaysDev(data))
         saveCache(data)
         setOffline(false)
       } else if (!cached || cached.length === 0) {
@@ -177,7 +172,7 @@ export default function Devotional() {
     const cached = loadCache(true)
     if (cached && cached.length > 0) {
       setDevs(cached)
-      setSelected(todaysDev(cached, today))
+      setSelected(todaysDev(cached))
       setLoading(false)
     }
     fetchFresh(cached)
@@ -190,8 +185,11 @@ export default function Devotional() {
     if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
   }, [selected])
 
-  // All devs are cached (including future) but only past+today are visible
-  const visibleDevs = devs.filter(d => isAvailableToday(d.date))
+  // Show all past + today in the list; filter out future-dated ones
+  const visibleDevs = devs.filter(d => {
+    const iso = toISO(d.date)
+    return !iso || iso <= todayISO()
+  })
 
   const categories = ['All', ...new Set(visibleDevs.map(d => d.category).filter(Boolean))]
 
@@ -213,7 +211,7 @@ export default function Devotional() {
   const selectedIdx = filtered.findIndex(d => d.id === selected?.id)
   const prevDev     = filtered[selectedIdx + 1]
   const nextDev     = filtered[selectedIdx - 1]
-  const isToday     = selected?.date === today
+  const isToday     = toISO(selected?.date) === todayISO()
 
   if (loading) return (
     <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>

@@ -37,21 +37,21 @@ function thisWeekLesson(lessons) {
   thisSaturday.setDate(today.getDate() + daysUntilSaturday)
   thisSaturday.setHours(0,0,0,0)
 
+  // Only consider lessons up to and including this Saturday (no future weeks)
+  const available = lessons.filter(l => {
+    const d = new Date(l.lesson_date + 'T00:00:00')
+    return d <= thisSaturday
+  })
+  if (!available.length) return null
+
   // Try to find a lesson whose date matches this week's Saturday exactly
-  const thisWeek = lessons.find(l =>
+  const thisWeek = available.find(l =>
     new Date(l.lesson_date + 'T00:00:00').getTime() === thisSaturday.getTime()
   )
   if (thisWeek) return thisWeek
 
-  // Fallback: pick the closest lesson to today's date (past preferred)
-  const todayMs = today.getTime()
-  return [...lessons].sort((a, b) => {
-    const aMs = new Date(a.lesson_date + 'T00:00:00').getTime()
-    const bMs = new Date(b.lesson_date + 'T00:00:00').getTime()
-    const aDiff = aMs <= todayMs ? todayMs - aMs : (aMs - todayMs) * 2
-    const bDiff = bMs <= todayMs ? todayMs - bMs : (bMs - todayMs) * 2
-    return aDiff - bDiff
-  })[0]
+  // Fallback: closest past lesson
+  return available[0] // already ordered desc from DB
 }
 
 const parseBlocks = (text) => {
@@ -157,8 +157,20 @@ export default function SabbathSchool() {
     fetchFresh(cached)
   }, [fetchFresh])
 
+  // Only show lessons up to and including this week's Saturday
+  const thisSat = (() => {
+    const today = new Date(); today.setHours(0,0,0,0)
+    const dow = today.getDay()
+    const sat = new Date(today)
+    sat.setDate(today.getDate() + (dow === 6 ? 0 : 6 - dow))
+    sat.setHours(23,59,59,999)
+    return sat
+  })()
+
   const quarters = [...new Set(lessons.map(l => l.quarter).filter(Boolean))].sort().reverse()
   const filtered = lessons.filter(l => {
+    const lessonDate = new Date(l.lesson_date + 'T00:00:00')
+    if (lessonDate > thisSat) return false  // hide future weeks
     const matchQ = quarter === 'all' || l.quarter === quarter
     const matchS = !search || l.title.toLowerCase().includes(search.toLowerCase()) ||
       (l.scripture || '').toLowerCase().includes(search.toLowerCase())
