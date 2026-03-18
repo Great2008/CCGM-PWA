@@ -108,7 +108,7 @@ function todaysDev(devs) {
   })
   if (!available.length) return devs[0] // fallback: show something
   // Prefer exact match for today
-  const exact = available.find(d => toISO(d.date) === today)
+  const exact = available.find(d => toISO(d.date) === todayISO())
   if (exact) return exact
   // Otherwise most recent past entry (available is already ordered desc from DB)
   return available[0]
@@ -166,7 +166,7 @@ export default function Devotional() {
       else setOffline(true)
     }
     if (!cached || cached.length === 0) setLoading(false)
-  }, [today])
+  }, [])
 
   useEffect(() => {
     const cached = loadCache(true)
@@ -342,7 +342,7 @@ export default function Devotional() {
               )}
               {filtered.map(d => {
                 const isSelected = selected?.id === d.id
-                const isTod = d.date === today
+                const isTod = toISO(d.date) === todayISO()
                 return (
                   <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
                     style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `4px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}` }}>
@@ -387,7 +387,7 @@ export default function Devotional() {
                     color: showBookmarks ? 'var(--brand-deep)' : 'var(--text-mid)',
                     fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
                   }}>⭐ Saved ({bookmarked.length})</button>
-                  <button onClick={() => { const d = devs.find(d => d.date === today); if (d) selectDev(d) }}
+                  <button onClick={() => { const d = devs.find(d => toISO(d.date) === todayISO()); if (d) selectDev(d) else selectDev(todaysDev(devs)) }}
                     style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1.5px solid var(--brand-light)', background: 'var(--brand-pale)', color: 'var(--brand-mid)', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                     📅 Today
                   </button>
@@ -396,7 +396,7 @@ export default function Devotional() {
               <div style={{ maxHeight: 520, overflowY: 'auto' }}>
                 {filtered.map(d => {
                   const isSelected = selected?.id === d.id
-                  const isTod = d.date === today
+                  const isTod = toISO(d.date) === todayISO()
                   return (
                     <div key={d.id} id={'dev-item-' + d.id} className="dev-item" onClick={() => selectDev(d)}
                       style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSelected ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `3px solid ${isSelected ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>

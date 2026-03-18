@@ -27,31 +27,39 @@ function fmt(d) {
   return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
 }
 
+function getThisSaturday() {
+  const today = new Date(); today.setHours(0,0,0,0)
+  const dow = today.getDay() // 0=Sun ... 6=Sat
+  const sat = new Date(today)
+  sat.setDate(today.getDate() + (dow === 6 ? 0 : 6 - dow))
+  sat.setHours(0,0,0,0)
+  return sat
+}
+
 function thisWeekLesson(lessons) {
   if (!lessons?.length) return null
-  const today = new Date(); today.setHours(0,0,0,0)
-  // Find this week's Saturday (day 6). If today IS Saturday use today.
-  const thisSaturday = new Date(today)
-  const dayOfWeek = today.getDay() // 0=Sun,1=Mon,...,6=Sat
-  const daysUntilSaturday = dayOfWeek === 6 ? 0 : 6 - dayOfWeek
-  thisSaturday.setDate(today.getDate() + daysUntilSaturday)
-  thisSaturday.setHours(0,0,0,0)
 
-  // Only consider lessons up to and including this Saturday (no future weeks)
+  const thisSaturday = getThisSaturday()
+  const thisSatMs = thisSaturday.getTime()
+
+  // 1. Only consider lessons whose date ≤ this Saturday (no future weeks)
   const available = lessons.filter(l => {
     const d = new Date(l.lesson_date + 'T00:00:00')
-    return d <= thisSaturday
+    d.setHours(0,0,0,0)
+    return d.getTime() <= thisSatMs
   })
   if (!available.length) return null
 
-  // Try to find a lesson whose date matches this week's Saturday exactly
-  const thisWeek = available.find(l =>
-    new Date(l.lesson_date + 'T00:00:00').getTime() === thisSaturday.getTime()
+  // 2. Prefer exact match for this Saturday
+  const exact = available.find(l =>
+    new Date(l.lesson_date + 'T00:00:00').setHours(0,0,0,0) === thisSatMs
   )
-  if (thisWeek) return thisWeek
+  if (exact) return exact
 
-  // Fallback: closest past lesson
-  return available[0] // already ordered desc from DB
+  // 3. Fallback: most recent past lesson (sort desc by date)
+  return [...available].sort((a, b) =>
+    new Date(b.lesson_date + 'T00:00:00') - new Date(a.lesson_date + 'T00:00:00')
+  )[0]
 }
 
 const parseBlocks = (text) => {
@@ -158,14 +166,8 @@ export default function SabbathSchool() {
   }, [fetchFresh])
 
   // Only show lessons up to and including this week's Saturday
-  const thisSat = (() => {
-    const today = new Date(); today.setHours(0,0,0,0)
-    const dow = today.getDay()
-    const sat = new Date(today)
-    sat.setDate(today.getDate() + (dow === 6 ? 0 : 6 - dow))
-    sat.setHours(23,59,59,999)
-    return sat
-  })()
+  const thisSat = getThisSaturday()
+  thisSat.setHours(23,59,59,999)
 
   const quarters = [...new Set(lessons.map(l => l.quarter).filter(Boolean))].sort().reverse()
   const filtered = lessons.filter(l => {
