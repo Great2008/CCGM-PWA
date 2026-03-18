@@ -387,7 +387,7 @@ export default function Devotional() {
                     color: showBookmarks ? 'var(--brand-deep)' : 'var(--text-mid)',
                     fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)',
                   }}>⭐ Saved ({bookmarked.length})</button>
-                  <button onClick={() => { const d = devs.find(d => toISO(d.date) === todayISO()); if (d) selectDev(d) else selectDev(todaysDev(devs)) }}
+                  <button onClick={() => { const d = devs.find(d => toISO(d.date) === todayISO()); if (d) { selectDev(d) } else { selectDev(todaysDev(devs)) } }}
                     style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1.5px solid var(--brand-light)', background: 'var(--brand-pale)', color: 'var(--brand-mid)', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                     📅 Today
                   </button>
