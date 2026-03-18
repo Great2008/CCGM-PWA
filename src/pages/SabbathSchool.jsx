@@ -2,24 +2,29 @@ import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 
 const CACHE_KEY = 'ccg-sabbath-lessons'
-const CACHE_TTL = 24 * 60 * 60 * 1000
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
-function loadCache(ignoreExpiry = false) {
+function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
     const data = Array.isArray(parsed) ? parsed : parsed.data
-    const ts   = Array.isArray(parsed) ? 0      : parsed.ts
     if (!data || data.length === 0) return null
-    if (!ignoreExpiry && ts && Date.now() - ts > CACHE_TTL && navigator.onLine) return null
     return data
   } catch { return null }
 }
 
 function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() })) } catch {}
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data })) } catch {}
+}
+
+// Compare fresh data to cache — return true if anything is new/changed
+function cacheIsStale(cached, fresh) {
+  if (!cached || cached.length !== fresh.length) return true
+  // Check if any lesson id or updated_at differs
+  const cachedMap = Object.fromEntries(cached.map(l => [l.id, l.updated_at || l.lesson_date]))
+  return fresh.some(l => cachedMap[l.id] !== (l.updated_at || l.lesson_date))
 }
 
 function fmt(d) {
@@ -137,23 +142,26 @@ export default function SabbathSchool() {
         .select('*').eq('published', true)
         .order('lesson_date', { ascending: false })
       if (data && data.length > 0) {
+        // If fresh data differs from cache, bust old cache and write new
+        if (cacheIsStale(cached, data)) {
+          saveCache(data)
+        }
         setLessons(data)
-        // Always re-run thisWeekLesson on fresh data — corrects wrong cached selection
+        // Always recompute correct lesson from fresh data
         setSelected(thisWeekLesson(data))
-        saveCache(data)
         setOffline(false)
       }
-      // If fetch returns empty but we have cache, keep showing cached — don't go offline
+      // If fetch returns empty but we have cache, silently keep cached data
     } catch {
-      // Network error — only show offline screen if we have nothing cached at all
-      if (!cached || cached.length === 0) { setOffline(true) }
+      // Network error — only show offline if truly nothing cached
+      if (!cached || cached.length === 0) setOffline(true)
     } finally {
       setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    const cached = loadCache(true)
+    const cached = loadCache()
     if (cached && cached.length > 0) {
       setLessons(cached)
       // Use cached data immediately for fast render

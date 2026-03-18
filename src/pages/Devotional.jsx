@@ -3,25 +3,28 @@ import supabase from '../lib/supabase'
 import ShareButton from '../components/ShareButton'
 
 const CACHE_KEY     = 'ccgworld_devotionals'
-const CACHE_TTL     = 24 * 60 * 60 * 1000
 const BOOKMARKS_KEY = 'ccgworld_dev_bookmarks'
 const FONT_SIZE_KEY = 'ccgworld_dev_fontsize'
 
-function loadCache(ignoreExpiry = false) {
+function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
     const data = Array.isArray(parsed) ? parsed : parsed.data
-    const ts   = Array.isArray(parsed) ? 0      : parsed.ts
     if (!data || data.length === 0) return null
-    if (!ignoreExpiry && ts && Date.now() - ts > CACHE_TTL && navigator.onLine) return null
     return data
   } catch { return null }
 }
 
 function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() })) } catch {}
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data })) } catch {}
+}
+
+function cacheIsStale(cached, fresh) {
+  if (!cached || cached.length !== fresh.length) return true
+  const cachedMap = Object.fromEntries(cached.map(d => [d.id, d.updated_at || d.date]))
+  return fresh.some(d => cachedMap[d.id] !== (d.updated_at || d.date))
 }
 
 function fmt(dateStr) {
@@ -154,22 +157,20 @@ export default function Devotional() {
         .eq('published', true)
         .order('date', { ascending: false })
       if (data && data.length > 0) {
+        if (cacheIsStale(cached, data)) saveCache(data)
         setDevs(data)
-        setSelected(prev => prev ? (data.find(d => d.id === prev.id) || todaysDev(data)) : todaysDev(data))
-        saveCache(data)
+        setSelected(todaysDev(data))
         setOffline(false)
-      } else if (!cached || cached.length === 0) {
-        setLoading(false)
       }
     } catch {
-      if (!cached || cached.length === 0) { setOffline(true); setLoading(false) }
-      else setOffline(true)
+      if (!cached || cached.length === 0) setOffline(true)
+    } finally {
+      setLoading(false)
     }
-    if (!cached || cached.length === 0) setLoading(false)
   }, [])
 
   useEffect(() => {
-    const cached = loadCache(true)
+    const cached = loadCache()
     if (cached && cached.length > 0) {
       setDevs(cached)
       setSelected(todaysDev(cached))
