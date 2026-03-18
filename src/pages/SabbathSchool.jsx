@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 
-const CACHE_KEY = 'ccg-sabbath-lessons-v2'
+const CACHE_KEY = 'ccg-sabbath-lessons'
 const CACHE_TTL = 24 * 60 * 60 * 1000
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
@@ -138,30 +138,29 @@ export default function SabbathSchool() {
         .order('lesson_date', { ascending: false })
       if (data && data.length > 0) {
         setLessons(data)
-        setSelected(prev => {
-          if (!prev) return thisWeekLesson(data)
-          return data.find(l => l.id === prev.id) || thisWeekLesson(data)
-        })
+        // Always re-run thisWeekLesson on fresh data — corrects wrong cached selection
+        setSelected(thisWeekLesson(data))
         saveCache(data)
         setOffline(false)
-      } else {
-        if (!cached || cached.length === 0) setLoading(false)
-        setOffline(true)
       }
+      // If fetch returns empty but we have cache, keep showing cached — don't go offline
     } catch {
-      if (!cached || cached.length === 0) { setOffline(true); setLoading(false) }
-      else { setOffline(true) }
+      // Network error — only show offline screen if we have nothing cached at all
+      if (!cached || cached.length === 0) { setOffline(true) }
+    } finally {
+      setLoading(false)
     }
-    if (!cached || cached.length === 0) setLoading(false)
   }, [])
 
   useEffect(() => {
     const cached = loadCache(true)
     if (cached && cached.length > 0) {
       setLessons(cached)
+      // Use cached data immediately for fast render
       setSelected(thisWeekLesson(cached))
       setLoading(false)
     }
+    // Always fetch fresh — will update selection if new lesson available
     fetchFresh(cached)
   }, [fetchFresh])
 
