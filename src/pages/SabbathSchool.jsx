@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 
-const CACHE_KEY = 'ccg-sabbath-lessons'
+const CACHE_KEY = 'ccg-sabbath-lessons-v2'
 const CACHE_TTL = 24 * 60 * 60 * 1000
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
@@ -28,37 +28,37 @@ function fmt(d) {
 }
 
 function getThisSaturday() {
-  const today = new Date(); today.setHours(0,0,0,0)
+  const today = new Date()
   const dow = today.getDay() // 0=Sun ... 6=Sat
   const sat = new Date(today)
   sat.setDate(today.getDate() + (dow === 6 ? 0 : 6 - dow))
-  sat.setHours(0,0,0,0)
-  return sat
+  // Return as YYYY-MM-DD string — avoids all timezone issues
+  const y = sat.getFullYear()
+  const m = String(sat.getMonth() + 1).padStart(2, '0')
+  const d = String(sat.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 function thisWeekLesson(lessons) {
   if (!lessons?.length) return null
 
-  const thisSaturday = getThisSaturday()
-  const thisSatMs = thisSaturday.getTime()
+  const thisSaturdayStr = getThisSaturday() // e.g. "2026-03-21"
 
-  // 1. Only consider lessons whose date ≤ this Saturday (no future weeks)
-  const available = lessons.filter(l => {
-    const d = new Date(l.lesson_date + 'T00:00:00')
-    d.setHours(0,0,0,0)
-    return d.getTime() <= thisSatMs
-  })
+  // 1. Only consider lessons whose date ≤ this Saturday's date string
+  const available = lessons.filter(l =>
+    l.lesson_date && l.lesson_date.slice(0, 10) <= thisSaturdayStr
+  )
   if (!available.length) return null
 
-  // 2. Prefer exact match for this Saturday
+  // 2. Exact match for this Saturday
   const exact = available.find(l =>
-    new Date(l.lesson_date + 'T00:00:00').setHours(0,0,0,0) === thisSatMs
+    l.lesson_date.slice(0, 10) === thisSaturdayStr
   )
   if (exact) return exact
 
-  // 3. Fallback: most recent past lesson (sort desc by date)
+  // 3. Fallback: most recent past lesson
   return [...available].sort((a, b) =>
-    new Date(b.lesson_date + 'T00:00:00') - new Date(a.lesson_date + 'T00:00:00')
+    b.lesson_date.localeCompare(a.lesson_date)
   )[0]
 }
 
@@ -166,13 +166,11 @@ export default function SabbathSchool() {
   }, [fetchFresh])
 
   // Only show lessons up to and including this week's Saturday
-  const thisSat = getThisSaturday()
-  thisSat.setHours(23,59,59,999)
+  const thisSat = getThisSaturday() // YYYY-MM-DD string
 
   const quarters = [...new Set(lessons.map(l => l.quarter).filter(Boolean))].sort().reverse()
   const filtered = lessons.filter(l => {
-    const lessonDate = new Date(l.lesson_date + 'T00:00:00')
-    if (lessonDate > thisSat) return false  // hide future weeks
+    if (!l.lesson_date || l.lesson_date.slice(0, 10) > thisSat) return false
     const matchQ = quarter === 'all' || l.quarter === quarter
     const matchS = !search || l.title.toLowerCase().includes(search.toLowerCase()) ||
       (l.scripture || '').toLowerCase().includes(search.toLowerCase())
