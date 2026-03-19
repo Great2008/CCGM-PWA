@@ -110,7 +110,17 @@ export default function AdminLog() {
   useEffect(() => { load() }, [load])
 
   if (!isSuperAdmin) return (
-    <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 0, padding: 32, textAlign: 'center' }}>
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
+      padding: 32, textAlign: 'center',
+      background: lockPhase === 'denied'
+        ? 'linear-gradient(135deg,#450a0a,#7f1d1d,#dc2626)'
+        : lockPhase === 'locked'
+        ? 'linear-gradient(135deg,#0a2612,#166534,#dc2626)'
+        : 'linear-gradient(135deg,#0a2612,#166534)',
+      transition: 'background 0.8s ease',
+    }}>
 
       <style>{`
         @keyframes shackle-open {
@@ -127,72 +137,92 @@ export default function AdminLog() {
         }
         @keyframes lock-shake {
           0%,100% { transform: translateX(0) rotate(0deg); }
-          15%     { transform: translateX(-6px) rotate(-4deg); }
-          30%     { transform: translateX(6px) rotate(4deg); }
-          45%     { transform: translateX(-5px) rotate(-3deg); }
-          60%     { transform: translateX(5px) rotate(3deg); }
-          75%     { transform: translateX(-3px) rotate(-2deg); }
-          90%     { transform: translateX(3px) rotate(2deg); }
+          15%     { transform: translateX(-8px) rotate(-5deg); }
+          30%     { transform: translateX(8px) rotate(5deg); }
+          45%     { transform: translateX(-6px) rotate(-4deg); }
+          60%     { transform: translateX(6px) rotate(4deg); }
+          75%     { transform: translateX(-4px) rotate(-2deg); }
+          90%     { transform: translateX(4px) rotate(2deg); }
         }
-        @keyframes lock-glow {
-          0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
-          50%     { box-shadow: 0 0 32px 8px rgba(220,38,38,0.35); }
+        @keyframes lock-glow-red {
+          0%,100% { box-shadow: 0 0 40px 10px rgba(220,38,38,0.4), 0 0 80px 20px rgba(220,38,38,0.15); }
+          50%     { box-shadow: 0 0 80px 24px rgba(220,38,38,0.7), 0 0 140px 40px rgba(220,38,38,0.3); }
         }
         @keyframes text-appear {
-          from { opacity: 0; transform: translateY(12px); }
+          from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes denied-pulse {
-          0%,100% { opacity: 1; }
-          50%     { opacity: 0.7; }
+          0%,100% { opacity: 1; transform: scale(1); }
+          50%     { opacity: 0.85; transform: scale(0.98); }
         }
-        .lock-icon-locking { animation: shackle-open 0.5s ease-in-out, shackle-close 0.6s ease-in-out 0.6s; }
-        .lock-icon-locked  { animation: lock-shake 0.6s ease-in-out, lock-glow 1.5s ease-in-out infinite; }
-        .lock-icon-denied  { animation: lock-glow 2s ease-in-out infinite; }
+        @keyframes ripple {
+          0%   { transform: scale(1); opacity: 0.6; }
+          100% { transform: scale(3.5); opacity: 0; }
+        }
+        .lock-locking  { animation: shackle-open 0.5s ease-in-out, shackle-close 0.6s ease-in-out 0.6s; }
+        .lock-locked   { animation: lock-shake 0.7s ease-in-out; }
+        .lock-denied   { animation: lock-glow-red 2s ease-in-out infinite; }
       `}</style>
+
+      {/* Ripple rings behind lock when denied */}
+      {lockPhase === 'denied' && (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+          {[0, 0.4, 0.8].map((delay, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              width: 120, height: 120, borderRadius: '50%',
+              border: '2px solid rgba(220,38,38,0.5)',
+              animation: `ripple 2s ease-out ${delay}s infinite`,
+            }} />
+          ))}
+        </div>
+      )}
 
       {/* Lock icon */}
       <div style={{
-        width: 96, height: 96, borderRadius: 24,
+        width: 110, height: 110, borderRadius: 28,
         background: lockPhase === 'denied'
-          ? 'linear-gradient(135deg,#7f1d1d,#dc2626)'
-          : 'linear-gradient(135deg,#0a2612,#166534)',
+          ? 'rgba(0,0,0,0.35)'
+          : 'rgba(255,255,255,0.1)',
+        backdropFilter: 'blur(12px)',
+        border: `2px solid ${lockPhase === 'denied' ? 'rgba(220,38,38,0.5)' : 'rgba(255,255,255,0.2)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '3.2rem', marginBottom: 28,
-        transition: 'background 0.6s ease',
-        cursor: 'default',
+        fontSize: '3.6rem', marginBottom: 36,
+        transition: 'all 0.6s ease',
+        position: 'relative', zIndex: 1,
       }}
-        className={`lock-icon-${lockPhase}`}
+        className={`lock-${lockPhase}`}
       >
         {lockPhase === 'locking' ? '🔓' : '🔒'}
       </div>
 
       {/* Phase text */}
       {lockPhase === 'locking' && (
-        <div style={{ animation: 'text-appear 0.3s ease', color: 'var(--text-light)', fontSize: '1rem', letterSpacing: '0.08em' }}>
+        <div style={{ animation: 'text-appear 0.3s ease', color: 'rgba(255,255,255,0.7)', fontSize: '1rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
           Checking clearance…
         </div>
       )}
 
       {lockPhase === 'locked' && (
         <div style={{ animation: 'text-appear 0.4s ease' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--brand-deep)', fontWeight: 900, marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'white', fontWeight: 900, marginBottom: 8 }}>
             Access Denied
           </div>
-          <div style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>Verifying credentials…</div>
+          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', letterSpacing: '0.08em' }}>Verifying credentials…</div>
         </div>
       )}
 
       {lockPhase === 'denied' && (
-        <div style={{ animation: 'text-appear 0.5s ease' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: '#dc2626', fontWeight: 900, marginBottom: 10, animation: 'denied-pulse 2s ease infinite' }}>
+        <div style={{ animation: 'text-appear 0.5s ease', position: 'relative', zIndex: 1 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,4vw,2.2rem)', color: 'white', fontWeight: 900, marginBottom: 14, animation: 'denied-pulse 2.5s ease infinite' }}>
             🚫 Authorised Users Only
           </div>
-          <div style={{ color: 'var(--text-mid)', fontSize: '0.9rem', lineHeight: 1.7, maxWidth: 320 }}>
-            This area is restricted to <strong>Super Admins</strong>.<br />
+          <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1rem', lineHeight: 1.8, maxWidth: 340, marginBottom: 28 }}>
+            This area is restricted to <strong style={{ color: 'white' }}>Super Admins</strong>.<br />
             You are not a Super Admin.
           </div>
-          <div style={{ marginTop: 20, padding: '10px 20px', borderRadius: 10, background: '#fff5f5', border: '1px solid #fecaca', display: 'inline-block', fontSize: '0.78rem', color: '#991b1b', fontFamily: 'monospace', letterSpacing: '0.06em' }}>
+          <div style={{ padding: '10px 24px', borderRadius: 10, background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(8px)', border: '1px solid rgba(220,38,38,0.4)', display: 'inline-block', fontSize: '0.78rem', color: '#fca5a5', fontFamily: 'monospace', letterSpacing: '0.1em' }}>
             CLEARANCE LEVEL: INSUFFICIENT
           </div>
         </div>
