@@ -23,10 +23,14 @@ function loadCache() {
   } catch { return null }
 }
 
-// Only update cache if lesson changed (different id or updated_at)
+// Only update cache if lesson changed (different id, updated_at, or body was empty before)
 function lessonChanged(cached, fresh) {
   if (!cached || !fresh) return true
-  return cached.id !== fresh.id || cached.updated_at !== fresh.updated_at
+  if (cached.id !== fresh.id) return true
+  if (cached.updated_at !== fresh.updated_at) return true
+  // Force refresh if cached body is empty but fresh has content
+  if (!cached.body && fresh.body) return true
+  return false
 }
 
 
@@ -163,8 +167,8 @@ export default function SabbathSchool() {
 
   useEffect(() => {
     const cachedLesson = loadCache()
-    if (cachedLesson) {
-      // Show cached lesson immediately while fetching fresh
+    if (cachedLesson && cachedLesson.body) {
+      // Only use cache if it has actual content
       setLessons([cachedLesson])
       setSelected(cachedLesson)
       setLoading(false)
