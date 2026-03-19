@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams, Link, useNavigate } from 'react-router-dom'
 import supabase from '../lib/supabase'
 
 export default function Verify() {
@@ -9,12 +9,16 @@ export default function Verify() {
   const [status, setStatus]   = useState('loading') // loading | valid | invalid
   const [member, setMember]   = useState(null)
   const [certType, setCertType] = useState('membership') // membership | birth
+  const [searchInput, setSearchInput] = useState('')
+  const [searching, setSearching] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!certId) { setStatus('invalid'); return }
 
     const isBirth = certId.startsWith('CCGB-')
-    setCertType(isBirth ? 'birth' : 'membership')
+    const isId    = certId.startsWith('CCG-ID-') || certId.startsWith('CCGID-')
+    setCertType(isBirth ? 'birth' : isId ? 'id' : 'membership')
 
     // Extract user ID prefix from cert ID (CCG-XXXXXXXX or CCGB-XXXXXXXX)
     const prefix = certId.replace(/^CCG[B]?-/, '').toLowerCase()
@@ -53,15 +57,40 @@ export default function Verify() {
     ? new Date(member.birthday).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })
     : ''
 
+  const handleSearch = (e) => {
+    e.preventDefault()
+    const id = searchInput.trim().toUpperCase()
+    if (!id) return
+    setSearching(true)
+    navigate('/verify?id=' + encodeURIComponent(id))
+  }
+
   return (
     <>
       <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(80px,12vw,110px) 5% 48px', textAlign: 'center' }}>
+        <div style={{ display:'flex', justifyContent:'center', marginBottom:16 }}>
+          <img src="/logo.png" alt="CCG World" style={{ width:64, height:64, objectFit:'contain' }} />
+        </div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.8rem,4vw,2.6rem)', color: 'white', margin: '0 0 10px' }}>
           🔍 Certificate Verification
         </h1>
-        <p style={{ color: 'rgba(255,255,255,0.7)', margin: 0 }}>
+        <p style={{ color: 'rgba(255,255,255,0.7)', margin: '0 0 32px' }}>
           Christian Church of God Mission — Official Verification Portal
         </p>
+
+        {/* Search form — always visible */}
+        <form onSubmit={handleSearch} style={{ display:'flex', gap:10, maxWidth:460, margin:'0 auto', flexWrap:'wrap', justifyContent:'center' }}>
+          <input
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            placeholder="Enter Certificate ID (e.g. CCG-55A6AA61)"
+            style={{ flex:1, minWidth:220, padding:'12px 18px', borderRadius:30, border:'none', fontFamily:'var(--font-body)', fontSize:'0.92rem', outline:'none', letterSpacing:'0.04em' }}
+          />
+          <button type="submit" disabled={!searchInput.trim()}
+            style={{ padding:'12px 28px', borderRadius:30, border:'none', background: searchInput.trim() ? '#d97706' : 'rgba(255,255,255,0.2)', color:'white', fontWeight:700, cursor: searchInput.trim() ? 'pointer' : 'default', fontFamily:'var(--font-body)', fontSize:'0.9rem', transition:'all 0.2s' }}>
+            Verify
+          </button>
+        </form>
       </div>
 
       <div className="container" style={{ maxWidth: 600, padding: '48px 5% 80px' }}>
@@ -86,7 +115,9 @@ export default function Verify() {
             <div style={{ background: '#fee2e2', borderRadius: 10, padding: '10px 16px', fontSize: '0.82rem', color: '#991b1b', fontFamily: 'monospace', marginBottom: 24 }}>
               ID: {certId || 'None provided'}
             </div>
-            <Link to="/" style={{ color: 'var(--brand-light)', fontWeight: 700, fontSize: '0.9rem' }}>← Back to CCG World</Link>
+            <p style={{ color:'#7f1d1d', fontSize:'0.84rem', lineHeight:1.6 }}>
+              Use the search box above to try a different certificate ID.
+            </p>
           </div>
         )}
 
@@ -134,11 +165,10 @@ export default function Verify() {
               <div style={{ padding: '20px 24px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   {[
-                    ['Certificate ID',  certId],
-                    ['Certificate Type', certType === 'birth' ? '🎂 Birth Certificate' : '🏅 Membership Certificate'],
-                    ['Church Branch',   branch],
-                    ['Member Since',    joinDate || 'N/A'],
-                    ...(certType === 'birth' && birthday ? [['Date of Birth', birthday]] : []),
+                    ['Certificate ID',   certId],
+                    ['Certificate Type', certType === 'birth' ? '🎂 Birth' : certType === 'id' ? '🪪 ID Card' : '🏅 Membership'],
+                    ['Full Name',        name],
+                    ['Church Branch',    branch],
                   ].map(([k, v]) => (
                     <div key={k} style={{ background: '#f1f5f9', borderRadius: 10, padding: '12px 14px' }}>
                       <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>{k}</div>
