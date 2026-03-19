@@ -4,12 +4,16 @@ import supabase from '../lib/supabase'
 const CACHE_KEY = 'ccg-sabbath-current'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
-// Only cache this week's lesson — tiny, always fits
 function saveCache(lesson) {
   try {
-    localStorage.removeItem(CACHE_KEY)
     localStorage.setItem(CACHE_KEY, JSON.stringify(lesson))
-  } catch(_) {}
+  } catch(_) {
+    // If full lesson is too large, store without body content as fallback
+    try {
+      const slim = { ...lesson, body: '', analysis: '', analysis_points: null }
+      localStorage.setItem(CACHE_KEY, JSON.stringify(slim))
+    } catch(_) {}
+  }
 }
 
 function loadCache() {
@@ -17,6 +21,12 @@ function loadCache() {
     const raw = localStorage.getItem(CACHE_KEY)
     return raw ? JSON.parse(raw) : null
   } catch { return null }
+}
+
+// Only update cache if lesson changed (different id or updated_at)
+function lessonChanged(cached, fresh) {
+  if (!cached || !fresh) return true
+  return cached.id !== fresh.id || cached.updated_at !== fresh.updated_at
 }
 
 
@@ -138,12 +148,13 @@ export default function SabbathSchool() {
         setLessons(data)
         const current = thisWeekLesson(data)
         setSelected(current)
-        // Only cache this week's lesson
-        if (current) saveCache(current)
+        // Only write cache if this week's lesson is new or updated
+        if (current && lessonChanged(cachedLesson, current)) {
+          saveCache(current)
+        }
         setOffline(false)
       }
     } catch {
-      // Network error — only show offline if nothing cached
       if (!cachedLesson) setOffline(true)
     } finally {
       setLoading(false)

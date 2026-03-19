@@ -1,5 +1,6 @@
-// CCG World Service Worker v5 — Full Offline PWA + Push Notifications
-const CACHE = 'ccgworld-v5'
+// CCG World Service Worker v6 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache
+const CACHE = 'ccgworld-v6'
+const API_CACHE = 'ccgworld-api-v1'
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
@@ -21,7 +22,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => k !== CACHE && k !== API_CACHE).map(k => caches.delete(k)))
     )
   )
   self.clients.claim()
@@ -31,6 +32,42 @@ self.addEventListener('fetch', e => {
   const { request } = e
   const url = new URL(request.url)
   if (request.method !== 'GET' || url.protocol === 'chrome-extension:') return
+
+  // Supabase API — cache sabbath_lessons and devotional posts for offline access
+  if (url.hostname.includes('supabase.co') && url.pathname.includes('/rest/v1/')) {
+    const isSabbath    = url.pathname.includes('sabbath_lessons')
+    const isDevotional = url.pathname.includes('posts') && url.search.includes('devotional')
+
+    if (isSabbath || isDevotional) {
+      e.respondWith((async () => {
+        try {
+          // Network first — always try to get fresh data
+          const res = await fetch(request.clone())
+          if (res && res.status === 200) {
+            // Only cache if response has content
+            const clone = res.clone()
+            const text = await clone.text()
+            if (text && text.length > 2) {
+              const apiCache = await caches.open(API_CACHE)
+              // Store with URL as key (includes query params)
+              apiCache.put(request.url, new Response(text, {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              }))
+            }
+          }
+          return res
+        } catch(_) {
+          // Offline — serve from API cache
+          const apiCache = await caches.open(API_CACHE)
+          const cached = await apiCache.match(request.url)
+          if (cached) return cached
+          return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } })
+        }
+      })())
+      return
+    }
+  }
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(fetch(request).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } })))
