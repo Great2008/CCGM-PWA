@@ -4,22 +4,44 @@ import supabase from '../lib/supabase'
 const CACHE_KEY = 'ccg-sabbath-lessons'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
+// Store slim index (no heavy content fields) + full content per lesson separately
+function saveCache(data) {
+  try {
+    // Slim index — just the metadata needed for the list
+    const index = data.map(l => ({
+      id: l.id, title: l.title, lesson_date: l.lesson_date,
+      quarter: l.quarter, scripture: l.scripture,
+      published: l.published, updated_at: l.updated_at,
+    }))
+    localStorage.removeItem(CACHE_KEY)
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ index }))
+    // Store full content per lesson (separate key per lesson so one big lesson can't kill all)
+    data.forEach(l => {
+      try {
+        localStorage.setItem(CACHE_KEY + ':' + l.id, JSON.stringify(l))
+      } catch(_) {}
+    })
+  } catch(_) {}
+}
+
 function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
+    // Support old format (array or {data:[...]}) and new format ({index:[...]})
+    if (parsed.index) {
+      // Rehydrate full content from per-lesson keys
+      return parsed.index.map(meta => {
+        try {
+          const full = localStorage.getItem(CACHE_KEY + ':' + meta.id)
+          return full ? JSON.parse(full) : meta
+        } catch(_) { return meta }
+      }).filter(Boolean)
+    }
     const data = Array.isArray(parsed) ? parsed : parsed.data
-    if (!data || data.length === 0) return null
-    return data
+    return data?.length ? data : null
   } catch { return null }
-}
-
-function saveCache(data) {
-  try {
-    localStorage.removeItem(CACHE_KEY)
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ data }))
-  } catch {}
 }
 
 
