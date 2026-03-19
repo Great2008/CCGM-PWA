@@ -417,6 +417,21 @@ export default function SabbathSchool() {
                         📄 Download PDF
                       </a>
                     )}
+                    <button
+                      onClick={async () => {
+                        const msg = `Join us this Sabbath! We're studying "${selected.title}" — read along on CCG World.\n\nhttps://ccgm-pwa.vercel.app/sabbath-school`
+                        if (navigator.share) {
+                          try {
+                            await navigator.share({ text: msg })
+                          } catch(_) {}
+                        } else {
+                          try { await navigator.clipboard.writeText(msg) } catch(_) {}
+                          alert('Message copied to clipboard!')
+                        }
+                      }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                      🔗 Share
+                    </button>
                   </div>
 
                   {/* Tabs row + desktop T-/T+ */}
