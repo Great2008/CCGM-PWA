@@ -127,7 +127,7 @@ export default function Guidelines() {
           </div>
           <div>
             {consequences.map((c, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '14px 24px', borderBottom: i < consequences.length - 1 ? '1px solid #f1f5f9' : 'none', flexWrap: 'wrap', gap: 12 }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '14px 24px', borderBottom: i < consequences.length - 1 ? '1px solid #f1f5f9' : 'none', flexWrap: 'wrap', gap: 12 }}>
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: c.color, flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 180 }}>
                   <div style={{ fontWeight: 700, color: 'var(--text-dark,#111)', fontSize: '0.88rem' }}>{c.level}</div>
