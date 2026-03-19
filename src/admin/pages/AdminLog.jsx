@@ -50,6 +50,27 @@ const ACTION_COLORS = {
   'prayer_delete':  { bg: '#fff7ed', color: '#c2410c' },
 }
 
+const ACTION_COLORS = {
+  'role_change':   { bg: '#f5f3ff', color: '#7c3aed' },
+  'suspend':       { bg: '#fff5f5', color: '#dc2626' },
+  'reinstate':     { bg: '#f0fdf4', color: '#166534' },
+  'post_approved': { bg: '#f0fdf4', color: '#166534' },
+  'post_rejected': { bg: '#fff5f5', color: '#dc2626' },
+  'branch_add':    { bg: '#f0fdf4', color: '#0369a1' },
+  'branch_edit':   { bg: '#eff6ff', color: '#0369a1' },
+  'branch_delete': { bg: '#fff5f5', color: '#dc2626' },
+  'sermon_add':    { bg: '#f0fdf4', color: '#166534' },
+  'sermon_edit':   { bg: '#eff6ff', color: '#0369a1' },
+  'sermon_delete': { bg: '#fff5f5', color: '#dc2626' },
+  'event_add':     { bg: '#f0fdf4', color: '#166534' },
+  'event_edit':    { bg: '#eff6ff', color: '#0369a1' },
+  'event_delete':  { bg: '#fff5f5', color: '#dc2626' },
+  'blog_add':      { bg: '#f0fdf4', color: '#166534' },
+  'blog_edit':     { bg: '#eff6ff', color: '#0369a1' },
+  'blog_delete':   { bg: '#fff5f5', color: '#dc2626' },
+  'gallery_add':   { bg: '#f0fdf4', color: '#166534' },
+  'gallery_delete':{ bg: '#fff5f5', color: '#dc2626' },
+}
 
 const CATEGORIES = [
   { value: 'all',        label: 'All Actions' },
@@ -73,6 +94,16 @@ function fmtDate(iso) {
 
 export default function AdminLog() {
   const { isSuperAdmin } = useAdmin()
+  const [lockPhase, setLockPhase] = useState('locking') // 'locking' | 'locked' | 'denied'
+
+  useEffect(() => {
+    if (isSuperAdmin) return
+    // Phase 1: locking animation (1.4s)
+    const t1 = setTimeout(() => setLockPhase('locked'), 1400)
+    // Phase 2: show denied message (2.6s total)
+    const t2 = setTimeout(() => setLockPhase('denied'), 2600)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [isSuperAdmin])
   const [logs, setLogs]         = useState([])
   const [loading, setLoading]   = useState(true)
   const [category, setCategory] = useState('all')
@@ -101,9 +132,93 @@ export default function AdminLog() {
   useEffect(() => { load() }, [load])
 
   if (!isSuperAdmin) return (
-    <div style={{ padding: 60, textAlign: 'center', color: 'var(--text-light)' }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🔒</div>
-      <div style={{ fontWeight: 700, color: 'var(--brand-deep)' }}>Super Admins only</div>
+    <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 0, padding: 32, textAlign: 'center' }}>
+
+      <style>{`
+        @keyframes shackle-open {
+          0%   { transform: translateY(0) rotate(0deg); }
+          40%  { transform: translateY(-8px) rotate(-15deg); }
+          70%  { transform: translateY(-6px) rotate(-10deg); }
+          100% { transform: translateY(0) rotate(0deg); }
+        }
+        @keyframes shackle-close {
+          0%   { transform: translateY(-6px) rotate(-10deg); }
+          60%  { transform: translateY(2px) rotate(5deg); }
+          80%  { transform: translateY(-1px) rotate(-2deg); }
+          100% { transform: translateY(0) rotate(0deg); }
+        }
+        @keyframes lock-shake {
+          0%,100% { transform: translateX(0) rotate(0deg); }
+          15%     { transform: translateX(-6px) rotate(-4deg); }
+          30%     { transform: translateX(6px) rotate(4deg); }
+          45%     { transform: translateX(-5px) rotate(-3deg); }
+          60%     { transform: translateX(5px) rotate(3deg); }
+          75%     { transform: translateX(-3px) rotate(-2deg); }
+          90%     { transform: translateX(3px) rotate(2deg); }
+        }
+        @keyframes lock-glow {
+          0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+          50%     { box-shadow: 0 0 32px 8px rgba(220,38,38,0.35); }
+        }
+        @keyframes text-appear {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes denied-pulse {
+          0%,100% { opacity: 1; }
+          50%     { opacity: 0.7; }
+        }
+        .lock-icon-locking { animation: shackle-open 0.5s ease-in-out, shackle-close 0.6s ease-in-out 0.6s; }
+        .lock-icon-locked  { animation: lock-shake 0.6s ease-in-out, lock-glow 1.5s ease-in-out infinite; }
+        .lock-icon-denied  { animation: lock-glow 2s ease-in-out infinite; }
+      `}</style>
+
+      {/* Lock icon */}
+      <div style={{
+        width: 96, height: 96, borderRadius: 24,
+        background: lockPhase === 'denied'
+          ? 'linear-gradient(135deg,#7f1d1d,#dc2626)'
+          : 'linear-gradient(135deg,#0a2612,#166534)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '3.2rem', marginBottom: 28,
+        transition: 'background 0.6s ease',
+        cursor: 'default',
+      }}
+        className={`lock-icon-${lockPhase}`}
+      >
+        {lockPhase === 'locking' ? '🔓' : '🔒'}
+      </div>
+
+      {/* Phase text */}
+      {lockPhase === 'locking' && (
+        <div style={{ animation: 'text-appear 0.3s ease', color: 'var(--text-light)', fontSize: '1rem', letterSpacing: '0.08em' }}>
+          Checking clearance…
+        </div>
+      )}
+
+      {lockPhase === 'locked' && (
+        <div style={{ animation: 'text-appear 0.4s ease' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--brand-deep)', fontWeight: 900, marginBottom: 6 }}>
+            Access Denied
+          </div>
+          <div style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>Verifying credentials…</div>
+        </div>
+      )}
+
+      {lockPhase === 'denied' && (
+        <div style={{ animation: 'text-appear 0.5s ease' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: '#dc2626', fontWeight: 900, marginBottom: 10, animation: 'denied-pulse 2s ease infinite' }}>
+            🚫 Authorised Users Only
+          </div>
+          <div style={{ color: 'var(--text-mid)', fontSize: '0.9rem', lineHeight: 1.7, maxWidth: 320 }}>
+            This area is restricted to <strong>Super Admins</strong>.<br />
+            You are not a Super Admin.
+          </div>
+          <div style={{ marginTop: 20, padding: '10px 20px', borderRadius: 10, background: '#fff5f5', border: '1px solid #fecaca', display: 'inline-block', fontSize: '0.78rem', color: '#991b1b', fontFamily: 'monospace', letterSpacing: '0.06em' }}>
+            CLEARANCE LEVEL: INSUFFICIENT
+          </div>
+        </div>
+      )}
     </div>
   )
 
