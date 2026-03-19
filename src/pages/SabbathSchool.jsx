@@ -1,46 +1,21 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 
-const CACHE_KEY = 'ccg-sabbath-lessons'
+const CACHE_KEY = 'ccg-sabbath-current'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
 
-// Store slim index (no heavy content fields) + full content per lesson separately
-function saveCache(data) {
+// Only cache this week's lesson — tiny, always fits
+function saveCache(lesson) {
   try {
-    // Slim index — just the metadata needed for the list
-    const index = data.map(l => ({
-      id: l.id, title: l.title, lesson_date: l.lesson_date,
-      quarter: l.quarter, scripture: l.scripture,
-      published: l.published, updated_at: l.updated_at,
-    }))
     localStorage.removeItem(CACHE_KEY)
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ index }))
-    // Store full content per lesson (separate key per lesson so one big lesson can't kill all)
-    data.forEach(l => {
-      try {
-        localStorage.setItem(CACHE_KEY + ':' + l.id, JSON.stringify(l))
-      } catch(_) {}
-    })
+    localStorage.setItem(CACHE_KEY, JSON.stringify(lesson))
   } catch(_) {}
 }
 
 function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    // Support old format (array or {data:[...]}) and new format ({index:[...]})
-    if (parsed.index) {
-      // Rehydrate full content from per-lesson keys
-      return parsed.index.map(meta => {
-        try {
-          const full = localStorage.getItem(CACHE_KEY + ':' + meta.id)
-          return full ? JSON.parse(full) : meta
-        } catch(_) { return meta }
-      }).filter(Boolean)
-    }
-    const data = Array.isArray(parsed) ? parsed : parsed.data
-    return data?.length ? data : null
+    return raw ? JSON.parse(raw) : null
   } catch { return null }
 }
 
@@ -154,37 +129,36 @@ export default function SabbathSchool() {
     })
   }
 
-  const fetchFresh = useCallback(async (cached) => {
+  const fetchFresh = useCallback(async (cachedLesson) => {
     try {
       const { data } = await supabase.from('sabbath_lessons')
         .select('*').eq('published', true)
         .order('lesson_date', { ascending: false })
       if (data && data.length > 0) {
-        saveCache(data)
         setLessons(data)
-        // Always recompute correct lesson from fresh data
-        setSelected(thisWeekLesson(data))
+        const current = thisWeekLesson(data)
+        setSelected(current)
+        // Only cache this week's lesson
+        if (current) saveCache(current)
         setOffline(false)
       }
-      // If fetch returns empty but we have cache, silently keep cached data
     } catch {
-      // Network error — only show offline if truly nothing cached
-      if (!cached || cached.length === 0) setOffline(true)
+      // Network error — only show offline if nothing cached
+      if (!cachedLesson) setOffline(true)
     } finally {
       setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    const cached = loadCache()
-    if (cached && cached.length > 0) {
-      setLessons(cached)
-      // Use cached data immediately for fast render
-      setSelected(thisWeekLesson(cached))
+    const cachedLesson = loadCache()
+    if (cachedLesson) {
+      // Show cached lesson immediately while fetching fresh
+      setLessons([cachedLesson])
+      setSelected(cachedLesson)
       setLoading(false)
     }
-    // Always fetch fresh — will update selection if new lesson available
-    fetchFresh(cached)
+    fetchFresh(cachedLesson)
   }, [fetchFresh])
 
   // Only show lessons up to and including this week's Saturday
