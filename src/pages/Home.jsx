@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useHomepageContent, useSermonsContent, useEventsContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
+import DailyVerseBanner from '../components/DailyVerseBanner'
 
 export default function Home() {
   const { data: hp } = useHomepageContent()
@@ -287,6 +288,9 @@ export default function Home() {
           .hero-ctas a{width:100%;max-width:280px;justify-content:center;}
         }
       `}</style>
+
+      {/* Daily Verse floating banner */}
+      <DailyVerseBanner />
     </>
   )
 }

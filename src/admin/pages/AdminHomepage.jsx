@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import AdminCard from '../components/AdminCard'
 import { getContent, setContent } from '../supabase'
+import supabaseAdmin from '../../lib/supabaseAdmin'
+import { BG_COLORS, DEFAULT_BG } from '../../components/DailyVerseBanner'
 
 const ICONS = ['🤝','🙏','📖','⛪','🔥','✨','🌟','🎵','📢','✝','🕊','💒']
 
@@ -33,11 +35,36 @@ export default function AdminHomepage() {
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('hero')
 
+  // Daily verse state
+  const [verse, setVerse]       = useState({ text:'', reference:'', reflection:'', bg_color: DEFAULT_BG })
+  const [verseSaving, setVerseSaving] = useState(false)
+  const [verseLoading, setVerseLoading] = useState(true)
+  const [verseActive, setVerseActive] = useState(false) // whether an override is active today
+
   useEffect(() => {
     getContent('homepage').then(d => {
       if (d) setData(prev => ({ ...prev, ...d, serviceTimes: d.serviceTimes || prev.serviceTimes }))
       setLoading(false)
     })
+  }, [])
+
+  // Load current daily verse override
+  useEffect(() => {
+    supabaseAdmin.from('site_settings').select('value').eq('key','daily_verse').single()
+      .then(({ data }) => {
+        const val = data?.value
+        const today = new Date().toISOString().split('T')[0]
+        if (val) {
+          setVerse({
+            text: val.text || '',
+            reference: val.reference || '',
+            reflection: val.reflection || '',
+            bg_color: val.bg_color || DEFAULT_BG,
+          })
+          setVerseActive(val.override_date === today)
+        }
+        setVerseLoading(false)
+      })
   }, [])
 
   const save = async () => {
@@ -50,7 +77,35 @@ export default function AdminHomepage() {
   const updateService = (idx,key,val) => { const t=[...data.serviceTimes]; t[idx]={...t[idx],[key]:val}; setData(d=>({...d,serviceTimes:t})) }
   const updateStat = (idx,key,val) => { const s=[...data.stats]; s[idx]={...s[idx],[key]:val}; setData(d=>({...d,stats:s})) }
 
-  const tabs = [['hero','🏠 Hero'],['services','⛪ Programs'],['announcement','📢 Announce'],['stats','📊 Stats'],['contact','📍 Contact']]
+  const saveVerse = async () => {
+    if (!verse.text.trim() || !verse.reference.trim()) { showToast('Verse text and reference are required','error'); return }
+    setVerseSaving(true)
+    const today = new Date().toISOString().split('T')[0]
+    try {
+      const payload = { ...verse, override_date: today }
+      const { data: existing } = await supabaseAdmin.from('site_settings').select('id').eq('key','daily_verse').single()
+      if (existing) {
+        await supabaseAdmin.from('site_settings').update({ value: payload }).eq('key','daily_verse')
+      } else {
+        await supabaseAdmin.from('site_settings').insert({ key:'daily_verse', value: payload })
+      }
+      setVerseActive(true)
+      showToast('Daily verse override saved for today!')
+    } catch(e) { showToast(e.message,'error') }
+    setVerseSaving(false)
+  }
+
+  const clearVerseOverride = async () => {
+    setVerseSaving(true)
+    try {
+      await supabaseAdmin.from('site_settings').update({ value: { ...verse, override_date: null } }).eq('key','daily_verse')
+      setVerseActive(false)
+      showToast('Override cleared — API verse will show today')
+    } catch(e) { showToast(e.message,'error') }
+    setVerseSaving(false)
+  }
+
+  const tabs = [['hero','🏠 Hero'],['services','⛪ Programs'],['announcement','📢 Announce'],['stats','📊 Stats'],['contact','📍 Contact'],['verse','📖 Daily Verse']]
 
   if (loading) return <div style={{textAlign:'center',padding:60,color:'var(--text-light)'}}>Loading...</div>
 
@@ -142,6 +197,114 @@ export default function AdminHomepage() {
             <div className="form-group"><label>Email</label><input type="email" value={data.contact?.email||''} onChange={e=>setData(d=>({...d,contact:{...d.contact,email:e.target.value}}))} /></div>
           </div>
           <div className="form-group"><label>Google Maps Embed URL</label><input value={data.contact?.mapUrl||''} onChange={e=>setData(d=>({...d,contact:{...d.contact,mapUrl:e.target.value}}))} placeholder="https://maps.google.com/maps?q=..." /></div>
+        </AdminCard>
+      )}
+
+      {tab==='verse'&&(
+        <AdminCard style={{maxWidth:720}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:18,flexWrap:'wrap',gap:10}}>
+            <div>
+              <h3 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>📖 Daily Verse Override</h3>
+              <p style={{color:'var(--text-light)',fontSize:'0.82rem',margin:0}}>
+                By default the app fetches a verse from an API automatically each day. Use this to set your own verse for today.
+              </p>
+            </div>
+            {verseActive && (
+              <span style={{background:'#dcfce7',color:'#15803d',fontWeight:700,fontSize:'0.72rem',padding:'4px 12px',borderRadius:10,border:'1px solid #86efac',whiteSpace:'nowrap'}}>
+                ✅ Override active today
+              </span>
+            )}
+          </div>
+
+          {verseLoading ? (
+            <p style={{color:'var(--text-light)'}}>Loading…</p>
+          ) : (
+            <>
+              <div className="form-group">
+                <label>Verse Text <span style={{color:'#dc2626'}}>*</span></label>
+                <textarea
+                  value={verse.text}
+                  onChange={e=>setVerse(v=>({...v,text:e.target.value}))}
+                  rows={4}
+                  placeholder="Enter the full verse text…"
+                  style={{resize:'vertical'}}
+                />
+              </div>
+              <div className="form-group">
+                <label>Reference <span style={{color:'#dc2626'}}>*</span></label>
+                <input
+                  value={verse.reference}
+                  onChange={e=>setVerse(v=>({...v,reference:e.target.value}))}
+                  placeholder="e.g. John 3:16"
+                />
+              </div>
+              <div className="form-group">
+                <label>Reflection / Thought (optional)</label>
+                <textarea
+                  value={verse.reflection}
+                  onChange={e=>setVerse(v=>({...v,reflection:e.target.value}))}
+                  rows={3}
+                  placeholder="A short reflection or application thought to go with the verse…"
+                  style={{resize:'vertical'}}
+                />
+              </div>
+
+              {/* Background colour picker */}
+              <div style={{marginBottom:18}}>
+                <label style={{display:'block',fontWeight:700,fontSize:'0.8rem',color:'var(--text-mid)',marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Banner Background</label>
+                <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                  {BG_COLORS.map(c=>(
+                    <button
+                      key={c.value}
+                      onClick={()=>setVerse(v=>({...v,bg_color:c.value}))}
+                      title={c.label}
+                      style={{
+                        width:36,height:36,borderRadius:'50%',border:'none',cursor:'pointer',
+                        background:c.value,
+                        outline:verse.bg_color===c.value?'3px solid #0a2612':'3px solid transparent',
+                        outlineOffset:2,transition:'outline 0.15s',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Live preview */}
+              {verse.text && verse.reference && (
+                <div style={{borderRadius:14,overflow:'hidden',marginBottom:20,boxShadow:'0 4px 20px rgba(0,0,0,0.15)'}}>
+                  <div style={{background:verse.bg_color||DEFAULT_BG,padding:'18px 20px'}}>
+                    <div style={{fontSize:'2.5rem',color:'rgba(255,255,255,0.12)',lineHeight:1,marginBottom:-8,fontFamily:'Georgia,serif'}}>"</div>
+                    <p style={{fontFamily:'Georgia,serif',fontStyle:'italic',color:'white',lineHeight:1.7,margin:'0 0 10px',fontSize:'0.95rem'}}>{verse.text}</p>
+                    <span style={{background:'rgba(255,255,255,0.18)',borderRadius:20,padding:'3px 12px',color:'white',fontWeight:700,fontSize:'0.8rem'}}>— {verse.reference}</span>
+                    {verse.reflection && <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.82rem',marginTop:10,lineHeight:1.6}}>{verse.reflection}</p>}
+                  </div>
+                </div>
+              )}
+
+              <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+                <button
+                  onClick={saveVerse}
+                  disabled={verseSaving}
+                  style={{padding:'10px 24px',borderRadius:30,border:'none',background:'var(--brand-mid)',color:'white',fontWeight:700,fontSize:'0.88rem',fontFamily:'var(--font-body)',cursor:'pointer',opacity:verseSaving?0.7:1}}
+                >
+                  {verseSaving?'Saving…':'📖 Set as Today\'s Verse'}
+                </button>
+                {verseActive && (
+                  <button
+                    onClick={clearVerseOverride}
+                    disabled={verseSaving}
+                    style={{padding:'10px 24px',borderRadius:30,border:'1.5px solid #e2e8f0',background:'transparent',color:'var(--text-mid)',fontWeight:600,fontSize:'0.88rem',fontFamily:'var(--font-body)',cursor:'pointer'}}
+                  >
+                    Clear Override (use API)
+                  </button>
+                )}
+              </div>
+
+              <p style={{color:'var(--text-light)',fontSize:'0.76rem',marginTop:14,marginBottom:0}}>
+                💡 The override only applies for today's date. Tomorrow the app will automatically fetch from the Bible API again unless you set a new override.
+              </p>
+            </>
+          )}
         </AdminCard>
       )}
 
