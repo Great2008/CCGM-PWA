@@ -34,6 +34,7 @@ export default function Navbar() {
   const [offlineOpen, setOfflineOpen] = useState(false)
   const [isLive, setIsLive]           = useState(false)
   const [unread, setUnread]           = useState(0)
+  const [activeProg, setActiveProg]   = useState(false)
   const { pathname } = useLocation()
   const { user, profile, signOut } = useAuth()
   const { dark, toggle: toggleTheme } = useTheme()
@@ -48,9 +49,22 @@ export default function Navbar() {
   }, [])
   useEffect(() => { setMenuOpen(false); setOfflineOpen(false) }, [pathname])
 
-  // Check live status
+  // Check for active programme
   useEffect(() => {
-    supabase.from('site_settings').select('value').eq('key','live').single()
+    supabase.from('programmes').select('id').eq('is_active', true).limit(1)
+      .then(({ data }) => setActiveProg(!!(data?.length)))
+    const sub = supabase.channel('nav-prog')
+      .on('postgres_changes', { event:'*', schema:'public', table:'programmes' },
+        async () => {
+          const { data } = await supabase.from('programmes').select('id').eq('is_active', true).limit(1)
+          setActiveProg(!!(data?.length))
+        })
+      .subscribe()
+    return () => supabase.removeChannel(sub)
+  }, [])
+
+  // Check live status
+  useEffect(() => {    supabase.from('site_settings').select('value').eq('key','live').single()
       .then(({ data }) => setIsLive(!!data?.value?.isLive))
     const sub = supabase.channel('nav-live')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
@@ -130,6 +144,16 @@ export default function Navbar() {
 
             {/* Live link */}
             <LiveLink />
+
+            {/* Programme link — only when active */}
+            {activeProg && (
+              <Link to="/programme" style={{
+                color: pathname==='/programme' ? 'var(--gold)' : '#fbbf24',
+                fontWeight: 700, fontSize:'0.82rem', padding:'6px 10px', borderRadius:6,
+                textDecoration:'none', transition:'color 0.2s', whiteSpace:'nowrap',
+                background:'rgba(251,191,36,0.12)', border:'1px solid rgba(251,191,36,0.25)',
+              }}>📅 Programme</Link>
+            )}
 
             {/* Offline dropdown */}
             <div style={{position:'relative'}}>
@@ -268,6 +292,16 @@ export default function Navbar() {
           ))}
           {/* Live in mobile */}
           <LiveLink mobile />
+          {/* Programme in mobile — only when active */}
+          {activeProg && (
+            <Link to="/programme" style={{
+              display:'block', padding:'12px 22px',
+              color: pathname==='/programme' ? 'var(--gold)' : '#fbbf24',
+              fontWeight:700, fontSize:'0.95rem', textDecoration:'none',
+              borderLeft: pathname==='/programme' ? '3px solid var(--gold)' : '3px solid rgba(251,191,36,0.4)',
+              background:'rgba(251,191,36,0.06)',
+            }}>📅 Programme</Link>
+          )}
           <Link to="/notifications"
             onClick={() => { localStorage.setItem(BELL_SEEN_KEY, new Date().toISOString()); setUnread(0) }}
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 22px', color: pathname === '/notifications' ? 'var(--gold)' : 'rgba(255,255,255,0.82)', fontWeight: pathname === '/notifications' ? 700 : 400, fontSize: '0.95rem', textDecoration: 'none', borderLeft: pathname === '/notifications' ? '3px solid var(--gold)' : '3px solid transparent' }}>

@@ -7,7 +7,8 @@ export default function Home() {
   const { data: hp } = useHomepageContent()
   const { data: liveSermons } = useSermonsContent()
   const { data: liveEvents }  = useEventsContent()
-  const [liveData, setLiveData] = useState(null)
+  const [liveData, setLiveData]     = useState(null)
+  const [activeProg, setActiveProg] = useState(null) // active programme or null
 
   useEffect(() => {
     supabase.from('site_settings').select('value').eq('key','live').single()
@@ -15,6 +16,23 @@ export default function Home() {
     const sub = supabase.channel('home-live')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
         payload => setLiveData(payload.new.value))
+      .subscribe()
+    return () => supabase.removeChannel(sub)
+  }, [])
+
+  // Fetch active programme for homepage banner
+  useEffect(() => {
+    supabase.from('programmes').select('id,title,theme,start_date,end_date,venue')
+      .eq('is_active', true).limit(1).single()
+      .then(({ data }) => setActiveProg(data || null))
+    const sub = supabase.channel('home-prog')
+      .on('postgres_changes', { event:'*', schema:'public', table:'programmes' },
+        async () => {
+          const { data } = await supabase.from('programmes')
+            .select('id,title,theme,start_date,end_date,venue')
+            .eq('is_active', true).limit(1).single()
+          setActiveProg(data || null)
+        })
       .subscribe()
     return () => supabase.removeChannel(sub)
   }, [])
@@ -56,32 +74,43 @@ export default function Home() {
             <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
           </div>
 
-          {/* Android App Download */}
-          <div style={{marginTop:28,display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
-            <a
-              href={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/apk/CCGWorld-latest.apk`}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display:'inline-flex',alignItems:'center',gap:10,
-                background:'linear-gradient(135deg,#0a2612,#166534)',
-                border:'none',borderRadius:40,padding:'13px 28px',
-                textDecoration:'none',boxShadow:'0 6px 24px rgba(22,163,74,0.35)',
-                transition:'transform 0.2s,box-shadow 0.2s',
-              }}
-              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 10px 32px rgba(22,163,74,0.45)'}}
-              onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 6px 24px rgba(22,163,74,0.35)'}}
-            >
-              <span style={{fontSize:'1.3rem'}}>🤖</span>
-              <div style={{textAlign:'left'}}>
-                <div style={{fontSize:'0.62rem',color:'rgba(255,255,255,0.75)',letterSpacing:'0.1em',textTransform:'uppercase',lineHeight:1}}>Download for</div>
-                <div style={{fontSize:'0.95rem',fontWeight:900,color:'white',lineHeight:1.3}}>Android APK</div>
+          {/* Programme Banner — shown only when an active programme exists */}
+          {activeProg && (
+            <Link to="/programme" style={{ textDecoration:'none', display:'block', marginTop:28 }}>
+              <div
+                style={{
+                  background:'linear-gradient(135deg,rgba(180,83,9,0.88),rgba(217,119,6,0.82))',
+                  backdropFilter:'blur(12px)',
+                  border:'1px solid rgba(251,191,36,0.45)',
+                  borderRadius:16, padding:'16px 22px',
+                  display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
+                  boxShadow:'0 8px 32px rgba(180,83,9,0.35)',
+                  transition:'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 12px 40px rgba(180,83,9,0.45)'}}
+                onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 8px 32px rgba(180,83,9,0.35)'}}
+              >
+                <div style={{fontSize:'1.8rem',flexShrink:0,animation:'softPulse 2.5s ease-in-out infinite'}}>📅</div>
+                <div style={{flex:1,minWidth:160,textAlign:'left'}}>
+                  <div style={{fontSize:'0.65rem',fontWeight:800,color:'rgba(255,255,255,0.75)',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:3}}>
+                    ⭐ Special Event — Now On
+                  </div>
+                  <div style={{fontFamily:'var(--font-display)',fontWeight:900,color:'white',fontSize:'clamp(0.92rem,2vw,1.08rem)',lineHeight:1.2,marginBottom:activeProg.theme?4:0}}>
+                    {activeProg.title}
+                  </div>
+                  {activeProg.theme && (
+                    <div style={{color:'rgba(255,255,255,0.8)',fontStyle:'italic',fontSize:'0.8rem'}}>"{activeProg.theme}"</div>
+                  )}
+                  {activeProg.venue && (
+                    <div style={{color:'rgba(255,255,255,0.65)',fontSize:'0.75rem',marginTop:3}}>📍 {activeProg.venue}</div>
+                  )}
+                </div>
+                <div style={{background:'rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 16px',color:'white',fontWeight:800,fontSize:'0.8rem',whiteSpace:'nowrap',flexShrink:0}}>
+                  View Programme →
+                </div>
               </div>
-            </a>
-            <div style={{fontSize:'0.68rem',color:'rgba(255,255,255,0.35)',letterSpacing:'0.05em'}}>
-              Free · No Play Store required
-            </div>
-          </div>
+            </Link>
+          )}
           <div style={{marginTop:48,display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',alignItems:'center'}}>
             {isLive ? (
               <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:10,background:'#dc2626',border:'none',borderRadius:40,padding:'10px 24px',textDecoration:'none',animation:'pulse 1.5s infinite'}}>
@@ -250,6 +279,7 @@ export default function Home() {
       <style>{`
         .sermon-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+        @keyframes softPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.12)}}
         @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
         @media(max-width:768px){
           .sermon-grid{grid-template-columns:1fr!important;gap:32px!important;}
