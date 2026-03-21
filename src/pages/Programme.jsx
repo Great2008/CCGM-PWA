@@ -41,6 +41,7 @@ export default function Programme() {
   const [programme, setProgramme]   = useState(null)
   const [days, setDays]             = useState([])
   const [sessions, setSessions]     = useState([]) // flat, all days
+  const [agendaMap, setAgendaMap]   = useState({}) // session_id → agenda items
   const [rsvps, setRsvps]           = useState(new Set()) // session_ids user has RSVPd
   const [rsvpCounts, setRsvpCounts] = useState({}) // session_id → count
   const [activeDay, setActiveDay]   = useState(0)
@@ -82,9 +83,22 @@ export default function Programme() {
         .order('sort_order')
       setSessions(sessData || [])
 
-      // Fetch RSVP counts
+      // Fetch all agenda items for all sessions
       if (sessData?.length) {
         const sessIds = sessData.map(s => s.id)
+        const { data: agendaData } = await supabase
+          .from('programme_agenda_items')
+          .select('*')
+          .in('session_id', sessIds)
+          .order('sort_order')
+        const aMap = {}
+        for (const item of agendaData || []) {
+          if (!aMap[item.session_id]) aMap[item.session_id] = []
+          aMap[item.session_id].push(item)
+        }
+        setAgendaMap(aMap)
+
+        // Fetch RSVP counts
         const { data: counts } = await supabase
           .from('programme_rsvps')
           .select('session_id')
@@ -317,6 +331,7 @@ export default function Programme() {
                     <SessionCard
                       key={session.id}
                       session={session}
+                      agenda={agendaMap[session.id] || []}
                       isRsvpd={rsvps.has(session.id)}
                       count={rsvpCounts[session.id] || 0}
                       loading={rsvpLoading === session.id}
@@ -352,8 +367,9 @@ export default function Programme() {
 }
 
 // ── Session card ───────────────────────────────────────────────────
-function SessionCard({ session, isRsvpd, count, loading, user, onRsvp }) {
-  const [expanded, setExpanded] = useState(false)
+function SessionCard({ session, agenda, isRsvpd, count, loading, user, onRsvp }) {
+  const [showNotes, setShowNotes] = useState(false)
+  const [showAgenda, setShowAgenda] = useState(false)
 
   return (
     <div style={{
@@ -388,7 +404,7 @@ function SessionCard({ session, isRsvpd, count, loading, user, onRsvp }) {
           </div>
 
           {/* Tags row */}
-          <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom: (session.scripture || session.notes) ? 8 : 0 }}>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:8 }}>
             {session.speaker && (
               <span style={{ background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', borderRadius:20, padding:'2px 10px', fontSize:'0.74rem', fontWeight:600 }}>
                 🎤 {session.speaker}
@@ -406,21 +422,67 @@ function SessionCard({ session, isRsvpd, count, loading, user, onRsvp }) {
             )}
           </div>
 
-          {/* Notes (collapsible) */}
-          {session.notes && (
-            <div>
-              {!expanded ? (
-                <button onClick={() => setExpanded(true)} style={{ background:'none', border:'none', color:'var(--brand-mid)', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', padding:0, fontFamily:'var(--font-body)' }}>
-                  + Show details
-                </button>
-              ) : (
-                <>
-                  <p style={{ color:'var(--text-mid)', fontSize:'0.84rem', lineHeight:1.7, margin:'4px 0 6px' }}>{session.notes}</p>
-                  <button onClick={() => setExpanded(false)} style={{ background:'none', border:'none', color:'var(--text-light)', fontSize:'0.78rem', cursor:'pointer', padding:0, fontFamily:'var(--font-body)' }}>
-                    Hide details
-                  </button>
-                </>
-              )}
+          {/* Action buttons row */}
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+            {agenda.length > 0 && (
+              <button onClick={() => setShowAgenda(v => !v)} style={{
+                background:'none', border:'1px solid #e2e8f0', borderRadius:8,
+                padding:'4px 11px', cursor:'pointer', color:'var(--brand-mid)',
+                fontSize:'0.74rem', fontWeight:700, fontFamily:'var(--font-body)',
+                display:'flex', alignItems:'center', gap:5,
+              }}>
+                📋 Agenda ({agenda.length}) <span style={{fontSize:'0.6rem'}}>{showAgenda?'▲':'▼'}</span>
+              </button>
+            )}
+            {session.notes && (
+              <button onClick={() => setShowNotes(v => !v)} style={{
+                background:'none', border:'none', color:'var(--text-light)',
+                fontSize:'0.74rem', fontWeight:600, cursor:'pointer', padding:0,
+                fontFamily:'var(--font-body)',
+              }}>
+                {showNotes ? 'Hide details ▲' : 'More details ▼'}
+              </button>
+            )}
+          </div>
+
+          {/* Notes */}
+          {showNotes && session.notes && (
+            <p style={{ color:'var(--text-mid)', fontSize:'0.84rem', lineHeight:1.7, margin:'8px 0 0' }}>{session.notes}</p>
+          )}
+
+          {/* Agenda items */}
+          {showAgenda && agenda.length > 0 && (
+            <div style={{ marginTop:12, borderTop:'1px solid #f1f5f9', paddingTop:10 }}>
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                {agenda.map((item, idx) => (
+                  <div key={item.id} style={{
+                    display:'flex', gap:10, alignItems:'flex-start',
+                    padding:'8px 10px', borderRadius:10, background:'#f8fafc',
+                    borderLeft:'3px solid #d97706',
+                  }}>
+                    {/* Number */}
+                    <div style={{ color:'#d97706', fontWeight:800, fontSize:'0.72rem', minWidth:16, paddingTop:2, flexShrink:0 }}>{idx+1}</div>
+                    {/* Detail */}
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontWeight:700, color:'var(--brand-deep)', fontSize:'0.84rem' }}>{item.title}</div>
+                      <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginTop:3 }}>
+                        {item.duration_mins != null && (
+                          <span style={{ color:'var(--text-light)', fontSize:'0.72rem' }}>⏱ {item.duration_mins} min</span>
+                        )}
+                        {item.person && (
+                          <span style={{ color:'var(--text-mid)', fontSize:'0.72rem' }}>👤 {item.person}</span>
+                        )}
+                        {item.topic && (
+                          <span style={{ color:'var(--text-mid)', fontSize:'0.72rem', fontStyle:'italic' }}>💬 {item.topic}</span>
+                        )}
+                        {item.scripture && (
+                          <span style={{ color:'#92400e', fontSize:'0.72rem' }}>📖 {item.scripture}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
