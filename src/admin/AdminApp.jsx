@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import supabase from '../lib/supabase'
 import supabaseAdmin from '../lib/supabaseAdmin'
 import AdminLogin     from './pages/AdminLogin'
@@ -188,6 +189,7 @@ export default function AdminApp() {
           </div>
         )}
       </div>
+      <Analytics />
       <style>{`
         @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
         @media(max-width:768px) {
