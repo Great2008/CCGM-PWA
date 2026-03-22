@@ -84,10 +84,10 @@ export default function DailyVerseBanner() {
   }
 
   const share = async () => {
-    const msg = `📖 ${verse.reference}\n\n"${verse.text}"\n\n— CCG World`
+    const msg = `📖 Daily Verse\n\n${verse.reference}\n\n"${verse.text}"\n\n— CCG World\n🌐 ccgm-pwa.vercel.app`
     try {
       if (navigator.share) {
-        await navigator.share({ title:'Daily Verse — CCG World', text: msg })
+        await navigator.share({ title:'Daily Verse — CCG World', text: msg, url: 'https://ccgm-pwa.vercel.app' })
       } else {
         await navigator.clipboard.writeText(msg)
         setCopied(true)
