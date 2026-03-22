@@ -192,9 +192,7 @@ export default function AdminLogin({ onLogin }) {
             {loading ? '⏳ Signing in...' : '🔐 Sign In'}
           </button>
         </form>
-        <p style={{ textAlign: 'center', marginTop: 24, fontSize: '0.78rem', color: 'var(--text-light)', lineHeight: 1.7 }}>
-          Create your admin user in Supabase Dashboard<br />then set their <code style={{ background: '#f0f9ff', padding: '1px 6px', borderRadius: 4 }}>role</code> to <code style={{ background: '#f0f9ff', padding: '1px 6px', borderRadius: 4 }}>super_admin</code>, <code style={{ background: '#f0f9ff', padding: '1px 6px', borderRadius: 4 }}>admin</code>, or <code style={{ background: '#f0f9ff', padding: '1px 6px', borderRadius: 4 }}>moderator</code> in the profiles table.
-        </p>
+       
       </div>
     </div>
   )
