@@ -28,71 +28,7 @@ import AdminLog from './pages/AdminLog'
 export const AdminContext = createContext(null)
 export const useAdmin = () => useContext(AdminContext)
 
-// ── Padlock unlock animation ───────────────────────────────────────────────
-const unlockKeyframes = `
-  @keyframes ccgm-fadeIn    { from { opacity:0; transform:scale(0.8) } to { opacity:1; transform:scale(1) } }
-  @keyframes ccgm-shackle   { 0%,30% { transform:translateY(0) rotate(0deg) } 60% { transform:translateY(-14px) rotate(-18deg) } 80% { transform:translateY(-18px) rotate(-22deg) } 100% { transform:translateY(-18px) rotate(-22deg) } }
-  @keyframes ccgm-glow      { 0%,40% { filter:drop-shadow(0 0 0px #fbbf24) } 70%,100% { filter:drop-shadow(0 0 18px #fbbf24) } }
-  @keyframes ccgm-checkIn   { 0%,55% { opacity:0; transform:scale(0.3) } 75% { opacity:1; transform:scale(1.2) } 100% { opacity:1; transform:scale(1) } }
-  @keyframes ccgm-textIn    { 0%,60% { opacity:0; transform:translateY(10px) } 100% { opacity:1; transform:translateY(0) } }
-  @keyframes ccgm-bgPulse   { 0%,100% { background-position:0% 50% } 50% { background-position:100% 50% } }
-`
 
-function UnlockScreen() {
-  return (
-    <>
-      <style>{unlockKeyframes}</style>
-      <div style={{
-        minHeight:'100vh', display:'flex', flexDirection:'column',
-        alignItems:'center', justifyContent:'center',
-        background:'linear-gradient(135deg, #0a1628 0%, #0e2a4a 40%, #1a3a5c 100%)',
-        backgroundSize:'200% 200%',
-        animation:'ccgm-bgPulse 3s ease infinite',
-        gap:0,
-      }}>
-        {/* Lock SVG */}
-        <div style={{ animation:'ccgm-fadeIn 0.4s ease forwards, ccgm-glow 2.4s ease forwards', marginBottom:28 }}>
-          <svg width="100" height="110" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Shackle (top arc) — animates open */}
-            <g style={{ animation:'ccgm-shackle 2.4s cubic-bezier(0.4,0,0.2,1) forwards', transformOrigin:'72px 52px' }}>
-              <path
-                d="M28 52 V36 C28 18 72 18 72 36 V52"
-                stroke="#fbbf24" strokeWidth="9" strokeLinecap="round" fill="none"
-              />
-            </g>
-            {/* Body */}
-            <rect x="12" y="48" width="76" height="56" rx="12" fill="#1d4ed8" />
-            <rect x="12" y="48" width="76" height="56" rx="12" fill="url(#bodyGrad)" />
-            {/* Keyhole */}
-            <circle cx="50" cy="74" r="10" fill="#0f172a" opacity="0.7" />
-            <rect x="46" y="74" width="8" height="14" rx="4" fill="#0f172a" opacity="0.7" />
-            {/* Checkmark — appears after unlock */}
-            <g style={{ animation:'ccgm-checkIn 2.4s ease forwards' }}>
-              <circle cx="50" cy="74" r="13" fill="#22c55e" opacity="0.95" />
-              <path d="M43 74 L48 79 L57 69" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            </g>
-            <defs>
-              <linearGradient id="bodyGrad" x1="12" y1="48" x2="88" y2="104" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#1e40af" />
-                <stop offset="100%" stopColor="#1e3a8a" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        {/* Text */}
-        <div style={{ animation:'ccgm-textIn 2.4s ease forwards', textAlign:'center' }}>
-          <div style={{ color:'#fbbf24', fontFamily:'var(--font-display,serif)', fontWeight:900, fontSize:'1.5rem', letterSpacing:'0.08em', marginBottom:6 }}>
-            ACCESS GRANTED
-          </div>
-          <div style={{ color:'rgba(255,255,255,0.5)', fontSize:'0.8rem', letterSpacing:'0.2em', textTransform:'uppercase' }}>
-            Welcome to CCG World Admin
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
 
 const NAV = [
   ['dashboard', '📊', 'Dashboard'],
@@ -123,7 +59,6 @@ const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermo
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
   const [checking, setChecking] = useState(true)
-  const [unlocking, setUnlocking] = useState(false)
   const [page, setPage] = useState('dashboard')
   const [toast, setToast] = useState(null)
   const [sideOpen, setSideOpen] = useState(false)
@@ -179,11 +114,7 @@ export default function AdminApp() {
   }
 
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
-  if (!authed) return <AdminLogin onLogin={() => {
-    setUnlocking(true)
-    setTimeout(() => { setUnlocking(false); setAuthed(true) }, 2400)
-  }} />
-  if (unlocking) return <UnlockScreen />
+  if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />
 
   // Moderators see only moderation-relevant pages
   const isSuperAdmin = adminRole === 'super_admin'

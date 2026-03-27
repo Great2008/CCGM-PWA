@@ -11,12 +11,24 @@ export default function AdminLogin({ onLogin }) {
   const [denied, setDenied]       = useState(false)
   const [lockPhase, setLockPhase] = useState('locking') // 'locking' | 'locked' | 'denied'
 
+  // Authorized unlock animation state
+  const [unlocking, setUnlocking]     = useState(false)
+  const [unlockPhase, setUnlockPhase] = useState('opening') // 'opening' | 'open' | 'granted'
+
   useEffect(() => {
     if (!denied) return
     const t1 = setTimeout(() => setLockPhase('locked'), 1400)
     const t2 = setTimeout(() => setLockPhase('denied'), 2600)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [denied])
+
+  useEffect(() => {
+    if (!unlocking) return
+    const t1 = setTimeout(() => setUnlockPhase('open'),    700)
+    const t2 = setTimeout(() => setUnlockPhase('granted'), 1400)
+    const t3 = setTimeout(() => onLogin(),                 2400)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
+  }, [unlocking])
 
   const handleSubmit = async e => {
     e.preventDefault(); setErr(''); setLoading(true)
@@ -31,7 +43,9 @@ export default function AdminLogin({ onLogin }) {
       setLockPhase('locking')
       return
     }
-    onLogin()
+    setLoading(false)
+    setUnlocking(true)
+    setUnlockPhase('opening')
   }
 
   const handleGoBack = () => {
@@ -41,6 +55,115 @@ export default function AdminLogin({ onLogin }) {
     setPass('')
     setErr('')
   }
+
+  // ── Authorized unlock screen ─────────────────────────────────────
+  if (unlocking) return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      flexDirection: 'column', padding: 32, textAlign: 'center',
+      background: unlockPhase === 'granted'
+        ? 'linear-gradient(135deg,#052e16,#14532d,#166534)'
+        : 'linear-gradient(135deg,#0a1628,#0e2a4a,#1a3a5c)',
+      transition: 'background 0.8s ease',
+    }}>
+      <style>{`
+        @keyframes ul-shackle-open {
+          0%   { transform: translateY(0) rotate(0deg); }
+          60%  { transform: translateY(-18px) rotate(-22deg); }
+          100% { transform: translateY(-18px) rotate(-22deg); }
+        }
+        @keyframes ul-lock-glow-gold {
+          0%,40% { filter: drop-shadow(0 0 0px #fbbf24); }
+          100%   { filter: drop-shadow(0 0 22px #fbbf24); }
+        }
+        @keyframes ul-check-pop {
+          0%,55% { opacity: 0; transform: scale(0.3); }
+          75%    { opacity: 1; transform: scale(1.2); }
+          100%   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes ul-text-in {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes ul-ripple {
+          0%   { transform: scale(1); opacity: 0.5; }
+          100% { transform: scale(3.5); opacity: 0; }
+        }
+      `}</style>
+
+      {/* Gold ripple rings on granted */}
+      {unlockPhase === 'granted' && (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+          {[0, 0.35, 0.7].map((delay, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              width: 120, height: 120, borderRadius: '50%',
+              border: '2px solid rgba(251,191,36,0.5)',
+              animation: `ul-ripple 2s ease-out ${delay}s infinite`,
+            }} />
+          ))}
+        </div>
+      )}
+
+      {/* Lock SVG */}
+      <div style={{
+        marginBottom: 32, position: 'relative', zIndex: 1,
+        animation: 'ul-lock-glow-gold 2.4s ease forwards',
+      }}>
+        <svg width="100" height="110" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Shackle — animates open */}
+          <g style={{
+            animation: unlockPhase !== 'opening' ? 'ul-shackle-open 0.7s cubic-bezier(0.4,0,0.2,1) forwards' : 'none',
+            transformOrigin: '72px 52px',
+          }}>
+            <path d="M28 52 V36 C28 18 72 18 72 36 V52"
+              stroke="#fbbf24" strokeWidth="9" strokeLinecap="round" fill="none" />
+          </g>
+          {/* Body */}
+          <rect x="12" y="48" width="76" height="56" rx="12" fill="#1d4ed8" />
+          <rect x="12" y="48" width="76" height="56" rx="12" fill="url(#ulBodyGrad)" />
+          {/* Keyhole (hidden behind check) */}
+          <circle cx="50" cy="74" r="10" fill="#0f172a" opacity="0.7" />
+          <rect x="46" y="74" width="8" height="14" rx="4" fill="#0f172a" opacity="0.7" />
+          {/* Checkmark */}
+          <g style={{ animation: 'ul-check-pop 2.4s ease forwards' }}>
+            <circle cx="50" cy="74" r="13" fill="#22c55e" opacity="0.97" />
+            <path d="M43 74 L48 79 L57 69" stroke="white" strokeWidth="2.5"
+              strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </g>
+          <defs>
+            <linearGradient id="ulBodyGrad" x1="12" y1="48" x2="88" y2="104" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#1e40af" />
+              <stop offset="100%" stopColor="#1e3a8a" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      {/* Text phases */}
+      {unlockPhase === 'opening' && (
+        <div style={{ animation: 'ul-text-in 0.4s ease', color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+          Verifying clearance…
+        </div>
+      )}
+      {unlockPhase === 'open' && (
+        <div style={{ animation: 'ul-text-in 0.4s ease', color: '#fbbf24', fontSize: '1rem', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700 }}>
+          Clearance confirmed…
+        </div>
+      )}
+      {unlockPhase === 'granted' && (
+        <div style={{ animation: 'ul-text-in 0.5s ease', position: 'relative', zIndex: 1 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem,4vw,2rem)', color: 'white', fontWeight: 900, marginBottom: 10 }}>
+            ✅ Access Granted
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            Welcome to CCG World Admin
+          </div>
+        </div>
+      )}
+    </div>
+  )
 
   // ── Unauthorized screen ──────────────────────────────────────────
   if (denied) return (
@@ -102,7 +225,6 @@ export default function AdminLogin({ onLogin }) {
         .al-lock-denied  { animation: lock-glow-red 2s ease-in-out infinite; }
       `}</style>
 
-      {/* Ripple rings */}
       {lockPhase === 'denied' && (
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
           {[0, 0.4, 0.8].map((delay, i) => (
@@ -116,7 +238,6 @@ export default function AdminLogin({ onLogin }) {
         </div>
       )}
 
-      {/* Lock icon */}
       <div style={{
         width: 110, height: 110, borderRadius: 28,
         background: lockPhase === 'denied' ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.1)',
@@ -135,7 +256,6 @@ export default function AdminLogin({ onLogin }) {
           Checking clearance…
         </div>
       )}
-
       {lockPhase === 'locked' && (
         <div style={{ animation: 'al-text-appear 0.4s ease' }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'white', fontWeight: 900, marginBottom: 8 }}>
@@ -146,7 +266,6 @@ export default function AdminLogin({ onLogin }) {
           </div>
         </div>
       )}
-
       {lockPhase === 'denied' && (
         <div style={{ animation: 'al-text-appear 0.5s ease', position: 'relative', zIndex: 1 }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,4vw,2.2rem)', color: 'white', fontWeight: 900, marginBottom: 14, animation: 'denied-pulse 2.5s ease infinite' }}>
@@ -159,8 +278,6 @@ export default function AdminLogin({ onLogin }) {
           <div style={{ padding: '10px 24px', borderRadius: 10, background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(8px)', border: '1px solid rgba(220,38,38,0.4)', display: 'inline-block', fontSize: '0.78rem', color: '#fca5a5', fontFamily: 'monospace', letterSpacing: '0.1em', marginBottom: 32 }}>
             CLEARANCE LEVEL: INSUFFICIENT
           </div>
-
-          {/* Go back button */}
           <div style={{ animation: 'btn-appear 0.5s ease 0.3s both' }}>
             <button
               onClick={handleGoBack}
@@ -192,7 +309,6 @@ export default function AdminLogin({ onLogin }) {
             {loading ? '⏳ Signing in...' : '🔐 Sign In'}
           </button>
         </form>
-       
       </div>
     </div>
   )
