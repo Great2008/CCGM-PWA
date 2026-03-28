@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import Navbar     from './components/Navbar'
@@ -64,6 +65,7 @@ function AppInner() {
       <Footer />
       <PushPrompt user={user} />
       <SuspensionNotice />
+      <Analytics />
     </>
   )
 }
