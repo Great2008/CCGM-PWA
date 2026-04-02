@@ -1,294 +1,242 @@
 import { useState, useEffect } from 'react'
+import supabaseAdmin from '../supabase'
 import { useAdmin } from '../AdminApp'
-import supabaseAdmin from '../../lib/supabaseAdmin'
 import PageHeader from '../components/PageHeader'
-import AdminCard from '../components/AdminCard'
 
-const CATEGORIES = ['Sermons', 'Worship & Praise', 'Choir', 'Bible Study', 'Events & Programs', 'Testimonies', 'Devotionals']
-const EMPTY = { type: 'video', title: '', media_url: '', thumbnail_url: '', category: 'Sermons', series: '', description: '', date: new Date().toISOString().split('T')[0], featured: false, published: true, status: 'published' }
+/*
+  Supabase table required:
+  ─────────────────────────────────────────────────────
+  create table studio_pins (
+    id          uuid primary key default gen_random_uuid(),
+    video_id    text not null unique,
+    title       text not null,
+    note        text,
+    created_at  timestamptz default now()
+  );
+
+  RLS: only service_role (admin client) can insert/delete.
+  Public anon can SELECT (so Studio.jsx can read pins).
+  ─────────────────────────────────────────────────────
+*/
+
+const YT_ID_RE = /(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/
+
+function extractVideoId(input) {
+  const m = input.match(YT_ID_RE)
+  if (m) return m[1]
+  if (/^[A-Za-z0-9_-]{11}$/.test(input.trim())) return input.trim()
+  return null
+}
 
 export default function AdminStudio() {
-  const { showToast } = useAdmin()
-  const [items, setItems]         = useState([])
-  const [pending, setPending]     = useState([])
-  const [form, setForm]           = useState(null)
-  const [saving, setSaving]       = useState(false)
-  const [loading, setLoading]     = useState(true)
-  const [tab, setTab]             = useState('all')
-  const [delId, setDelId]         = useState(null)
-  const [rejectTarget, setRejectTarget] = useState(null)  // item being rejected
-  const [rejectReason, setRejectReason] = useState('')
+  const { showToast, logAction } = useAdmin()
+
+  const [pins, setPins]       = useState([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving]   = useState(false)
+
+  // Form
+  const [input, setInput] = useState('')   // URL or video ID
+  const [title, setTitle] = useState('')
+  const [note, setNote]   = useState('')
+  const [preview, setPreview] = useState(null)   // { id, thumb }
+
+  // Resolve preview when input changes
+  useEffect(() => {
+    const id = extractVideoId(input)
+    if (id) setPreview({ id, thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg` })
+    else setPreview(null)
+  }, [input])
 
   const load = async () => {
-    const [{ data: all }, { data: pend }] = await Promise.all([
-      supabaseAdmin.from('studio_items').select('*').eq('status', 'published').order('date', { ascending: false }),
-      supabaseAdmin.from('studio_items').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
-    ])
-    setItems(all || [])
-    setPending(pend || [])
+    setLoading(true)
+    const { data } = await supabaseAdmin.from('studio_pins').select('*').order('created_at', { ascending:false })
+    setPins(data || [])
     setLoading(false)
   }
 
   useEffect(() => { load() }, [])
 
-  const F = k => ({ value: form?.[k] ?? '', onChange: e => setForm(f => ({ ...f, [k]: e.target.value })) })
+  const handlePin = async () => {
+    const id = extractVideoId(input)
+    if (!id) { showToast('Invalid YouTube URL or video ID', 'error'); return }
+    if (!title.trim()) { showToast('Please enter a title for this pin', 'error'); return }
 
-  const handleSubmit = async e => {
-    e.preventDefault(); setSaving(true)
-    const { id, ...rest } = form
-    const payload = { ...rest, featured: !!form.featured, published: !!form.published }
-    const { error } = id
-      ? await supabaseAdmin.from('studio_items').update(payload).eq('id', id)
-      : await supabaseAdmin.from('studio_items').insert(payload)
-    if (!error) { showToast(id ? 'Item updated!' : 'Item added!'); setForm(null); load() }
-    else showToast(error.message, 'error')
-    setSaving(false)
-  }
-
-  const approve = async (item) => {
-    const { error } = await supabaseAdmin.from('studio_items').update({ status: 'published', published: true }).eq('id', item.id)
-    if (!error) { showToast(`"${item.title}" approved and published!`); load() }
-    else showToast(error.message, 'error')
-  }
-
-  const openReject = (item) => {
-    setRejectTarget(item)
-    setRejectReason('')
-  }
-
-  const confirmReject = async () => {
-    if (!rejectTarget) return
     setSaving(true)
-    const { error } = await supabaseAdmin.from('studio_items').update({
-      status: 'rejected',
-      published: false,
-      rejection_reason: rejectReason.trim() || null,
-    }).eq('id', rejectTarget.id)
-    if (!error) { showToast(`"${rejectTarget.title}" rejected.`, 'error'); load() }
-    else showToast(error.message, 'error')
-    setSaving(false)
-    setRejectTarget(null)
-    setRejectReason('')
-  }
+    const { error } = await supabaseAdmin.from('studio_pins').upsert({
+      video_id: id,
+      title:    title.trim(),
+      note:     note.trim() || null,
+    }, { onConflict: 'video_id' })
 
-  const handleDelete = async () => {
-    setSaving(true)
-    const { error } = await supabaseAdmin.from('studio_items').delete().eq('id', delId)
-    if (!error) { showToast('Deleted'); load() }
-    else showToast(error.message, 'error')
-    setSaving(false); setDelId(null)
-  }
-
-  const toggleFeatured = async (item) => {
-    // Unfeature all, then feature this one (only one featured at a time)
-    await supabaseAdmin.from('studio_items').update({ featured: false }).eq('featured', true)
-    if (!item.featured) {
-      await supabaseAdmin.from('studio_items').update({ featured: true }).eq('id', item.id)
-      showToast(`"${item.title}" is now featured!`)
+    if (error) {
+      showToast(error.message, 'error')
     } else {
-      showToast('Featured removed.')
+      showToast('📌 Video pinned successfully')
+      logAction('studio_pin', `Pinned video: ${title.trim()}`, title.trim())
+      setInput(''); setTitle(''); setNote(''); setPreview(null)
+      await load()
     }
-    load()
+    setSaving(false)
   }
 
-  const inp = { width: '100%', padding: '9px 12px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.88rem', background: 'white', boxSizing: 'border-box' }
-  const lbl = { display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: 5 }
+  const handleUnpin = async (pin) => {
+    if (!window.confirm(`Unpin "${pin.title}"?`)) return
+    setSaving(true)
+    await supabaseAdmin.from('studio_pins').delete().eq('id', pin.id)
+    showToast('Pin removed')
+    logAction('studio_unpin', `Unpinned video: ${pin.title}`, pin.title)
+    await load()
+    setSaving(false)
+  }
 
-  if (loading) return <div style={{ textAlign: 'center', padding: 60, color: 'var(--text-light)' }}>Loading Studio...</div>
+  const inputStyle = {
+    width:'100%', padding:'10px 14px', borderRadius:8,
+    border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)',
+    fontSize:'0.88rem', outline:'none', boxSizing:'border-box',
+  }
 
-  // ── FORM VIEW ──
-  if (form !== null) return (
-    <div>
-      <PageHeader icon="🎬" title={form.id ? 'Edit Item' : 'New Studio Item'} />
-      <AdminCard style={{ maxWidth: 760 }}>
-        <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-
-            {/* Type */}
-            <div style={{ gridColumn: '1/-1' }}>
-              <label style={lbl}>Content Type *</label>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {['video','music'].map(t => (
-                  <button key={t} type="button" onClick={() => setForm(f => ({ ...f, type: t }))}
-                    style={{ flex: 1, padding: '9px', borderRadius: 10, border: `2px solid ${form.type === t ? 'var(--brand-light)' : '#e2e8f0'}`, background: form.type === t ? 'var(--brand-pale)' : 'white', color: form.type === t ? 'var(--brand-light)' : 'var(--text-mid)', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.88rem', textTransform: 'capitalize' }}>
-                    {t === 'video' ? '🎬 Video' : '🎵 Music'}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ gridColumn: '1/-1' }}><label style={lbl}>Title *</label><input {...F('title')} required style={inp} placeholder="e.g. Amazing Grace — Sunday Choir" /></div>
-            <div style={{ gridColumn: '1/-1' }}><label style={lbl}>{form.type === 'video' ? 'YouTube / Video URL *' : 'Audio URL (MP3) *'}</label><input {...F('media_url')} required style={inp} placeholder={form.type === 'video' ? 'https://youtube.com/watch?v=...' : 'https://...mp3'} /></div>
-            <div style={{ gridColumn: '1/-1' }}><label style={lbl}>Thumbnail URL</label><input {...F('thumbnail_url')} style={inp} placeholder="Leave blank to auto-generate from YouTube" /></div>
-
-            <div>
-              <label style={lbl}>Category *</label>
-              <select {...F('category')} required style={{ ...inp, cursor: 'pointer' }}>
-                {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div><label style={lbl}>Series / Album</label><input {...F('series')} style={inp} placeholder="e.g. Sunday Choir Vol. 1" /></div>
-            <div><label style={lbl}>Date *</label><input type="date" {...F('date')} required style={inp} /></div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingTop: 22 }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-dark)' }}>
-                <input type="checkbox" checked={!!form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} />
-                Published
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-dark)' }}>
-                <input type="checkbox" checked={!!form.featured} onChange={e => setForm(f => ({ ...f, featured: e.target.checked }))} />
-                ★ Featured
-              </label>
-            </div>
-
-            <div style={{ gridColumn: '1/-1' }}><label style={lbl}>Description</label><textarea {...F('description')} rows={4} style={{ ...inp, resize: 'vertical' }} /></div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
-            <button type="submit" className="btn btn-blue" disabled={saving}>{saving ? '⏳ Saving...' : '💾 Save'}</button>
-            <button type="button" className="btn btn-outline-blue" onClick={() => setForm(null)}>Cancel</button>
-          </div>
-        </form>
-      </AdminCard>
-    </div>
-  )
-
-  // ── MAIN VIEW ──
   return (
     <div>
-      <PageHeader icon="🎬" title="CCG Studio"
-        subtitle={`${items.length} published · ${pending.length} pending`}
-        action={<button className="btn btn-blue" onClick={() => setForm({ ...EMPTY })}>+ Add Item</button>} />
+      <PageHeader
+        title="CCG Studio"
+        subtitle="Pin featured videos to the top of the Studio page. All other videos are fetched automatically from your YouTube channel."
+        icon="🎬"
+      />
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-        {[['all', `All Published (${items.length})`], ['pending', `⏳ Pending Approval ${pending.length > 0 ? `(${pending.length})` : ''}`]].map(([id, label]) => (
-          <button key={id} onClick={() => setTab(id)} style={{
-            padding: '8px 18px', borderRadius: 8, border: `1.5px solid ${tab === id ? 'var(--brand-light)' : '#e2e8f0'}`,
-            background: tab === id ? 'var(--brand-pale)' : 'white', color: tab === id ? 'var(--brand-light)' : 'var(--text-mid)',
-            cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.85rem',
-            ...(id === 'pending' && pending.length > 0 ? { borderColor: '#f59e0b', background: '#fffbf0', color: '#92400e' } : {}),
-          }}>{label}</button>
-        ))}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:28, alignItems:'start' }}>
+
+        {/* ── Pin form ── */}
+        <div style={{ background:'white', borderRadius:14, padding:24, boxShadow:'0 2px 12px rgba(0,0,0,0.07)' }}>
+          <h3 style={{ margin:'0 0 18px', color:'var(--brand-deep)', fontFamily:'var(--font-display)', fontSize:'1rem' }}>
+            📌 Pin a Video
+          </h3>
+
+          <div style={{ marginBottom:14 }}>
+            <label style={{ display:'block', fontSize:'0.78rem', fontWeight:700, color:'var(--text-mid)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }}>
+              YouTube URL or Video ID *
+            </label>
+            <input
+              style={inputStyle}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              placeholder="https://youtu.be/dQw4w9WgXcQ  or  dQw4w9WgXcQ"
+            />
+          </div>
+
+          {/* Preview thumbnail */}
+          {preview && (
+            <div style={{ marginBottom:14, borderRadius:10, overflow:'hidden', aspectRatio:'16/9', background:'#0f172a' }}>
+              <img src={preview.thumb} alt="preview" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+            </div>
+          )}
+
+          <div style={{ marginBottom:14 }}>
+            <label style={{ display:'block', fontSize:'0.78rem', fontWeight:700, color:'var(--text-mid)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }}>
+              Title *
+            </label>
+            <input style={inputStyle} value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Sunday Service — Easter 2025" />
+          </div>
+
+          <div style={{ marginBottom:20 }}>
+            <label style={{ display:'block', fontSize:'0.78rem', fontWeight:700, color:'var(--text-mid)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }}>
+              Internal Note (optional)
+            </label>
+            <input style={inputStyle} value={note} onChange={e => setNote(e.target.value)} placeholder="e.g. Keep pinned until June" />
+          </div>
+
+          <button
+            onClick={handlePin}
+            disabled={saving || !input.trim() || !title.trim()}
+            style={{
+              width:'100%', padding:'11px', borderRadius:10, border:'none',
+              background: (saving || !input.trim() || !title.trim()) ? '#9ca3af' : 'linear-gradient(135deg,var(--brand-base),var(--brand-mid))',
+              color:'white', fontWeight:700, fontSize:'0.9rem',
+              fontFamily:'var(--font-body)', cursor: (saving || !input.trim() || !title.trim()) ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {saving ? '⏳ Pinning…' : '📌 Pin Video'}
+          </button>
+
+          <p style={{ margin:'14px 0 0', fontSize:'0.75rem', color:'var(--text-light)', lineHeight:1.6 }}>
+            Pinned videos appear at the top of the Studio page with a 📌 badge, regardless of upload date.
+            If the video is already in the YouTube feed it will be highlighted there; otherwise it's added as a manual entry.
+          </p>
+        </div>
+
+        {/* ── Current pins ── */}
+        <div style={{ background:'white', borderRadius:14, padding:24, boxShadow:'0 2px 12px rgba(0,0,0,0.07)' }}>
+          <h3 style={{ margin:'0 0 18px', color:'var(--brand-deep)', fontFamily:'var(--font-display)', fontSize:'1rem' }}>
+            Currently Pinned ({pins.length})
+          </h3>
+
+          {loading && (
+            <div style={{ textAlign:'center', padding:32, color:'var(--text-light)' }}>⏳ Loading…</div>
+          )}
+
+          {!loading && pins.length === 0 && (
+            <div style={{ textAlign:'center', padding:32, color:'var(--text-light)', fontSize:'0.88rem' }}>
+              No pins yet. Add one on the left.
+            </div>
+          )}
+
+          {!loading && pins.map(pin => (
+            <div key={pin.id} style={{
+              display:'flex', gap:12, alignItems:'flex-start',
+              padding:'12px 0', borderBottom:'1px solid #f0f4fa',
+            }}>
+              <img
+                src={`https://i.ytimg.com/vi/${pin.video_id}/default.jpg`}
+                alt={pin.title}
+                style={{ width:80, height:45, objectFit:'cover', borderRadius:6, flexShrink:0 }}
+              />
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ fontWeight:700, fontSize:'0.85rem', color:'var(--text-dark)', lineHeight:1.3,
+                  overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                  {pin.title}
+                </div>
+                <div style={{ fontSize:'0.72rem', color:'var(--text-light)', fontFamily:'monospace', marginTop:3 }}>
+                  {pin.video_id}
+                </div>
+                {pin.note && (
+                  <div style={{ fontSize:'0.72rem', color:'var(--text-mid)', marginTop:3, fontStyle:'italic' }}>
+                    {pin.note}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => handleUnpin(pin)}
+                disabled={saving}
+                style={{ padding:'5px 12px', borderRadius:8, border:'1px solid #fecaca', background:'#fff5f5', color:'#dc2626', fontSize:'0.78rem', fontWeight:700, cursor:'pointer', flexShrink:0 }}
+              >
+                Unpin
+              </button>
+            </div>
+          ))}
+        </div>
+
       </div>
 
-      {/* ── PENDING TAB ── */}
-      {tab === 'pending' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {pending.length === 0 ? (
-            <AdminCard><div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>✅ No pending submissions.</div></AdminCard>
-          ) : pending.map(item => (
-            <AdminCard key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
-              <div style={{ flex: 1, minWidth: 200 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                  <span style={{ fontSize: '0.68rem', background: 'var(--brand-pale)', color: 'var(--brand-light)', padding: '2px 10px', borderRadius: 20, fontWeight: 700, textTransform: 'uppercase' }}>{item.type}</span>
-                  <span style={{ fontSize: '0.68rem', background: '#fffbf0', color: '#92400e', padding: '2px 10px', borderRadius: 20, fontWeight: 700 }}>⏳ Pending</span>
-                </div>
-                <div style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: '0.95rem', marginBottom: 4 }}>{item.title}</div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-mid)', marginBottom: 4 }}>{item.category}{item.series ? ` · ${item.series}` : ''}</div>
-                {item.media_url && (
-                  <a href={item.media_url} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: 'var(--brand-light)', wordBreak: 'break-all' }}>{item.media_url}</a>
-                )}
-                {item.description && <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: 6, lineHeight: 1.6 }}>{item.description}</p>}
-              </div>
-              <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-                <button onClick={() => approve(item)} style={{ padding: '8px 18px', borderRadius: 8, border: 'none', background: '#16a34a', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.82rem' }}>✓ Approve</button>
-                <button onClick={() => openReject(item)} style={{ padding: '8px 18px', borderRadius: 8, border: '1.5px solid #fca5a5', background: 'white', color: '#dc2626', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.82rem' }}>✗ Reject</button>
-                <button onClick={() => setForm({ ...item })} style={{ padding: '8px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.82rem' }}>✏️</button>
-              </div>
-            </AdminCard>
+      {/* Setup guide */}
+      <div style={{ marginTop:28, background:'#f0f9ff', borderRadius:14, padding:22, border:'1px solid #bae6fd' }}>
+        <h4 style={{ margin:'0 0 10px', color:'#0369a1', fontFamily:'var(--font-display)' }}>⚙️ Setup Checklist</h4>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:10 }}>
+          {[
+            { label:'YOUTUBE_API_KEY', desc:'Google Cloud Console → APIs & Services → Credentials' },
+            { label:'YOUTUBE_CHANNEL_ID', desc:'YouTube Studio → Settings → Channel → Advanced → Channel ID (starts with UC)' },
+          ].map(({ label, desc }) => (
+            <div key={label} style={{ background:'white', borderRadius:8, padding:'12px 14px', border:'1px solid #e0f2fe' }}>
+              <code style={{ fontSize:'0.78rem', fontWeight:700, color:'#0284c7', display:'block', marginBottom:4 }}>{label}</code>
+              <div style={{ fontSize:'0.75rem', color:'#0369a1', lineHeight:1.5 }}>{desc}</div>
+            </div>
           ))}
         </div>
-      )}
-
-      {/* ── ALL PUBLISHED TAB ── */}
-      {tab === 'all' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {items.length === 0 ? (
-            <AdminCard><div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>No content yet. Add your first item!</div></AdminCard>
-          ) : items.map(item => (
-            <AdminCard key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-              <div style={{ flex: 1, minWidth: 200 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                  <span style={{ fontSize: '0.68rem', background: item.type === 'video' ? '#fef2f2' : '#f0fdf4', color: item.type === 'video' ? '#dc2626' : '#16a34a', padding: '2px 10px', borderRadius: 20, fontWeight: 700, textTransform: 'uppercase' }}>
-                    {item.type === 'video' ? '▶ Video' : '♪ Music'}
-                  </span>
-                  {item.featured && <span style={{ fontSize: '0.68rem', background: '#fffbf0', color: '#92400e', padding: '2px 10px', borderRadius: 20, fontWeight: 700 }}>★ Featured</span>}
-                  {!item.published && <span style={{ fontSize: '0.68rem', background: '#f8fafc', color: 'var(--text-light)', padding: '2px 10px', borderRadius: 20, fontWeight: 700 }}>Draft</span>}
-                </div>
-                <div style={{ fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 3 }}>{item.title}</div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-mid)' }}>{item.category}{item.series ? ` · ${item.series}` : ''} · {item.date}</div>
-              </div>
-              <div style={{ display: 'flex', gap: 8, flexShrink: 0, flexWrap: 'wrap' }}>
-                <button onClick={() => toggleFeatured(item)}
-                  style={{ padding: '7px 14px', borderRadius: 8, border: `1.5px solid ${item.featured ? '#f59e0b' : '#e2e8f0'}`, background: item.featured ? '#fffbf0' : 'white', color: item.featured ? '#92400e' : 'var(--text-mid)', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 700 }}>
-                  {item.featured ? '★ Unfeature' : '☆ Feature'}
-                </button>
-                <button onClick={() => setForm({ ...item })} style={{ padding: '7px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.82rem' }}>✏️ Edit</button>
-                <button onClick={() => setDelId(item.id)} style={{ padding: '7px 14px', borderRadius: 8, border: '1.5px solid #fca5a5', background: 'white', color: '#dc2626', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.82rem' }}>🗑</button>
-              </div>
-            </AdminCard>
-          ))}
-        </div>
-      )}
-
-      {/* ── REJECTION REASON MODAL ── */}
-      {rejectTarget && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ background: 'white', borderRadius: 16, padding: 32, maxWidth: 440, width: '100%' }}>
-            <div style={{ fontSize: '2rem', marginBottom: 12, textAlign: 'center' }}>✗</div>
-            <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', marginBottom: 4, textAlign: 'center' }}>Reject Submission</h3>
-            <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', marginBottom: 20, textAlign: 'center', lineHeight: 1.6 }}>
-              Tell <strong>{rejectTarget.title}</strong>'s submitter why their content was rejected so they can improve or resubmit.
-            </p>
-
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: 6, letterSpacing: '0.05em' }}>
-                Reason for rejection <span style={{ color: 'var(--text-light)', fontWeight: 400 }}>(optional but recommended)</span>
-              </label>
-              <textarea
-                value={rejectReason}
-                onChange={e => setRejectReason(e.target.value)}
-                rows={4}
-                placeholder="e.g. Audio quality is too low. Please re-record with a better microphone and resubmit."
-                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.88rem', resize: 'vertical', boxSizing: 'border-box', lineHeight: 1.6, outline: 'none' }}
-                autoFocus
-              />
-              {!rejectReason.trim() && (
-                <div style={{ marginTop: 6, fontSize: '0.75rem', color: '#f59e0b', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  ⚠ Submitter won't know why their content was rejected without a reason.
-                </div>
-              )}
-            </div>
-
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={confirmReject} disabled={saving}
-                style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#dc2626', color: 'white', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.9rem', opacity: saving ? 0.7 : 1 }}>
-                {saving ? '⏳ Rejecting...' : '✗ Confirm Rejection'}
-              </button>
-              <button onClick={() => { setRejectTarget(null); setRejectReason('') }}
-                style={{ flex: 1, padding: '11px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, color: 'var(--text-mid)', fontSize: '0.9rem' }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete confirm */}
-      {delId && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ background: 'white', borderRadius: 16, padding: 32, maxWidth: 360, width: '100%', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: 12 }}>🗑</div>
-            <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', marginBottom: 10 }}>Delete this item?</h3>
-            <p style={{ color: 'var(--text-mid)', fontSize: '0.88rem', marginBottom: 24 }}>This cannot be undone.</p>
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button onClick={handleDelete} disabled={saving} style={{ padding: '10px 24px', borderRadius: 30, background: '#dc2626', color: 'white', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700 }}>{saving ? '...' : 'Delete'}</button>
-              <button onClick={() => setDelId(null)} style={{ padding: '10px 24px', borderRadius: 30, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, color: 'var(--text-mid)' }}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+        <p style={{ margin:'12px 0 0', fontSize:'0.78rem', color:'#0369a1', lineHeight:1.6 }}>
+          Add both as environment variables in your <strong>Vercel dashboard</strong> (Settings → Environment Variables).
+          The API key is never exposed to the browser — it's only used in <code>api/index.py</code>.
+          Enable the <strong>YouTube Data API v3</strong> in Google Cloud Console for your project.
+        </p>
+      </div>
     </div>
   )
 }
