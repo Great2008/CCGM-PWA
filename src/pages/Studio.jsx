@@ -180,9 +180,11 @@ function PlayerModal({ item, onClose }) {
   }, [onClose])
 
   const isPlaylist = item.type === 'playlist'
+  // No autoplay — mobile browsers block it and cause black screen
+  // Use rel=0 to hide related videos, modestbranding for cleaner look
   const embedSrc = isPlaylist
-    ? `https://www.youtube.com/embed/videoseries?list=${item.id}&autoplay=1`
-    : `https://www.youtube.com/embed/${item.id}?autoplay=1`
+    ? `https://www.youtube.com/embed/videoseries?list=${item.id}&rel=0&modestbranding=1`
+    : `https://www.youtube.com/embed/${item.id}?rel=0&modestbranding=1`
 
   return (
     <div
@@ -198,8 +200,9 @@ function PlayerModal({ item, onClose }) {
           <iframe
             src={embedSrc}
             title={item.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
             style={{ width:'100%', height:'100%', border:'none', display:'block' }}
           />
         </div>
