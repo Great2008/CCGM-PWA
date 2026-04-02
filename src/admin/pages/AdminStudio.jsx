@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import supabaseAdmin from '../supabase'
+import supabaseAdmin from '../../lib/supabaseAdmin'
 import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 
