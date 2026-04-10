@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useHomepageContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
+import AppDownloadBanner from '../components/AppDownloadBanner'
 
 export default function Contact() {
   const { data: hp } = useHomepageContent()
@@ -124,6 +125,8 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      <AppDownloadBanner />
 
       <style>{`
         @media(max-width:768px){ .contact-grid{grid-template-columns:1fr!important;gap:32px!important;} }

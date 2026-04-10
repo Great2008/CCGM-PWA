@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
+import AppDownloadBanner from './AppDownloadBanner'
 
 const BELL_SEEN_KEY = 'ccg-notif-last-seen'
 
@@ -343,6 +344,9 @@ export default function Navbar() {
             <Link to="/timeline" className="btn btn-gold" style={{width:'100%',justifyContent:'center',padding:'12px'}}>🌐 Join Community</Link>
           )}
           <Link to="/admin" style={{display:'block',textAlign:'center',marginTop:12,color:'rgba(255,255,255,0.25)',fontSize:'0.7rem'}}>Admin Panel</Link>
+          <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+            <AppDownloadBanner compact />
+          </div>
         </div>
       </div>
 

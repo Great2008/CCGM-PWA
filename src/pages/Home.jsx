@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useHomepageContent, useSermonsContent, useEventsContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
 import DailyVerseBanner from '../components/DailyVerseBanner'
+import AppDownloadBanner from '../components/AppDownloadBanner'
 
 export default function Home() {
   const { data: hp } = useHomepageContent()
@@ -261,6 +262,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <AppDownloadBanner />
 
       {/* CTA */}
       <section style={{background:'var(--cream)',padding:'clamp(60px,8vw,90px) 5%',textAlign:'center'}}>

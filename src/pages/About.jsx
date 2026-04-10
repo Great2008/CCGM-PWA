@@ -1,3 +1,5 @@
+import AppDownloadBanner from '../components/AppDownloadBanner'
+
 export default function About() {
   return (
     <>
@@ -72,6 +74,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <AppDownloadBanner />
 
       {/* Call to action */}
       <section style={{ background: 'var(--cream)', padding: '90px 5%', textAlign: 'center' }}>
