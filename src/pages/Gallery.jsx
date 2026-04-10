@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
+import SEO from '../components/SEO'
 
 const CACHE_KEY = 'ccgworld_gallery'
 
@@ -37,6 +38,11 @@ export default function Gallery() {
 
   return (
     <>
+      <SEO
+        title="Gallery"
+        description="Photos and memories from CCG World church events, services and programmes."
+        path="/gallery"
+      />
       <div style={{
         background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import ShareButton from '../components/ShareButton'
+import SEO from '../components/SEO'
 
 const CACHE_KEY     = 'ccgworld_devotionals'
 const BOOKMARKS_KEY = 'ccgworld_dev_bookmarks'
@@ -231,6 +232,12 @@ export default function Devotional() {
   )
 
   return (
+    <>
+      <SEO
+        title="Daily Devotional"
+        description="Daily devotionals from CCG World. Start each day with God's Word — 365 devotionals available offline."
+        path="/devotional"
+      />
     <div style={{ overflowX: 'hidden', width: '100%' }}>
       <style>{`
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
@@ -532,5 +539,6 @@ export default function Devotional() {
         </div>
       </div>
     </div>
+    </>
   )
 }

@@ -1,8 +1,14 @@
 import AppDownloadBanner from '../components/AppDownloadBanner'
+import SEO from '../components/SEO'
 
 export default function About() {
   return (
     <>
+      <SEO
+        title="About Us"
+        description="Learn about the Christian Church Of God Mission — our history, mission, vision and values. Rooted in the Word, growing in grace, reaching the world."
+        path="/about"
+      />
       <div style={{
         background: `linear-gradient(160deg, rgba(15,31,61,0.88) 0%, rgba(26,58,107,0.75) 100%), url('https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1600&q=80') center/cover`,
         padding: 'clamp(90px,14vw,130px) 5% 80px', textAlign: 'center',

@@ -1,6 +1,14 @@
+import SEO from '../components/SEO'
+
 export default function FindChurch() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--cream)', paddingTop: 66 }}>
+    <>
+      <SEO
+        title="Find a Church"
+        description="Find a CCG World church branch near you. Locate Christian Church Of God Mission branches worldwide."
+        path="/find-church"
+      />
+      <div style={{ minHeight: '100vh', background: 'var(--cream)', paddingTop: 66 }}>
 
       {/* Header */}
       <div style={{
@@ -125,5 +133,6 @@ export default function FindChurch() {
         }
       `}</style>
     </div>
+    </>
   )
 }

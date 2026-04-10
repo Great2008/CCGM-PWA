@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ccgm-pwa.vercel.app/sitemap.xml

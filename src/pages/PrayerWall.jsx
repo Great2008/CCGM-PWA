@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { auditLog } from '../lib/auditLog'
+import SEO from '../components/SEO'
 
 function timeAgo(ts) {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000)
@@ -252,6 +253,12 @@ export default function PrayerWall() {
   const filtered = filter === 'All' ? prayers : prayers.filter(p => p.category === filter)
 
   return (
+    <>
+      <SEO
+        title="Prayer Wall"
+        description="Submit and pray for prayer requests on the CCG World Prayer Wall. Believers standing together in faith."
+        path="/prayer-wall"
+      />
     <div style={{ minHeight: '100vh', background: 'var(--cream)', paddingTop: 66 }}>
 
       {/* Header */}
@@ -401,5 +408,6 @@ export default function PrayerWall() {
 
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
     </div>
+    </>
   )
 }

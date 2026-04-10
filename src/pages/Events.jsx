@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useEventsContent } from '../hooks/useContent'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import SEO from '../components/SEO'
 
 export default function Events() {
   const { data: events, loading } = useEventsContent()
@@ -30,6 +31,11 @@ export default function Events() {
 
   return (
     <>
+      <SEO
+        title="Events"
+        description="Upcoming events at CCG World — Christian Church Of God Mission. Programmes, services and special gatherings."
+        path="/events"
+      />
       <div style={{
         background: 'linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%)',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',

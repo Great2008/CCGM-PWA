@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { auditLog } from '../lib/auditLog'
 import { Link, useNavigate } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 const POST_TYPES = [
   { id:'update',    label:'📝 Update',    color:'var(--brand-light)' },
@@ -772,6 +773,11 @@ export default function Timeline() {
 
   return (
     <>
+      <SEO
+        title="Community Timeline"
+        description="CCG World Community Timeline — connect with members of the Christian Church Of God Mission worldwide."
+        path="/timeline"
+      />
       {/* Page header */}
       <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(90px,14vw,110px) 5% 40px',marginBottom:0}}>
         <div className="container" style={{maxWidth:760}}>

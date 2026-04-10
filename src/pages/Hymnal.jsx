@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 const CACHE_KEY    = 'ccgworld_hymns'
 const CACHE_TTL    = 24 * 60 * 60 * 1000
@@ -209,6 +210,12 @@ export default function Hymnal() {
   )
 
   return (
+    <>
+      <SEO
+        title="Hymnal"
+        description="Browse and sing from the CCG World Hymnal. Hundreds of hymns and worship songs, available offline."
+        path="/hymnal"
+      />
     <div style={{ overflowX: 'hidden', width: '100%' }}>
       <style>{`
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
@@ -441,5 +448,6 @@ export default function Hymnal() {
         </div>
       </div>
     </div>
+    </>
   )
 }

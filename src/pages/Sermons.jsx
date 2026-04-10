@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSermonsContent } from '../hooks/useContent'
 import { ShareButtonLight } from '../components/ShareButton'
+import SEO from '../components/SEO'
 
 export default function Sermons() {
   const { data: sermons, loading } = useSermonsContent()
@@ -19,6 +20,11 @@ export default function Sermons() {
 
   return (
     <>
+      <SEO
+        title="Sermons"
+        description="Watch and listen to CCG World sermons. Spirit-filled messages from the Christian Church Of God Mission."
+        path="/sermons"
+      />
       <div style={{
         background: 'linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%)',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',

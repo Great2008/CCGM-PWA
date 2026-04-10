@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
 import ShareButton, { ShareButtonLight } from '../components/ShareButton'
 import NewsletterSignup from '../components/NewsletterSignup'
+import SEO from '../components/SEO'
 
 const CACHE_KEY = 'ccgworld_blog'
 
@@ -63,6 +64,11 @@ export default function Blog() {
 
   return (
     <>
+      <SEO
+        title="Blog"
+        description="Read the latest articles, news and updates from CCG World — Christian Church Of God Mission."
+        path="/blog"
+      />
       <div style={{
         background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',

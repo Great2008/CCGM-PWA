@@ -4,6 +4,7 @@ import { useHomepageContent, useSermonsContent, useEventsContent } from '../hook
 import supabase from '../lib/supabase'
 import DailyVerseBanner from '../components/DailyVerseBanner'
 import AppDownloadBanner from '../components/AppDownloadBanner'
+import SEO from '../components/SEO'
 
 export default function Home() {
   const { data: hp } = useHomepageContent()
@@ -47,6 +48,11 @@ export default function Home() {
 
   return (
     <>
+      <SEO
+        title="Home"
+        description="Welcome to CCG World — Christian Church Of God Mission. Access Bible, Hymnal, Daily Devotionals, Sermons, Live Services, Sabbath School and more."
+        path="/"
+      />
       {hp.announcement?.show && hp.announcement?.text && (
         <div style={{ background:'var(--gold)',color:'var(--green-deep)',textAlign:'center',padding:'12px 20px',fontSize:'0.9rem',fontWeight:700,lineHeight:1.5,position:'fixed',top:0,left:0,right:0,zIndex:2000 }}>
           {hp.announcement.text}

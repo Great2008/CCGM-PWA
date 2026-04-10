@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import supabase from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
@@ -158,6 +159,11 @@ function LiveChat({ isLive }) {
   // Floating chat button + panel
   return (
     <>
+      <SEO
+        title="Live Service"
+        description="Watch CCG World live services online. Join us every Saturday for worship — Christian Church Of God Mission."
+        path="/live"
+      />
       {/* Toggle button */}
       <button
         onClick={() => setOpen(o => !o)}

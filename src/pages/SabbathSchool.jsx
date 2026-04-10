@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
+import SEO from '../components/SEO'
 
 const CACHE_KEY = 'ccg-sabbath-current'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
@@ -228,6 +229,12 @@ export default function SabbathSchool() {
   const nextLesson = filtered[lessonIdx - 1]
 
   return (
+    <>
+      <SEO
+        title="Sabbath School"
+        description="CCG World Sabbath School — weekly Bible lessons for adults and youth. Study God's Word every Saturday."
+        path="/sabbath-school"
+      />
     <div style={{ overflowX: 'hidden', width: '100%' }}>
       <style>{`
         @media (max-width: 768px) {
@@ -632,5 +639,6 @@ export default function SabbathSchool() {
         </div>
       </div>
     </div>
+    </>
   )
 }

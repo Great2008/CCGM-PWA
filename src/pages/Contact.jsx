@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useHomepageContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
 import AppDownloadBanner from '../components/AppDownloadBanner'
+import SEO from '../components/SEO'
 
 export default function Contact() {
   const { data: hp } = useHomepageContent()
@@ -47,6 +48,11 @@ export default function Contact() {
 
   return (
     <>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with CCG World — Christian Church Of God Mission. Send a prayer request, general inquiry or find out how to get involved."
+        path="/contact"
+      />
       <div style={{ background:'linear-gradient(135deg,var(--brand-deep) 0%,var(--brand-mid) 100%)', padding:'clamp(90px,14vw,130px) 5% 56px', textAlign:'center' }}>
         <span className="section-label">Get In Touch</span>
         <h1 style={{ fontFamily:'var(--font-display)', fontWeight:900, fontSize:'clamp(2rem,5vw,3.2rem)', color:'white', margin:'8px 0 16px' }}>Contact Us</h1>

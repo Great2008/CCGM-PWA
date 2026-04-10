@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -346,6 +347,11 @@ export default function Studio() {
 
   return (
     <>
+      <SEO
+        title="Studio"
+        description="CCG World Studio — sermons, teachings and worship videos from the Christian Church Of God Mission YouTube channel."
+        path="/studio"
+      />
       <style>{`
         @keyframes studio-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         @keyframes studio-pulse   { 0%,100%{opacity:1} 50%{opacity:0.4} }

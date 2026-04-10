@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { KJV_BOOKS } from '../data/bibleData'
+import SEO from '../components/SEO'
 
 // Popular verses — always available instantly, no fetch needed
 const POPULAR = [
@@ -228,6 +229,11 @@ export default function Bible() {
 
   return (
     <>
+      <SEO
+        title="Bible"
+        description="Read the full King James Version Bible online and offline. CCG World — Christian Church Of God Mission."
+        path="/bible"
+      />
       <div style={{ background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)', padding: 'clamp(80px,12vw,120px) 5% 0' }}>
         <div className="container">
           <div className="bible-header-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, paddingBottom: 24 }}>
