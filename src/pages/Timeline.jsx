@@ -11,6 +11,15 @@ const POST_TYPES = [
   { id:'prayer',    label:'🙏 Prayer',    color:'#059669' },
 ]
 
+const TOPIC_CATEGORIES = [
+  { id:'general',   label:'💬 General',       color:'#64748b' },
+  { id:'bible',     label:'📖 Bible Study',   color:'#7c3aed' },
+  { id:'prayer',    label:'🙏 Prayer',        color:'#059669' },
+  { id:'youth',     label:'🔥 Youth Corner',  color:'#f97316' },
+  { id:'worship',   label:'🎵 Worship',       color:'#ec4899' },
+  { id:'testimony', label:'🙌 Testimonies',   color:'#0ea5e9' },
+]
+
 function timeAgo(ts) {
   const d = Math.floor((Date.now() - new Date(ts)) / 1000)
   if (d < 60)    return 'just now'
@@ -24,6 +33,331 @@ function Avatar({ profile, size=40 }) {
   return profile?.avatar_url
     ? <img src={profile.avatar_url} alt="" style={{width:size,height:size,borderRadius:'50%',objectFit:'cover',flexShrink:0}} />
     : <div style={{width:size,height:size,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-light),var(--gold))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:size*0.38,flexShrink:0}}>{init}</div>
+}
+
+/* ── ThreadedReply component for Topics ── */
+function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, isAdmin }) {
+  const [showReplyBox, setShowReplyBox] = useState(false)
+  const [replyText, setReplyText]       = useState('')
+  const [sending, setSending]           = useState(false)
+  const [childReplies, setChildReplies] = useState(reply.children || [])
+
+  const submitReply = async () => {
+    if (!replyText.trim() || sending || !currentUserId) return
+    setSending(true)
+    const { data } = await supabase.from('topic_replies').insert({
+      topic_id: topicId,
+      user_id: currentUserId,
+      body: replyText.trim(),
+      parent_id: reply.id,
+    }).select('*, profiles(display_name,full_name,avatar_url)').single()
+    if (data) {
+      setChildReplies(c => [...c, { ...data, children: [] }])
+      onReplyAdded && onReplyAdded()
+    }
+    setReplyText('')
+    setSending(false)
+    setShowReplyBox(false)
+  }
+
+  const deleteReply = async () => {
+    if (!window.confirm('Delete this reply?')) return
+    await supabase.from('topic_replies').delete().eq('id', reply.id)
+    // Parent refreshes
+    onReplyAdded && onReplyAdded()
+  }
+
+  const maxDepth = 3
+  const indent = Math.min(depth, maxDepth) * 20
+
+  return (
+    <div style={{marginLeft: indent, borderLeft: depth > 0 ? '2px solid #f1f5f9' : 'none', paddingLeft: depth > 0 ? 14 : 0, marginTop: 10}}>
+      <div style={{display:'flex', gap:10, alignItems:'flex-start'}}>
+        <Avatar profile={reply.profiles} size={depth === 0 ? 34 : 28} />
+        <div style={{flex:1}}>
+          <div style={{background:'#f8fafc', borderRadius:12, padding:'10px 14px'}}>
+            <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap:8, marginBottom:4}}>
+              <span style={{fontWeight:700, fontSize:'0.82rem', color:'var(--text-dark)'}}>
+                {reply.profiles?.display_name || reply.profiles?.full_name || 'Member'}
+              </span>
+              <div style={{display:'flex', alignItems:'center', gap:6}}>
+                <span style={{fontSize:'0.7rem', color:'var(--text-light)'}}>{timeAgo(reply.created_at)}</span>
+                {(currentUserId === reply.user_id || isAdmin) && (
+                  <button onClick={deleteReply} style={{background:'none',border:'none',cursor:'pointer',color:'#ef4444',fontSize:'0.75rem',opacity:0.5,padding:'0 2px'}}>🗑</button>
+                )}
+              </div>
+            </div>
+            <p style={{margin:0, fontSize:'0.88rem', color:'var(--text-mid)', lineHeight:1.65, whiteSpace:'pre-wrap', wordBreak:'break-word'}}>{reply.body}</p>
+          </div>
+          {currentUserId && depth < maxDepth && (
+            <button onClick={() => setShowReplyBox(s => !s)}
+              style={{marginTop:4, background:'none', border:'none', cursor:'pointer', color:'var(--brand-light)', fontSize:'0.75rem', fontWeight:700, padding:'2px 0', fontFamily:'var(--font-body)'}}>
+              {showReplyBox ? 'Cancel' : '↩ Reply'}
+            </button>
+          )}
+          {showReplyBox && (
+            <div style={{display:'flex', gap:8, marginTop:8}}>
+              <input value={replyText} onChange={e=>setReplyText(e.target.value)}
+                placeholder="Write a reply..."
+                onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&submitReply()}
+                autoFocus
+                style={{flex:1, padding:'7px 12px', borderRadius:20, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.85rem', outline:'none'}} />
+              <button onClick={submitReply} disabled={!replyText.trim()||sending}
+                style={{padding:'7px 16px', borderRadius:20, background:'var(--brand-light)', color:'white', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.78rem', opacity:!replyText.trim()?0.5:1}}>
+                {sending ? '...' : 'Post'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+      {childReplies.map(child => (
+        <ThreadedReply key={child.id} reply={child} depth={depth+1}
+          currentUserId={currentUserId} topicId={topicId}
+          onReplyAdded={onReplyAdded} isAdmin={isAdmin} />
+      ))}
+    </div>
+  )
+}
+
+/* ── TopicCard component ── */
+function TopicCard({ topic, currentUserId, isAdmin, onDelete, onOpen }) {
+  const cat = TOPIC_CATEGORIES.find(c=>c.id===topic.category) || TOPIC_CATEGORIES[0]
+  return (
+    <div onClick={() => onOpen(topic)}
+      style={{background:'var(--white, white)', borderRadius:16, boxShadow:'var(--shadow-sm)', border:'1px solid rgba(15,31,61,0.05)', marginBottom:14, cursor:'pointer', transition:'box-shadow 0.15s, transform 0.12s'}}
+      onMouseEnter={e=>{e.currentTarget.style.boxShadow='0 4px 20px rgba(15,31,61,0.1)'; e.currentTarget.style.transform='translateY(-1px)'}}
+      onMouseLeave={e=>{e.currentTarget.style.boxShadow='var(--shadow-sm)'; e.currentTarget.style.transform='none'}}>
+      <div style={{padding:'16px 20px 12px', display:'flex', gap:12, alignItems:'flex-start'}}>
+        <Avatar profile={topic.profiles} size={42} />
+        <div style={{flex:1, minWidth:0}}>
+          <div style={{display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', marginBottom:4}}>
+            <span style={{fontSize:'0.7rem', fontWeight:700, padding:'2px 10px', borderRadius:20, background:cat.color+'18', color:cat.color}}>{cat.label}</span>
+            <span style={{fontSize:'0.68rem', color:'var(--text-light)'}}>{timeAgo(topic.created_at)}</span>
+          </div>
+          <h3 style={{margin:'0 0 4px', fontSize:'1rem', fontWeight:800, color:'var(--text-dark)', lineHeight:1.35}}>{topic.title}</h3>
+          <p style={{margin:0, fontSize:'0.85rem', color:'var(--text-mid)', lineHeight:1.6, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden'}}>{topic.body}</p>
+        </div>
+        {(currentUserId === topic.user_id || isAdmin) && (
+          <button onClick={e=>{e.stopPropagation(); onDelete(topic.id)}}
+            style={{background:'none', border:'none', cursor:'pointer', color:'#ef4444', fontSize:'1rem', opacity:0.45, padding:4, flexShrink:0}} title="Delete">🗑</button>
+        )}
+      </div>
+      <div style={{padding:'8px 20px 14px', display:'flex', gap:16, alignItems:'center'}}>
+        <span style={{fontSize:'0.8rem', color:'var(--text-light)', display:'flex', alignItems:'center', gap:4}}>
+          <span style={{fontWeight:700, color:'var(--text-dark)'}}>{topic.profiles?.display_name||topic.profiles?.full_name||'Member'}</span>
+        </span>
+        <span style={{marginLeft:'auto', fontSize:'0.78rem', color:'var(--text-light)', display:'flex', alignItems:'center', gap:4}}>
+          💬 {topic.reply_count || 0} {topic.reply_count === 1 ? 'reply' : 'replies'}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/* ── TopicDetailModal ── */
+function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdated }) {
+  const [replies, setReplies]     = useState([])
+  const [loading, setLoading]     = useState(true)
+  const [replyText, setReplyText] = useState('')
+  const [sending, setSending]     = useState(false)
+  const cat = TOPIC_CATEGORIES.find(c=>c.id===topic.category) || TOPIC_CATEGORIES[0]
+
+  const loadReplies = async () => {
+    const { data } = await supabase.from('topic_replies')
+      .select('*, profiles(display_name,full_name,avatar_url)')
+      .eq('topic_id', topic.id)
+      .is('parent_id', null)
+      .order('created_at')
+    if (!data) { setLoading(false); return }
+
+    // Fetch all nested replies for this topic
+    const { data: allReplies } = await supabase.from('topic_replies')
+      .select('*, profiles(display_name,full_name,avatar_url)')
+      .eq('topic_id', topic.id)
+      .not('parent_id', 'is', null)
+      .order('created_at')
+
+    // Build tree
+    const replyMap = {}
+    data.forEach(r => { replyMap[r.id] = { ...r, children: [] } })
+    ;(allReplies || []).forEach(r => {
+      if (replyMap[r.parent_id]) replyMap[r.parent_id].children.push({ ...r, children: [] })
+    })
+    setReplies(data.map(r => replyMap[r.id]))
+    setLoading(false)
+  }
+
+  useEffect(() => { loadReplies() }, [topic.id])
+
+  const submitTopLevelReply = async () => {
+    if (!replyText.trim() || sending || !currentUserId) return
+    setSending(true)
+    await supabase.from('topic_replies').insert({
+      topic_id: topic.id,
+      user_id: currentUserId,
+      body: replyText.trim(),
+      parent_id: null,
+    })
+    setReplyText('')
+    await loadReplies()
+    onTopicUpdated && onTopicUpdated()
+    setSending(false)
+  }
+
+  return (
+    <div style={{position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'flex-start', justifyContent:'center', zIndex:9990, padding:'20px 16px', overflowY:'auto'}}>
+      <div style={{background:'var(--white, white)', borderRadius:20, width:'100%', maxWidth:680, boxShadow:'0 24px 80px rgba(0,0,0,0.3)', marginTop:60, marginBottom:40}}>
+        {/* Header */}
+        <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', borderRadius:'20px 20px 0 0', padding:'24px 24px 20px', position:'relative'}}>
+          <button onClick={onClose}
+            style={{position:'absolute', top:14, right:16, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:8, cursor:'pointer', fontSize:'1rem', color:'white', lineHeight:1, padding:'4px 10px', fontFamily:'var(--font-body)'}}>✕</button>
+          <div style={{display:'flex', gap:12, alignItems:'flex-start', paddingRight:40}}>
+            <Avatar profile={topic.profiles} size={44} />
+            <div>
+              <span style={{fontSize:'0.68rem', fontWeight:700, padding:'2px 10px', borderRadius:20, background:'rgba(255,255,255,0.15)', color:'white', display:'inline-block', marginBottom:8}}>{cat.label}</span>
+              <h2 style={{fontFamily:'var(--font-display)', color:'white', fontSize:'1.2rem', margin:'0 0 4px', fontWeight:800, lineHeight:1.3}}>{topic.title}</h2>
+              <div style={{fontSize:'0.75rem', color:'rgba(255,255,255,0.65)'}}>
+                {topic.profiles?.display_name||topic.profiles?.full_name||'Member'} · {timeAgo(topic.created_at)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Original body */}
+        <div style={{padding:'20px 24px', borderBottom:'1px solid #f1f5f9'}}>
+          <p style={{margin:0, color:'var(--text-mid)', fontSize:'0.95rem', lineHeight:1.8, whiteSpace:'pre-wrap', wordBreak:'break-word'}}>{topic.body}</p>
+        </div>
+
+        {/* Replies */}
+        <div style={{padding:'16px 24px'}}>
+          <div style={{fontWeight:700, fontSize:'0.85rem', color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:14}}>
+            💬 {replies.length} {replies.length===1?'Reply':'Replies'}
+          </div>
+
+          {loading && <div style={{textAlign:'center', padding:'30px', color:'var(--text-light)'}}>Loading replies…</div>}
+
+          {!loading && replies.length === 0 && (
+            <div style={{textAlign:'center', padding:'30px', color:'var(--text-light)', fontSize:'0.9rem'}}>
+              No replies yet. Be the first to respond! 🙌
+            </div>
+          )}
+
+          {replies.map(reply => (
+            <ThreadedReply key={reply.id} reply={reply} depth={0}
+              currentUserId={currentUserId} topicId={topic.id}
+              onReplyAdded={loadReplies} isAdmin={isAdmin} />
+          ))}
+
+          {/* Top-level reply box */}
+          {currentUserId ? (
+            <div style={{display:'flex', gap:10, marginTop:20, paddingTop:16, borderTop:'1px solid #f1f5f9'}}>
+              <textarea value={replyText} onChange={e=>setReplyText(e.target.value)}
+                placeholder="Share your thoughts…"
+                rows={2}
+                style={{flex:1, padding:'10px 14px', borderRadius:12, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.9rem', resize:'vertical', outline:'none', transition:'border-color 0.2s'}}
+                onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
+                onBlur={e=>e.target.style.borderColor='#e2e8f0'}
+                onKeyDown={e=>e.key==='Enter'&&e.ctrlKey&&submitTopLevelReply()}
+              />
+              <button onClick={submitTopLevelReply} disabled={!replyText.trim()||sending}
+                style={{padding:'10px 20px', borderRadius:12, background:'var(--brand-light)', color:'white', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.85rem', alignSelf:'flex-end', opacity:!replyText.trim()?0.5:1, fontFamily:'var(--font-body)'}}>
+                {sending ? '…' : 'Reply 🕊'}
+              </button>
+            </div>
+          ) : (
+            <div style={{marginTop:16, padding:'14px', background:'var(--brand-pale,#e8f5e9)', borderRadius:10, textAlign:'center', fontSize:'0.85rem', color:'var(--text-mid)'}}>
+              Sign in to reply to this topic.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── New Topic Modal ── */
+function NewTopicModal({ currentUser, profile, onClose, onCreated }) {
+  const [title, setTitle]     = useState('')
+  const [body, setBody]       = useState('')
+  const [category, setCategory] = useState('general')
+  const [posting, setPosting] = useState(false)
+  const [err, setErr]         = useState('')
+
+  const submit = async () => {
+    if (!title.trim() || !body.trim() || posting) return
+    if (title.trim().length < 10) { setErr('Title must be at least 10 characters.'); return }
+    setErr('')
+    setPosting(true)
+    const { error } = await supabase.from('timeline_topics').insert({
+      user_id: currentUser.id,
+      title: title.trim(),
+      body: body.trim(),
+      category,
+    })
+    if (error) { setErr('Something went wrong. Please try again.'); setPosting(false); return }
+    onCreated()
+    onClose()
+  }
+
+  return (
+    <div style={{position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:20}}>
+      <div style={{background:'var(--white, white)', borderRadius:20, width:'100%', maxWidth:520, boxShadow:'0 24px 80px rgba(0,0,0,0.3)', overflow:'hidden'}}>
+        <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'20px 24px'}}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+            <h3 style={{fontFamily:'var(--font-display)', color:'white', margin:0, fontSize:'1.15rem'}}>💬 Start a New Topic</h3>
+            <button onClick={onClose} style={{background:'rgba(255,255,255,0.15)', border:'none', borderRadius:8, cursor:'pointer', color:'white', fontSize:'1rem', padding:'4px 10px'}}>✕</button>
+          </div>
+        </div>
+        <div style={{padding:'24px'}}>
+          {/* Category selector */}
+          <div style={{marginBottom:18}}>
+            <label style={{fontSize:'0.72rem', fontWeight:700, color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', display:'block', marginBottom:8}}>Category</label>
+            <div style={{display:'flex', flexWrap:'wrap', gap:6}}>
+              {TOPIC_CATEGORIES.map(cat => (
+                <button key={cat.id} onClick={() => setCategory(cat.id)}
+                  style={{padding:'5px 14px', borderRadius:20, border:`1.5px solid ${category===cat.id?cat.color:'#e2e8f0'}`, background:category===cat.id?cat.color+'15':'white', color:category===cat.id?cat.color:'var(--text-light)', fontSize:'0.78rem', fontWeight:category===cat.id?700:400, cursor:'pointer', fontFamily:'var(--font-body)', transition:'all 0.15s'}}>
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Title */}
+          <div style={{marginBottom:14}}>
+            <label style={{fontSize:'0.72rem', fontWeight:700, color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', display:'block', marginBottom:6}}>Topic Title</label>
+            <input value={title} onChange={e=>setTitle(e.target.value)}
+              placeholder="e.g. What does Proverbs 3:5-6 mean to you?"
+              maxLength={120}
+              style={{width:'100%', padding:'11px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.92rem', outline:'none', color:'var(--text-dark)', boxSizing:'border-box', background:'var(--white, white)'}}
+              onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
+              onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+            <div style={{textAlign:'right', fontSize:'0.72rem', color:'var(--text-light)', marginTop:4}}>{title.length}/120</div>
+          </div>
+
+          {/* Body */}
+          <div style={{marginBottom:18}}>
+            <label style={{fontSize:'0.72rem', fontWeight:700, color:'var(--text-light)', textTransform:'uppercase', letterSpacing:'0.1em', display:'block', marginBottom:6}}>Description</label>
+            <textarea value={body} onChange={e=>setBody(e.target.value)}
+              placeholder="Give context or ask your question…"
+              rows={4}
+              style={{width:'100%', padding:'11px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.92rem', outline:'none', color:'var(--text-dark)', resize:'vertical', boxSizing:'border-box', background:'var(--white, white)'}}
+              onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
+              onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
+          </div>
+
+          {err && <div style={{background:'#fff5f5', border:'1px solid #fecaca', borderRadius:8, padding:'10px 14px', color:'#dc2626', fontSize:'0.84rem', marginBottom:14}}>❌ {err}</div>}
+
+          <div style={{display:'flex', gap:10}}>
+            <button onClick={submit} disabled={!title.trim()||!body.trim()||posting}
+              className="btn btn-blue" style={{flex:1, justifyContent:'center', padding:'12px', opacity:(!title.trim()||!body.trim())?0.5:1}}>
+              {posting ? 'Posting…' : 'Create Topic 🕊'}
+            </button>
+            <button onClick={onClose} style={{padding:'12px 20px', borderRadius:10, border:'1.5px solid #e2e8f0', background:'white', color:'var(--text-mid)', fontWeight:600, cursor:'pointer', fontFamily:'var(--font-body)'}}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function PostCard({ post, currentUserId, onReact, onComment, onDelete, isAdmin, onReport, reportedByMe }) {
@@ -298,148 +632,103 @@ function AuthModal({ onClose }) {
             <form onSubmit={handleSignIn}>
               <div style={{marginBottom:14}}>
                 <label style={label}>Email</label>
-                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="your@email.com"
+                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
-              <div style={{marginBottom:18}}>
+              <div style={{marginBottom:20}}>
                 <label style={label}>Password</label>
-                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} required placeholder="••••••••"
+                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
               <ErrBox />
-              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px'}} disabled={loading}>
+              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:16}} disabled={loading}>
                 {loading ? '⏳ Signing in…' : 'Sign In →'}
               </button>
             </form>
-            <div style={{textAlign:'center',marginTop:16}}>
-              <button onClick={()=>{setMode('signup');setStep(1);setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.85rem',fontFamily:'var(--font-body)',fontWeight:600}}>
-                No account? Sign up free →
-              </button>
+            <div style={{textAlign:'center',fontSize:'0.84rem',color:'var(--text-light)'}}>
+              Don't have an account?{' '}
+              <button onClick={()=>{setMode('signup');setStep(1);setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontWeight:700,fontFamily:'var(--font-body)',fontSize:'0.84rem'}}>Sign Up</button>
             </div>
           </>
         )}
 
-        {/* ── SIGNUP STEP 1: Credentials ── */}
+        {/* ── SIGNUP STEP 1 ── */}
         {mode === 'signup' && step === 1 && (
           <>
             <Header title="Join CCG World" sub="Step 1 of 3 — Create your login" />
             <div style={{display:'flex',gap:6,marginBottom:22}}>
               {[1,2,3].map(s=>(
-                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=1?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
+                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=step?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
               ))}
             </div>
             <form onSubmit={handleCredsNext}>
               <div style={{marginBottom:14}}>
-                <label style={label}>Email *</label>
-                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="your@email.com"
+                <label style={label}>Email</label>
+                <input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
               <div style={{marginBottom:14}}>
-                <label style={label}>Password *</label>
-                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} required placeholder="At least 6 characters"
+                <label style={label}>Password</label>
+                <input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="Min 6 characters" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
-              <div style={{marginBottom:18}}>
-                <label style={label}>Confirm Password *</label>
-                <input style={inputStyle} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} required placeholder="Re-enter password"
+              <div style={{marginBottom:20}}>
+                <label style={label}>Confirm Password</label>
+                <input style={inputStyle} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
               <ErrBox />
-              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px'}}>
+              <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:16}}>
                 Continue →
               </button>
             </form>
-            <div style={{textAlign:'center',marginTop:16}}>
-              <button onClick={()=>{setMode('signin');setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.85rem',fontFamily:'var(--font-body)',fontWeight:600}}>
-                Already have an account? Sign in
-              </button>
+            <div style={{textAlign:'center',fontSize:'0.84rem',color:'var(--text-light)'}}>
+              Already have an account?{' '}
+              <button onClick={()=>{setMode('signin');setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontWeight:700,fontFamily:'var(--font-body)',fontSize:'0.84rem'}}>Sign In</button>
             </div>
           </>
         )}
 
-        {/* ── SIGNUP STEP 2: Profile ── */}
+        {/* ── SIGNUP STEP 2 ── */}
         {mode === 'signup' && step === 2 && (
           <>
             <Header title="Your Profile" sub="Step 2 of 3 — Tell us about yourself" />
             <div style={{display:'flex',gap:6,marginBottom:22}}>
               {[1,2,3].map(s=>(
-                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=2?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
+                <div key={s} style={{flex:1,height:4,borderRadius:2,background:s<=step?'var(--brand-base)':'#e2e8f0',transition:'background 0.3s'}} />
               ))}
             </div>
             <form onSubmit={handleProfileNext}>
-
-              {/* Required */}
-              <div style={{marginBottom:14}}>\
-                <label style={label}>Full Name *</label>
-                <input style={inputStyle} value={fullName} onChange={e=>setFullName(e.target.value)} required placeholder="e.g. Samuel Adeyemi"
+              <div style={{marginBottom:14}}>
+                <label style={label}>Full Name</label>
+                <input style={inputStyle} value={fullName} onChange={e=>setFullName(e.target.value)} placeholder="e.g. Grace Okonkwo" required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
               </div>
-
-              {/* Gender — required */}
               <div style={{marginBottom:14}}>
-                <label style={label}>Gender *</label>
-                <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={gender} onChange={e=>{ setGender(e.target.value); setChurchPost('') }}
+                <label style={label}>Gender</label>
+                <select style={{...inputStyle}} value={gender} onChange={e=>setGender(e.target.value)} required
                   onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
                   <option value="">Select gender…</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
               </div>
-
-              {/* Church Post — required after gender selected */}
-              {gender && (
-                <div style={{marginBottom:14}}>
-                  <label style={label}>Church Post *</label>
-                  <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={churchPost} onChange={e=>setChurchPost(e.target.value)}
-                    onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
-                    <option value="">Select your post…</option>
-                    {gender === 'Male' && <>
-                      <option value="Brother">Brother</option>
-                      <option value="Deacon">Deacon</option>
-                      <option value="Elder">Elder</option>
-                      <option value="Evangelist">Evangelist</option>
-                      <option value="Prophet">Prophet</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Apostle">Apostle</option>
-                    </>}
-                    {gender === 'Female' && <>
-                      <option value="Sister">Sister</option>
-                      <option value="Deaconess">Deaconess</option>
-                      <option value="Evangelist">Evangelist</option>
-                      <option value="Prophet">Prophet</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Apostle">Apostle</option>
-                    </>}
-                  </select>
-                  {churchPost && ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle'].includes(churchPost) && (
-                    <div style={{fontSize:'0.76rem',color:'#92400e',marginTop:4,background:'#fff7ed',padding:'6px 10px',borderRadius:6}}>
-                      ⏳ <strong>{churchPost}</strong> requires admin approval before it shows on your profile.
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Church Branch — required */}
-              <div style={{marginBottom:14}}>
-                <label style={label}>Church Branch *</label>
+              <div style={{marginBottom:6}}>
+                <label style={label}>Church Branch</label>
                 {!notListed ? (
-                  <select style={{...inputStyle, appearance:'none', cursor:'pointer'}} value={branch} onChange={e=>{ if(e.target.value==='__not_listed__'){setNotListed(true);setBranch('')}else{setBranch(e.target.value)} }}
+                  <select style={{...inputStyle}} value={branch} onChange={e=>setBranch(e.target.value)}
                     onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'}>
                     <option value="">Select your branch…</option>
-                    {branches.map(b => (
-                      <option key={b.id} value={b.name}>{b.name}{b.location ? ` — ${b.location}` : ''}</option>
-                    ))}
-                    <option value="__not_listed__">🔍 My branch isn't listed</option>
+                    {branches.map(b=><option key={b.id} value={b.name}>{b.name}{b.location?` — ${b.location}`:''}</option>)}
                   </select>
                 ) : (
-                  <div>
-                    <input style={{...inputStyle, marginBottom:8}} value={unlistedName} onChange={e=>setUnlistedName(e.target.value)} placeholder="Branch name"
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    <input style={inputStyle} value={unlistedName} onChange={e=>setUnlistedName(e.target.value)} placeholder="Branch name" required
                       onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
-                    <input style={inputStyle} value={unlistedCity} onChange={e=>setUnlistedCity(e.target.value)} placeholder="City / State (optional)"
+                    <input style={inputStyle} value={unlistedCity} onChange={e=>setUnlistedCity(e.target.value)} placeholder="City / Country (optional)"
                       onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} />
                   </div>
                 )}
-                {/* Toggle not listed */}
                 <button type="button"
                   onClick={() => { setNotListed(v=>!v); setBranch(''); setUnlistedName(''); setUnlistedCity('') }}
                   style={{marginTop:6, background:'none', border:'none', cursor:'pointer', color:'var(--brand-light)', fontSize:'0.8rem', fontFamily:'var(--font-body)', fontWeight:600, padding:0}}>
@@ -452,7 +741,6 @@ function AuthModal({ onClose }) {
                 )}
               </div>
 
-              {/* Optional divider */}
               <div style={{display:'flex',alignItems:'center',gap:10,margin:'18px 0 14px'}}>
                 <div style={{flex:1,height:1,background:'#e2e8f0'}} />
                 <span style={{fontSize:'0.72rem',color:'var(--text-light)',fontWeight:600}}>OPTIONAL</span>
@@ -515,7 +803,6 @@ function AuthModal({ onClose }) {
             </div>
 
             <form onSubmit={handleVerify}>
-              {/* 6 separate digit boxes */}
               <div style={{display:'flex',gap:8,justifyContent:'center',marginBottom:20}}>
                 {otp.map((digit, i) => (
                   <input
@@ -593,32 +880,49 @@ function ProfileModal({ profile, onClose, onUpdate }) {
   )
 }
 
-/* ── Main Timeline Page ── */
+/* ══════════════════════════════════════════
+   Main Timeline Page
+══════════════════════════════════════════ */
 export default function Timeline() {
   const { user, profile, loading: authLoading, signOut, isAdmin, updateProfile } = useAuth()
-  const [posts, setPosts]       = useState([])
-  const [loading, setLoading]   = useState(true)
-  const [body, setBody]         = useState('')
-  const [postType, setPostType] = useState('update')
-  const [posting, setPosting]   = useState(false)
-  const [showAuth, setShowAuth] = useState(false)
-  // Guidelines banner — dismissed per session; new-user popup — shown once after signup
+
+  // ── Active tab ──
+  const [activeTab, setActiveTab] = useState('feed') // 'feed' | 'topics'
+
+  // ── Feed state ──
+  const [posts, setPosts]         = useState([])
+  const [feedLoading, setFeedLoading] = useState(true)
+  const [body, setBody]           = useState('')
+  const [postType, setPostType]   = useState('update')
+  const [posting, setPosting]     = useState(false)
+  const [feedFilter, setFeedFilter] = useState('all') // 'all' | post_type ids
+  const listRef = useRef(null)
+
+  // ── Topics state ──
+  const [topics, setTopics]         = useState([])
+  const [topicsLoading, setTopicsLoading] = useState(true)
+  const [topicFilter, setTopicFilter] = useState('all')
+  const [openTopic, setOpenTopic]   = useState(null)
+  const [showNewTopic, setShowNewTopic] = useState(false)
+  const [userPostCount, setUserPostCount] = useState(0)
+
+  // ── Shared state ──
+  const [showAuth, setShowAuth]     = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const [guidesBannerDismissed, setGuidesBannerDismissed] = useState(
     () => typeof window !== 'undefined' && !!sessionStorage.getItem('ccgm_guides_dismissed')
   )
   const [showNewUserGuides, setShowNewUserGuides] = useState(
     () => typeof window !== 'undefined' && !!sessionStorage.getItem('ccgm_new_user_guides')
   )
-  const [showProfile, setShowProfile] = useState(false)
-  const listRef = useRef(null)
 
-  // Report state
-  const [reportPost, setReportPost]     = useState(null)   // post being reported
-  const [reportReason, setReportReason] = useState('')
-  const [reportOther, setReportOther]   = useState('')
+  // ── Report state ──
+  const [reportPost, setReportPost]       = useState(null)
+  const [reportReason, setReportReason]   = useState('')
+  const [reportOther, setReportOther]     = useState('')
   const [reportSending, setReportSending] = useState(false)
-  const [reportDone, setReportDone]     = useState(false)
-  const [myReports, setMyReports]       = useState([])     // post_ids I've already reported
+  const [reportDone, setReportDone]       = useState(false)
+  const [myReports, setMyReports]         = useState([])
 
   const REPORT_REASONS = [
     'Spam or irrelevant content',
@@ -629,7 +933,9 @@ export default function Timeline() {
   ]
 
   const canPost = !!user
+  const canCreateTopic = !!user && (isAdmin || userPostCount >= 3)
 
+  // ── Data loaders ──
   const loadPosts = async () => {
     const { data } = await supabase.from('timeline_posts')
       .select('*, profiles(display_name,full_name,avatar_url), reactions:timeline_reactions(*)')
@@ -637,10 +943,23 @@ export default function Timeline() {
       .order('created_at', { ascending: false })
       .limit(50)
     setPosts(data || [])
-    setLoading(false)
+    setFeedLoading(false)
   }
 
-  // Load posts I've already reported (so flag shows as already-reported)
+  const loadTopics = async () => {
+    const { data } = await supabase.from('timeline_topics')
+      .select('*, profiles(display_name,full_name,avatar_url), reply_count:topic_replies(count)')
+      .order('created_at', { ascending: false })
+      .limit(60)
+    // Flatten reply_count from [{count:N}] → N
+    const normalized = (data || []).map(t => ({
+      ...t,
+      reply_count: t.reply_count?.[0]?.count ?? 0,
+    }))
+    setTopics(normalized)
+    setTopicsLoading(false)
+  }
+
   const loadMyReports = async () => {
     if (!user) return
     const { data } = await supabase.from('post_reports')
@@ -648,9 +967,22 @@ export default function Timeline() {
     setMyReports((data || []).map(r => r.post_id))
   }
 
-  useEffect(() => { loadPosts(); loadMyReports() }, [user])
+  const loadUserPostCount = async () => {
+    if (!user) return
+    const { count } = await supabase.from('timeline_posts')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+    setUserPostCount(count || 0)
+  }
 
-  // Realtime subscription
+  useEffect(() => {
+    loadPosts()
+    loadTopics()
+    loadMyReports()
+    loadUserPostCount()
+  }, [user])
+
+  // Realtime for feed
   useEffect(() => {
     const sub = supabase.channel('timeline')
       .on('postgres_changes', { event:'INSERT', schema:'public', table:'timeline_posts' }, () => loadPosts())
@@ -660,12 +992,23 @@ export default function Timeline() {
     return () => supabase.removeChannel(sub)
   }, [])
 
+  // Realtime for topics
+  useEffect(() => {
+    const sub = supabase.channel('topics')
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'timeline_topics' }, () => loadTopics())
+      .on('postgres_changes', { event:'DELETE', schema:'public', table:'timeline_topics' }, () => loadTopics())
+      .subscribe()
+    return () => supabase.removeChannel(sub)
+  }, [])
+
+  // ── Feed actions ──
   const submitPost = async () => {
     if (!body.trim() || posting || !canPost) return
     setPosting(true)
     await supabase.from('timeline_posts').insert({ user_id: user.id, body: body.trim(), post_type: postType })
     setBody('')
     await loadPosts()
+    await loadUserPostCount()
     listRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
     setPosting(false)
   }
@@ -685,7 +1028,6 @@ export default function Timeline() {
     await supabase.from('timeline_reactions').delete().eq('post_id', postId)
     await supabase.from('timeline_comments').delete().eq('post_id', postId)
     await supabase.from('timeline_posts').delete().eq('id', postId)
-    // Log if a moderator/admin deleted someone else's post
     if (post && post.user_id !== user?.id) {
       const authorName = post.profiles?.display_name || post.profiles?.full_name || 'member'
       auditLog('timeline_delete', `Deleted timeline post by ${authorName}`, authorName)
@@ -705,69 +1047,60 @@ export default function Timeline() {
     if (!reportReason || !reportPost || !user) return
     setReportSending(true)
     const reason = reportReason === 'Other' ? (reportOther.trim() || 'Other') : reportReason
-
-    // Insert report (unique constraint on reporter_id + post_id prevents duplicates)
     const { error } = await supabase.from('post_reports').insert({
       post_id:     reportPost.id,
       reporter_id: user.id,
       reason,
     })
-
     if (error) { setReportSending(false); return }
-
-    // Update local state
     setMyReports(r => [...r, reportPost.id])
-
-    // Count unique reports on this post
     const { count } = await supabase.from('post_reports')
       .select('*', { count: 'exact', head: true })
       .eq('post_id', reportPost.id)
-
-    // Auto-suspend if 10 unique reports reached
     if (count >= 10) {
       const authorId = reportPost.user_id
       const now = new Date().toISOString()
       const reason_text = `Auto-suspended: post received ${count} reports`
-
-      // Suspend the user
       await supabase.from('profiles').update({
-        suspended: true,
-        suspended_at: now,
-        suspension_reason: reason_text,
-        suspension_expires_at: null,  // indefinite
-        auto_suspended: true,
+        suspended: true, suspended_at: now, suspension_reason: reason_text,
+        suspension_expires_at: null, auto_suspended: true,
       }).eq('id', authorId)
-
-      // Log to suspension_logs
       await supabase.from('suspension_logs').insert({
-        user_id: authorId,
-        action: 'auto_suspended',
-        reason: reason_text,
-        post_id: reportPost.id,
-        created_at: now,
+        user_id: authorId, action: 'auto_suspended', reason: reason_text,
+        post_id: reportPost.id, created_at: now,
       })
-
-      // Audit log
       const authorName = reportPost.profiles?.display_name || reportPost.profiles?.full_name || 'Member'
       auditLog('suspend', reason_text, authorName)
-
-      // Notify admin via email
       try {
         await supabase.functions.invoke('send-suspension-email', {
           body: {
-            type: 'auto_suspension_admin_alert',
-            authorName,
-            postBody: reportPost.body?.slice(0, 120),
-            reportCount: count,
+            type: 'auto_suspension_admin_alert', authorName,
+            postBody: reportPost.body?.slice(0, 120), reportCount: count,
             adminPanelUrl: 'https://ccgm-pwa.vercel.app/admin',
           }
         })
       } catch(_) {}
     }
-
     setReportSending(false)
     setReportDone(true)
   }
+
+  // ── Topic actions ──
+  const handleDeleteTopic = async (topicId) => {
+    if (!window.confirm('Delete this topic and all its replies?')) return
+    await supabase.from('topic_replies').delete().eq('topic_id', topicId)
+    await supabase.from('timeline_topics').delete().eq('id', topicId)
+    setTopics(t => t.filter(x => x.id !== topicId))
+  }
+
+  // ── Filtered lists ──
+  const filteredPosts = feedFilter === 'all'
+    ? posts
+    : posts.filter(p => p.post_type === feedFilter)
+
+  const filteredTopics = topicFilter === 'all'
+    ? topics
+    : topics.filter(t => t.category === topicFilter)
 
   if (authLoading) return <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center'}}>⏳</div>
 
@@ -778,10 +1111,11 @@ export default function Timeline() {
         description="CCG World Community Timeline — connect with members of the Christian Church Of God Mission worldwide."
         path="/timeline"
       />
-      {/* Page header */}
-      <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(90px,14vw,110px) 5% 40px',marginBottom:0}}>
+
+      {/* ── Page header ── */}
+      <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(90px,14vw,110px) 5% 0',marginBottom:0}}>
         <div className="container" style={{maxWidth:760}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:16}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:16,marginBottom:24}}>
             <div>
               <span style={{fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.22em',textTransform:'uppercase',color:'var(--gold)',display:'block',marginBottom:8}}>Members Community</span>
               <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(1.8rem,4vw,2.8rem)',color:'white',lineHeight:1.1,margin:'0 0 8px'}}>🌐 Timeline</h1>
@@ -799,103 +1133,233 @@ export default function Timeline() {
               <button onClick={()=>setShowAuth(true)} className="btn btn-gold" style={{padding:'10px 24px'}}>🌐 Join Community</button>
             )}
           </div>
+
+          {/* ── Tab bar (inside hero, flush to bottom) ── */}
+          <div style={{display:'flex', gap:0, borderBottom:'none'}}>
+            {[
+              { id:'feed',   label:'📰 Feed' },
+              { id:'topics', label:'💬 Topics' },
+            ].map(tab => (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                style={{
+                  padding:'10px 26px', border:'none', cursor:'pointer',
+                  fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.9rem',
+                  background: activeTab===tab.id ? 'white' : 'transparent',
+                  color: activeTab===tab.id ? 'var(--brand-deep)' : 'rgba(255,255,255,0.65)',
+                  borderRadius: activeTab===tab.id ? '10px 10px 0 0' : '10px 10px 0 0',
+                  transition:'all 0.2s',
+                  borderBottom: activeTab===tab.id ? '2px solid white' : '2px solid transparent',
+                }}>
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="container" style={{maxWidth:720,padding:'32px 5% 80px'}}>
+      <div className="container" style={{maxWidth:720, padding:'28px 5% 80px'}}>
 
-        
-
-        {/* Compose box */}
-        {canPost && (
-          <div style={{background: 'var(--white, white)',borderRadius:16,boxShadow:'var(--shadow-sm)',padding:'20px',marginBottom:24,border:'1px solid rgba(15,31,61,0.05)'}}>
-            <div style={{display:'flex',gap:12,marginBottom:14}}>
-              <Avatar profile={profile} size={44} />
-              <textarea
-                value={body}
-                onChange={e=>setBody(e.target.value)}
-                placeholder={`Share something with the CCG World family, ${profile?.display_name||profile?.full_name?.split(' ')[0]||'friend'}...`}
-                style={{flex:1,border:'1.5px solid #e2e8f0',borderRadius:12,padding:'12px 14px',fontFamily:'var(--font-body)',fontSize:'0.95rem',resize:'none',outline:'none',lineHeight:1.65,minHeight:80,transition:'border-color 0.2s'}}
-                onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
-                onBlur={e=>e.target.style.borderColor='#e2e8f0'}
-              />
+        {/* ════════════════════════════════
+            FEED TAB
+        ════════════════════════════════ */}
+        {activeTab === 'feed' && (
+          <>
+            {/* Feed filter bar */}
+            <div style={{display:'flex', gap:6, marginBottom:20, flexWrap:'wrap'}}>
+              {[{id:'all',label:'🌐 All'},...POST_TYPES].map(f => (
+                <button key={f.id} onClick={()=>setFeedFilter(f.id)}
+                  style={{padding:'5px 16px', borderRadius:20, border:`1.5px solid ${feedFilter===f.id?(f.color||'var(--brand-light)'):'#e2e8f0'}`, background:feedFilter===f.id?(f.color||'var(--brand-light)')+'15':'white', color:feedFilter===f.id?(f.color||'var(--brand-light)'):'var(--text-light)', fontSize:'0.78rem', fontWeight:feedFilter===f.id?700:400, cursor:'pointer', fontFamily:'var(--font-body)', transition:'all 0.15s'}}>
+                  {f.label}
+                </button>
+              ))}
             </div>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:10}}>
-              <div style={{display:'flex',gap:6}}>
-                {POST_TYPES.map(pt=>(
-                  <button key={pt.id} onClick={()=>setPostType(pt.id)} style={{padding:'5px 14px',borderRadius:20,border:`1.5px solid ${postType===pt.id?pt.color:'#e2e8f0'}`,background:postType===pt.id?pt.color+'15':'white',color:postType===pt.id?pt.color:'var(--text-light)',fontSize:'0.78rem',fontWeight:postType===pt.id?700:400,cursor:'pointer',fontFamily:'var(--font-body)',transition:'all 0.15s'}}>
-                    {pt.label}
+
+            {/* Compose box */}
+            {canPost && (
+              <div style={{background:'var(--white, white)',borderRadius:16,boxShadow:'var(--shadow-sm)',padding:'20px',marginBottom:24,border:'1px solid rgba(15,31,61,0.05)'}}>
+                <div style={{display:'flex',gap:12,marginBottom:14}}>
+                  <Avatar profile={profile} size={44} />
+                  <textarea
+                    value={body}
+                    onChange={e=>setBody(e.target.value)}
+                    placeholder={`Share something with the CCG World family, ${profile?.display_name||profile?.full_name?.split(' ')[0]||'friend'}...`}
+                    style={{flex:1,border:'1.5px solid #e2e8f0',borderRadius:12,padding:'12px 14px',fontFamily:'var(--font-body)',fontSize:'0.95rem',resize:'none',outline:'none',lineHeight:1.65,minHeight:80,transition:'border-color 0.2s'}}
+                    onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
+                    onBlur={e=>e.target.style.borderColor='#e2e8f0'}
+                  />
+                </div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:10}}>
+                  <div style={{display:'flex',gap:6}}>
+                    {POST_TYPES.map(pt=>(
+                      <button key={pt.id} onClick={()=>setPostType(pt.id)} style={{padding:'5px 14px',borderRadius:20,border:`1.5px solid ${postType===pt.id?pt.color:'#e2e8f0'}`,background:postType===pt.id?pt.color+'15':'white',color:postType===pt.id?pt.color:'var(--text-light)',fontSize:'0.78rem',fontWeight:postType===pt.id?700:400,cursor:'pointer',fontFamily:'var(--font-body)',transition:'all 0.15s'}}>
+                        {pt.label}
+                      </button>
+                    ))}
+                  </div>
+                  <button onClick={submitPost} disabled={!body.trim()||posting} className="btn btn-blue" style={{padding:'9px 24px',fontSize:'0.85rem',opacity:!body.trim()?0.5:1}}>
+                    {posting?'Posting...':'Share 🕊'}
                   </button>
-                ))}
-              </div>
-              <button onClick={submitPost} disabled={!body.trim()||posting} className="btn btn-blue" style={{padding:'9px 24px',fontSize:'0.85rem',opacity:!body.trim()?0.5:1}}>
-                {posting?'Posting...':'Share 🕊'}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Sign in prompt */}
-        {!user && (
-          <div style={{background:'linear-gradient(135deg,var(--brand-pale),white)',border:'1.5px solid #bfdbfe',borderRadius:16,padding:'24px',textAlign:'center',marginBottom:24}}>
-            <div style={{fontSize:'2rem',marginBottom:10}}>🌐</div>
-            <h3 style={{color:'var(--brand-deep)',margin:'0 0 8px',fontFamily:'var(--font-display)'}}>Join the CCG World Family</h3>
-            <p style={{color:'var(--text-mid)',fontSize:'0.9rem',marginBottom:20,lineHeight:1.7}}>Create a free account to post testimonies, share prayer requests, and connect with other members.</p>
-            <button onClick={()=>setShowAuth(true)} className="btn btn-blue" style={{padding:'11px 28px'}}>Sign Up — It's Free</button>
-          </div>
-        )}
-
-        {/* Posts */}
-        <div ref={listRef}>
-
-          {/* ── Community Guidelines Banner ── */}
-          {!guidesBannerDismissed && (
-            <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', borderRadius:14, padding:'16px 20px', marginBottom:18, display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
-              <span style={{ fontSize:'1.4rem', flexShrink:0 }}>📖</span>
-              <div style={{ flex:1, minWidth:180 }}>
-                <div style={{ fontWeight:700, color:'white', fontSize:'0.92rem', marginBottom:3 }}>Community Guidelines</div>
-                <div style={{ color:'rgba(255,255,255,0.72)', fontSize:'0.8rem', lineHeight:1.5 }}>
-                  Keep this a Spirit-filled space. Read our guidelines to understand what's welcome here.
                 </div>
               </div>
-              <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-                <Link to="/guidelines" style={{ padding:'7px 16px', borderRadius:20, background:'rgba(255,255,255,0.15)', color:'white', textDecoration:'none', fontSize:'0.78rem', fontWeight:700, border:'1px solid rgba(255,255,255,0.25)', backdropFilter:'blur(8px)' }}>
-                  Read Guidelines →
-                </Link>
-                <button onClick={() => { sessionStorage.setItem('ccgm_guides_dismissed','1'); setGuidesBannerDismissed(true) }}
-                  style={{ padding:'7px 12px', borderRadius:20, background:'none', color:'rgba(255,255,255,0.6)', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', fontSize:'0.78rem', fontWeight:600 }}>
-                  Dismiss
-                </button>
-              </div>
-            </div>
-          )}
+            )}
 
-          {loading && (
-            <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
-              <div style={{fontSize:'2rem',marginBottom:12,animation:'pulse 1.5s infinite'}}>🌐</div>
-              Loading timeline...
+            {/* Sign in prompt */}
+            {!user && (
+              <div style={{background:'linear-gradient(135deg,var(--brand-pale),white)',border:'1.5px solid #bfdbfe',borderRadius:16,padding:'24px',textAlign:'center',marginBottom:24}}>
+                <div style={{fontSize:'2rem',marginBottom:10}}>🌐</div>
+                <h3 style={{color:'var(--brand-deep)',margin:'0 0 8px',fontFamily:'var(--font-display)'}}>Join the CCG World Family</h3>
+                <p style={{color:'var(--text-mid)',fontSize:'0.9rem',marginBottom:20,lineHeight:1.7}}>Create a free account to post testimonies, share prayer requests, and connect with other members.</p>
+                <button onClick={()=>setShowAuth(true)} className="btn btn-blue" style={{padding:'11px 28px'}}>Sign Up — It's Free</button>
+              </div>
+            )}
+
+            {/* Posts */}
+            <div ref={listRef}>
+              {/* Community Guidelines Banner */}
+              {!guidesBannerDismissed && (
+                <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', borderRadius:14, padding:'16px 20px', marginBottom:18, display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                  <span style={{ fontSize:'1.4rem', flexShrink:0 }}>📖</span>
+                  <div style={{ flex:1, minWidth:180 }}>
+                    <div style={{ fontWeight:700, color:'white', fontSize:'0.92rem', marginBottom:3 }}>Community Guidelines</div>
+                    <div style={{ color:'rgba(255,255,255,0.72)', fontSize:'0.8rem', lineHeight:1.5 }}>
+                      Keep this a Spirit-filled space. Read our guidelines to understand what's welcome here.
+                    </div>
+                  </div>
+                  <div style={{ display:'flex', gap:8, flexShrink:0 }}>
+                    <Link to="/guidelines" style={{ padding:'7px 16px', borderRadius:20, background:'rgba(255,255,255,0.15)', color:'white', textDecoration:'none', fontSize:'0.78rem', fontWeight:700, border:'1px solid rgba(255,255,255,0.25)', backdropFilter:'blur(8px)' }}>
+                      Read Guidelines →
+                    </Link>
+                    <button onClick={() => { sessionStorage.setItem('ccgm_guides_dismissed','1'); setGuidesBannerDismissed(true) }}
+                      style={{ padding:'7px 12px', borderRadius:20, background:'none', color:'rgba(255,255,255,0.6)', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', fontSize:'0.78rem', fontWeight:600 }}>
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {feedLoading && (
+                <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
+                  <div style={{fontSize:'2rem',marginBottom:12,animation:'pulse 1.5s infinite'}}>🌐</div>
+                  Loading timeline...
+                </div>
+              )}
+              {!feedLoading && filteredPosts.length===0 && (
+                <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
+                  <div style={{fontSize:'2.5rem',marginBottom:14}}>🕊</div>
+                  <h3 style={{color:'var(--brand-deep)',marginBottom:8}}>
+                    {feedFilter==='all' ? 'The Timeline is empty' : `No ${POST_TYPES.find(t=>t.id===feedFilter)?.label||''} posts yet`}
+                  </h3>
+                  <p>Be the first to share!</p>
+                </div>
+              )}
+              {filteredPosts.map(post=>(
+                <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} onReport={handleReport} reportedByMe={myReports.includes(post.id)} />
+              ))}
             </div>
-          )}
-          {!loading && posts.length===0 && (
-            <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
-              <div style={{fontSize:'2.5rem',marginBottom:14}}>🕊</div>
-              <h3 style={{color:'var(--brand-deep)',marginBottom:8}}>The Timeline is empty</h3>
-              <p>Be the first to share a testimony or update!</p>
+          </>
+        )}
+
+        {/* ════════════════════════════════
+            TOPICS TAB
+        ════════════════════════════════ */}
+        {activeTab === 'topics' && (
+          <>
+            {/* Topics header row */}
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, flexWrap:'wrap', gap:12}}>
+              <div>
+                <h2 style={{fontFamily:'var(--font-display)', fontSize:'1.15rem', color:'var(--text-dark)', margin:'0 0 2px', fontWeight:800}}>Community Topics</h2>
+                <p style={{margin:0, fontSize:'0.8rem', color:'var(--text-light)'}}>Start discussions, ask questions, dig into the Word</p>
+              </div>
+              {canCreateTopic ? (
+                <button onClick={()=>setShowNewTopic(true)} className="btn btn-blue" style={{padding:'9px 20px', fontSize:'0.85rem'}}>
+                  + New Topic
+                </button>
+              ) : user ? (
+                <div style={{fontSize:'0.78rem', color:'var(--text-light)', background:'#f8fafc', border:'1px solid #e2e8f0', borderRadius:10, padding:'8px 14px', maxWidth:220, lineHeight:1.5}}>
+                  🔒 Post 3+ times on the Feed to unlock topic creation ({userPostCount}/3)
+                </div>
+              ) : (
+                <button onClick={()=>setShowAuth(true)} className="btn btn-blue" style={{padding:'9px 20px', fontSize:'0.85rem'}}>
+                  Sign in to participate
+                </button>
+              )}
             </div>
-          )}
-          {posts.map(post=>(
-            <PostCard key={post.id} post={post} currentUserId={user?.id} onReact={handleReact} onDelete={handleDelete} isAdmin={isAdmin} onReport={handleReport} reportedByMe={myReports.includes(post.id)} />
-          ))}
-        </div>
+
+            {/* Category filter */}
+            <div style={{display:'flex', gap:6, marginBottom:20, flexWrap:'wrap'}}>
+              <button onClick={()=>setTopicFilter('all')}
+                style={{padding:'5px 16px', borderRadius:20, border:`1.5px solid ${topicFilter==='all'?'var(--brand-light)':'#e2e8f0'}`, background:topicFilter==='all'?'var(--brand-light)15':'white', color:topicFilter==='all'?'var(--brand-light)':'var(--text-light)', fontSize:'0.78rem', fontWeight:topicFilter==='all'?700:400, cursor:'pointer', fontFamily:'var(--font-body)', transition:'all 0.15s'}}>
+                🌐 All
+              </button>
+              {TOPIC_CATEGORIES.map(cat => (
+                <button key={cat.id} onClick={()=>setTopicFilter(cat.id)}
+                  style={{padding:'5px 16px', borderRadius:20, border:`1.5px solid ${topicFilter===cat.id?cat.color:'#e2e8f0'}`, background:topicFilter===cat.id?cat.color+'15':'white', color:topicFilter===cat.id?cat.color:'var(--text-light)', fontSize:'0.78rem', fontWeight:topicFilter===cat.id?700:400, cursor:'pointer', fontFamily:'var(--font-body)', transition:'all 0.15s'}}>
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {topicsLoading && (
+              <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
+                <div style={{fontSize:'2rem',marginBottom:12,animation:'pulse 1.5s infinite'}}>💬</div>
+                Loading topics...
+              </div>
+            )}
+
+            {!topicsLoading && filteredTopics.length === 0 && (
+              <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
+                <div style={{fontSize:'2.5rem',marginBottom:14}}>💬</div>
+                <h3 style={{color:'var(--brand-deep)',marginBottom:8}}>No topics yet</h3>
+                <p style={{marginBottom:20}}>
+                  {topicFilter==='all'
+                    ? 'Be the first to start a discussion!'
+                    : `No topics in this category yet.`}
+                </p>
+                {canCreateTopic && (
+                  <button onClick={()=>setShowNewTopic(true)} className="btn btn-blue" style={{padding:'10px 24px'}}>
+                    Start the first topic
+                  </button>
+                )}
+              </div>
+            )}
+
+            {filteredTopics.map(topic => (
+              <TopicCard key={topic.id} topic={topic}
+                currentUserId={user?.id} isAdmin={isAdmin}
+                onDelete={handleDeleteTopic}
+                onOpen={t => setOpenTopic(t)} />
+            ))}
+          </>
+        )}
+
       </div>
 
+      {/* ── Modals ── */}
       {showAuth && <AuthModal onClose={()=>setShowAuth(false)} />}
+
+      {showNewTopic && (
+        <NewTopicModal
+          currentUser={user}
+          profile={profile}
+          onClose={() => setShowNewTopic(false)}
+          onCreated={() => { loadTopics() }}
+        />
+      )}
+
+      {openTopic && (
+        <TopicDetailModal
+          topic={openTopic}
+          currentUserId={user?.id}
+          isAdmin={isAdmin}
+          onClose={() => setOpenTopic(null)}
+          onTopicUpdated={loadTopics}
+        />
+      )}
 
       {/* ── New User Guidelines Popup ── */}
       {showNewUserGuides && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.65)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9500, padding:20 }}>
           <div style={{ background:'white', borderRadius:20, width:'100%', maxWidth:460, boxShadow:'0 32px 80px rgba(0,0,0,0.4)', overflow:'hidden' }}>
-            {/* Header */}
             <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'28px 28px 24px', textAlign:'center', position:'relative' }}>
               <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity:0.05, fontSize:'8rem', pointerEvents:'none' }}>✝</div>
               <div style={{ fontSize:'2.5rem', marginBottom:12 }}>🙏</div>
@@ -904,7 +1368,6 @@ export default function Timeline() {
                 Before you dive in, please take a moment to read our Community Guidelines.
               </p>
             </div>
-            {/* Body */}
             <div style={{ padding:'24px 28px' }}>
               <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:22 }}>
                 {[
@@ -987,6 +1450,7 @@ export default function Timeline() {
           </div>
         </div>
       )}
+
       {showProfile && <ProfileModal profile={profile} onClose={()=>setShowProfile(false)} onUpdate={updateProfile} />}
 
       <style>{`
