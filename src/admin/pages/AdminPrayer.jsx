@@ -7,7 +7,7 @@ import supabase from '../../lib/supabase'
 const SC = { new:{bg:'#eff6ff',text:'#1d4ed8',label:'New'}, praying:{bg:'#dcfce7',text:'#166534',label:'Praying'}, answered:{bg:'#fef9c3',text:'#854d0e',label:'Answered'}, closed:{bg:'#f5f5f5',text:'#6b7280',label:'Closed'} }
 
 export default function AdminPrayer() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [tab, setTab]         = useState('wall') // 'wall' | 'requests'
   const [items, setItems]     = useState([])
   const [wallItems, setWallItems] = useState([])
@@ -32,7 +32,7 @@ export default function AdminPrayer() {
   const updateStatus = async (id, status) => {
     setSaving(true)
     await supabase.from('prayers').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
-    showToast('Status updated'); load()
+    logAction('prayer_status', `Updated prayer status to ${status}`, null); showToast('Status updated'); load()
     if (selected?.id===id) setSelected(s=>({...s,status}))
     setSaving(false)
   }
@@ -42,13 +42,13 @@ export default function AdminPrayer() {
     const item = items.find(i=>i.id===id)
     const notes = [...(item?.notes||[]), { text:note.trim(), date:new Date().toLocaleDateString(), by:'Admin' }]
     await supabase.from('prayers').update({ notes, updated_at:new Date().toISOString() }).eq('id', id)
-    showToast('Note added'); setNote(''); load()
+    logAction('prayer_note', 'Added note to prayer request', null); showToast('Note added'); setNote(''); load()
     setSaving(false)
   }
 
   const deleteReq = async id => {
     await supabase.from('prayers').delete().eq('id', id)
-    setItems(i=>i.filter(x=>x.id!==id)); setSelected(null); showToast('Deleted')
+    logAction('prayer_delete', 'Deleted prayer request', null); setItems(i=>i.filter(x=>x.id!==id)); setSelected(null); showToast('Deleted')
   }
 
   const deleteWallPost = async id => {

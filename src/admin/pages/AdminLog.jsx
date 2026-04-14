@@ -22,8 +22,34 @@ const ACTION_ICONS = {
   'blog_delete':        '🗑',
   'gallery_add':        '🖼',
   'gallery_delete':     '🗑',
-  'timeline_delete':    '💬',
-  'prayer_delete':      '🙏',
+  'timeline_delete':    '🗑',
+  'timeline_pin':       '📌',
+  'timeline_unpin':     '📌',
+  'prayer_delete':      '🗑',
+  'prayer_status':      '🙏',
+  'prayer_note':        '📝',
+  'sabbath_add':        '📚',
+  'sabbath_edit':       '✏️',
+  'sabbath_delete':     '🗑',
+  'hymn_add':           '🎵',
+  'hymn_edit':          '✏️',
+  'hymn_delete':        '🗑',
+  'homepage_updated':   '🏠',
+  'verse_override':     '📖',
+  'verse_override_cleared': '📖',
+  'live_started':       '🔴',
+  'live_ended':         '⚫',
+  'live_updated':       '📡',
+  'notification_sent':  '🔔',
+  'email_sent':         '📧',
+  'newsletter_unsubscribe': '📧',
+  'signature_updated':  '✍️',
+  'studio_pin':         '📌',
+  'studio_unpin':       '📌',
+  'programme_created':  '📅',
+  'programme_updated':  '✏️',
+  'programme_deleted':  '🗑',
+  'programme_activated':'✅',
 }
 
 const ACTION_COLORS = {
@@ -46,8 +72,34 @@ const ACTION_COLORS = {
   'blog_delete':    { bg: '#fff5f5', color: '#dc2626' },
   'gallery_add':    { bg: '#f0fdf4', color: '#166534' },
   'gallery_delete': { bg: '#fff5f5', color: '#dc2626' },
-  'timeline_delete':{ bg: '#fff7ed', color: '#c2410c' },
-  'prayer_delete':  { bg: '#fff7ed', color: '#c2410c' },
+  'timeline_delete':    { bg: '#fff7ed', color: '#c2410c' },
+  'timeline_pin':       { bg: '#fefce8', color: '#a16207' },
+  'timeline_unpin':     { bg: '#fefce8', color: '#a16207' },
+  'prayer_delete':      { bg: '#fff7ed', color: '#c2410c' },
+  'prayer_status':      { bg: '#f0fdf4', color: '#166534' },
+  'prayer_note':        { bg: '#eff6ff', color: '#0369a1' },
+  'sabbath_add':        { bg: '#f0fdf4', color: '#166534' },
+  'sabbath_edit':       { bg: '#eff6ff', color: '#0369a1' },
+  'sabbath_delete':     { bg: '#fff5f5', color: '#dc2626' },
+  'hymn_add':           { bg: '#f0fdf4', color: '#166534' },
+  'hymn_edit':          { bg: '#eff6ff', color: '#0369a1' },
+  'hymn_delete':        { bg: '#fff5f5', color: '#dc2626' },
+  'homepage_updated':   { bg: '#eff6ff', color: '#0369a1' },
+  'verse_override':     { bg: '#f5f3ff', color: '#7c3aed' },
+  'verse_override_cleared': { bg: '#f8fafc', color: '#64748b' },
+  'live_started':       { bg: '#fff5f5', color: '#dc2626' },
+  'live_ended':         { bg: '#f8fafc', color: '#64748b' },
+  'live_updated':       { bg: '#eff6ff', color: '#0369a1' },
+  'notification_sent':  { bg: '#fefce8', color: '#a16207' },
+  'email_sent':         { bg: '#eff6ff', color: '#0369a1' },
+  'newsletter_unsubscribe': { bg: '#fff5f5', color: '#dc2626' },
+  'signature_updated':  { bg: '#f5f3ff', color: '#7c3aed' },
+  'studio_pin':         { bg: '#fefce8', color: '#a16207' },
+  'studio_unpin':       { bg: '#fefce8', color: '#a16207' },
+  'programme_created':  { bg: '#f0fdf4', color: '#166534' },
+  'programme_updated':  { bg: '#eff6ff', color: '#0369a1' },
+  'programme_deleted':  { bg: '#fff5f5', color: '#dc2626' },
+  'programme_activated':{ bg: '#f0fdf4', color: '#166534' },
 }
 
 const CATEGORIES = [
@@ -56,12 +108,14 @@ const CATEGORIES = [
   { value: 'content',    label: 'Content' },
   { value: 'branches',   label: 'Branches' },
   { value: 'moderation', label: 'Moderation' },
+  { value: 'comms',      label: 'Comms' },
 ]
 
 const MEMBER_ACTIONS     = ['role_change','suspend','reinstate','post_approved','post_rejected']
-const CONTENT_ACTIONS    = ['sermon_add','sermon_edit','sermon_delete','event_add','event_edit','event_delete','blog_add','blog_edit','blog_delete','gallery_add','gallery_delete']
+const CONTENT_ACTIONS    = ['sermon_add','sermon_edit','sermon_delete','event_add','event_edit','event_delete','blog_add','blog_edit','blog_delete','gallery_add','gallery_delete','sabbath_add','sabbath_edit','sabbath_delete','hymn_add','hymn_edit','hymn_delete','homepage_updated','verse_override','verse_override_cleared','live_started','live_ended','live_updated','studio_pin','studio_unpin','signature_updated','programme_created','programme_updated','programme_deleted','programme_activated']
 const BRANCH_ACTIONS     = ['branch_add','branch_edit','branch_delete']
-const MODERATION_ACTIONS = ['timeline_delete','prayer_delete']
+const COMMS_ACTIONS      = ['notification_sent','email_sent','newsletter_unsubscribe']
+const MODERATION_ACTIONS = ['timeline_delete','timeline_pin','timeline_unpin','prayer_delete','prayer_status','prayer_note']
 
 function fmtDate(iso) {
   if (!iso) return ''
@@ -101,6 +155,7 @@ export default function AdminLog() {
     else if (category === 'content')    q = q.in('action', CONTENT_ACTIONS)
     else if (category === 'branches')   q = q.in('action', BRANCH_ACTIONS)
     else if (category === 'moderation') q = q.in('action', MODERATION_ACTIONS)
+    else if (category === 'comms')       q = q.in('action', COMMS_ACTIONS)
 
     const { data, error } = await q
     if (!error) setLogs(data || [])

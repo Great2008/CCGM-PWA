@@ -29,7 +29,7 @@ const DEFAULT = {
 }
 
 export default function AdminHomepage() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [data, setData] = useState(DEFAULT)
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -69,7 +69,7 @@ export default function AdminHomepage() {
 
   const save = async () => {
     setSaving(true)
-    try { await setContent('homepage', data); showToast('Homepage saved! Live immediately.') }
+    try { await setContent('homepage', data); logAction('homepage_updated', 'Updated homepage content', null); showToast('Homepage saved! Live immediately.') }
     catch(e) { showToast(e.message,'error') }
     setSaving(false)
   }
@@ -90,7 +90,7 @@ export default function AdminHomepage() {
         await supabaseAdmin.from('site_settings').insert({ key:'daily_verse', value: payload })
       }
       setVerseActive(true)
-      showToast('Daily verse override saved for today!')
+      logAction('verse_override', `Set daily verse override: ${verse.reference}`, verse.reference); showToast('Daily verse override saved for today!')
     } catch(e) { showToast(e.message,'error') }
     setVerseSaving(false)
   }
@@ -100,7 +100,7 @@ export default function AdminHomepage() {
     try {
       await supabaseAdmin.from('site_settings').update({ value: { ...verse, override_date: null } }).eq('key','daily_verse')
       setVerseActive(false)
-      showToast('Override cleared — API verse will show today')
+      logAction('verse_override_cleared', 'Cleared daily verse override', null); showToast('Override cleared — API verse will show today')
     } catch(e) { showToast(e.message,'error') }
     setVerseSaving(false)
   }

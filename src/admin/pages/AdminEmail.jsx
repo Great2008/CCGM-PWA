@@ -7,7 +7,7 @@ import AdminCard from '../components/AdminCard'
 const TABS = ['✉️ Email', '💬 WhatsApp', '👥 Subscribers']
 
 export default function AdminEmail() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [tab, setTab]           = useState(0)
   const [subs, setSubs]         = useState([])
   const [loading, setLoading]   = useState(true)
@@ -82,7 +82,7 @@ export default function AdminEmail() {
         recipient_emails: emailSubs.map(s => s.email),
         sent_at: new Date().toISOString(), status: 'sent',
       })
-      showToast(`✅ Email sent to ${emailSubs.length} subscribers!`)
+      logAction('email_sent', `Newsletter sent to ${emailSubs.length} subscribers: ${subject}`, subject); showToast(`✅ Email sent to ${emailSubs.length} subscribers!`)
       setForm(f => ({ ...f, subject: '', body: '' }))
     } catch {
       if (emailSubs.length <= 50) {
@@ -125,7 +125,7 @@ export default function AdminEmail() {
   const removeSub = async (id) => {
     if (!window.confirm('Remove this subscriber?')) return
     setRemovingId(id)
-    await supabaseAdmin.from('newsletter_subscribers').update({ active: false }).eq('id', id)
+    await supabaseAdmin.from('newsletter_subscribers').update({ active: false }).eq('id', id); logAction('newsletter_unsubscribe', `Unsubscribed member from newsletter`, null)
     setSubs(s => s.map(sub => sub.id === id ? { ...sub, active: false } : sub))
     setRemovingId(null)
     showToast('Subscriber removed')

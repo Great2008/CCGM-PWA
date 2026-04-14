@@ -59,7 +59,7 @@ function renderBlocks(text, baseStyle = {}) {
 }
 
 export default function AdminSabbath() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems]   = useState([])
   const [form, setForm]     = useState(null)
   const [saving, setSaving] = useState(false)
@@ -78,14 +78,14 @@ export default function AdminSabbath() {
     // Auto-fill quarter if empty
     const payload = { ...rest, quarter: rest.quarter || dateToQuarter(rest.lesson_date) }
     const { error } = id ? await update('sabbath_lessons',id,payload) : await insert('sabbath_lessons',payload)
-    if (!error) { showToast(id?'Lesson updated!':'Lesson added!'); setForm(null); load() }
+    if (!error) { showToast(id?'Lesson updated!':'Lesson added!'); logAction(id?'sabbath_edit':'sabbath_add', (id?'Updated':'Added')+' lesson: '+(payload.title||''), payload.title||null); setForm(null); load() }
     else showToast(error.message,'error')
     setSaving(false)
   }
 
   const handleDelete = async () => {
     const err = await remove('sabbath_lessons', delId)
-    if (!err) { showToast('Deleted'); setItems(i=>i.filter(x=>x.id!==delId)) }
+    if (!err) { showToast('Deleted'); logAction('sabbath_delete','Deleted Sabbath lesson',null); setItems(i=>i.filter(x=>x.id!==delId)) }
     else showToast(err.message,'error')
     setDelId(null)
   }

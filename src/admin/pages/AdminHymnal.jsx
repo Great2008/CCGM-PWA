@@ -28,7 +28,7 @@ function versesToText(verses) {
 }
 
 export default function AdminHymnal() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [items, setItems]   = useState([])
   const [form, setForm]     = useState(null)
   const [saving, setSaving] = useState(false)
@@ -55,7 +55,7 @@ export default function AdminHymnal() {
     }
     const { error } = id ? await update('hymns', id, payload) : await insert('hymns', payload)
     if (!error) {
-      showToast(id ? 'Hymn updated!' : 'Hymn added!')
+      showToast(id ? 'Hymn updated!' : 'Hymn added!'); logAction(id?'hymn_edit':'hymn_add', (id?'Updated':'Added')+' hymn: '+(payload?.title||''), payload?.title||null)
       setForm(null); load()
     } else {
       showToast(error.message, 'error')
@@ -66,7 +66,7 @@ export default function AdminHymnal() {
   const handleDelete = async () => {
     setSaving(true)
     const err = await remove('hymns', delId)
-    if (!err) { showToast('Hymn deleted'); setItems(i => i.filter(x => x.id !== delId)) }
+    if (!err) { showToast('Hymn deleted'); logAction('hymn_delete','Deleted hymn',null); setItems(i => i.filter(x => x.id !== delId)) }
     else showToast(err.message, 'error')
     setSaving(false); setDelId(null)
   }

@@ -28,7 +28,7 @@ const DEFAULT = {
 }
 
 export default function AdminLive() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [data, setData]     = useState(DEFAULT)
   const [loading, setLoading] = useState(true)
   const [savedLive, setSavedLive] = useState(false)
@@ -51,7 +51,7 @@ export default function AdminLive() {
     const wasLive = savedLive
     try {
       await setContent('live', data)
-      showToast('Live settings saved!')
+      showToast('Live settings saved!'); logAction(data.isLive && !wasLive ? 'live_started' : !data.isLive && wasLive ? 'live_ended' : 'live_updated', data.isLive ? 'Stream set to LIVE' : 'Stream set to offline', null)
       // Auto-send push notification when going live
       if (data.isLive && !wasLive) {
         try {

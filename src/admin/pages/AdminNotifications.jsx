@@ -16,7 +16,7 @@ const TEMPLATES = [
 const PAGES = ['/', '/live', '/sermons', '/events', '/blog', '/sabbath-school', '/timeline', '/about', '/contact']
 
 export default function AdminNotifications() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [subCount, setSubCount]   = useState(0)
   const [logs, setLogs]           = useState([])
   const [loading, setLoading]     = useState(true)
@@ -89,7 +89,7 @@ export default function AdminNotifications() {
       })
 
       setSent({ delivered: result?.delivered || subs.length, failed: result?.failed || 0 })
-      showToast(`Sent to ${result?.delivered || subs.length} subscribers!`)
+      logAction('notification_sent', `Push notification sent to ${result?.delivered || subs.length} subscribers: ${title}`, title); showToast(`Sent to ${result?.delivered || subs.length} subscribers!`)
       loadData()
     } catch(err) {
       // Fallback: if Edge Function not set up yet, show setup instructions

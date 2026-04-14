@@ -3,7 +3,7 @@ import { useAdmin } from '../AdminApp'
 import { getContent, setContent } from '../supabase'
 
 export default function AdminSignature() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const [current, setCurrent] = useState(null)  // current saved signature (base64)
   const [mode, setMode]       = useState('draw') // 'draw' | 'upload'
   const [saving, setSaving]   = useState(false)
@@ -100,7 +100,7 @@ export default function AdminSignature() {
     try {
       await setContent('admin_signature', { image: imageData, updatedAt: new Date().toISOString() })
       setCurrent(imageData)
-      showToast('Signature saved successfully!')
+      logAction('signature_updated', 'Updated admin signature', null); showToast('Signature saved successfully!')
       clearCanvas()
       setUploadPreview(null)
     } catch (e) {

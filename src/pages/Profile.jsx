@@ -368,7 +368,6 @@ export default function Profile() {
                     )}
                   </div>
                   <div style={{ fontWeight: 700, color: '#166534', fontSize: '0.95rem' }}>✝️ {churchTitle}</div>
-                  <div style={{ marginLeft: 'auto', fontSize: '0.7rem', color: '#6b7280' }}>Set by admin</div>
                 </div>
               )}
 

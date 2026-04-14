@@ -15,7 +15,7 @@ function timeAgo(ts) {
 const TYPE_COLORS = { update:'var(--brand-light)', testimony:'#7c3aed', prayer:'#059669' }
 
 export default function AdminTimeline() {
-  const { showToast } = useAdmin()
+  const { showToast, logAction } = useAdmin()
   const { rows, loading, update, remove } = useTable('timeline_posts', {
     select: '*, profiles(display_name,full_name,avatar_url,email)',
     order: 'created_at', asc: false,
@@ -46,6 +46,7 @@ export default function AdminTimeline() {
       await supabaseAdmin.from('timeline_reactions').delete().eq('post_id', delId)
       await supabaseAdmin.from('timeline_comments').delete().eq('post_id', delId)
       await remove(delId)
+      logAction('timeline_delete', `Deleted timeline post by ${delPost?.author_name || 'unknown'}`, delPost?.author_name || null)
       showToast('Post deleted.')
       setDelId(null); setSelected(null)
     } catch(e) { showToast(e.message,'error') }
@@ -53,7 +54,7 @@ export default function AdminTimeline() {
   }
 
   const togglePin = async (post) => {
-    try { await update(post.id, { pinned: !post.pinned }); showToast(post.pinned?'Unpinned.':'📌 Pinned!') }
+    try { await update(post.id, { pinned: !post.pinned }); logAction(post.pinned?'timeline_unpin':'timeline_pin', `${post.pinned?'Unpinned':'Pinned'} post by ${post.author_name||'unknown'}`, post.author_name||null); showToast(post.pinned?'Unpinned.':'📌 Pinned!') }
     catch(e) { showToast(e.message,'error') }
   }
 
