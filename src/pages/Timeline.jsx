@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { auditLog } from '../lib/auditLog'
@@ -1150,19 +1150,18 @@ export default function Timeline() {
   const canCreateTopic = !!user && (isAdmin || userPostCount >= 3)
 
   // ── Data loaders ──
-  const loadPosts = useCallback(async () => {
+  const loadPosts = async () => {
     const { data, error } = await supabase.from('timeline_posts')
       .select('*, profiles(display_name,full_name,avatar_url), reactions:timeline_reactions(*)')
       .order('created_at', { ascending: false })
       .limit(60)
     if (error) console.error('loadPosts error:', error.message)
-    // Sort pinned posts to top client-side (avoids dependency on DB column existing)
     const sorted = (data || []).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
     setPosts(sorted)
     setFeedLoading(false)
-  }, [])
+  }
 
-  const loadTopics = useCallback(async () => {
+  const loadTopics = async () => {
     const { data, error } = await supabase.from('timeline_topics')
       .select('*, profiles(display_name,full_name,avatar_url), reply_count:topic_replies(count)')
       .order('created_at', { ascending: false })
@@ -1171,38 +1170,37 @@ export default function Timeline() {
     const normalized = (data || []).map(t => ({
       ...t, reply_count: t.reply_count?.[0]?.count ?? 0,
     }))
-    // Sort pinned topics to top client-side
     const sorted = normalized.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
     setTopics(sorted)
     setTopicsLoading(false)
-  }, [])
+  }
 
-  const loadMyReports = useCallback(async () => {
+  const loadMyReports = async () => {
     if (!user) return
     const { data } = await supabase.from('post_reports').select('post_id').eq('reporter_id', user.id)
     setMyReports((data || []).map(r => r.post_id))
-  }, [user])
+  }
 
-  const loadUserPostCount = useCallback(async () => {
+  const loadUserPostCount = async () => {
     if (!user) return
     const { count } = await supabase.from('timeline_posts')
       .select('*', { count: 'exact', head: true }).eq('user_id', user.id)
     setUserPostCount(count || 0)
-  }, [user])
+  }
 
-  const loadFollowing = useCallback(async () => {
+  const loadFollowing = async () => {
     if (!user) return
     const { data } = await supabase.from('member_follows')
       .select('following_id').eq('follower_id', user.id)
     setFollowedIds((data || []).map(f => f.following_id))
-  }, [user])
+  }
 
-  const loadMembers = useCallback(async () => {
+  const loadMembers = async () => {
     const { data } = await supabase.from('profiles')
       .select('id,display_name,full_name,avatar_url')
       .eq('suspended', false).limit(100)
     setMembers(data || [])
-  }, [])
+  }
 
   useEffect(() => {
     loadPosts()
