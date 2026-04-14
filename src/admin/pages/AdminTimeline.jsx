@@ -46,7 +46,7 @@ export default function AdminTimeline() {
       await supabaseAdmin.from('timeline_reactions').delete().eq('post_id', delId)
       await supabaseAdmin.from('timeline_comments').delete().eq('post_id', delId)
       await remove(delId)
-      logAction('timeline_delete', `Deleted timeline post by ${delPost?.author_name || 'unknown'}`, delPost?.author_name || null)
+      logAction('timeline_delete', `Deleted timeline post by ${selected?.profiles?.display_name || selected?.profiles?.full_name || 'unknown'}`, selected?.profiles?.display_name || selected?.profiles?.full_name || null)
       showToast('Post deleted.')
       setDelId(null); setSelected(null)
     } catch(e) { showToast(e.message,'error') }
