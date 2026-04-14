@@ -1151,25 +1151,29 @@ export default function Timeline() {
 
   // ── Data loaders ──
   const loadPosts = useCallback(async () => {
-    const { data } = await supabase.from('timeline_posts')
+    const { data, error } = await supabase.from('timeline_posts')
       .select('*, profiles(display_name,full_name,avatar_url), reactions:timeline_reactions(*)')
-      .order('pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(60)
-    setPosts(data || [])
+    if (error) console.error('loadPosts error:', error.message)
+    // Sort pinned posts to top client-side (avoids dependency on DB column existing)
+    const sorted = (data || []).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+    setPosts(sorted)
     setFeedLoading(false)
   }, [])
 
   const loadTopics = useCallback(async () => {
-    const { data } = await supabase.from('timeline_topics')
+    const { data, error } = await supabase.from('timeline_topics')
       .select('*, profiles(display_name,full_name,avatar_url), reply_count:topic_replies(count)')
-      .order('pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(60)
+    if (error) console.error('loadTopics error:', error.message)
     const normalized = (data || []).map(t => ({
       ...t, reply_count: t.reply_count?.[0]?.count ?? 0,
     }))
-    setTopics(normalized)
+    // Sort pinned topics to top client-side
+    const sorted = normalized.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+    setTopics(sorted)
     setTopicsLoading(false)
   }, [])
 
