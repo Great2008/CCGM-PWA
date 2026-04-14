@@ -113,6 +113,9 @@ export default function AdminProgramme() {
   const [sessForm, setSessForm]         = useState(EMPTY_SESSION)
   const [agendaForm, setAgendaForm]     = useState(EMPTY_AGENDA)
   const [delConfirm, setDelConfirm]     = useState(null)
+  const [rsvpProg, setRsvpProg]         = useState(null)  // programme being viewed for RSVPs
+  const [rsvpData, setRsvpData]         = useState([])    // [{session, count, attendees}]
+  const [rsvpLoading, setRsvpLoading]   = useState(false)
 
   // ── Loaders ───────────────────────────────────────────────────────
   const loadProgrammes = async () => {
@@ -141,6 +144,29 @@ export default function AdminProgramme() {
     const { data } = await supabaseAdmin.from('programme_agenda_items').select('*').eq('session_id',sessionId).order('sort_order')
     setAgendaMap(prev => ({...prev, [sessionId]: data||[]}))
     return data||[]
+  }
+
+  const loadRsvps = async (prog) => {
+    setRsvpProg(prog); setRsvpLoading(true); setView('rsvps')
+    // Load all sessions for this programme with RSVP counts + attendee names
+    const { data: daysData } = await supabaseAdmin.from('programme_days').select('id,day_number,title').eq('programme_id',prog.id).order('day_number')
+    if (!daysData?.length) { setRsvpData([]); setRsvpLoading(false); return }
+    const dayIds = daysData.map(d=>d.id)
+    const { data: sessData } = await supabaseAdmin.from('programme_sessions').select('id,title,period,time_start,day_id').in('day_id',dayIds).order('sort_order')
+    if (!sessData?.length) { setRsvpData([]); setRsvpLoading(false); return }
+    const sessIds = sessData.map(s=>s.id)
+    const { data: rsvps } = await supabaseAdmin.from('programme_rsvps').select('session_id, profiles(display_name,full_name,email)').in('session_id',sessIds)
+    // Group by session
+    const grouped = {}
+    for (const r of rsvps||[]) {
+      if (!grouped[r.session_id]) grouped[r.session_id] = []
+      grouped[r.session_id].push(r.profiles)
+    }
+    // Build day map
+    const dayMap = {}
+    for (const d of daysData) dayMap[d.id] = d
+    setRsvpData(sessData.map(s=>({ session:s, day:dayMap[s.day_id], count:grouped[s.id]?.length||0, attendees:grouped[s.id]||[] })).filter(x=>x.count>0))
+    setRsvpLoading(false)
   }
 
   const toggleAgenda = async (sessionId) => {
@@ -347,6 +373,7 @@ export default function AdminProgramme() {
             </div>
             <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>
               <Btn onClick={()=>openManage(p)} color='#2563eb' small>📋 Manage Days</Btn>
+              <Btn onClick={()=>loadRsvps(p)} color='#7c3aed' small>👥 View RSVPs</Btn>
               <Btn onClick={()=>openEditProg(p)} color='#6b7280' small>✏️ Edit</Btn>
               {p.is_active
                 ? <Btn onClick={()=>deactivate(p)} color='#d97706' small>⏸ Deactivate</Btn>
@@ -395,6 +422,45 @@ export default function AdminProgramme() {
           <Btn onClick={()=>setView('list')} color='#6b7280'>Cancel</Btn>
         </div>
       </Card>
+    </div>
+  )
+
+  // ── RSVP view ─────────────────────────────────────────────────────
+  if (view==='rsvps') return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:20}}>
+        <button onClick={()=>setView('list')} style={{background:'none',border:'none',color:'var(--brand-mid)',cursor:'pointer',fontWeight:700,fontSize:'0.9rem',padding:0,fontFamily:'var(--font-body)'}}>← Back</button>
+        <h1 style={{fontFamily:'var(--font-display)',fontSize:'1.4rem',color:'var(--brand-deep)',margin:0}}>👥 RSVPs — {rsvpProg?.title}</h1>
+      </div>
+      {rsvpLoading && <p style={{color:'var(--text-light)',textAlign:'center',padding:40}}>Loading RSVPs…</p>}
+      {!rsvpLoading && !rsvpData.length && (
+        <Card style={{textAlign:'center',padding:'50px 20px'}}>
+          <div style={{fontSize:'2.5rem',marginBottom:12}}>👥</div>
+          <p style={{color:'var(--text-light)'}}>No RSVPs recorded for this programme yet.</p>
+        </Card>
+      )}
+      {!rsvpLoading && rsvpData.map(({session,day,count,attendees}) => (
+        <Card key={session.id} style={{marginBottom:12}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10,flexWrap:'wrap',gap:8}}>
+            <div>
+              <div style={{fontWeight:700,color:'var(--brand-deep)',fontSize:'0.95rem'}}>{session.title}</div>
+              <div style={{color:'var(--text-light)',fontSize:'0.78rem',marginTop:2}}>
+                Day {day?.day_number}{day?.title?` — ${day.title}`:''} {session.time_start?`· ${fmtTime(session.time_start)}`:''}
+              </div>
+            </div>
+            <span style={{background:'#f5f3ff',color:'#7c3aed',border:'1px solid #ddd6fe',borderRadius:20,padding:'4px 14px',fontWeight:700,fontSize:'0.82rem'}}>
+              {count} attending
+            </span>
+          </div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:7}}>
+            {attendees.map((a,i) => (
+              <div key={i} style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:20,padding:'4px 12px',fontSize:'0.78rem',color:'var(--text-mid)',fontWeight:600}}>
+                {a?.display_name||a?.full_name||a?.email||'Member'}
+              </div>
+            ))}
+          </div>
+        </Card>
+      ))}
     </div>
   )
 
@@ -551,6 +617,10 @@ export default function AdminProgramme() {
     </div>
   )
 }
+
+// ── RSVP view ──────────────────────────────────────────────────────
+// Rendered inside AdminProgramme when view === 'rsvps'
+// (inserted inline in component return via early return pattern above)
 
 // ── Session card with expandable agenda list ──────────────────────
 function SessionBlock({ sess, expanded, agenda, onToggle, onEdit, onDelete, onAddAgenda, onEditAgenda, onDeleteAgenda }) {

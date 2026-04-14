@@ -25,6 +25,7 @@ import AdminSignature   from './pages/AdminSignature'
 import AdminBranches from './pages/AdminBranches'
 import AdminMemberDirectory from './pages/AdminMemberDirectory'
 import AdminLog from './pages/AdminLog'
+import AdminProgramme from './pages/AdminProgramme'
 
 export const AdminContext = createContext(null)
 export const useAdmin = () => useContext(AdminContext)
@@ -36,6 +37,7 @@ const NAV = [
   ['studio',    '🎬', 'CCG Studio'],
   ['sermons',   '🎙', 'Sermons'],
   ['events',    '📅', 'Events'],
+  ['programme', '📅', 'Programme'],
   ['blog',      '✍️', 'Blog & Devotionals'],
   ['gallery',   '🖼', 'Gallery'],
   ['hymnal',    '🎵', 'Hymnal'],
@@ -55,7 +57,7 @@ const NAV = [
   ['directory',   '🗂', 'Member Directory'],
   ['audit-log',   '📋', 'Audit Log'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
