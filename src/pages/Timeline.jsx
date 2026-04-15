@@ -1106,6 +1106,7 @@ export default function Timeline() {
   // Topics state
   const [topics, setTopics]                 = useState([])
   const [topicsLoading, setTopicsLoading]   = useState(true)
+  const [topicsDebug, setTopicsDebug]       = useState(null)
   const [topicFilter, setTopicFilter]       = useState('all')
   const [openTopic, setOpenTopic]           = useState(null)
   const [showNewTopic, setShowNewTopic]     = useState(false)
@@ -1162,22 +1163,40 @@ export default function Timeline() {
   }
 
   const loadTopics = async () => {
+    setTopicsLoading(true)
+    setTopicsDebug(null)
+
     const { data, error } = await supabase.from('timeline_topics')
       .select('*, profiles(display_name,full_name,avatar_url)')
       .order('created_at', { ascending: false })
       .limit(60)
-    if (error) { console.error('loadTopics error:', error.message); setTopicsLoading(false); return }
 
-    const { data: replyRows } = await supabase
+    if (error) {
+      setTopicsDebug(`❌ Query error — message: "${error.message}" | code: ${error.code} | hint: ${error.hint || 'none'} | details: ${error.details || 'none'}`)
+      setTopicsLoading(false)
+      return
+    }
+
+    if (!data || data.length === 0) {
+      setTopicsDebug('⚠️ Query succeeded but returned 0 rows. RLS is likely blocking reads — check SELECT policy on timeline_topics.')
+      setTopicsLoading(false)
+      return
+    }
+
+    const { data: replyRows, error: replyError } = await supabase
       .from('topic_replies')
       .select('topic_id')
+
+    if (replyError) {
+      setTopicsDebug(`⚠️ Topics loaded (${data.length} rows) but topic_replies query failed: "${replyError.message}"`)
+    }
 
     const countMap = {}
     ;(replyRows || []).forEach(r => {
       countMap[r.topic_id] = (countMap[r.topic_id] || 0) + 1
     })
 
-    const normalized = (data || []).map(t => ({
+    const normalized = data.map(t => ({
       ...t, reply_count: countMap[t.id] || 0,
     }))
     const sorted = normalized.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
@@ -1570,6 +1589,12 @@ export default function Timeline() {
                 </button>
               ))}
             </div>
+
+            {topicsDebug && (
+              <div style={{background:'#fff5f5', border:'1px solid #fecaca', borderRadius:12, padding:'16px 20px', marginBottom:16, color:'#dc2626', fontSize:'0.82rem', lineHeight:1.8, wordBreak:'break-word'}}>
+                🔍 Debug: {topicsDebug}
+              </div>
+            )}
 
             {topicsLoading && (
               <div style={{textAlign:'center',padding:'60px 20px',color:'var(--text-light)'}}>
