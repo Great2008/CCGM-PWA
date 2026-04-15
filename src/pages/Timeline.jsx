@@ -1161,31 +1161,29 @@ export default function Timeline() {
     setFeedLoading(false)
   }
 
-const loadTopics = async () => {
-  const { data, error } = await supabase.from('timeline_topics')
-    .select('*, profiles(display_name,full_name,avatar_url)')
-    .order('created_at', { ascending: false })
-    .limit(60)
-  if (error) console.error('loadTopics error:', error.message)
+  const loadTopics = async () => {
+    const { data, error } = await supabase.from('timeline_topics')
+      .select('*, profiles(display_name,full_name,avatar_url)')
+      .order('created_at', { ascending: false })
+      .limit(60)
+    if (error) { console.error('loadTopics error:', error.message); setTopicsLoading(false); return }
 
-  // Fetch reply counts separately
-  const { data: replyCounts } = await supabase
-    .from('topic_replies')
-    .select('topic_id')
+    const { data: replyRows } = await supabase
+      .from('topic_replies')
+      .select('topic_id')
 
-  const countMap = {}
-  ;(replyCounts || []).forEach(r => {
-    countMap[r.topic_id] = (countMap[r.topic_id] || 0) + 1
-  })
+    const countMap = {}
+    ;(replyRows || []).forEach(r => {
+      countMap[r.topic_id] = (countMap[r.topic_id] || 0) + 1
+    })
 
-  const normalized = (data || []).map(t => ({
-    ...t,
-    reply_count: countMap[t.id] || 0,
-  }))
-  const sorted = normalized.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
-  setTopics(sorted)
-  setTopicsLoading(false)
-}
+    const normalized = (data || []).map(t => ({
+      ...t, reply_count: countMap[t.id] || 0,
+    }))
+    const sorted = normalized.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+    setTopics(sorted)
+    setTopicsLoading(false)
+  }
 
   const loadMyReports = async () => {
     if (!user) return
