@@ -524,7 +524,7 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',display:'flex',alignItems:'flex-end',justifyContent:'center',zIndex:9999}}
       onClick={e=>{ if(e.target===e.currentTarget) onClose() }}>
-      <div style={{background:'var(--white, white)',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:680,maxHeight:'92vh',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.2)'}}>
+      <div style={{background:'var(--white, white)',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:680,maxHeight:'min(85dvh, 85vh)',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.2)'}}>
         {/* Header */}
         <div style={{padding:'20px 24px 16px',borderBottom:'1px solid #f1f5f9',flexShrink:0}}>
           <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
@@ -543,7 +543,7 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
         </div>
 
         {/* Replies */}
-        <div style={{flex:1,overflowY:'auto',padding:'16px 24px'}}>
+        <div style={{flex:1,overflowY:'auto',padding:'16px 24px',WebkitOverflowScrolling:'touch'}}>
           {loading && <div style={{textAlign:'center',padding:'40px',color:'var(--text-light)'}}>Loading replies…</div>}
           {!loading && replies.length === 0 && (
             <div style={{textAlign:'center',padding:'40px 20px',color:'var(--text-light)'}}>
@@ -560,7 +560,7 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
 
         {/* Reply composer */}
         {currentUserId && (
-          <div style={{padding:'14px 20px',borderTop:'1px solid #f1f5f9',flexShrink:0}}>
+          <div style={{padding:'14px 20px',paddingBottom:'calc(14px + env(safe-area-inset-bottom, 0px))',borderTop:'1px solid #f1f5f9',flexShrink:0}}>
             {mediaPreview && (
               <div style={{position:'relative',marginBottom:8,display:'inline-block'}}>
                 <img src={mediaPreview} alt="" style={{maxHeight:80,borderRadius:8,maxWidth:180,objectFit:'cover'}} />
