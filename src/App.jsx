@@ -1,10 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
+import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { useNativeSetup } from './hooks/useNativeSetup'
-import AppSplash from './components/AppSplash'
-import UpdatePrompt from './components/UpdatePrompt'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
 import Home       from './pages/Home'
@@ -35,27 +33,8 @@ import SuspensionNotice from './components/SuspensionNotice'
 
 function AppInner() {
   const { user } = useAuth()
-  const [splashDone, setSplashDone] = useState(false)
-
-  // ── Native setup: push notification routing, badge count ──
-  useNativeSetup()
-
-  // ── Hide native splash immediately — React splash takes over ──
-  useEffect(() => {
-    const hideSplash = async () => {
-      try {
-        const { SplashScreen } = await import('@capacitor/splash-screen')
-        await SplashScreen.hide({ fadeOutDuration: 0 })
-      } catch {
-        // Not native — silently ignore
-      }
-    }
-    hideSplash()
-  }, [])
-
   return (
     <>
-      {!splashDone && <AppSplash onDone={() => setSplashDone(true)} />}
       <Navbar />
       <main style={{ overflowX: 'hidden' }}>
         <Routes>
@@ -87,19 +66,21 @@ function AppInner() {
       <Footer />
       <PushPrompt user={user} />
       <SuspensionNotice />
-      {splashDone && <UpdatePrompt />}
+      <Analytics />
     </>
   )
 }
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppInner />
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AppInner />
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   )
 }
