@@ -104,7 +104,7 @@ function MentionTextarea({ value, onChange, placeholder, rows=3, style={}, membe
         style={{
           width:'100%', padding:'12px 14px', borderRadius:12, border:'1.5px solid #e2e8f0',
           fontFamily:'var(--font-body)', fontSize:'0.95rem', resize:'none', outline:'none',
-          lineHeight:1.65, transition:'border-color 0.2s', boxSizing:'border-box',
+          lineHeight:1.5, transition:'border-color 0.2s', boxSizing:'border-box',
           ...style
         }}
         onFocus={e=>e.target.style.borderColor='var(--brand-light)'}
@@ -524,18 +524,18 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',display:'flex',alignItems:'flex-end',justifyContent:'center',zIndex:9999}}
       onClick={e=>{ if(e.target===e.currentTarget) onClose() }}>
-      <div style={{background:'var(--white, white)',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:680,maxHeight:'min(85dvh, 85vh)',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.2)'}}>
-        {/* Header */}
-        <div style={{padding:'20px 24px 16px',borderBottom:'1px solid #f1f5f9',flexShrink:0}}>
-          <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
-            <Avatar profile={topic.profiles} size={40} />
+      <div style={{background:'var(--white, white)',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:680,height:'min(88dvh, 88vh)',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.2)'}}>
+        {/* Header — compact, topic body clamped to 3 lines */}
+        <div style={{padding:'14px 16px 12px',borderBottom:'1px solid #f1f5f9',flexShrink:0}}>
+          <div style={{display:'flex',alignItems:'flex-start',gap:10}}>
+            <Avatar profile={topic.profiles} size={34} />
             <div style={{flex:1,minWidth:0}}>
-              <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',marginBottom:4}}>
-                <span style={{fontSize:'0.7rem',fontWeight:700,padding:'2px 10px',borderRadius:20,background:cat.color+'18',color:cat.color}}>{cat.label}</span>
-                <span style={{fontSize:'0.7rem',color:'var(--text-light)'}}>{timeAgo(topic.created_at)}</span>
+              <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',marginBottom:3}}>
+                <span style={{fontSize:'0.68rem',fontWeight:700,padding:'2px 8px',borderRadius:20,background:cat.color+'18',color:cat.color}}>{cat.label}</span>
+                <span style={{fontSize:'0.68rem',color:'var(--text-light)'}}>{timeAgo(topic.created_at)}</span>
               </div>
-              <h3 style={{margin:'0 0 6px',fontSize:'1.05rem',fontWeight:800,color:'var(--text-dark)',lineHeight:1.3}}>{topic.title}</h3>
-              <p style={{margin:0,fontSize:'0.88rem',color:'var(--text-mid)',lineHeight:1.65}}>{topic.body}</p>
+              <h3 style={{margin:'0 0 3px',fontSize:'0.92rem',fontWeight:800,color:'var(--text-dark)',lineHeight:1.3}}>{topic.title}</h3>
+              <p style={{margin:0,fontSize:'0.8rem',color:'var(--text-mid)',lineHeight:1.55,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{topic.body}</p>
             </div>
             <button onClick={onClose}
               style={{background:'rgba(15,31,61,0.06)',border:'none',borderRadius:8,cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',padding:'6px 10px',flexShrink:0}}>✕</button>
@@ -558,31 +558,31 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
           ))}
         </div>
 
-        {/* Reply composer */}
+        {/* Reply composer — always visible at bottom */}
         {currentUserId && (
-          <div style={{padding:'14px 20px',paddingBottom:'calc(14px + env(safe-area-inset-bottom, 0px))',borderTop:'1px solid #f1f5f9',flexShrink:0}}>
+          <div style={{padding:'10px 14px',paddingBottom:'calc(10px + env(safe-area-inset-bottom, 0px))',borderTop:'1px solid #f1f5f9',flexShrink:0,background:'var(--white, white)'}}>
             {mediaPreview && (
-              <div style={{position:'relative',marginBottom:8,display:'inline-block'}}>
-                <img src={mediaPreview} alt="" style={{maxHeight:80,borderRadius:8,maxWidth:180,objectFit:'cover'}} />
+              <div style={{position:'relative',marginBottom:6,display:'inline-block'}}>
+                <img src={mediaPreview} alt="" style={{maxHeight:60,borderRadius:8,maxWidth:140,objectFit:'cover'}} />
                 <button onClick={()=>{setMediaFile(null);setMediaPreview(null)}}
-                  style={{position:'absolute',top:2,right:2,background:'rgba(0,0,0,0.6)',border:'none',borderRadius:'50%',color:'white',width:20,height:20,cursor:'pointer',fontSize:'0.7rem',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                  style={{position:'absolute',top:2,right:2,background:'rgba(0,0,0,0.6)',border:'none',borderRadius:'50%',color:'white',width:18,height:18,cursor:'pointer',fontSize:'0.65rem',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
               </div>
             )}
-            <div style={{display:'flex',gap:8,alignItems:'flex-end'}}>
+            <div style={{display:'flex',gap:6,alignItems:'center'}}>
               <MentionTextarea
                 value={replyText}
                 onChange={setReplyText}
-                placeholder="Write a reply... use @name to mention someone"
-                rows={2}
+                placeholder="Reply to this topic..."
+                rows={1}
                 members={members}
-                style={{fontSize:'0.88rem', borderRadius:12, padding:'10px 14px'}}
+                style={{fontSize:'0.88rem', borderRadius:24, padding:'9px 14px', resize:'none', lineHeight:1.4}}
               />
               <input type="file" ref={fileRef} accept="image/*,video/*" onChange={handleMedia} style={{display:'none'}} />
               <button onClick={()=>fileRef.current?.click()}
-                style={{padding:'10px 12px',borderRadius:12,border:'1.5px solid #e2e8f0',background:'white',cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',flexShrink:0}}
-                title="Add image/video">📎</button>
+                style={{padding:'9px 10px',borderRadius:24,border:'1.5px solid #e2e8f0',background:'white',cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',flexShrink:0,lineHeight:1}}
+                title="Add image">📎</button>
               <button onClick={submitTopLevelReply} disabled={(!replyText.trim()&&!mediaFile)||sending}
-                style={{padding:'10px 18px',borderRadius:12,background:'var(--brand-light)',color:'white',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.85rem',flexShrink:0,opacity:(!replyText.trim()&&!mediaFile)?0.5:1}}>
+                style={{padding:'9px 16px',borderRadius:24,background:'var(--brand-light)',color:'white',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.82rem',flexShrink:0,opacity:(!replyText.trim()&&!mediaFile)?0.5:1,whiteSpace:'nowrap'}}>
                 {sending ? '…' : 'Reply'}
               </button>
             </div>
