@@ -1166,8 +1166,14 @@ export default function Timeline() {
     setTopicsLoading(true)
     setTopicsDebug(null)
 
+    // NOTE: timeline_topics.user_id → profiles FK may be missing in Supabase schema cache.
+    // To fix permanently, run in Supabase SQL editor:
+    //   ALTER TABLE timeline_topics
+    //     ADD CONSTRAINT timeline_topics_user_id_fkey
+    //     FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE SET NULL;
+    // Until then we fetch profiles separately and merge in JS.
     const { data, error } = await supabase.from('timeline_topics')
-      .select('*, profiles(display_name,full_name,avatar_url)')
+      .select('*')
       .order('created_at', { ascending: false })
       .limit(60)
 
@@ -1175,6 +1181,18 @@ export default function Timeline() {
       setTopicsDebug(`❌ Query error — message: "${error.message}" | code: ${error.code} | hint: ${error.hint || 'none'} | details: ${error.details || 'none'}`)
       setTopicsLoading(false)
       return
+    }
+
+    // Hydrate author profiles separately (avoids FK join requirement)
+    if (data && data.length > 0) {
+      const userIds = [...new Set(data.map(t => t.user_id).filter(Boolean))]
+      const { data: profileRows } = await supabase
+        .from('profiles')
+        .select('id,display_name,full_name,avatar_url')
+        .in('id', userIds)
+      const profileMap = {}
+      ;(profileRows || []).forEach(p => { profileMap[p.id] = p })
+      data.forEach(t => { t.profiles = profileMap[t.user_id] || null })
     }
 
     if (!data || data.length === 0) {
