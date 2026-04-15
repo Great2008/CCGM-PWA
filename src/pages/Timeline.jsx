@@ -299,9 +299,12 @@ function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, i
       body: replyText.trim(),
       parent_id: reply.id,
       ...(image_url && { image_url }),
-    }).select('*, profiles(display_name,full_name,avatar_url)').single()
+    }).select('*').single()
     if (data) {
-      setChildReplies(c => [...c, { ...data, children: [] }])
+      // Hydrate profile manually (FK join not reliable without constraint)
+      const { data: prof } = await supabase.from('profiles')
+        .select('id,display_name,full_name,avatar_url').eq('id', currentUserId).single()
+      setChildReplies(c => [...c, { ...data, profiles: prof || null, children: [] }])
       onReplyAdded && onReplyAdded()
     }
     setReplyText(''); setMediaFile(null); setMediaPreview(null)
@@ -456,19 +459,32 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
   const cat = TOPIC_CATEGORIES.find(c=>c.id===topic.category) || TOPIC_CATEGORIES[0]
 
   const loadReplies = async () => {
-    const { data } = await supabase.from('topic_replies')
-      .select('*, profiles(display_name,full_name,avatar_url)')
+    // Fetch all replies for this topic without FK join (topic_replies → profiles FK may be missing)
+    const { data: topLevel } = await supabase.from('topic_replies')
+      .select('*')
       .eq('topic_id', topic.id).is('parent_id', null).order('created_at')
-    if (!data) { setLoading(false); return }
-    const { data: allReplies } = await supabase.from('topic_replies')
-      .select('*, profiles(display_name,full_name,avatar_url)')
+    if (!topLevel) { setLoading(false); return }
+    const { data: childReplies } = await supabase.from('topic_replies')
+      .select('*')
       .eq('topic_id', topic.id).not('parent_id', 'is', null).order('created_at')
+
+    // Hydrate profiles separately
+    const allRows = [...topLevel, ...(childReplies || [])]
+    const userIds = [...new Set(allRows.map(r => r.user_id).filter(Boolean))]
+    let profileMap = {}
+    if (userIds.length > 0) {
+      const { data: profileRows } = await supabase
+        .from('profiles').select('id,display_name,full_name,avatar_url').in('id', userIds)
+      ;(profileRows || []).forEach(p => { profileMap[p.id] = p })
+    }
+    allRows.forEach(r => { r.profiles = profileMap[r.user_id] || null })
+
     const replyMap = {}
-    data.forEach(r => { replyMap[r.id] = { ...r, children: [] } })
-    ;(allReplies || []).forEach(r => {
+    topLevel.forEach(r => { replyMap[r.id] = { ...r, children: [] } })
+    ;(childReplies || []).forEach(r => {
       if (replyMap[r.parent_id]) replyMap[r.parent_id].children.push({ ...r, children: [] })
     })
-    setReplies(data.map(r => replyMap[r.id]))
+    setReplies(topLevel.map(r => replyMap[r.id]))
     setLoading(false)
   }
 
