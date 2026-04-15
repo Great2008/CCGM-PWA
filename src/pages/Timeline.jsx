@@ -455,6 +455,7 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
   const [mediaFile, setMediaFile] = useState(null)
   const [mediaPreview, setMediaPreview] = useState(null)
   const [sending, setSending]     = useState(false)
+  const [headerExpanded, setHeaderExpanded] = useState(false)
   const fileRef = useRef(null)
   const cat = TOPIC_CATEGORIES.find(c=>c.id===topic.category) || TOPIC_CATEGORIES[0]
 
@@ -525,9 +526,9 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',display:'flex',alignItems:'flex-end',justifyContent:'center',zIndex:9999}}
       onClick={e=>{ if(e.target===e.currentTarget) onClose() }}>
       <div style={{background:'var(--white, white)',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:680,height:'min(88dvh, 88vh)',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.2)'}}>
-        {/* Header — compact, topic body clamped to 3 lines */}
-        <div style={{padding:'14px 16px 12px',borderBottom:'1px solid #f1f5f9',flexShrink:0}}>
-          <div style={{display:'flex',alignItems:'flex-start',gap:10}}>
+        {/* Header — tappable to expand/collapse full topic body */}
+        <div style={{borderBottom:'1px solid #f1f5f9',flexShrink:0}}>
+          <div style={{padding:'14px 16px 12px',display:'flex',alignItems:'flex-start',gap:10}}>
             <Avatar profile={topic.profiles} size={34} />
             <div style={{flex:1,minWidth:0}}>
               <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',marginBottom:3}}>
@@ -535,7 +536,29 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
                 <span style={{fontSize:'0.68rem',color:'var(--text-light)'}}>{timeAgo(topic.created_at)}</span>
               </div>
               <h3 style={{margin:'0 0 3px',fontSize:'0.92rem',fontWeight:800,color:'var(--text-dark)',lineHeight:1.3}}>{topic.title}</h3>
-              <p style={{margin:0,fontSize:'0.8rem',color:'var(--text-mid)',lineHeight:1.55,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{topic.body}</p>
+              {/* Body: clamped by default, expands on tap */}
+              <p
+                onClick={() => setHeaderExpanded(s => !s)}
+                style={{
+                  margin:0, fontSize:'0.8rem', color:'var(--text-mid)', lineHeight:1.55,
+                  cursor:'pointer',
+                  ...(headerExpanded ? {} : {
+                    display:'-webkit-box', WebkitLineClamp:2,
+                    WebkitBoxOrient:'vertical', overflow:'hidden',
+                  })
+                }}>
+                {topic.body}
+              </p>
+              {/* Expand / collapse toggle */}
+              <button
+                onClick={() => setHeaderExpanded(s => !s)}
+                style={{
+                  marginTop:4, background:'none', border:'none', cursor:'pointer',
+                  color:'var(--brand-light)', fontSize:'0.72rem', fontWeight:700,
+                  fontFamily:'var(--font-body)', padding:0, display:'block'
+                }}>
+                {headerExpanded ? '▲ Show less' : '▼ Read more'}
+              </button>
             </div>
             <button onClick={onClose}
               style={{background:'rgba(15,31,61,0.06)',border:'none',borderRadius:8,cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',padding:'6px 10px',flexShrink:0}}>✕</button>
