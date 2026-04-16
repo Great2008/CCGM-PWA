@@ -13,6 +13,10 @@ function timeAgo(ts) {
 }
 
 const TYPE_COLORS = { update:'var(--brand-light)', testimony:'#7c3aed', prayer:'#059669' }
+const TOPIC_CATEGORY_COLORS = {
+  general:'#64748b', bible:'#7c3aed', prayer:'#059669',
+  youth:'#f97316', worship:'#ec4899', testimony:'#0ea5e9',
+}
 
 const BADGE = (label, color, bg) => (
   <span style={{fontSize:'0.68rem',fontWeight:700,padding:'2px 8px',borderRadius:20,background:bg,color,whiteSpace:'nowrap'}}>
@@ -21,7 +25,7 @@ const BADGE = (label, color, bg) => (
 )
 
 /* ─────────────────────────────────────────
-   Posts Tab (unchanged from original)
+   Posts Tab
 ───────────────────────────────────────── */
 function PostsTab() {
   const { showToast, logAction } = useAdmin()
@@ -68,8 +72,9 @@ function PostsTab() {
   const togglePin = async (post) => {
     try {
       await update(post.id, { pinned: !post.pinned })
+      const name = post.profiles?.display_name || post.profiles?.full_name || 'unknown'
       logAction(post.pinned ? 'timeline_unpin' : 'timeline_pin',
-        `${post.pinned ? 'Unpinned' : 'Pinned'} post by ${post.profiles?.display_name || post.profiles?.full_name || 'unknown'}`)
+        `${post.pinned ? 'Unpinned' : 'Pinned'} post by ${name}`, name)
       showToast(post.pinned ? 'Unpinned.' : '📌 Pinned!')
       if (selected?.id === post.id) setSelected(p => ({ ...p, pinned: !p.pinned }))
     } catch(e) { showToast(e.message, 'error') }
@@ -142,7 +147,7 @@ function PostsTab() {
           })}
         </div>
 
-        {/* Detail panel */}
+        {/* Post detail panel */}
         {selected && (
           <div style={{position:'sticky',top:20}}>
             <div style={{background:'white',borderRadius:14,boxShadow:'0 2px 16px rgba(0,0,0,0.09)',overflow:'hidden'}}>
@@ -189,16 +194,192 @@ function PostsTab() {
 }
 
 /* ─────────────────────────────────────────
+   Topics Tab
+───────────────────────────────────────── */
+function TopicsTab() {
+  const { showToast, logAction } = useAdmin()
+  const [topics, setTopics]               = useState([])
+  const [loading, setLoading]             = useState(false)
+  const [topicSearch, setTopicSearch]     = useState('')
+  const [delTopicId, setDelTopicId]       = useState(null)
+  const [selectedTopic, setSelectedTopic] = useState(null)
+  const [saving, setSaving]               = useState(false)
+
+  const loadTopics = async () => {
+    setLoading(true)
+    const { data, error } = await supabaseAdmin.from('timeline_topics')
+      .select('*').order('created_at', { ascending: false })
+    if (error || !data) { setLoading(false); return }
+
+    // Hydrate profiles separately (FK may be absent in schema cache)
+    const userIds = [...new Set(data.map(t => t.user_id).filter(Boolean))]
+    let profileMap = {}
+    if (userIds.length > 0) {
+      const { data: profileRows } = await supabaseAdmin
+        .from('profiles').select('id,display_name,full_name,avatar_url,email').in('id', userIds)
+      ;(profileRows || []).forEach(p => { profileMap[p.id] = p })
+    }
+    // Attach reply counts
+    const { data: replyRows } = await supabaseAdmin.from('topic_replies').select('topic_id')
+    const countMap = {}
+    ;(replyRows || []).forEach(r => { countMap[r.topic_id] = (countMap[r.topic_id] || 0) + 1 })
+
+    setTopics(data.map(t => ({
+      ...t,
+      profiles: profileMap[t.user_id] || null,
+      reply_count: countMap[t.id] || 0,
+    })))
+    setLoading(false)
+  }
+
+  useEffect(() => { loadTopics() }, [])
+
+  const filteredTopics = topics.filter(t =>
+    !topicSearch ||
+    (t.title||'').toLowerCase().includes(topicSearch.toLowerCase()) ||
+    (t.body||'').toLowerCase().includes(topicSearch.toLowerCase()) ||
+    (t.profiles?.full_name||'').toLowerCase().includes(topicSearch.toLowerCase())
+  )
+
+  const deleteTopic = async () => {
+    setSaving(true)
+    try {
+      await supabaseAdmin.from('topic_replies').delete().eq('topic_id', delTopicId)
+      await supabaseAdmin.from('timeline_topics').delete().eq('id', delTopicId)
+      const name = selectedTopic?.profiles?.display_name || selectedTopic?.profiles?.full_name || 'unknown'
+      logAction('topic_delete', `Deleted topic "${selectedTopic?.title}" by ${name}`, name)
+      showToast('Topic deleted.')
+      setTopics(ts => ts.filter(t => t.id !== delTopicId))
+      setDelTopicId(null); setSelectedTopic(null)
+    } catch(e) { showToast(e.message, 'error') }
+    setSaving(false)
+  }
+
+  const togglePinTopic = async (topic) => {
+    try {
+      await supabaseAdmin.from('timeline_topics').update({ pinned: !topic.pinned }).eq('id', topic.id)
+      const name = topic.profiles?.display_name || topic.profiles?.full_name || 'unknown'
+      logAction(topic.pinned ? 'topic_unpin' : 'topic_pin',
+        `${topic.pinned ? 'Unpinned' : 'Pinned'} topic "${topic.title}"`, name)
+      showToast(topic.pinned ? 'Unpinned.' : '📌 Pinned!')
+      setTopics(ts => ts.map(t => t.id === topic.id ? { ...t, pinned: !t.pinned } : t))
+      if (selectedTopic?.id === topic.id) setSelectedTopic(t => ({ ...t, pinned: !t.pinned }))
+    } catch(e) { showToast(e.message, 'error') }
+  }
+
+  const initials = p => (p?.display_name || p?.full_name || '?').charAt(0).toUpperCase()
+
+  if (loading) return <div style={{textAlign:'center',padding:60,color:'var(--text-light)'}}>Loading topics…</div>
+
+  return (
+    <>
+      <div style={{position:'relative',marginBottom:18,maxWidth:380}}>
+        <span style={{position:'absolute',left:13,top:'50%',transform:'translateY(-50%)',color:'var(--text-light)'}}>🔍</span>
+        <input value={topicSearch} onChange={e => setTopicSearch(e.target.value)} placeholder="Search topics..."
+          style={{width:'100%',padding:'9px 14px 9px 38px',borderRadius:30,border:'1.5px solid #e2e8f0',fontFamily:'var(--font-body)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}} />
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:selectedTopic ? '1fr 360px' : '1fr',gap:20,alignItems:'start'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          {filteredTopics.length === 0 && <div style={{background:'white',borderRadius:14,padding:'40px',textAlign:'center',color:'var(--text-light)'}}>No topics found.</div>}
+          {filteredTopics.map(topic => {
+            const catColor = TOPIC_CATEGORY_COLORS[topic.category] || '#64748b'
+            return (
+              <div key={topic.id} onClick={() => setSelectedTopic(topic)} style={{
+                background:'white', borderRadius:12, padding:'14px 18px', cursor:'pointer',
+                boxShadow:'0 1px 8px rgba(0,0,0,0.06)',
+                border:`1.5px solid ${selectedTopic?.id===topic.id ? 'var(--brand-light)' : 'transparent'}`,
+                transition:'border-color 0.15s',
+              }}>
+                <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
+                  <div style={{width:40,height:40,borderRadius:'50%',background:`${catColor}18`,display:'flex',alignItems:'center',justifyContent:'center',color:catColor,fontWeight:900,fontSize:'1rem',flexShrink:0}}>
+                    {topic.profiles?.avatar_url
+                      ? <img src={topic.profiles.avatar_url} alt="" style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}} />
+                      : initials(topic.profiles)}
+                  </div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',marginBottom:4}}>
+                      <span style={{fontWeight:700,fontSize:'0.88rem',color:'var(--text-dark)'}}>{topic.profiles?.display_name||topic.profiles?.full_name||'Unknown'}</span>
+                      <span style={{fontSize:'0.68rem',fontWeight:700,padding:'2px 8px',borderRadius:20,background:catColor+'20',color:catColor}}>{topic.category||'general'}</span>
+                      {topic.pinned && <span style={{fontSize:'0.65rem',color:'var(--gold)',fontWeight:700}}>📌 Pinned</span>}
+                      <span style={{fontSize:'0.72rem',color:'var(--text-light)',marginLeft:'auto'}}>{timeAgo(topic.created_at)}</span>
+                    </div>
+                    <p style={{fontSize:'0.88rem',fontWeight:700,color:'var(--text-dark)',margin:'0 0 4px',display:'-webkit-box',WebkitLineClamp:1,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{topic.title}</p>
+                    <p style={{fontSize:'0.82rem',color:'var(--text-mid)',lineHeight:1.5,margin:0,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{topic.body}</p>
+                    <div style={{marginTop:8,fontSize:'0.75rem',color:'var(--text-light)'}}>
+                      💬 {topic.reply_count} {topic.reply_count===1?'reply':'replies'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Topic detail panel */}
+        {selectedTopic && (
+          <div style={{position:'sticky',top:20}}>
+            <div style={{background:'white',borderRadius:14,boxShadow:'0 2px 16px rgba(0,0,0,0.09)',overflow:'hidden'}}>
+              <div style={{padding:'16px 18px',borderBottom:'1px solid #f1f5f9',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <h3 style={{margin:0,color:'var(--brand-deep)',fontSize:'0.95rem',fontFamily:'var(--font-display)'}}>Topic Detail</h3>
+                <button onClick={() => setSelectedTopic(null)} style={{background:'none',border:'none',cursor:'pointer',fontSize:'1.1rem',color:'var(--text-light)'}}>✕</button>
+              </div>
+              <div style={{padding:'18px'}}>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+                  <div style={{width:36,height:36,borderRadius:'50%',background:'var(--brand-pale)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,color:'var(--brand-light)'}}>
+                    {initials(selectedTopic.profiles)}
+                  </div>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:'0.9rem',color:'var(--text-dark)'}}>{selectedTopic.profiles?.display_name||selectedTopic.profiles?.full_name||'Unknown'}</div>
+                    <div style={{fontSize:'0.72rem',color:'var(--text-light)'}}>{selectedTopic.profiles?.email} · {timeAgo(selectedTopic.created_at)}</div>
+                  </div>
+                </div>
+                <div style={{fontWeight:800,fontSize:'0.95rem',color:'var(--text-dark)',marginBottom:8,lineHeight:1.35}}>{selectedTopic.title}</div>
+                <div style={{background:'#f8fafc',borderRadius:10,padding:'14px',marginBottom:16,lineHeight:1.75,color:'var(--text-dark)',fontSize:'0.88rem',whiteSpace:'pre-wrap',wordBreak:'break-word'}}>
+                  {selectedTopic.body}
+                </div>
+                <div style={{fontSize:'0.82rem',color:'var(--text-mid)',marginBottom:18}}>
+                  💬 {selectedTopic.reply_count} {selectedTopic.reply_count===1?'reply':'replies'}
+                  {selectedTopic.pinned && <span style={{marginLeft:10,color:'#d97706',fontWeight:700}}>📌 Pinned</span>}
+                </div>
+                <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                  <button onClick={() => togglePinTopic(selectedTopic)} style={{padding:'10px',borderRadius:10,border:`1.5px solid ${selectedTopic.pinned?'#e2e8f0':'var(--gold)'}`,background:selectedTopic.pinned?'white':'#fef3c7',color:selectedTopic.pinned?'var(--text-mid)':'#92400e',fontWeight:700,cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'}}>
+                    {selectedTopic.pinned ? '📌 Unpin Topic' : '📌 Pin to Top'}
+                  </button>
+                  <button onClick={() => setDelTopicId(selectedTopic.id)} style={{padding:'10px',borderRadius:10,border:'1.5px solid #fecaca',background:'white',color:'#dc2626',fontWeight:700,cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'}}>
+                    🗑 Delete Topic & Replies
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {delTopicId && <Confirm message="Delete this topic and ALL its replies? This cannot be undone." onConfirm={deleteTopic} onCancel={() => setDelTopicId(null)} loading={saving} />}
+    </>
+  )
+}
+
+/* ─────────────────────────────────────────
    Reports Tab
 ───────────────────────────────────────── */
 function ReportsTab() {
   const { showToast, logAction } = useAdmin()
-  const [reports, setReports]         = useState([])
-  const [loading, setLoading]         = useState(true)
-  const [statusFilter, setStatusFilter] = useState('pending') // 'pending' | 'resolved' | 'all'
-  const [selected, setSelected]       = useState(null) // { report, post, allReportsForPost }
+  const [reports, setReports]             = useState([])
+  const [loading, setLoading]             = useState(true)
+  const [statusFilter, setStatusFilter]   = useState('pending')
+  const [selected, setSelected]           = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
-  const [confirmAction, setConfirmAction] = useState(null) // { type, label, fn }
+  const [confirmAction, setConfirmAction] = useState(null)
+
+  const REASON_COLORS = {
+    'Spam or irrelevant content':            '#f97316',
+    'Inappropriate or offensive content':    '#dc2626',
+    'Harassment or bullying':                '#9333ea',
+    'False information / misinformation':    '#0ea5e9',
+    'Other':                                 '#64748b',
+  }
 
   const loadReports = async () => {
     setLoading(true)
@@ -220,19 +401,18 @@ function ReportsTab() {
 
   useEffect(() => { loadReports() }, [])
 
-  // Group reports by post_id so we can see how many reports each post has
+  // Group reports by post_id
   const reportsByPost = {}
   reports.forEach(r => {
     if (!reportsByPost[r.post_id]) reportsByPost[r.post_id] = []
     reportsByPost[r.post_id].push(r)
   })
 
-  // Deduplicate: show one row per post (the most recent report for that post)
+  // One row per post, most recent report first
   const deduped = Object.entries(reportsByPost).map(([postId, reps]) => {
     const sorted = [...reps].sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
     return { postId, count: reps.length, latest: sorted[0], all: reps }
   }).sort((a,b) => {
-    // Unresolved first, then by count desc
     const aResolved = a.all.every(r => r.resolved)
     const bResolved = b.all.every(r => r.resolved)
     if (aResolved !== bResolved) return aResolved ? 1 : -1
@@ -249,12 +429,7 @@ function ReportsTab() {
   const pendingCount  = deduped.filter(d => !d.all.every(r => r.resolved)).length
   const resolvedCount = deduped.filter(d =>  d.all.every(r => r.resolved)).length
 
-  const openDetail = (item) => {
-    setSelected(item)
-  }
-
   // ── Actions ──
-
   const markResolved = async (postId) => {
     setActionLoading(true)
     try {
@@ -326,14 +501,6 @@ function ReportsTab() {
 
   const initials = p => (p?.display_name || p?.full_name || '?').charAt(0).toUpperCase()
 
-  const REASON_COLORS = {
-    'Spam or irrelevant content':            '#f97316',
-    'Inappropriate or offensive content':    '#dc2626',
-    'Harassment or bullying':                '#9333ea',
-    'False information / misinformation':    '#0ea5e9',
-    'Other':                                 '#64748b',
-  }
-
   if (loading) return <div style={{textAlign:'center',padding:60,color:'var(--text-light)'}}>Loading reports...</div>
 
   return (
@@ -341,9 +508,9 @@ function ReportsTab() {
       {/* Status filter */}
       <div style={{display:'flex',gap:6,marginBottom:20,flexWrap:'wrap'}}>
         {[
-          ['pending',  `🚨 Pending`,  pendingCount],
-          ['resolved', `✅ Resolved`, resolvedCount],
-          ['all',      `📋 All`,      deduped.length],
+          ['pending',  '🚨 Pending',  pendingCount],
+          ['resolved', '✅ Resolved', resolvedCount],
+          ['all',      '📋 All',      deduped.length],
         ].map(([id, label, count]) => (
           <button key={id} onClick={() => setStatusFilter(id)} style={{
             padding:'7px 16px', borderRadius:30, border:'1.5px solid',
@@ -376,15 +543,15 @@ function ReportsTab() {
         {/* Report list */}
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(item => {
-            const post     = item.latest?.post
-            const author   = post?.author
+            const post       = item.latest?.post
+            const author     = post?.author
             const allResolved = item.all.every(r => r.resolved)
-            const tc       = TYPE_COLORS[post?.post_type] || 'var(--brand-light)'
-            const reasons  = [...new Set(item.all.map(r => r.reason).filter(Boolean))]
-            const isActive = selected?.postId === item.postId
+            const tc         = TYPE_COLORS[post?.post_type] || 'var(--brand-light)'
+            const reasons    = [...new Set(item.all.map(r => r.reason).filter(Boolean))]
+            const isActive   = selected?.postId === item.postId
 
             return (
-              <div key={item.postId} onClick={() => openDetail(item)}
+              <div key={item.postId} onClick={() => setSelected(item)}
                 style={{
                   background:'white', borderRadius:14, padding:'16px 18px',
                   cursor:'pointer', boxShadow:'0 1px 8px rgba(0,0,0,0.06)',
@@ -393,7 +560,6 @@ function ReportsTab() {
                   transition:'border-color 0.15s',
                 }}>
                 <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
-
                   {/* Report count badge */}
                   <div style={{
                     width:44, height:44, borderRadius:12, flexShrink:0,
@@ -408,7 +574,6 @@ function ReportsTab() {
                   </div>
 
                   <div style={{flex:1,minWidth:0}}>
-                    {/* Author row */}
                     <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',marginBottom:5}}>
                       {author?.avatar_url
                         ? <img src={author.avatar_url} alt="" style={{width:22,height:22,borderRadius:'50%',objectFit:'cover'}} />
@@ -420,13 +585,9 @@ function ReportsTab() {
                       {allResolved && BADGE('Resolved','#059669','#ecfdf5')}
                       <span style={{fontSize:'0.7rem',color:'var(--text-light)',marginLeft:'auto'}}>{timeAgo(item.latest?.created_at)}</span>
                     </div>
-
-                    {/* Post preview */}
                     <p style={{fontSize:'0.82rem',color:'var(--text-mid)',lineHeight:1.55,margin:'0 0 8px',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>
                       {post?.body || '(post unavailable)'}
                     </p>
-
-                    {/* Reason tags */}
                     <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
                       {reasons.slice(0,3).map(reason => (
                         <span key={reason} style={{
@@ -446,12 +607,12 @@ function ReportsTab() {
           })}
         </div>
 
-        {/* Detail panel */}
+        {/* Report detail panel */}
         {selected && (() => {
-          const post       = selected.latest?.post
-          const author     = post?.author
+          const post        = selected.latest?.post
+          const author      = post?.author
           const allResolved = selected.all.every(r => r.resolved)
-          const tc         = TYPE_COLORS[post?.post_type] || 'var(--brand-light)'
+          const tc          = TYPE_COLORS[post?.post_type] || 'var(--brand-light)'
           const uniqueReporters = [...new Map(selected.all.map(r => [r.reporter_id, r])).values()]
 
           return (
@@ -516,10 +677,7 @@ function ReportsTab() {
                               <span style={{fontSize:'0.68rem',color:'var(--text-light)'}}>{timeAgo(r.created_at)}</span>
                               {r.resolved && <span style={{fontSize:'0.65rem',color:'#059669',fontWeight:700}}>✓ resolved</span>}
                             </div>
-                            <div style={{
-                              marginTop:2, fontSize:'0.75rem', fontWeight:600,
-                              color: REASON_COLORS[r.reason]||'#64748b',
-                            }}>
+                            <div style={{marginTop:2,fontSize:'0.75rem',fontWeight:600,color: REASON_COLORS[r.reason]||'#64748b'}}>
                               {r.reason || 'No reason given'}
                             </div>
                           </div>
@@ -592,20 +750,25 @@ function ReportsTab() {
 ───────────────────────────────────────── */
 export default function AdminTimeline() {
   const [tab, setTab] = useState('posts')
-
-  // Load pending report count for the badge
   const [pendingReports, setPendingReports] = useState(0)
+
+  // Refresh pending report badge whenever tab changes
   useEffect(() => {
     supabaseAdmin
       .from('post_reports')
       .select('post_id', { count: 'exact', head: false })
       .eq('resolved', false)
       .then(({ data }) => {
-        // Count unique post_ids
         const unique = new Set((data||[]).map(r => r.post_id))
         setPendingReports(unique.size)
       })
-  }, [tab]) // refresh when switching back to posts tab
+  }, [tab])
+
+  const TABS = [
+    { id:'posts',   label:'📰 Feed Posts' },
+    { id:'topics',  label:'💬 Topics' },
+    { id:'reports', label:'🚩 Reports', badge: pendingReports },
+  ]
 
   return (
     <div>
@@ -619,10 +782,7 @@ export default function AdminTimeline() {
 
       {/* Tab bar */}
       <div style={{display:'flex',gap:4,marginBottom:24,borderBottom:'2px solid #f1f5f9',paddingBottom:0}}>
-        {[
-          { id:'posts',   label:'📝 Posts' },
-          { id:'reports', label:'🚩 Reports', badge: pendingReports },
-        ].map(t => (
+        {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             style={{
               padding:'10px 20px', border:'none', cursor:'pointer', position:'relative',
@@ -646,6 +806,7 @@ export default function AdminTimeline() {
       </div>
 
       {tab === 'posts'   && <PostsTab />}
+      {tab === 'topics'  && <TopicsTab />}
       {tab === 'reports' && <ReportsTab />}
     </div>
   )
