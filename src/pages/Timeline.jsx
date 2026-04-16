@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { auditLog } from '../lib/auditLog'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
+import { ShareButtonLight } from '../components/ShareButton'
 
 const POST_TYPES = [
   { id:'update',    label:'📝 Update',    color:'var(--brand-light)' },
@@ -442,6 +443,13 @@ function TopicCard({ topic, currentUserId, isAdmin, onDelete, onOpen, onPin }) {
         <span style={{marginLeft:'auto', fontSize:'0.78rem', color:'var(--text-light)', display:'flex', alignItems:'center', gap:4}}>
           💬 {topic.reply_count || 0} {topic.reply_count === 1 ? 'reply' : 'replies'}
         </span>
+        <ShareButtonLight
+          title={topic.title}
+          text={topic.body}
+          url={`${window.location.origin}/timeline?topic=${topic.id}`}
+          label="Share"
+          style={{fontSize:'0.72rem', padding:'5px 12px'}}
+        />
       </div>
     </div>
   )
@@ -560,8 +568,17 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
                 {headerExpanded ? '▲ Show less' : '▼ Read more'}
               </button>
             </div>
-            <button onClick={onClose}
-              style={{background:'rgba(15,31,61,0.06)',border:'none',borderRadius:8,cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',padding:'6px 10px',flexShrink:0}}>✕</button>
+            <div style={{display:'flex', flexDirection:'column', gap:6, alignItems:'flex-end', flexShrink:0}}>
+              <button onClick={onClose}
+                style={{background:'rgba(15,31,61,0.06)',border:'none',borderRadius:8,cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',padding:'6px 10px'}}>✕</button>
+              <ShareButtonLight
+                title={topic.title}
+                text={topic.body}
+                url={`${window.location.origin}/timeline?topic=${topic.id}`}
+                label="Share"
+                style={{fontSize:'0.7rem', padding:'5px 11px'}}
+              />
+            </div>
           </div>
         </div>
 
@@ -1130,6 +1147,7 @@ function ProfileModal({ profile, onClose, onUpdate }) {
 ══════════════════════════════════════════ */
 export default function Timeline() {
   const { user, profile, loading: authLoading, signOut, isAdmin, updateProfile } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [activeTab, setActiveTab] = useState('feed')
 
@@ -1296,6 +1314,19 @@ export default function Timeline() {
     loadFollowing()
     loadMembers()
   }, [user])
+
+  // Deep-link: open topic from ?topic=<id> (e.g. from a shared link)
+  useEffect(() => {
+    const topicId = searchParams.get('topic')
+    if (!topicId || topics.length === 0) return
+    const match = topics.find(t => t.id === topicId)
+    if (match) {
+      setActiveTab('topics')
+      setOpenTopic(match)
+      // Clean the query param from the URL without re-navigating
+      setSearchParams(prev => { prev.delete('topic'); return prev }, { replace: true })
+    }
+  }, [topics, searchParams])
 
   // Realtime subscriptions
   useEffect(() => {
