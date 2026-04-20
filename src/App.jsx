@@ -30,6 +30,7 @@ import Guidelines  from './pages/Guidelines'
 import Verify       from './pages/Verify'
 import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
+import BannerGenerator from './pages/BannerGenerator'
 
 function AppInner() {
   const { user } = useAuth()
@@ -60,6 +61,7 @@ function AppInner() {
           <Route path="/certificate"      element={<Certificate />} />
           <Route path="/verify"           element={<Verify />} />
           <Route path="/programme"        element={<Programme />} />
+          <Route path="/banner-generator" element={<BannerGenerator />} />
           <Route path="/guidelines"       element={<Guidelines />} />
         </Routes>
       </main>
