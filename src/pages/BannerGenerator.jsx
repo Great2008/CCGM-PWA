@@ -45,28 +45,7 @@ const DESIGN_STYLES = [
   { id: 'midnight',  label: 'Midnight',    bg: '#030d06', accent: '#4ade80' },
 ]
 
-// ─── CANVAS RENDERER ──────────────────────────────────────────────────────────
-function drawBanner(canvas, { fmt, style, fields, logoImg }) {
-  const { w, h } = fmt
-  const ctx = canvas.getContext('2d')
-  canvas.width  = w
-  canvas.height = h
-
-  const isDark  = style.bg.startsWith('#0') || style.bg.startsWith('#1') || style.bg.startsWith('#03')
-  const textPrimary   = isDark ? '#ffffff' : '#0a2612'
-  const textSecondary = isDark ? 'rgba(255,255,255,0.72)' : '#166534'
-  const gold   = style.accent
-  const isLandscape = w > h
-
-  // ── Background ──
-  const grad = ctx.createLinearGradient(0, 0, w * 0.6, h)
-  grad.addColorStop(0,   style.bg)
-  grad.addColorStop(0.6, style.bg === '#f0fdf4' ? '#dcfce7' : blendDark(style.bg, 0.4))
-  grad.addColorStop(1,   style.bg === '#f0fdf4' ? '#bbf7d0' : blendDark(style.bg, 0.7))
-  ctx.fillStyle = grad
-  ctx.fillRect(0, 0, w, h)
-
-  // ── Decorative circles ──
+ ──
   ctx.save()
   ctx.globalAlpha = 0.06
   ctx.fillStyle = gold
@@ -326,173 +305,140 @@ export default function BannerGenerator() {
       </div>
 
       {/* ── Main ── */}
-      <div style={{ background: 'var(--cream)', minHeight: '60vh', padding: '48px 4% 80px' }}>
-        <div style={{
-          maxWidth: 1200, margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'clamp(280px,35%,400px) 1fr',
-          gap: 32,
-          alignItems: 'start',
-        }}>
+      <div style={{ background: 'var(--cream)', minHeight: '60vh', padding: '32px 4% 80px' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-          {/* ── LEFT: Controls ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-
-            {/* Template type */}
-            <Card title="Banner Type">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {Object.entries(TEMPLATES).map(([k, t]) => (
-                  <button key={k} onClick={() => switchType(k)} style={{
-                    padding: '12px 8px', borderRadius: 10, border: '2px solid',
-                    borderColor: type === k ? 'var(--brand-base)' : 'var(--brand-pale)',
-                    background: type === k ? 'var(--brand-pale)' : 'white',
-                    color: 'var(--text-dark)', cursor: 'pointer',
-                    fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 600,
-                    transition: 'all 0.15s',
-                  }}>
-                    <div style={{ fontSize: '1.4rem', marginBottom: 4 }}>{t.icon}</div>
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            </Card>
-
-            {/* Format */}
-            <Card title="Output Format">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {FORMATS.map(f => (
-                  <button key={f.id} onClick={() => setFmtId(f.id)} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '10px 14px', borderRadius: 8, border: '2px solid',
-                    borderColor: fmtId === f.id ? 'var(--brand-base)' : 'var(--brand-pale)',
-                    background: fmtId === f.id ? 'var(--brand-pale)' : 'white',
-                    color: 'var(--text-dark)', cursor: 'pointer',
-                    fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500,
-                    transition: 'all 0.15s',
-                  }}>
-                    <span>{f.label}</span>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.74rem' }}>{f.w}×{f.h}</span>
-                  </button>
-                ))}
-              </div>
-            </Card>
-
-            {/* Style */}
-            <Card title="Colour Style">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {DESIGN_STYLES.map(s => (
-                  <button key={s.id} onClick={() => setStyleId(s.id)} style={{
-                    padding: '10px 6px', borderRadius: 10, border: '2px solid',
-                    borderColor: styleId === s.id ? s.accent : 'transparent',
-                    background: s.bg, cursor: 'pointer', position: 'relative',
-                    transition: 'transform 0.15s',
-                    transform: styleId === s.id ? 'scale(1.04)' : 'scale(1)',
-                  }}>
-                    <div style={{ width: 20, height: 20, borderRadius: '50%', background: s.accent, margin: '0 auto 4px' }} />
-                    <div style={{ color: s.accent, fontSize: '0.72rem', fontWeight: 600, fontFamily: 'var(--font-body)' }}>{s.label}</div>
-                  </button>
-                ))}
-              </div>
-            </Card>
-
-            {/* Text fields */}
-            <Card title="Content">
-              {[
-                { key: 'title',    label: 'Title',          placeholder: 'e.g. Annual Convention' },
-                { key: 'subtitle', label: 'Subtitle / Theme verse caption', placeholder: 'e.g. Walking in the Light' },
-                { key: 'date',     label: 'Date',           placeholder: 'e.g. Saturday, 10 May 2025' },
-                { key: 'time',     label: 'Time',           placeholder: 'e.g. 9:00 AM' },
-                { key: 'venue',    label: 'Venue',          placeholder: 'e.g. CCG World Headquarters' },
-                { key: 'theme',    label: 'Bible Reference (optional)', placeholder: 'e.g. Isaiah 60:1' },
-                { key: 'cta',      label: 'Call to Action', placeholder: 'e.g. All are welcome' },
-              ].map(({ key, label, placeholder }) => (
-                <div key={key} style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-mid)', marginBottom: 4 }}>
-                    {label}
-                  </label>
-                  <input
-                    value={fields[key] || ''}
-                    onChange={e => setField(key, e.target.value)}
-                    placeholder={placeholder}
-                    style={{
-                      width: '100%', padding: '9px 12px', borderRadius: 8,
-                      border: '1.5px solid var(--brand-pale)', background: 'white',
-                      fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--text-dark)',
-                      outline: 'none', transition: 'border-color 0.15s',
-                    }}
-                    onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
-                    onBlur={e  => e.target.style.borderColor = 'var(--brand-pale)'}
-                  />
-                </div>
-              ))}
-            </Card>
+          {/* ── PREVIEW (top, always fully visible) ── */}
+          <div style={{ background: 'white', borderRadius: 16, padding: 16, boxShadow: 'var(--shadow-md)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>
+                Preview
+              </span>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>{fmt.w}×{fmt.h}px</span>
+            </div>
+            {/* Canvas scales to 100% width, height follows aspect ratio */}
+            <div style={{ width: '100%', background: '#e2e2e2', borderRadius: 10, padding: 8, lineHeight: 0 }}>
+              <canvas
+                ref={canvasRef}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  borderRadius: 6,
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.18)',
+                }}
+              />
+            </div>
           </div>
 
-          {/* ── RIGHT: Preview + Download ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 90 }}>
-            <div style={{
-              background: 'white', borderRadius: 16, padding: 20,
-              boxShadow: 'var(--shadow-md)',
-            }}>
-              <div style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16,
-              }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>
-                  Preview
-                </span>
-                <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                  {fmt.w}×{fmt.h}px
-                </span>
-              </div>
+          {/* ── DOWNLOAD ── */}
+          <button onClick={download} style={{
+            width: '100%', padding: '16px',
+            background: 'linear-gradient(135deg, var(--brand-dark), var(--brand-mid))',
+            color: 'white', border: 'none', borderRadius: 12,
+            fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 700,
+            cursor: 'pointer', letterSpacing: '0.5px',
+            boxShadow: 'var(--shadow-md)',
+          }}>
+            ⬇ Download PNG
+          </button>
 
-              {/* Canvas wrapper — scales to fit */}
-              <div style={{
-                width: '100%',
-                display: 'flex', justifyContent: 'center', alignItems: 'center',
-                background: '#e8e8e8', borderRadius: 10, padding: 8, overflow: 'hidden',
-              }}>
-                <canvas
-                  ref={canvasRef}
+          {/* ── CONTROLS ── */}
+
+          {/* Banner type */}
+          <Card title="Banner Type">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {Object.entries(TEMPLATES).map(([k, t]) => (
+                <button key={k} onClick={() => switchType(k)} style={{
+                  padding: '12px 8px', borderRadius: 10, border: '2px solid',
+                  borderColor: type === k ? 'var(--brand-base)' : 'var(--brand-pale)',
+                  background: type === k ? 'var(--brand-pale)' : 'white',
+                  color: 'var(--text-dark)', cursor: 'pointer',
+                  fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 600,
+                  transition: 'all 0.15s',
+                }}>
+                  <div style={{ fontSize: '1.4rem', marginBottom: 4 }}>{t.icon}</div>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          {/* Format */}
+          <Card title="Output Format">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {FORMATS.map(f => (
+                <button key={f.id} onClick={() => setFmtId(f.id)} style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '10px 14px', borderRadius: 8, border: '2px solid',
+                  borderColor: fmtId === f.id ? 'var(--brand-base)' : 'var(--brand-pale)',
+                  background: fmtId === f.id ? 'var(--brand-pale)' : 'white',
+                  color: 'var(--text-dark)', cursor: 'pointer',
+                  fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500,
+                  transition: 'all 0.15s',
+                }}>
+                  <span>{f.label}</span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.74rem' }}>{f.w}×{f.h}</span>
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          {/* Colour style */}
+          <Card title="Colour Style">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
+              {DESIGN_STYLES.map(s => (
+                <button key={s.id} onClick={() => setStyleId(s.id)} style={{
+                  padding: '10px 6px', borderRadius: 10, border: '2px solid',
+                  borderColor: styleId === s.id ? s.accent : 'transparent',
+                  background: s.bg, cursor: 'pointer',
+                  transition: 'transform 0.15s',
+                  transform: styleId === s.id ? 'scale(1.06)' : 'scale(1)',
+                }}>
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', background: s.accent, margin: '0 auto 4px' }} />
+                  <div style={{ color: s.accent, fontSize: '0.68rem', fontWeight: 600, fontFamily: 'var(--font-body)' }}>{s.label}</div>
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          {/* Content fields */}
+          <Card title="Content">
+            {[
+              { key: 'title',    label: 'Title',                       placeholder: 'e.g. Annual Convention' },
+              { key: 'subtitle', label: 'Subtitle',                    placeholder: 'e.g. Walking in the Light' },
+              { key: 'date',     label: 'Date',                        placeholder: 'e.g. Saturday, 10 May 2025' },
+              { key: 'time',     label: 'Time',                        placeholder: 'e.g. 9:00 AM' },
+              { key: 'venue',    label: 'Venue',                       placeholder: 'e.g. CCG World Headquarters' },
+              { key: 'theme',    label: 'Bible Reference (optional)',   placeholder: 'e.g. Isaiah 60:1' },
+              { key: 'cta',      label: 'Call to Action',              placeholder: 'e.g. All are welcome' },
+            ].map(({ key, label, placeholder }) => (
+              <div key={key} style={{ marginBottom: 12 }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-mid)', marginBottom: 4 }}>
+                  {label}
+                </label>
+                <input
+                  value={fields[key] || ''}
+                  onChange={e => setField(key, e.target.value)}
+                  placeholder={placeholder}
                   style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    borderRadius: 6,
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                    display: 'block',
+                    width: '100%', padding: '9px 12px', borderRadius: 8,
+                    border: '1.5px solid var(--brand-pale)', background: 'white',
+                    fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--text-dark)',
+                    outline: 'none', transition: 'border-color 0.15s',
                   }}
+                  onFocus={e => e.target.style.borderColor = 'var(--brand-base)'}
+                  onBlur={e  => e.target.style.borderColor = 'var(--brand-pale)'}
                 />
               </div>
-            </div>
+            ))}
+          </Card>
 
-            {/* Download */}
-            <button onClick={download} style={{
-              width: '100%', padding: '16px',
-              background: 'linear-gradient(135deg, var(--brand-dark), var(--brand-mid))',
-              color: 'white', border: 'none', borderRadius: 12,
-              fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 700,
-              cursor: 'pointer', letterSpacing: '0.5px',
-              boxShadow: 'var(--shadow-md)',
-              transition: 'transform 0.15s, box-shadow 0.15s',
-            }}
-              onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = 'var(--shadow-lg)' }}
-              onMouseLeave={e => { e.target.style.transform = 'translateY(0)';   e.target.style.boxShadow = 'var(--shadow-md)' }}
-            >
-              ⬇ Download PNG
-            </button>
-
-            <p style={{ textAlign: 'center', fontSize: '0.74rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-              Downloads as a full-resolution PNG ready for WhatsApp, Instagram, or print.
-            </p>
-          </div>
+          <p style={{ textAlign: 'center', fontSize: '0.74rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            Downloads as a full-resolution PNG ready for WhatsApp, Instagram, or print.
+          </p>
         </div>
       </div>
-
-      {/* Mobile responsive override */}
-      <style>{`
-        @media (max-width: 768px) {
-          .banner-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </>
   )
 }
