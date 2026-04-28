@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import AppSplash    from './components/AppSplash'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
 import Home       from './pages/Home'
@@ -74,11 +76,14 @@ function AppInner() {
 }
 
 export default function App() {
+  const [splashDone, setSplashDone] = useState(false)
+
   return (
     <HelmetProvider>
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
+            {!splashDone && <AppSplash onDone={() => setSplashDone(true)} />}
             <AppInner />
           </BrowserRouter>
         </AuthProvider>
