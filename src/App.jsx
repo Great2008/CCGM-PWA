@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
@@ -77,6 +77,13 @@ function AppInner() {
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false)
+
+  // Dismiss the plain-HTML splash in index.html the moment React mounts.
+  // The React AppSplash renders on top immediately after, so there is no
+  // visible gap — it just takes over the green screen seamlessly.
+  useEffect(() => {
+    window.__ccgHideSplash?.()
+  }, [])
 
   return (
     <HelmetProvider>

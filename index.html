@@ -67,59 +67,81 @@
       }
     </script>
     <meta name="google-site-verification" content="aSW17V8kShNr-NWnLpeGdP-25U5_bDodBLOFB2Q0EzU" />
+
+    <!-- Inline splash styles — paint immediately before any JS loads -->
+    <style>
+      #ccg-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* Green radial gradient — matches native Android splash exactly:
+           GREEN_CORE #00b250 (cx=50%, cy=22%) → GREEN_MID #48c878 → WHITE_TINT #dcf5e6
+           Ellipse sized to cover all corners from the 22%-high focal point. */
+        background: radial-gradient(ellipse 144% 156% at 50% 22%, #00b250 0%, #48c878 45%, #dcf5e6 100%);
+        opacity: 1;
+        transition: opacity 0.6s ease;
+        padding-bottom: 18%;
+        user-select: none;
+      }
+      #ccg-splash img {
+        width: clamp(160px, 50vw, 270px);
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 28px;
+        filter: drop-shadow(0 4px 16px rgba(0,80,20,0.18));
+      }
+      #ccg-splash-title {
+        font-family: Georgia, "Playfair Display", serif;
+        font-weight: 900;
+        font-size: clamp(2rem, 10vw, 3rem);
+        color: #053a14;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+        text-align: center;
+      }
+      #ccg-splash-sub {
+        font-family: Georgia, "Playfair Display", serif;
+        font-weight: 400;
+        font-size: clamp(0.82rem, 3.8vw, 1rem);
+        color: #0a6e28;
+        margin-top: 10px;
+        text-align: center;
+        letter-spacing: 0.01em;
+      }
+    </style>
   </head>
   <body>
 
     <!-- ── SPLASH SCREEN ── -->
-    <div id="ccg-splash" style="
-      position: fixed; inset: 0; z-index: 99999;
-      background: #0f1f3d;
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.6s ease;
-    ">
-      <video
-        id="ccg-splash-video"
-        src="/splash.mp4"
-        autoplay
-        muted
-        playsinline
-        preload="auto"
-        style="width: 100%; height: 100%; object-fit: cover;"
-      ></video>
+    <!-- Visible immediately (pure CSS/HTML, no JS needed to paint).
+         React's AppSplash takes over once the bundle loads;
+         this div is hidden via ccgSplashDismiss() which App.jsx calls
+         by setting window.__ccgHideSplash after mounting. -->
+    <div id="ccg-splash">
+      <img src="/logo.png" alt="CCG World" />
+      <div id="ccg-splash-title">CCG World</div>
+      <div id="ccg-splash-sub">Christian Church Of God Mission</div>
     </div>
 
     <script>
-      (function () {
-        var splash = document.getElementById('ccg-splash')
-        var video  = document.getElementById('ccg-splash-video')
-        var dismissed = false
+      // Called by App.jsx after React mounts, so the HTML splash hands off
+      // cleanly to the React AppSplash which then fades itself out.
+      window.__ccgHideSplash = function () {
+        var el = document.getElementById('ccg-splash')
+        if (!el) return
+        el.style.opacity = '0'
+        setTimeout(function () { el.style.display = 'none' }, 650)
+      }
 
-        function dismiss() {
-          if (dismissed) return
-          dismissed = true
-          splash.style.opacity = '0'
-          setTimeout(function () {
-            splash.style.display = 'none'
-          }, 650)
-        }
-
-        // Dismiss when video ends
-        video.addEventListener('ended', dismiss)
-
-        // Safety fallback — dismiss after 5.8s no matter what
-        setTimeout(dismiss, 5800)
-
-        // If video fails to load (e.g. offline, slow connection) dismiss quickly
-        video.addEventListener('error', function () {
-          setTimeout(dismiss, 300)
-        })
-
-        // On very slow devices the video may stall — dismiss if it hasn't
-        // started playing within 2 seconds
-        setTimeout(function () {
-          if (video.paused && !dismissed) dismiss()
-        }, 2000)
-      })()
+      // Hard safety fallback — if React never calls it (e.g. JS error),
+      // dismiss after 6s so the app is not permanently blocked.
+      setTimeout(function () {
+        window.__ccgHideSplash && window.__ccgHideSplash()
+      }, 6000)
     </script>
 
     <div id="root"></div>
