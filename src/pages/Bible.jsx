@@ -21,7 +21,7 @@ const POPULAR = [
 // KJV text fetched from public domain CDN and aggressively cached in localStorage
 // After reading a chapter online once, it is permanently available offline
 const BIBLE_CDN = 'https://cdn.jsdelivr.net/gh/thiagobodruk/bible@master/json/en_kjv.json'
-const CACHE_META = 'ccogm_kjv_loaded'
+const CACHE_META = 'ccogm_kjv_loaded_v2' // v2: fixed Ezekiel abbrev (eze→EZK)
 const CHAPTER_KEY = (bookId, ch) => `kjv_${bookId}_${ch}`
 
 // In-memory store for the session
@@ -69,7 +69,7 @@ async function loadFullBible(onProgress) {
       'rt':'RUT','1sm':'1SA','2sm':'2SA','1kgs':'1KI','2kgs':'2KI','1ch':'1CH',
       '2ch':'2CH','ez':'EZR','ne':'NEH','et':'EST','job':'JOB','ps':'PSA',
       'prv':'PRO','ec':'ECC','so':'SNG','is':'ISA','jr':'JER','lm':'LAM',
-      'ezk':'EZK','dn':'DAN','ho':'HOS','jl':'JOL','am':'AMO','ob':'OBA',
+      'eze':'EZK','dn':'DAN','ho':'HOS','jl':'JOL','am':'AMO','ob':'OBA',
       'jn':'JON','mi':'MIC','na':'NAM','hk':'HAB','zp':'ZEP','hg':'HAG',
       'zc':'ZEC','ml':'MAL','mt':'MAT','mk':'MRK','lk':'LUK','jo':'JHN',
       'act':'ACT','rm':'ROM','1co':'1CO','2co':'2CO','gl':'GAL','ep':'EPH',
