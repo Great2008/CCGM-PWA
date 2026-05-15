@@ -12,7 +12,7 @@ export default function NotFound() {
   const navigate  = useNavigate()
   const [verse]   = useState(() => VERSES[Math.floor(Math.random() * VERSES.length)])
   const [dots,    setDots]    = useState('')
-  const [counter, setCounter] = useState(10)
+  const [counter, setCounter] = useState(30)
 
   // Animated dots
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function NotFound() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #0a2612 0%, #14532d 45%, #0a2612 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 5%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #0a2612 0%, #14532d 45%, #0a2612 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 5% 40px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
 
       {/* Background glow */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
@@ -45,7 +45,7 @@ export default function NotFound() {
       </div>
 
       {/* Logo */}
-      <img src="/logo.png" alt="CCG World" style={{ width: 'clamp(72px,16vw,108px)', height: 'auto', marginBottom: 24, filter: 'drop-shadow(0 4px 20px rgba(245,208,96,0.3))' }} />
+      <img src="/logo.png" alt="CCG World" style={{ width: 'clamp(72px,16vw,108px)', height: 'auto', marginBottom: 24, filter: 'drop-shadow(0 4px 20px rgba(245,208,96,0.3))', marginTop: 8 }} />
 
       {/* 404 number */}
       <div style={{ position: 'relative', marginBottom: 8 }}>
