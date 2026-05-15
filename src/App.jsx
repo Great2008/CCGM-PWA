@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
-import AppSplash    from './components/AppSplash'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
 import Home       from './pages/Home'
@@ -76,13 +75,10 @@ function AppInner() {
 }
 
 export default function App() {
-  const [splashDone, setSplashDone] = useState(false)
-
-  // Dismiss the plain-HTML splash in index.html the moment React mounts.
-  // The React AppSplash renders on top immediately after, so there is no
-  // visible gap — it just takes over the green screen seamlessly.
+  // Let the HTML splash show for 2.5s then fade out (600ms transition)
   useEffect(() => {
-    window.__ccgHideSplash?.()
+    const t = setTimeout(() => window.__ccgHideSplash?.(), 2500)
+    return () => clearTimeout(t)
   }, [])
 
   return (
@@ -90,7 +86,6 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
-            {!splashDone && <AppSplash onDone={() => setSplashDone(true)} />}
             <AppInner />
           </BrowserRouter>
         </AuthProvider>
