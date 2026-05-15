@@ -239,7 +239,7 @@ function ErrorState({ onRetry }) {
     <div style={{ textAlign:'center', padding:'64px 20px' }}>
       <div style={{ fontSize:'2.5rem', marginBottom:12 }}>⚠️</div>
       <div style={{ color:'var(--text-dark,#0f172a)', fontWeight:700, marginBottom:6 }}>Couldn't load YouTube content</div>
-      <div style={{ color:'var(--text-light,#64748b)', fontSize:'0.85rem', marginBottom:20 }}>Check that your API key and Channel ID are set in Vercel.</div>
+      <div style={{ color:'var(--text-light,#64748b)', fontSize:'0.85rem', marginBottom:20 }}>Check your internet connection and try again</div>
       <button onClick={onRetry} style={{ padding:'10px 24px', borderRadius:40, background:'var(--brand-mid,#1d4ed8)', color:'white', border:'none', fontWeight:700, cursor:'pointer', fontFamily:'var(--font-body)' }}>
         Try Again
       </button>
