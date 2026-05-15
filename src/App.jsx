@@ -62,7 +62,6 @@ function AppInner() {
           <Route path="/certificate"      element={<Certificate />} />
           <Route path="/verify"           element={<Verify />} />
           <Route path="/programme"        element={<Programme />} />
-          <Route path="/banner-generator" element={<BannerGenerator />} />
           <Route path="/guidelines"       element={<Guidelines />} />
         </Routes>
       </main>
