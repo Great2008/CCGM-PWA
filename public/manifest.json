@@ -4,8 +4,8 @@
   "description": "God First \u2014 Bible, Hymnal, Devotionals & Church Resources",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f1f3d",
-  "theme_color": "#0f1f3d",
+  "background_color": "#00b250",
+  "theme_color": "#00b250",
   "orientation": "portrait-primary",
   "icons": [
     {
