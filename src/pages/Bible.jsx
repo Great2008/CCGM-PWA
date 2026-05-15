@@ -21,17 +21,13 @@ const POPULAR = [
 // KJV text fetched from public domain CDN and aggressively cached in localStorage
 // After reading a chapter online once, it is permanently available offline
 const BIBLE_CDN = 'https://cdn.jsdelivr.net/gh/thiagobodruk/bible@master/json/en_kjv.json'
-const CACHE_META = 'ccogm_kjv_loaded_v3' // v3: force re-download to fix EZK/REV keys
+const CACHE_META = 'ccogm_kjv_loaded_v4' // v4: fixed ez→EZK, re→REV (correct API abbrevs)
 
-// Clean up stale keys from v1/v2 bad abbreviations
-;['EZE','RV'].forEach(bad => {
-  for (let c = 1; c <= 50; c++) {
-    localStorage.removeItem(`kjv_${bad}_${c}`)
-  }
+// Clean up stale keys from previous versions
+;['EZE','RV','EZK_bad'].forEach(bad => {
+  for (let c = 1; c <= 50; c++) localStorage.removeItem(`kjv_${bad}_${c}`)
 })
-// Remove old cache-meta flags so re-download triggers
-localStorage.removeItem('ccogm_kjv_loaded_v1')
-localStorage.removeItem('ccogm_kjv_loaded_v2')
+;['ccogm_kjv_loaded_v1','ccogm_kjv_loaded_v2','ccogm_kjv_loaded_v3'].forEach(k => localStorage.removeItem(k))
 const CHAPTER_KEY = (bookId, ch) => `kjv_${bookId}_${ch}`
 
 // In-memory store for the session
@@ -94,15 +90,15 @@ async function loadFullBible(onProgress) {
     const MAP = {
       'gn':'GEN','ex':'EXO','lv':'LEV','nm':'NUM','dt':'DEU','js':'JOS','jud':'JDG',
       'rt':'RUT','1sm':'1SA','2sm':'2SA','1kgs':'1KI','2kgs':'2KI','1ch':'1CH',
-      '2ch':'2CH','ez':'EZR','ne':'NEH','et':'EST','job':'JOB','ps':'PSA',
+      '2ch':'2CH','ezr':'EZR','ne':'NEH','et':'EST','job':'JOB','ps':'PSA',
       'prv':'PRO','ec':'ECC','so':'SNG','is':'ISA','jr':'JER','lm':'LAM',
-      'eze':'EZK','dn':'DAN','ho':'HOS','jl':'JOL','am':'AMO','ob':'OBA',
+      'ez':'EZK','dn':'DAN','ho':'HOS','jl':'JOL','am':'AMO','ob':'OBA',
       'jn':'JON','mi':'MIC','na':'NAM','hk':'HAB','zp':'ZEP','hg':'HAG',
       'zc':'ZEC','ml':'MAL','mt':'MAT','mk':'MRK','lk':'LUK','jo':'JHN',
       'act':'ACT','rm':'ROM','1co':'1CO','2co':'2CO','gl':'GAL','ep':'EPH',
       'ph':'PHP','cl':'COL','1ts':'1TH','2ts':'2TH','1tm':'1TI','2tm':'2TI',
       'tt':'TIT','phm':'PHM','hb':'HEB','jm':'JAS','1pe':'1PE','2pe':'2PE',
-      '1jo':'1JN','2jo':'2JN','3jo':'3JN','jd':'JUD','rv':'REV'
+      '1jo':'1JN','2jo':'2JN','3jo':'3JN','jd':'JUD','re':'REV'
     }
 
     onProgress('Caching all books offline...')
