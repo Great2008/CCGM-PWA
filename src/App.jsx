@@ -32,7 +32,6 @@ import NotFound    from './pages/NotFound'
 import Verify       from './pages/Verify'
 import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
-import BannerGenerator from './pages/BannerGenerator'
 
 function AppInner() {
   const { user } = useAuth()
