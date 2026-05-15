@@ -21,7 +21,17 @@ const POPULAR = [
 // KJV text fetched from public domain CDN and aggressively cached in localStorage
 // After reading a chapter online once, it is permanently available offline
 const BIBLE_CDN = 'https://cdn.jsdelivr.net/gh/thiagobodruk/bible@master/json/en_kjv.json'
-const CACHE_META = 'ccogm_kjv_loaded_v2' // v2: fixed Ezekiel abbrev (eze→EZK)
+const CACHE_META = 'ccogm_kjv_loaded_v3' // v3: force re-download to fix EZK/REV keys
+
+// Clean up stale keys from v1/v2 bad abbreviations
+;['EZE','RV'].forEach(bad => {
+  for (let c = 1; c <= 50; c++) {
+    localStorage.removeItem(`kjv_${bad}_${c}`)
+  }
+})
+// Remove old cache-meta flags so re-download triggers
+localStorage.removeItem('ccogm_kjv_loaded_v1')
+localStorage.removeItem('ccogm_kjv_loaded_v2')
 const CHAPTER_KEY = (bookId, ch) => `kjv_${bookId}_${ch}`
 
 // In-memory store for the session
