@@ -26,11 +26,11 @@ export const DEFAULTS = {
     ],
     stats: [
       { label: 'Years of Ministry', value: '25+' },
-      { label: 'Active Members',    value: '500+' },
+      { label: 'Active Members',    value: '10000+' },
       { label: 'Weekly Services',   value: '7' },
       { label: 'Countries Reached', value: '12+' },
     ],
-    contact: { address: '', phone: '', email: 'info@ccgworld.org', mapUrl: '' },
+    contact: { address: '', phone: '', email: 'ccgmworldwide@gmail.com', mapUrl: '' },
   },
 }
 

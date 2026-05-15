@@ -1,16 +1,14 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useSearchParams } from 'react-router-dom'
 import supabase from '../lib/supabase'
 
-// ── Primitive helpers — defined first so all functions below can use them ──
+// ── Primitive helpers ──────────────────────────────────────────────────────────
 
-// Safe fillText: never throws on null/undefined
 function safeFill(ctx, value, x, y) {
   ctx.fillText(value == null ? '' : String(value), x, y)
 }
 
-// roundRect polyfill: ctx.roundRect missing in older Android WebViews
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath()
   ctx.moveTo(x + r, y)
@@ -24,13 +22,6 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.quadraticCurveTo(x, y, x + r, y)
   ctx.closePath()
 }
-
-// Safe ellipse: polyfill for Android WebViews that lack ctx.ellipse
-// safeEllipse removed — replaced with arc calls
-
-// ─────────────────────────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────────────────────────
 
 function qrDataUrl(text, size = 200) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=ffffff&color=0a2612&margin=8`
@@ -58,7 +49,6 @@ async function drawStamp(ctx, x, y, size = 160) {
   } catch (_) {}
 }
 
-// Cape stripes: null=none, 0=plain green, 1=one stripe, 2=two stripes
 function getCapeStripes(t) {
   if (!t) return null
   if (t === 'Apostle') return 2
@@ -66,7 +56,6 @@ function getCapeStripes(t) {
   return ['Pastor','Evangelist','Deacon','Deaconess','Prophet'].includes(t) ? 0 : null
 }
 
-// Draw the title/post badge band
 function drawCapeBadge(ctx, W, y, stripes, title) {
   const bH = 42, bW = 360, x = (W - bW) / 2
   ctx.save()
@@ -87,7 +76,6 @@ function drawCapeBadge(ctx, W, y, stripes, title) {
   ctx.restore()
 }
 
-// Draw diagonal stripes in the header top-right corner
 function drawCornerStripes(ctx, W, stripes) {
   if (stripes === null) return
   ctx.save()
@@ -97,92 +85,47 @@ function drawCornerStripes(ctx, W, stripes) {
   ctx.restore()
 }
 
-// Ornate corner flourish — draws directly at absolute coords, no scale(-1) needed
-// ox/oy = corner origin, sx/sy = direction (+1 or -1 for mirroring)
 function drawOrnateCorner(ctx, ox, oy, size, sx, sy) {
   try {
-    // Helper: map local coords to absolute
     const ax = (lx) => ox + lx * sx
     const ay = (ly) => oy + ly * sy
-
     ctx.save()
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.8
-
-    // L-bracket outer
     ctx.beginPath()
-    ctx.moveTo(ax(0), ay(size))
-    ctx.lineTo(ax(0), ay(0))
-    ctx.lineTo(ax(size), ay(0))
+    ctx.moveTo(ax(0), ay(size)); ctx.lineTo(ax(0), ay(0)); ctx.lineTo(ax(size), ay(0))
     ctx.stroke()
-
-    // L-bracket inner
     ctx.beginPath()
-    ctx.moveTo(ax(0), ay(size-14))
-    ctx.lineTo(ax(0), ay(10))
-    ctx.lineTo(ax(size-14), ay(10))
+    ctx.moveTo(ax(0), ay(size-14)); ctx.lineTo(ax(0), ay(10)); ctx.lineTo(ax(size-14), ay(10))
     ctx.stroke()
-
-    // Rosette ring
-    ctx.beginPath()
-    ctx.arc(ax(26), ay(26), 12, 0, Math.PI*2)
+    ctx.beginPath(); ctx.arc(ax(26), ay(26), 12, 0, Math.PI*2)
     ctx.strokeStyle = '#b45309'; ctx.lineWidth = 1.8; ctx.stroke()
-
-    // Rosette fill
-    ctx.beginPath()
-    ctx.arc(ax(26), ay(26), 5, 0, Math.PI*2)
+    ctx.beginPath(); ctx.arc(ax(26), ay(26), 5, 0, Math.PI*2)
     ctx.fillStyle = '#d97706'; ctx.globalAlpha = 1; ctx.fill()
-
-    // Tendril along X axis
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.3; ctx.globalAlpha = 0.8
     ctx.beginPath()
     ctx.moveTo(ax(38), ay(26))
     ctx.bezierCurveTo(ax(50),ay(26), ax(52),ay(16), ax(63),ay(15))
     ctx.bezierCurveTo(ax(70),ay(14), ax(72),ay(7),  ax(76),ay(7))
     ctx.stroke()
-
-    // Tendril along Y axis
     ctx.beginPath()
     ctx.moveTo(ax(26), ay(38))
     ctx.bezierCurveTo(ax(26),ay(50), ax(16),ay(52), ax(15),ay(63))
     ctx.bezierCurveTo(ax(14),ay(70), ax(7), ay(72), ax(7), ay(76))
     ctx.stroke()
-
-    // Leaf buds
     var buds = [[50,19],[64,12],[19,50],[12,64]]
     for (var b=0; b<buds.length; b++) {
-      ctx.beginPath()
-      ctx.arc(ax(buds[b][0]), ay(buds[b][1]), 3.5, 0, Math.PI*2)
+      ctx.beginPath(); ctx.arc(ax(buds[b][0]), ay(buds[b][1]), 3.5, 0, Math.PI*2)
       ctx.fillStyle = '#d97706'; ctx.globalAlpha = 0.5; ctx.fill()
     }
-
-    // Edge dots
     for (var i=0; i<6; i++) {
-      ctx.beginPath()
-      ctx.arc(ax(20+i*11), ay(5), 1.8, 0, Math.PI*2)
+      ctx.beginPath(); ctx.arc(ax(20+i*11), ay(5), 1.8, 0, Math.PI*2)
       ctx.fillStyle = '#d97706'; ctx.globalAlpha = 0.4; ctx.fill()
-      ctx.beginPath()
-      ctx.arc(ax(5), ay(20+i*11), 1.8, 0, Math.PI*2)
-      ctx.fill()
+      ctx.beginPath(); ctx.arc(ax(5), ay(20+i*11), 1.8, 0, Math.PI*2); ctx.fill()
     }
-
     ctx.restore()
   } catch(e) {
-    // If ornament fails for any reason, silently skip — cert still generates
     try { ctx.restore() } catch(_) {}
   }
-}
-
-// Field line with dotted leader (like physical cert)
-function drawFieldLine(ctx, label, value, x, y, maxW) {
-  ctx.textAlign = 'left'
-  ctx.fillStyle = '#374151'; ctx.font = '14px Georgia, serif'
-  safeFill(ctx, label, x, y)
-  const lw = ctx.measureText(String(label||'')).width
-  ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.8; ctx.setLineDash([2,4])
-  ctx.beginPath(); ctx.moveTo(x+lw+5,y+2); ctx.lineTo(x+maxW,y+2); ctx.stroke()
-  ctx.setLineDash([])
-  ctx.fillStyle = '#0a2612'; ctx.font = 'bold 14px Georgia, serif'
-  safeFill(ctx, value == null ? '—' : value, x+lw+10, y)
 }
 
 function getTitlePrefix(churchTitle, gender) {
@@ -196,7 +139,6 @@ const MONTHS = ['January','February','March','April','May','June',
 function fmtDate(iso) {
   if (!iso) return ''
   try {
-    // Parse manually to avoid timezone-shift issues with date-only strings
     const parts = iso.split('T')[0].split('-')
     const y = parseInt(parts[0]), m = parseInt(parts[1])-1, d = parseInt(parts[2])
     if (isNaN(y)||isNaN(m)||isNaN(d)) return ''
@@ -218,14 +160,185 @@ function fmtBirthday(iso) {
 const APP_URL = 'https://ccgm-pwa.vercel.app'
 const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
 
+// ── PDF render helper (dynamic import so it only loads when needed) ────────────
+async function pdfPageToDataUrl(pdfUrl) {
+  const pdfjsLib = await import('pdfjs-dist')
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+  const pdf  = await pdfjsLib.getDocument(pdfUrl).promise
+  const page = await pdf.getPage(1)
+  const vp   = page.getViewport({ scale: 2 })
+  const c    = document.createElement('canvas')
+  c.width = vp.width; c.height = vp.height
+  await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise
+  return c.toDataURL('image/png')
+}
+
+// ── Map profile fields to template field keys ─────────────────────────────────
+function getMemberValue(key, profile, user, certType, today) {
+  if (!profile) return ''
+  switch (key) {
+    case 'full_name':      return profile.full_name || profile.display_name || ''
+    case 'church_branch':  return profile.church_branch || ''
+    case 'member_since':   return fmtDate(profile.created_at)
+    case 'church_title':   return profile.church_title || ''
+    case 'cert_id':        return (certType === 'birth' ? 'CCGB-' : 'CCG-') + (user?.id || '').slice(0,8).toUpperCase()
+    case 'issued_date':    return today
+    case 'birthday':       return profile.birthday ? fmtBirthday(profile.birthday) : ''
+    case 'place_of_birth': return profile.place_of_birth || ''
+    case 'father_name':    return profile.father_name || ''
+    case 'mother_name':    return profile.mother_name || ''
+    case 'hometown':       return profile.hometown || ''
+    case 'lga':            return profile.lga || ''
+    default:               return ''
+  }
+}
+
+// ── CustomCertTab: renders a template onto canvas and lets member download ─────
+function CustomCertTab({ template, profile, user, today }) {
+  const canvasRef = useRef(null)
+  const [generating, setGenerating] = useState(false)
+  const [done,        setDone]      = useState(false)
+  const [imgSrc,      setImgSrc]    = useState(null)
+  const [format,      setFormat]    = useState('png')
+  const [error,       setError]     = useState('')
+
+  const generate = useCallback(async () => {
+    setGenerating(true); setError('')
+    try {
+      // Resolve the background image
+      let bgDataUrl
+      if (template.is_pdf) {
+        bgDataUrl = await pdfPageToDataUrl(template.image_url)
+      } else {
+        const img = await loadImage(template.image_url)
+        const tmp = document.createElement('canvas')
+        tmp.width = img.naturalWidth; tmp.height = img.naturalHeight
+        tmp.getContext('2d').drawImage(img, 0, 0)
+        bgDataUrl = tmp.toDataURL('image/png')
+      }
+
+      const bgImg  = await loadImage(bgDataUrl)
+      const canvas = canvasRef.current
+      canvas.width  = bgImg.naturalWidth
+      canvas.height = bgImg.naturalHeight
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(bgImg, 0, 0)
+
+      // Overlay each placed field
+      const fieldsMap = template.fields || {}
+      for (const [key, f] of Object.entries(fieldsMap)) {
+        const val = getMemberValue(key, profile, user, template.cert_type, today)
+        if (!val || !f) continue
+        ctx.save()
+        ctx.font = `${f.bold ? 'bold ' : ''}${f.fontSize}px ${f.fontFamily}`
+        ctx.fillStyle = f.fontColor
+        ctx.textBaseline = 'middle'
+        ctx.fillText(val, f.x, f.y)
+        ctx.restore()
+      }
+
+      const dataUrl = canvas.toDataURL('image/png')
+      setImgSrc(dataUrl)
+      setDone(true)
+    } catch (e) {
+      setError(e.message || 'Generation failed. Please try again.')
+    }
+    setGenerating(false)
+  }, [template, profile, user, today])
+
+  const download = async () => {
+    if (format === 'pdf') {
+      try {
+        const { jsPDF } = await import('jspdf')
+        const img  = await loadImage(imgSrc)
+        const isLandscape = img.naturalWidth > img.naturalHeight
+        const pdf = new jsPDF({
+          orientation: isLandscape ? 'landscape' : 'portrait',
+          unit: 'px',
+          format: [img.naturalWidth, img.naturalHeight],
+        })
+        pdf.addImage(imgSrc, 'PNG', 0, 0, img.naturalWidth, img.naturalHeight)
+        pdf.save(`CCG-${template.cert_type}-${(profile.full_name||'member').replace(/\s+/g,'-')}.pdf`)
+      } catch (e) {
+        setError('PDF export failed: ' + e.message)
+      }
+    } else {
+      const a = document.createElement('a')
+      a.download = `CCG-${template.cert_type}-${(profile.full_name||'member').replace(/\s+/g,'-')}.png`
+      a.href = imgSrc; a.click()
+    }
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Hidden canvas */}
+      <canvas ref={canvasRef} style={{ position: 'absolute', left: '-9999px', top: 0 }} />
+
+      {error && (
+        <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: 12, padding: '12px 18px', color: '#dc2626', fontSize: '0.88rem', display: 'flex', gap: 10, alignItems: 'center' }}>
+          ❌ <span>{error}</span>
+          <button onClick={() => setError('')} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626' }}>✕</button>
+        </div>
+      )}
+
+      {/* Preview */}
+      {done && imgSrc ? (
+        <div style={{ borderRadius: 14, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0' }}>
+          <img src={imgSrc} alt="Your certificate" style={{ width: '100%', display: 'block' }} />
+        </div>
+      ) : (
+        <div style={{ background: 'var(--brand-pale)', borderRadius: 14, padding: '48px 32px', textAlign: 'center', color: 'var(--text-light)' }}>
+          <div style={{ fontSize: '3rem', marginBottom: 12 }}>📜</div>
+          <div>Your details will be written onto the official church template.</div>
+          <div style={{ fontSize: '0.82rem', marginTop: 8, opacity: 0.7 }}>Click "Generate" to preview, then choose your download format.</div>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        {!done ? (
+          <button onClick={generate} disabled={generating} style={{ padding: '12px 28px', borderRadius: 40, border: 'none', background: generating ? '#94a3b8' : 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', color: 'white', fontWeight: 700, cursor: generating ? 'not-allowed' : 'pointer', fontFamily: 'var(--font-body)' }}>
+            {generating ? '⏳ Generating…' : '🎨 Generate Certificate'}
+          </button>
+        ) : (
+          <>
+            {/* Format picker */}
+            <div style={{ display: 'flex', gap: 6, background: '#f1f5f9', borderRadius: 30, padding: 4 }}>
+              {['png', 'pdf'].map(f => (
+                <button key={f} onClick={() => setFormat(f)} style={{ padding: '7px 18px', borderRadius: 26, border: 'none', background: format === f ? 'var(--brand-mid)' : 'transparent', color: format === f ? 'white' : 'var(--text-mid)', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.85rem', transition: 'all 0.2s' }}>
+                  {f.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <button onClick={download} style={{ padding: '12px 24px', borderRadius: 40, border: 'none', background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', color: 'white', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+              ⬇️ Download {format.toUpperCase()}
+            </button>
+
+            <button onClick={() => { setDone(false); setImgSrc(null); generate() }} style={{ padding: '12px 20px', borderRadius: 40, border: '1.5px solid #e2e8f0', background: 'transparent', color: 'var(--text-mid)', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+              🔄 Regenerate
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─────────────────────────────────────────────────────────────────
-// COMPONENT
+// MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
 export default function Certificate() {
   const { user, profile, churchTitle: rawChurchTitle } = useAuth()
   const churchTitle = rawChurchTitle ?? null
   const [searchParams] = useSearchParams()
   const [adminSig, setAdminSig] = useState(null)
+
+  // Custom templates from DB
+  const [customTemplates, setCustomTemplates] = useState([])
+  const [templatesLoading, setTemplatesLoading] = useState(true)
+
   const [tab, setTab] = useState(
     searchParams.get('type') === 'birth' ? 'birth' :
     searchParams.get('type') === 'id'    ? 'id'    : 'membership'
@@ -249,6 +362,18 @@ export default function Certificate() {
       .then(({ data }) => { if (data?.value?.image) setAdminSig(data.value.image) })
   }, [])
 
+  // Load active custom templates
+  useEffect(() => {
+    supabase.from('certificate_templates')
+      .select('id, name, cert_type, image_url, is_pdf, fields, active')
+      .eq('active', true)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setCustomTemplates(data || [])
+        setTemplatesLoading(false)
+      })
+  }, [])
+
   if (!user || !profile) return (
     <div style={{ minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:16,padding:32,textAlign:'center' }}>
       <div style={{ fontSize:'3rem' }}>🏅</div>
@@ -258,7 +383,7 @@ export default function Certificate() {
     </div>
   )
 
-  // ── Derived values (all null-safe) ──────────────────────────────
+  // ── Derived values ─────────────────────────────────────────────
   const name           = profile?.full_name || profile?.display_name || 'Member'
   const branch         = profile?.church_branch || 'CCG World'
   const gender         = profile?.gender || null
@@ -272,17 +397,19 @@ export default function Certificate() {
   const verifyUrl      = `${APP_URL}/verify?id=${certId}`
   const birthVerifyUrl = `${APP_URL}/verify?id=${birthId}`
   const hasBirthday    = !!profile?.birthday
-  // ID card only for ordained posts; Brother/Sister get badge but no card
   const hasIdCard      = !!churchTitle && ORDAINED.includes(churchTitle)
 
-  // Birth record fields — safe fallbacks if columns don't exist yet
   const fatherName   = profile?.father_name   || ''
   const motherName   = profile?.mother_name   || ''
   const placeOfBirth = profile?.place_of_birth || ''
   const hometown     = profile?.hometown      || ''
   const lga          = profile?.lga           || ''
 
-  // ── MEMBERSHIP CERTIFICATE — A4 Landscape (1748 × 1240 px) ──────
+  // Group custom templates by type
+  const membershipTemplates = customTemplates.filter(t => t.cert_type === 'membership')
+  const birthTemplates      = customTemplates.filter(t => t.cert_type === 'birth')
+
+  // ── MEMBERSHIP CERTIFICATE ─────────────────────────────────────
   const generateMembership = async () => {
     if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
@@ -290,8 +417,6 @@ export default function Certificate() {
     if (!canvas) { setGenError('Canvas not available — refresh and try again'); setGenerating(false); return }
     let _step = 'init'
     try {
-    // A5 landscape at 300dpi: 210mm × 148mm = 2480 × 1748px
-    // At 150dpi (screen-friendly): 1240 × 874px — scale up 1.4x for quality
     const W = 1748, H = 1240
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
@@ -324,13 +449,9 @@ export default function Certificate() {
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(1,'#166534')
     ctx.fillStyle = grad; ctx.fillRect(36,36,W-72,190)
 
-    // Logo in header
     try { const logo = await loadImage('/logo.png'); ctx.drawImage(logo,70,52,140,140) } catch(_){}
-
-    // Corner stripes (post indicator)
     drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
 
-    // Header text
     ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 28px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('CHRISTIAN CHURCH OF GOD MISSION', W/2, 106)
     ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '19px Georgia, serif'
@@ -338,7 +459,6 @@ export default function Certificate() {
     ctx.fillStyle = '#fbbf24'; ctx.font = '16px Georgia, serif'
     ctx.fillText('ccgm-pwa.vercel.app', W/2, 174)
 
-    // Gold divider under header
     ctx.fillStyle = '#d97706'; ctx.fillRect(36,226,W-72,3)
 
     _step = 'title'
@@ -347,12 +467,10 @@ export default function Certificate() {
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2
     ctx.beginPath(); ctx.moveTo(W/2-420,378); ctx.lineTo(W/2+420,378); ctx.stroke()
 
-    // Post badge (if titled)
     const stripes = getCapeStripes(churchTitle)
     let bodyY = 468
     if (stripes !== null) { drawCapeBadge(ctx,W,392,stripes,churchTitle); bodyY = 502 }
 
-    // Body text
     ctx.fillStyle = '#374151'; ctx.font = 'italic 26px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('This is to certify that', W/2, bodyY)
 
@@ -373,10 +491,8 @@ export default function Certificate() {
     ctx.fillText('branch of the Christian Church of God Mission', W/2, 746+yOff)
     if (joinDate) ctx.fillText('Member since ' + joinDate, W/2, 794+yOff)
 
-    // Gold divider
     ctx.fillStyle = '#d97706'; ctx.fillRect(W/2-320,828+yOff,640,2)
 
-    // Printed / Cert ID row
     ctx.textAlign = 'left'
     ctx.fillStyle = '#374151'; ctx.font = 'italic 18px Georgia, serif'
     ctx.fillText('Printed:', 160, 904+yOff)
@@ -396,23 +512,20 @@ export default function Certificate() {
       ctx.fillText('Scan to verify', W/2, 994+yOff)
     } catch(_){}
 
-    // Official stamp
     await drawStamp(ctx, W-220, 910+yOff, 210)
 
-    // Footer
     ctx.textAlign = 'center'; ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 14px Georgia, serif'
     ctx.fillText('✦ Printed digitally by CCG World ✦', W/2, 1160+yOff)
     ctx.font = '13px Georgia, serif'
     ctx.fillText('Verify at: ' + verifyUrl, W/2, 1184+yOff)
 
-    // Push result to visible <img> preview
     setMemberDone(true)
     setTimeout(() => { if (memberImgRef.current) memberImgRef.current.src = canvas.toDataURL('image/png') }, 50)
     } catch(e) { const msg = `[${_step}] ${e?.message || 'unknown'}`; console.error('Membership cert ERROR at step:', _step, e); setGenError(msg) }
     finally { setGenerating(false) }
   }
 
-  // ── BIRTH CERTIFICATE — A4 Landscape (1748 × 1240 px) ───────────
+  // ── BIRTH CERTIFICATE ──────────────────────────────────────────
   const generateBirth = async () => {
     if (!birthday) return
     if (!profile || !user) { setGenError('Profile not loaded yet.'); return }
@@ -420,16 +533,13 @@ export default function Certificate() {
     const canvas = birthCanvasRef.current
     if (!canvas) { setGenError('Canvas not available'); setGenerating(false); return }
     try {
-    // A4 landscape: 297mm × 210mm at 150dpi = 1748 × 1240px
     const W = 1748, H = 1240
     canvas.width = W; canvas.height = H
     const ctx = canvas.getContext('2d')
     if (!ctx) { setGenError('Canvas context unavailable'); return }
 
-    // Background
     ctx.fillStyle = '#fffef5'; ctx.fillRect(0,0,W,H)
 
-    // Logo watermark
     try {
       const logo = await loadImage('/logo.png')
       ctx.save(); ctx.globalAlpha = 0.04
@@ -437,18 +547,15 @@ export default function Certificate() {
       ctx.restore()
     } catch(_){}
 
-    // Triple border
     ctx.strokeStyle = '#b45309'; ctx.lineWidth = 8;  ctx.strokeRect(14,14,W-28,H-28)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5; ctx.strokeRect(26,26,W-52,H-52)
     ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;   ctx.strokeRect(34,34,W-68,H-68)
 
-    // Ornate corners
     drawOrnateCorner(ctx,16,16,80,  1, 1)
     drawOrnateCorner(ctx,W-16,16,80,-1, 1)
     drawOrnateCorner(ctx,16,H-16,80, 1,-1)
     drawOrnateCorner(ctx,W-16,H-16,80,-1,-1)
 
-    // Side dots
     for (let x=120;x<W-110;x+=18) {
       ctx.save(); ctx.globalAlpha=0.3
       ctx.beginPath(); ctx.arc(x,19,2,0,Math.PI*2); ctx.fillStyle='#d97706'; ctx.fill()
@@ -462,7 +569,6 @@ export default function Certificate() {
       ctx.restore()
     }
 
-    // Header (same height as membership cert)
     const grad = ctx.createLinearGradient(0,0,W,0)
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(0.6,'#14532d'); grad.addColorStop(1,'#b45309')
     ctx.fillStyle = grad; ctx.fillRect(34,34,W-68,190)
@@ -479,7 +585,6 @@ export default function Certificate() {
     ctx.fillText('ccgm-pwa.vercel.app', W/2, 178)
     ctx.fillStyle = '#d97706'; ctx.fillRect(34,224,W-68,2)
 
-    // Printed / No. row
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'
     ctx.fillText('Printed:', 60, 264)
     ctx.fillStyle = '#0a2612'; ctx.font = '17px Georgia, serif'; ctx.fillText(today, 148, 264)
@@ -488,7 +593,6 @@ export default function Certificate() {
     ctx.fillStyle = '#0a2612'; ctx.font = '17px Georgia, serif'
     ctx.fillText(birthId.replace('CCGB-',''), W-60, 264)
 
-    // Title
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold italic 72px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('Certificate of Birth', W/2, 368)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5
@@ -498,7 +602,6 @@ export default function Certificate() {
     ctx.fillStyle = '#374151'; ctx.font = 'italic 26px Georgia, serif'
     ctx.fillText('This is to Certify that', W/2, 476)
 
-    // Fields
     const LX = 60, RX = W/2 + 40
     const COL_W = W/2 - 100
 
@@ -520,7 +623,6 @@ export default function Certificate() {
 
     let fy = 512
 
-    // Name — larger font, wraps to second line if it overflows
     const nameFont = 'bold 28px Georgia, serif'
     const nameLabelFont = '20px Georgia, serif'
     ctx.font = nameLabelFont; ctx.fillStyle = '#374151'; ctx.textAlign = 'left'
@@ -532,48 +634,38 @@ export default function Certificate() {
     ctx.font = nameFont; ctx.fillStyle = '#0a2612'
     const nameAvailW = (W - 120) - nameLabelW - 20
     if (ctx.measureText(name).width <= nameAvailW) {
-      // Fits on same line
       ctx.fillText(name, LX + nameLabelW + 10, fy)
       fy += 68
     } else {
-      // Wrap: put value on next line, full width
       ctx.fillText(name, LX, fy + 32)
-      // Dotted line under wrapped name
       ctx.strokeStyle = '#b45309'; ctx.lineWidth = 0.9; ctx.setLineDash([2,4])
       ctx.beginPath(); ctx.moveTo(LX, fy+38); ctx.lineTo(LX + W - 120, fy+38); ctx.stroke()
       ctx.setLineDash([])
       fy += 100
     }
 
-    // DOB + POB same row
     fieldLine('Date of Birth...', birthday, LX, fy, COL_W)
     fieldLine('Place of Birth...', placeOfBirth||'—', RX, fy, COL_W)
     fy += 66
 
-    // Was born by
     ctx.fillStyle = '#374151'; ctx.font = 'italic 22px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('Was born by', W/2, fy); fy += 54
 
-    // Father + Mother same row
     fieldLine("Father's Name...", fatherName||'—', LX, fy, COL_W)
     fieldLine("Mother's Name...", motherName||'—', RX, fy, COL_W)
     fy += 66
 
-    // Hometown + LGA same row
     fieldLine('Home Town/Village...', hometown||'—', LX, fy, COL_W)
     fieldLine('L.G. Area/Division...', lga||'—', RX, fy, COL_W)
     fy += 66
 
-    // Divider
     fy += 20
     ctx.fillStyle = '#d97706'; ctx.fillRect(LX, fy, W-120, 1.5); fy += 38
 
-    // Witness text
     ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('In witness whereof the undersigned who accepted the above particulars to be correct and true.', W/2, fy)
     fy += 56
 
-    // Bottom row: Signature left | QR centre | Stamp right
     const botY = fy
 
     if (adminSig) {
@@ -606,8 +698,7 @@ export default function Certificate() {
     finally { setGenerating(false) }
   }
 
-  // ── ID CARD — Portrait CR80 (638 × 1012 px @ 2x) ─────────────────
-  // Physical CR80: 54mm × 85.6mm
+  // ── ID CARD ────────────────────────────────────────────────────
   const generateId = async () => {
     if (!profile || !user) { setGenError('Profile not loaded yet — please wait and try again.'); return }
     setGenerating(true); setGenError('')
@@ -619,19 +710,15 @@ export default function Certificate() {
     const ctx = canvas.getContext('2d')
     if (!ctx) { setGenError('Canvas context unavailable'); return }
 
-    // Top green band (~36% height)
     const bandH = 368
     const topGrad = ctx.createLinearGradient(0,0,0,bandH)
     topGrad.addColorStop(0,'#0a2612'); topGrad.addColorStop(1,'#166534')
     ctx.fillStyle = topGrad; ctx.fillRect(0,0,W,bandH)
-    // White lower body
     ctx.fillStyle = '#fafafa'; ctx.fillRect(0,bandH,W,H-bandH)
 
-    // Gold border
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 5; ctx.strokeRect(5,5,W-10,H-10)
     ctx.strokeStyle = 'rgba(251,191,36,0.35)'; ctx.lineWidth = 1.5; ctx.strokeRect(11,11,W-22,H-22)
 
-    // Cape stripes — top-right corner
     const stripes = getCapeStripes(churchTitle)
     if (stripes !== null) {
       ctx.save(); ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 7; ctx.lineCap = 'round'
@@ -640,23 +727,19 @@ export default function Certificate() {
       ctx.restore()
     }
 
-    // Logo top-centre
     try {
       const logo = await loadImage('/logo.png')
       ctx.drawImage(logo, W/2-40, 22, 80, 80)
     } catch(_){}
 
-    // Church name
     ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 15px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText('CHRISTIAN CHURCH', W/2, 120)
     ctx.fillText('OF GOD MISSION', W/2, 139)
     ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = '11px Georgia, serif'
     ctx.fillText('Official Member ID', W/2, 158)
 
-    // Avatar — centred, large
     const avX = W/2, avY = 272, avR = 90
     ctx.save()
-    // Gold ring shadow
     ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 14
     ctx.beginPath(); ctx.arc(avX,avY,avR+5,0,Math.PI*2)
     ctx.fillStyle = '#d97706'; ctx.fill()
@@ -681,18 +764,15 @@ export default function Certificate() {
     }
     ctx.restore()
 
-    // Post badge — straddles band/body divide
     const badgeY = bandH - 22
     ctx.fillStyle = '#d97706'
     roundRect(ctx, W/2-90,badgeY,180,34,17); ctx.fill()
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 13px Georgia, serif'; ctx.textAlign = 'center'
     ctx.fillText((churchTitle||'Member').toUpperCase(), W/2, badgeY+22)
 
-    // White body — member details
     const dy = bandH + 32
     ctx.textAlign = 'center'
 
-    // Name
     ctx.fillStyle = '#9ca3af'; ctx.font = '11px Georgia, serif'
     ctx.fillText('FULL NAME', W/2, dy)
     ctx.fillStyle = '#0a2612'
@@ -700,11 +780,9 @@ export default function Certificate() {
     while (ctx.measureText(name).width > W-48 && nfs2 > 12) { nfs2--; ctx.font=`bold ${nfs2}px Georgia, serif` }
     ctx.fillText(name, W/2, dy+22)
 
-    // Divider
     ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(44,dy+38); ctx.lineTo(W-44,dy+38); ctx.stroke()
 
-    // Branch
     ctx.fillStyle = '#9ca3af'; ctx.font = '11px Georgia, serif'
     ctx.fillText('BRANCH', W/2, dy+60)
     ctx.fillStyle = '#166534'; ctx.font = 'bold 16px Georgia, serif'
@@ -712,7 +790,6 @@ export default function Certificate() {
 
     ctx.beginPath(); ctx.moveTo(44,dy+96); ctx.lineTo(W-44,dy+96); ctx.stroke()
 
-    // Member since (left) / Birthday (right)
     ctx.textAlign = 'left'
     ctx.fillStyle = '#9ca3af'; ctx.font = '10px Georgia, serif'
     ctx.fillText('MEMBER SINCE', 48, dy+118)
@@ -730,7 +807,6 @@ export default function Certificate() {
     ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(44,dy+152); ctx.lineTo(W-44,dy+152); ctx.stroke()
 
-    // QR code — centred
     try {
       const qr = await loadImage(qrDataUrl(verifyUrl, 120))
       ctx.drawImage(qr, W/2-60, dy+168, 120, 120)
@@ -738,7 +814,6 @@ export default function Certificate() {
       ctx.fillText('Scan to verify membership', W/2, dy+300)
     } catch(_){}
 
-    // Member ID bottom strip
     ctx.fillStyle = '#f3f4f6'; ctx.fillRect(0,H-80,W,80)
     ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5
     ctx.beginPath(); ctx.moveTo(0,H-80); ctx.lineTo(W,H-80); ctx.stroke()
@@ -756,26 +831,35 @@ export default function Certificate() {
     finally { setGenerating(false) }
   }
 
-  // ── Download helper ────────────────────────────────────────────
-  const download = (ref, filename) => {
+  // ── Download helpers ───────────────────────────────────────────
+  const downloadPng = (canvasRef, filename) => {
     const a = document.createElement('a')
-    a.download = filename; a.href = ref.current.toDataURL('image/png'); a.click()
+    a.download = filename; a.href = canvasRef.current.toDataURL('image/png'); a.click()
   }
 
-  // ── Tabs ───────────────────────────────────────────────────────
-  const tabs = [
-    { key:'membership', label:'🏅 Membership' },
-    { key:'birth',      label:'🎂 Birth' },
-    ...(hasIdCard ? [{ key:'id', label:'🪪 ID Card' }] : []),
-  ]
+  const downloadPdf = async (canvasRef, filename) => {
+    try {
+      const { jsPDF } = await import('jspdf')
+      const dataUrl = canvasRef.current.toDataURL('image/png')
+      const img     = await loadImage(dataUrl)
+      const isLandscape = img.naturalWidth > img.naturalHeight
+      const pdf = new jsPDF({ orientation: isLandscape ? 'landscape' : 'portrait', unit: 'px', format: [img.naturalWidth, img.naturalHeight] })
+      pdf.addImage(dataUrl, 'PNG', 0, 0, img.naturalWidth, img.naturalHeight)
+      pdf.save(filename)
+    } catch (e) {
+      setGenError('PDF export failed: ' + e.message)
+    }
+  }
 
-  const TabBtn = ({ k }) => (
+  // ── Shared sub-components ──────────────────────────────────────
+  const TabBtn = ({ k, label }) => (
     <button onClick={() => setTab(k)} style={{
       padding:'10px 22px', borderRadius:30, border:'none', cursor:'pointer',
       fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.86rem',
       background: tab===k ? 'var(--brand-mid)' : '#f1f5f9',
-      color: tab===k ? 'white' : 'var(--text-mid)', transition:'all 0.2s'
-    }}>{tabs.find(t=>t.key===k)?.label ?? k}</button>
+      color: tab===k ? 'white' : 'var(--text-mid)', transition:'all 0.2s',
+      whiteSpace: 'nowrap',
+    }}>{label}</button>
   )
 
   const GenBtn = ({ onClick, disabled, label, color='var(--brand-mid)' }) => (
@@ -795,6 +879,29 @@ export default function Certificate() {
     }}>🔄 Regenerate</button>
   )
 
+  // Download format picker + buttons for built-in certs
+  const DownloadRow = ({ canvasRef, baseName, onRegen, color }) => {
+    const [fmt, setFmt] = useState('png')
+    return (
+      <div style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center' }}>
+        <div style={{ display:'flex', gap:6, background:'#f1f5f9', borderRadius:30, padding:4 }}>
+          {['png','pdf'].map(f => (
+            <button key={f} onClick={() => setFmt(f)} style={{ padding:'7px 18px', borderRadius:26, border:'none', background:fmt===f?'var(--brand-mid)':'transparent', color:fmt===f?'white':'var(--text-mid)', fontWeight:700, cursor:'pointer', fontFamily:'var(--font-body)', fontSize:'0.85rem', transition:'all 0.2s' }}>
+              {f.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <GenBtn
+          onClick={() => fmt==='pdf' ? downloadPdf(canvasRef, baseName+'.pdf') : downloadPng(canvasRef, baseName+'.png')}
+          disabled={false}
+          label={`⬇️ Download ${fmt.toUpperCase()}`}
+          color={color}
+        />
+        <RegenBtn onClick={onRegen} />
+      </div>
+    )
+  }
+
   const InfoGrid = ({ items }) => (
     <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(190px,1fr))', gap:12 }}>
       {items.map(([l,v]) => (
@@ -806,19 +913,18 @@ export default function Certificate() {
     </div>
   )
 
-  const Preview = ({ done, canvasRef, placeholder, emoji }) => (
-    <>
-      <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 40px rgba(0,0,0,0.12)', border:'1px solid #e2e8f0', display:done?'block':'none' }}>
-        <canvas ref={canvasRef} style={{ width:'100%', display:'block' }} />
-      </div>
-      {!done && (
-        <div style={{ background:'var(--brand-pale)', borderRadius:14, padding:'48px 32px', textAlign:'center', color:'var(--text-light)' }}>
-          <div style={{ fontSize:'3rem', marginBottom:12 }}>{emoji}</div>
-          <div>{placeholder}</div>
-        </div>
-      )}
-    </>
-  )
+  // ── Build tab list ─────────────────────────────────────────────
+  const tabs = [
+    { key:'membership', label:'🏅 Membership' },
+    { key:'birth',      label:'🎂 Birth' },
+    ...(hasIdCard ? [{ key:'id', label:'🪪 ID Card' }] : []),
+    // Custom templates — one tab each
+    ...membershipTemplates.map(t => ({ key:`custom-${t.id}`, label:`📜 ${t.name}` })),
+    ...birthTemplates.map(t => ({ key:`custom-${t.id}`, label:`📜 ${t.name}` })),
+  ]
+
+  // Detect if current tab is a custom template tab
+  const activeCustomTemplate = customTemplates.find(t => tab === `custom-${t.id}`)
 
   // ─────────────────────────────────────────────────────────────────
   // RENDER
@@ -835,7 +941,7 @@ export default function Certificate() {
         </p>
       </div>
 
-      {/* Hidden canvases — always mounted so refs are always valid */}
+      {/* Hidden canvases — always mounted */}
       <div style={{ position:'absolute', left:'-9999px', top:0, pointerEvents:'none', visibility:'hidden' }}>
         <canvas ref={memberCanvasRef} />
         <canvas ref={birthCanvasRef} />
@@ -846,10 +952,10 @@ export default function Certificate() {
 
         {/* Tabs */}
         <div style={{ display:'flex', gap:10, marginBottom:32, flexWrap:'wrap' }}>
-          {tabs.map(t => <TabBtn key={t.key} k={t.key} />)}
+          {tabs.map(t => <TabBtn key={t.key} k={t.key} label={t.label} />)}
         </div>
 
-        {/* Generation error banner */}
+        {/* Error banner */}
         {genError && (
           <div style={{ background:'#fff5f5', border:'1px solid #fecaca', borderRadius:12, padding:'12px 18px', color:'#dc2626', fontSize:'0.88rem', marginBottom:16, display:'flex', gap:10, alignItems:'center' }}>
             ❌ <span>{genError}</span>
@@ -857,10 +963,34 @@ export default function Certificate() {
           </div>
         )}
 
-        {/* ── MEMBERSHIP ── */}
+        {/* ── CUSTOM TEMPLATE TAB ── */}
+        {activeCustomTemplate && (
+          <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+            <div style={{ background:'white', borderRadius:16, padding:'20px 24px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
+              <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 6px' }}>{activeCustomTemplate.name}</h3>
+              <p style={{ color:'var(--text-light)', fontSize:'0.84rem', margin:'0 0 16px' }}>
+                Your details will be placed directly onto the official church template.
+              </p>
+              <InfoGrid items={[
+                ['👤 Name', displayName],
+                ['⛪ Branch', branch],
+                ['📅 Member Since', joinDate || 'N/A'],
+                ...(activeCustomTemplate.cert_type === 'birth' && birthday ? [['🎂 Birthday', birthday]] : []),
+              ]} />
+            </div>
+            <CustomCertTab
+              template={activeCustomTemplate}
+              profile={profile}
+              user={user}
+              today={today}
+            />
+          </div>
+        )}
+
+        {/* ── MEMBERSHIP TAB ── */}
         {tab === 'membership' && (
           <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-            <div style={{ background:'var(--white,white)', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
+            <div style={{ background:'white', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
               <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 16px' }}>Certificate Details</h3>
               <InfoGrid items={[
                 ['👤 Name', displayName],
@@ -873,7 +1003,7 @@ export default function Certificate() {
             <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
               {!memberDone
                 ? <GenBtn onClick={generateMembership} disabled={generating} label={generating?'⏳ Generating…':'🏅 Generate Certificate'} />
-                : <><GenBtn onClick={() => download(memberCanvasRef,'CCG-Membership-'+name.replace(/\s+/g,'-')+'.png')} disabled={false} label="⬇️ Download PNG" /><RegenBtn onClick={() => { setMemberDone(false); generateMembership() }} /></>
+                : <DownloadRow canvasRef={memberCanvasRef} baseName={'CCG-Membership-'+name.replace(/\s+/g,'-')} onRegen={() => { setMemberDone(false); generateMembership() }} />
               }
             </div>
             {memberDone && (
@@ -890,7 +1020,7 @@ export default function Certificate() {
           </div>
         )}
 
-        {/* ── BIRTH ── */}
+        {/* ── BIRTH TAB ── */}
         {tab === 'birth' && (
           <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
             {!hasBirthday ? (
@@ -902,7 +1032,7 @@ export default function Certificate() {
               </div>
             ) : (
               <>
-                <div style={{ background:'var(--white,white)', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
+                <div style={{ background:'white', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
                   <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 16px' }}>Certificate Details</h3>
                   <InfoGrid items={[
                     ['👤 Name', displayName],
@@ -919,7 +1049,7 @@ export default function Certificate() {
                 <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
                   {!birthDone
                     ? <GenBtn onClick={generateBirth} disabled={generating} label={generating?'⏳ Generating…':'🎂 Generate Birth Certificate'} color="#b45309" />
-                    : <><GenBtn onClick={() => download(birthCanvasRef,'CCG-Birth-Certificate-'+name.replace(/\s+/g,'-')+'.png')} disabled={false} label="⬇️ Download PNG" color="#b45309" /><RegenBtn onClick={() => { setBirthDone(false); generateBirth() }} /></>
+                    : <DownloadRow canvasRef={birthCanvasRef} baseName={'CCG-Birth-Certificate-'+name.replace(/\s+/g,'-')} onRegen={() => { setBirthDone(false); generateBirth() }} color="#b45309" />
                   }
                 </div>
                 {birthDone && (
@@ -938,10 +1068,10 @@ export default function Certificate() {
           </div>
         )}
 
-        {/* ── ID CARD (ordained posts only) ── */}
+        {/* ── ID CARD TAB ── */}
         {tab === 'id' && (
           <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-            <div style={{ background:'var(--white,white)', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
+            <div style={{ background:'white', borderRadius:16, padding:'24px 28px', boxShadow:'var(--shadow-sm)', border:'1px solid #e2e8f0' }}>
               <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep)', margin:'0 0 8px' }}>🪪 Church ID Card</h3>
               <p style={{ color:'var(--text-mid)', fontSize:'0.88rem', marginBottom:16 }}>Portrait credit-card sized ID (CR80 standard) — print and laminate for use.</p>
               <InfoGrid items={[
@@ -954,7 +1084,7 @@ export default function Certificate() {
             <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
               {!idDone
                 ? <GenBtn onClick={generateId} disabled={generating} label={generating?'⏳ Generating…':'🪪 Generate ID Card'} />
-                : <><GenBtn onClick={() => download(idCanvasRef,'CCG-ID-'+name.replace(/\s+/g,'-')+'.png')} disabled={false} label="⬇️ Download ID Card" /><RegenBtn onClick={() => { setIdDone(false); generateId() }} /></>
+                : <DownloadRow canvasRef={idCanvasRef} baseName={'CCG-ID-'+name.replace(/\s+/g,'-')} onRegen={() => { setIdDone(false); generateId() }} />
               }
             </div>
             <div style={{ maxWidth:360 }}>

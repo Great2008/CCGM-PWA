@@ -436,11 +436,11 @@ export default function Profile() {
                   This information appears on your Church Birth Certificate.
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
-                  <Field label="Father's Name" value={form.father_name} onChange={v => setForm(f => ({ ...f, father_name: v }))} placeholder="e.g. John Okara" />
-                  <Field label="Mother's Name" value={form.mother_name} onChange={v => setForm(f => ({ ...f, mother_name: v }))} placeholder="e.g. Mary Okara" />
+                  <Field label="Father's Name" value={form.father_name} onChange={v => setForm(f => ({ ...f, father_name: v }))} placeholder="e.g. John John" />
+                  <Field label="Mother's Name" value={form.mother_name} onChange={v => setForm(f => ({ ...f, mother_name: v }))} placeholder="e.g. Mary Mary" />
                   <Field label="Place of Birth" value={form.place_of_birth} onChange={v => setForm(f => ({ ...f, place_of_birth: v }))} placeholder="e.g. Igwuruta" />
-                  <Field label="Home Town / Village" value={form.hometown} onChange={v => setForm(f => ({ ...f, hometown: v }))} placeholder="e.g. Omoku" />
-                  <Field label="L.G. Area / Division" value={form.lga} onChange={v => setForm(f => ({ ...f, lga: v }))} placeholder="e.g. Ogba/Egbema/Ndoni" />
+                  <Field label="Home Town / Village" value={form.hometown} onChange={v => setForm(f => ({ ...f, hometown: v }))} placeholder="e.g. Town" />
+                  <Field label="L.G. Area / Division" value={form.lga} onChange={v => setForm(f => ({ ...f, lga: v }))} placeholder="e.g. LGA" />
                 </div>
               </div>
 

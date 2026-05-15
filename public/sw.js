@@ -1,6 +1,6 @@
 // CCG World Service Worker v7 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache
-const CACHE = 'ccgworld-v7'
-const API_CACHE = 'ccgworld-api-v1'
+const CACHE = 'ccgworld-v8'
+const API_CACHE = 'ccgworld-api-v2'
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
