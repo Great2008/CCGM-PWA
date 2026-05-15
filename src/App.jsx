@@ -31,7 +31,6 @@ import Guidelines  from './pages/Guidelines'
 import Verify       from './pages/Verify'
 import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
-import BannerGenerator from './pages/BannerGenerator'
 
 function AppInner() {
   const { user } = useAuth()
