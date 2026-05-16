@@ -1,315 +1,305 @@
-/**
- * Home2.jsx — CCG World Maintenance Page
- *
- * HOW TO USE:
- *   Going into maintenance:
- *     1. Rename Home.jsx  → HomeMain.jsx
- *     2. Rename Home2.jsx → Home.jsx
- *
- *   Coming back online:
- *     1. Rename Home.jsx  → Home2.jsx
- *     2. Rename HomeMain.jsx → Home.jsx
- */
-
-import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useHomepageContent, useSermonsContent, useEventsContent } from '../hooks/useContent'
+import supabase from '../lib/supabase'
+import DailyVerseBanner from '../components/DailyVerseBanner'
+import AppDownloadBanner from '../components/AppDownloadBanner'
 import SEO from '../components/SEO'
 
-const LAUNCH = new Date(Date.now() + 2 * 60 * 60 * 1000) // default: 2 hrs from now
-// ↑ Change this to your actual expected back-online time, e.g.:
-// const LAUNCH = new Date('2026-05-20T10:00:00+01:00')
-
-function useCountdown(target) {
-  const [timeLeft, setTimeLeft] = useState({})
-
-  useEffect(() => {
-    const calc = () => {
-      const diff = target - Date.now()
-      if (diff <= 0) return setTimeLeft({ d: 0, h: 0, m: 0, s: 0 })
-      setTimeLeft({
-        d: Math.floor(diff / 86400000),
-        h: Math.floor((diff % 86400000) / 3600000),
-        m: Math.floor((diff % 3600000)  / 60000),
-        s: Math.floor((diff % 60000)    / 1000),
-      })
-    }
-    calc()
-    const t = setInterval(calc, 1000)
-    return () => clearInterval(t)
-  }, [target])
-
-  return timeLeft
-}
-
-const UPDATES = [
-  { icon: '⚡', text: 'Improving app performance' },
-  { icon: '🔒', text: 'Security enhancements' },
-  { icon: '✨', text: 'New features being deployed' },
-  { icon: '📖', text: 'Bible & content updates' },
-]
-
-export default function Home2() {
-  const { d, h, m, s } = useCountdown(LAUNCH)
-  const [dots, setDots]     = useState(1)
-  const [visible, setVisible] = useState(false)
+export default function Home() {
+  const { data: hp } = useHomepageContent()
+  const { data: liveSermons } = useSermonsContent()
+  const { data: liveEvents }  = useEventsContent()
+  const [liveData, setLiveData]     = useState(null)
+  const [activeProg, setActiveProg] = useState(null) // active programme or null
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 100)
-    return () => clearTimeout(t)
+    supabase.from('site_settings').select('value').eq('key','live').single()
+      .then(({ data }) => setLiveData(data?.value || null))
+    const sub = supabase.channel('home-live')
+      .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
+        payload => setLiveData(payload.new.value))
+      .subscribe()
+    return () => supabase.removeChannel(sub)
   }, [])
 
+  // Fetch active programme for homepage banner
   useEffect(() => {
-    const t = setInterval(() => setDots(d => d === 3 ? 1 : d + 1), 600)
-    return () => clearInterval(t)
+    supabase.from('programmes').select('id,title,theme,start_date,end_date,venue')
+      .eq('is_active', true).limit(1).single()
+      .then(({ data }) => setActiveProg(data || null))
+    const sub = supabase.channel('home-prog')
+      .on('postgres_changes', { event:'*', schema:'public', table:'programmes' },
+        async () => {
+          const { data } = await supabase.from('programmes')
+            .select('id,title,theme,start_date,end_date,venue')
+            .eq('is_active', true).limit(1).single()
+          setActiveProg(data || null)
+        })
+      .subscribe()
+    return () => supabase.removeChannel(sub)
   }, [])
+
+  const isLive = liveData?.isLive
+
+  // Use live Supabase data if available, fall back to mock data
+  const latestSermon   = liveSermons[0]  || null
+  const upcomingEvents = liveEvents.slice(0, 3)
 
   return (
     <>
       <SEO
-        title="CCG World — Under Maintenance"
-        description="CCG World is currently undergoing maintenance. We'll be back shortly."
+        title="Home"
+        description="Welcome to CCG World — Christian Church Of God Mission. Access Bible, Hymnal, Daily Devotionals, Sermons, Live Services, Sabbath School and more."
         path="/"
       />
+      {hp.announcement?.show && hp.announcement?.text && (
+        <div style={{ background:'var(--gold)',color:'var(--green-deep)',textAlign:'center',padding:'12px 20px',fontSize:'0.9rem',fontWeight:700,lineHeight:1.5,position:'fixed',top:0,left:0,right:0,zIndex:2000 }}>
+          {hp.announcement.text}
+        </div>
+      )}
 
-      <div style={{
-        minHeight: '100vh',
-        background: '#00b250',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '40px 24px',
-        position: 'relative',
-        overflow: 'hidden',
-        fontFamily: 'Georgia, serif',
+      {/* HERO */}
+      <section style={{
+        minHeight:'100vh',
+        background:`linear-gradient(160deg,rgba(10,38,18,0.92) 0%,rgba(22,100,52,0.85) 55%,rgba(22,163,74,0.4) 100%),url('https://images.unsplash.com/photo-1438232992991-995b671e4b8b?w=1600&q=80') center/cover no-repeat`,
+        display:'flex',alignItems:'center',justifyContent:'center',
+        textAlign:'center',padding:'clamp(100px,15vw,140px) 20px 80px',
+        position:'relative',overflow:'hidden',
+        marginTop: hp.announcement?.show ? 44 : 0,
       }}>
-
-        {/* Animated background rings */}
-        {[1,2,3].map(i => (
-          <div key={i} style={{
-            position: 'absolute',
-            borderRadius: '50%',
-            border: `${4-i}px solid rgba(255,255,255,${0.06 * i})`,
-            width:  `${i * 38}vw`,
-            height: `${i * 38}vw`,
-            top: '50%', left: '50%',
-            transform: 'translate(-50%,-50%)',
-            animation: `pulse-ring ${2 + i * 0.8}s ease-in-out infinite alternate`,
-            pointerEvents: 'none',
-          }} />
-        ))}
-
-        {/* Gold top bar */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0,
-          height: 5,
-          background: 'linear-gradient(90deg, #f59e0b, #fcd34d, #f59e0b)',
-        }} />
-
-        {/* Content */}
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: 0, maxWidth: 520, width: '100%',
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(24px)',
-          transition: 'opacity 0.7s ease, transform 0.7s ease',
-        }}>
-
-          {/* Logo */}
-          <img
-            src="/logo.png"
-            alt="CCG World"
-            style={{
-              width: 'clamp(90px,22vw,130px)',
-              height: 'auto',
-              marginBottom: 24,
-              filter: 'drop-shadow(0 6px 24px rgba(0,0,0,0.25))',
-            }}
-          />
-
-          {/* Gear / wrench icon */}
-          <div style={{
-            fontSize: 'clamp(2.8rem,10vw,4rem)',
-            marginBottom: 16,
-            animation: 'spin-slow 6s linear infinite',
-            display: 'inline-block',
-          }}>
-            ⚙️
+        <div style={{position:'absolute',right:'-2%',bottom:'2%',fontSize:'clamp(8rem,20vw,22rem)',color:'rgba(255,255,255,0.04)',lineHeight:1,pointerEvents:'none',userSelect:'none'}}>✝</div>
+        <div style={{position:'relative',maxWidth:780,width:'100%'}}>
+          <div style={{display:'inline-block',border:'1px solid var(--gold)',color:'var(--gold)',padding:'6px 24px',borderRadius:30,fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:28}}>🌐 CCG World</div>
+          <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(2rem,6vw,4.4rem)',color:'white',lineHeight:1.12,marginBottom:20,textShadow:'0 2px 24px rgba(0,0,0,0.3)'}}>
+            Welcome to<br /><em style={{fontStyle:'italic',color:'var(--gold)'}}>Christian Church<br />Of God Mission</em>
+          </h1>
+          <p style={{fontSize:'clamp(0.95rem,2vw,1.1rem)',color:'rgba(255,255,255,0.88)',lineHeight:1.8,maxWidth:540,margin:'0 auto 40px'}}>
+            {hp.hero.subtitle}
+          </p>
+          <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
+            <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
+            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
           </div>
 
-          {/* Heading */}
-          <h1 style={{
-            color: '#ffffff',
-            fontSize: 'clamp(1.6rem,6vw,2.6rem)',
-            fontWeight: 900,
-            textAlign: 'center',
-            margin: '0 0 10px',
-            letterSpacing: '-0.02em',
-            textShadow: '0 2px 12px rgba(0,0,0,0.2)',
-          }}>
-            Under Maintenance
-          </h1>
-
-          <p style={{
-            color: 'rgba(255,255,255,0.85)',
-            fontSize: 'clamp(0.9rem,3vw,1.05rem)',
-            textAlign: 'center',
-            margin: '0 0 36px',
-            lineHeight: 1.75,
-          }}>
-            CCG World is currently down for scheduled maintenance.
-            We'll be back in just a moment{'.'.repeat(dots)}
-          </p>
-
-          {/* Countdown */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 'clamp(8px,2vw,16px)',
-            width: '100%',
-            marginBottom: 36,
-          }}>
-            {[
-              { val: d, label: 'Days' },
-              { val: h, label: 'Hours' },
-              { val: m, label: 'Mins' },
-              { val: s, label: 'Secs' },
-            ].map(({ val, label }) => (
-              <div key={label} style={{
-                background: 'rgba(0,0,0,0.18)',
-                borderRadius: 16,
-                padding: 'clamp(12px,3vw,20px) 8px',
-                textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.15)',
-                backdropFilter: 'blur(8px)',
-              }}>
-                <div style={{
-                  color: '#fcd34d',
-                  fontSize: 'clamp(1.6rem,6vw,2.8rem)',
-                  fontWeight: 900,
-                  lineHeight: 1,
-                  fontVariantNumeric: 'tabular-nums',
-                }}>
-                  {String(val ?? 0).padStart(2, '0')}
+          {/* Programme Banner — shown only when an active programme exists */}
+          {activeProg && (
+            <Link to="/programme" style={{ textDecoration:'none', display:'block', marginTop:28 }}>
+              <div
+                style={{
+                  background:'linear-gradient(135deg,rgba(180,83,9,0.88),rgba(217,119,6,0.82))',
+                  backdropFilter:'blur(12px)',
+                  border:'1px solid rgba(251,191,36,0.45)',
+                  borderRadius:16, padding:'16px 22px',
+                  display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
+                  boxShadow:'0 8px 32px rgba(180,83,9,0.35)',
+                  transition:'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 12px 40px rgba(180,83,9,0.45)'}}
+                onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 8px 32px rgba(180,83,9,0.35)'}}
+              >
+                <div style={{fontSize:'1.8rem',flexShrink:0,animation:'softPulse 2.5s ease-in-out infinite'}}>📅</div>
+                <div style={{flex:1,minWidth:160,textAlign:'left'}}>
+                  <div style={{fontSize:'0.65rem',fontWeight:800,color:'rgba(255,255,255,0.75)',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:3}}>
+                    ⭐ Special Event — Now On
+                  </div>
+                  <div style={{fontFamily:'var(--font-display)',fontWeight:900,color:'white',fontSize:'clamp(0.92rem,2vw,1.08rem)',lineHeight:1.2,marginBottom:activeProg.theme?4:0}}>
+                    {activeProg.title}
+                  </div>
+                  {activeProg.theme && (
+                    <div style={{color:'rgba(255,255,255,0.8)',fontStyle:'italic',fontSize:'0.8rem'}}>"{activeProg.theme}"</div>
+                  )}
+                  {activeProg.venue && (
+                    <div style={{color:'rgba(255,255,255,0.65)',fontSize:'0.75rem',marginTop:3}}>📍 {activeProg.venue}</div>
+                  )}
                 </div>
-                <div style={{
-                  color: 'rgba(255,255,255,0.65)',
-                  fontSize: 'clamp(0.62rem,2vw,0.75rem)',
-                  fontWeight: 600,
-                  marginTop: 6,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  fontFamily: 'Arial, sans-serif',
-                }}>
-                  {label}
+                <div style={{background:'rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 16px',color:'white',fontWeight:800,fontSize:'0.8rem',whiteSpace:'nowrap',flexShrink:0}}>
+                  View Programme →
                 </div>
+              </div>
+            </Link>
+          )}
+          <div style={{marginTop:48,display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',alignItems:'center'}}>
+            {isLive ? (
+              <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:10,background:'#dc2626',border:'none',borderRadius:40,padding:'10px 24px',textDecoration:'none',animation:'pulse 1.5s infinite'}}>
+                <span style={{width:8,height:8,borderRadius:'50%',background: 'var(--white, white)',display:'inline-block'}} />
+                <span style={{color:'white',fontSize:'0.88rem',fontWeight:900}}>🔴 We Are Live — Watch Now</span>
+              </Link>
+            ) : (
+              <div style={{display:'inline-flex',alignItems:'center',gap:10,background:'rgba(255,255,255,0.12)',backdropFilter:'blur(8px)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:40,padding:'10px 24px'}}>
+                <span style={{width:8,height:8,borderRadius:'50%',background:'#ff4444',animation:'pulse 1.5s infinite',display:'inline-block'}} />
+                <span style={{color:'white',fontSize:'0.88rem',fontWeight:700}}>🌟 Divine Service every Saturday</span>
+              </div>
+            )}
+            <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:6,color:'rgba(255,255,255,0.6)',fontSize:'0.8rem',textDecoration:'none',border:'1px solid rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 18px'}}>
+              📡 View Schedule
+            </Link>
+          </div>
+        </div>
+        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',color:'rgba(255,255,255,0.45)',fontSize:'0.72rem',letterSpacing:'0.18em',textTransform:'uppercase',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+          <span>Scroll</span><span style={{animation:'bounce 2s infinite'}}>↓</span>
+        </div>
+      </section>
+
+      {/* SERVICE TIMES */}
+      <section style={{background:'var(--green-pale)',padding:'clamp(40px,6vw,70px) 5%'}}>
+        <div className="container">
+          <div style={{textAlign:'center',marginBottom:32}}>
+            <span className="section-label">Join Us</span>
+            <h2 className="section-title">Weekly Programs</h2>
+            <div className="section-divider" style={{margin:'0 auto'}} />
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:12}}>
+            {hp.serviceTimes.map(({icon,day,name,time})=>(
+              <div key={day} style={{
+                background:'var(--white, white)',borderRadius:14,padding:'18px 12px',textAlign:'center',
+                borderTop:`4px solid ${day==='Saturday'?'var(--gold)':'var(--green-mid)'}`,
+                boxShadow:'var(--shadow-sm)',transition:'transform 0.2s',
+              }}
+              onMouseEnter={e=>e.currentTarget.style.transform='translateY(-4px)'}
+              onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+                <div style={{fontSize:'1.5rem',marginBottom:8}}>{icon||'✝'}</div>
+                <div style={{fontWeight:900,fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',color:day==='Saturday'?'var(--gold)':'var(--green-mid)',marginBottom:4}}>{day}</div>
+                <div style={{fontFamily:'var(--font-display)',fontSize:'0.88rem',color:'var(--green-deep)',fontWeight:700,lineHeight:1.3,marginBottom:time?4:0}}>{name}</div>
+                {time&&<div style={{fontSize:'0.75rem',color:'var(--text-light)'}}>{time}</div>}
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* What we're working on */}
-          <div style={{
-            background: 'rgba(0,0,0,0.15)',
-            borderRadius: 16,
-            padding: '20px 24px',
-            width: '100%',
-            border: '1px solid rgba(255,255,255,0.12)',
-            marginBottom: 32,
-          }}>
-            <div style={{
-              color: '#fcd34d',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              marginBottom: 14,
-              fontFamily: 'Arial, sans-serif',
-            }}>
-              What we're working on
+      {/* LATEST SERMON */}
+      {latestSermon && (
+        <section style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(60px,8vw,90px) 5%'}}>
+          <div className="container">
+            <div className="sermon-grid">
+              <div>
+                <span className="section-label" style={{color:'var(--green-light)'}}>Latest Message</span>
+                <h2 className="section-title" style={{color:'white'}}>{latestSermon.title}</h2>
+                <div className="section-divider" style={{background:'linear-gradient(90deg,var(--green-light),var(--gold))'}} />
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16,flexWrap:'wrap'}}>
+                  {latestSermon.series && <span className="tag" style={{background:'rgba(255,255,255,0.12)',color:'var(--gold)'}}>{latestSermon.series}</span>}
+                  <span style={{fontSize:'0.8rem',color:'rgba(255,255,255,0.55)'}}>{latestSermon.date}</span>
+                </div>
+                {latestSermon.description && <p style={{color:'rgba(255,255,255,0.78)',lineHeight:1.8,marginBottom:12}}>{latestSermon.description}</p>}
+                {(latestSermon.scripture || latestSermon.pastor) && (
+                  <p style={{color:'var(--green-light)',fontSize:'0.88rem',fontWeight:700,marginBottom:28}}>
+                    {latestSermon.scripture && `📖 ${latestSermon.scripture}`}{latestSermon.scripture && latestSermon.pastor && ' — '}{latestSermon.pastor}
+                  </p>
+                )}
+                <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+                  <Link to="/sermons" className="btn btn-gold">▶ Watch Now</Link>
+                  <Link to="/sermons" className="btn btn-outline-white" style={{border:'1.5px solid rgba(255,255,255,0.4)',color:'white'}}>All Sermons →</Link>
+                </div>
+              </div>
+              <div style={{position:'relative'}}>
+                {latestSermon.thumbnail ? (
+                  <>
+                    <img src={latestSermon.thumbnail} alt={latestSermon.title} style={{width:'100%',borderRadius:16,boxShadow:'0 24px 60px rgba(0,0,0,0.4)'}} />
+                    <div style={{position:'absolute',inset:0,borderRadius:16,background:'rgba(10,38,18,0.3)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      <div style={{width:64,height:64,borderRadius:'50%',background:'rgba(255,255,255,0.95)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.6rem',boxShadow:'0 8px 30px rgba(0,0,0,0.3)',cursor:'pointer',transition:'transform 0.2s'}}
+                      onMouseEnter={e=>e.currentTarget.style.transform='scale(1.1)'}
+                      onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>▶</div>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{height:200,borderRadius:16,background:'rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'4rem'}}>🎙</div>
+                )}
+                {latestSermon.duration && (
+                  <div style={{position:'absolute',bottom:-14,left:-14,background:'var(--gold)',color:'var(--brand-deep)',borderRadius:10,padding:'10px 16px',fontWeight:900,fontSize:'0.82rem'}}>🎙 {latestSermon.duration}</div>
+                )}
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {UPDATES.map(({ icon, text }, i) => (
-                <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  color: 'rgba(255,255,255,0.88)',
-                  fontSize: 'clamp(0.82rem,2.8vw,0.92rem)',
-                  fontFamily: 'Arial, sans-serif',
-                  animation: `fade-in 0.4s ease ${i * 0.12}s both`,
-                }}>
-                  <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{icon}</span>
-                  {text}
+          </div>
+        </section>
+      )}
+
+      {/* EVENTS */}
+      {upcomingEvents.length > 0 && (
+        <section style={{background:'var(--cream)',padding:'clamp(60px,8vw,90px) 5%'}}>
+          <div className="container">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:40,flexWrap:'wrap',gap:16}}>
+              <div>
+                <span className="section-label">What's Coming Up</span>
+                <h2 className="section-title">Upcoming Events</h2>
+                <div className="section-divider" />
+              </div>
+              <Link to="/events" className="btn btn-outline-green">View All →</Link>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:22}}>
+              {upcomingEvents.map(event=>(
+                <div key={event.id} className="card">
+                  {event.image ? (
+                    <div style={{position:'relative',overflow:'hidden',height:170}}>
+                      <img src={event.image} alt={event.title} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
+                        onMouseEnter={e=>e.target.style.transform='scale(1.06)'}
+                        onMouseLeave={e=>e.target.style.transform='scale(1)'} />
+                      {event.category && <div style={{position:'absolute',top:12,left:12}}><span className="tag">{event.category}</span></div>}
+                    </div>
+                  ) : (
+                    <div style={{height:100,background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2.5rem'}}>📅</div>
+                  )}
+                  <div style={{padding:'18px 20px'}}>
+                    <div style={{display:'flex',gap:8,marginBottom:8,fontSize:'0.8rem',color:'var(--text-light)',flexWrap:'wrap'}}>
+                      {event.date && <span>📅 {event.date}</span>}
+                      {event.date && event.time && <span>·</span>}
+                      {event.time && <span>⏰ {event.time}</span>}
+                    </div>
+                    <h3 style={{fontFamily:'var(--font-display)',fontSize:'1.1rem',color:'var(--brand-deep)',marginBottom:8}}>{event.title}</h3>
+                    {event.description && <p style={{fontSize:'0.86rem',color:'var(--text-mid)',lineHeight:1.65}}>{event.description}</p>}
+                    {event.location && <div style={{marginTop:14,fontSize:'0.8rem',color:'var(--brand-mid)',fontWeight:700}}>📍 {event.location}</div>}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+        </section>
+      )}
 
-          {/* Bible verse */}
-          <div style={{
-            background: 'rgba(255,255,255,0.08)',
-            borderRadius: 14,
-            padding: '18px 22px',
-            width: '100%',
-            border: '1px solid rgba(255,255,255,0.15)',
-            textAlign: 'center',
-            marginBottom: 28,
-          }}>
-            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.6rem', lineHeight: 1, marginBottom: 8 }}>"</div>
-            <p style={{
-              color: 'rgba(255,255,255,0.9)',
-              fontStyle: 'italic',
-              fontSize: 'clamp(0.82rem,2.8vw,0.95rem)',
-              lineHeight: 1.8,
-              margin: '0 0 10px',
-            }}>
-              For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.
-            </p>
-            <div style={{
-              color: '#fcd34d',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              fontFamily: 'Arial, sans-serif',
-            }}>
-              — Jeremiah 29:11
-            </div>
+      <section className="stats-section" style={{padding:'clamp(50px,7vw,80px) 5%'}}>
+        <div className="container">
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:24,textAlign:'center'}}>
+            {hp.stats.map(s=>(
+              <div key={s.label}>
+                <div style={{fontFamily:'var(--font-display)',fontSize:'clamp(2rem,5vw,3.2rem)',fontWeight:900,color:'var(--gold)',lineHeight:1}}>{s.value}</div>
+                <div style={{fontSize:'0.82rem',color:'rgba(255,255,255,0.75)',marginTop:8}}>{s.label}</div>
+              </div>
+            ))}
           </div>
-
-          {/* Contact note */}
-          <p style={{
-            color: 'rgba(255,255,255,0.5)',
-            fontSize: '0.78rem',
-            textAlign: 'center',
-            lineHeight: 1.7,
-            fontFamily: 'Arial, sans-serif',
-          }}>
-            For urgent enquiries contact us at{' '}
-            <a href="mailto:info@ccgworld.org" style={{ color: '#fcd34d', textDecoration: 'none' }}>
-              info@ccgworld.org
-            </a>
-          </p>
         </div>
+      </section>
 
-        {/* Gold bottom bar */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          height: 5,
-          background: 'linear-gradient(90deg, #f59e0b, #fcd34d, #f59e0b)',
-        }} />
+      <AppDownloadBanner />
 
-        {/* Keyframe styles */}
-        <style>{`
-          @keyframes pulse-ring {
-            from { opacity: 0.4; transform: translate(-50%,-50%) scale(0.96); }
-            to   { opacity: 1;   transform: translate(-50%,-50%) scale(1.04); }
-          }
-          @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
-          }
-          @keyframes fade-in {
-            from { opacity: 0; transform: translateX(-8px); }
-            to   { opacity: 1; transform: translateX(0); }
-          }
-        `}</style>
-      </div>
+      {/* CTA */}
+      <section style={{background:'var(--cream)',padding:'clamp(60px,8vw,90px) 5%',textAlign:'center'}}>
+        <div className="container" style={{maxWidth:640}}>
+          <div style={{fontSize:'2.5rem',marginBottom:16}}>✝</div>
+          <h2 style={{fontFamily:'var(--font-display)',color:'var(--green-deep)',fontSize:'clamp(1.6rem,4vw,2.4rem)',marginBottom:16}}>New Here? You're Family Already.</h2>
+          <p style={{color:'var(--text-mid)',maxWidth:480,margin:'0 auto 36px',lineHeight:1.8}}>
+            Whether you're searching for faith, returning to God, or looking for a community — our doors are always open.
+          </p>
+          <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
+            <Link to="/about" className="btn btn-green">Learn About Us</Link>
+            <Link to="/contact" className="btn btn-outline-green">Get In Touch</Link>
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        .sermon-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+        @keyframes softPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.12)}}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+        @media(max-width:768px){
+          .sermon-grid{grid-template-columns:1fr!important;gap:32px!important;}
+          .hero-ctas{flex-direction:column;align-items:center;}
+          .hero-ctas a{width:100%;max-width:280px;justify-content:center;}
+        }
+      `}</style>
+
+      {/* Daily Verse floating banner */}
+      <DailyVerseBanner />
     </>
   )
 }
