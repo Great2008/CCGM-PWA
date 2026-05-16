@@ -31,14 +31,14 @@ const SACRED_SONGS = [
   {
     "id": 3,
     "number": 3,
-    "title": "The God Of Abraham Praise",
-    "author": "Thomas Olivers",
+    "title": "A safe stronghold our God is still",
+    "author": " ",
     "verses": [
-      "The God of Abraham praise,\nWho reigns enthroned above,\nAncient of everlasting days,\nAnd God of love!\nJehovah, great I AM!\nBy earth and heaven confessed;\nI bow and bless the sacred name\nForever blest!",
-      "The God of Abraham praise,\nAt whose supreme command\nFrom earth I rise, and seek the joys\nAt His right hand.\nI all on earth forsake,\nIts wisdom, fame, and power;\nAnd Him my only portion make,\nMy shield and tower.",
-      "He by Himself hath sworn,\nI on His oath depend;\nI shall, on eagle wings upborne,\nTo heaven ascend.\nI shall behold His face,\nI shall His power adore,\nAnd sing the wonders of His grace\nForevermore!",
-      "The whole triumphant host\nGive thanks to God on high;\n'Hail, Father, Son, and Holy Ghost!'\nThey ever cry.\nHail, Abraham's God and mine!\nI join the heavenly lays;\nAll might and majesty are Thine,\nAnd endless praise!"
-    ],
+      "A safe stronghold our God is stilln\nA trusty shield and weapon\n He'll help us clear from all the ill\nThat hath us now o'er taken.\nThe ancient prince of hell\nHath risen with purpose fell ;\nStrong mail of craft and power\nHe weareth in this hour,\nOn earth is not his fellow.",
+      "With force of arms we nothing can,\nFull soon were we down-ridden ;\nBut for us fights the proper Man,\nWhom God Himself hath bidden.\nAsk ye, Who is this same ?\nChrist Jesus is His name,\nThe Lord Sabaoth's Son ;\nHe, and no other one,\nShall conquer in the battle.",
+      "And were this world all devils o'er,\nAnd watching to devour us,\nWe lay it not to heart so sore ;\nNot they can overpower us.\nAnd let the prince of ill\nLook grim as e'er he will,\nHe harms us not a whit :\nFor why ? His doom is writ ;\nA word shall quickly slay him.",
+      "God's word, for all their craft and force,\nOne moment will not linger,\nBut,spite of hell, shall have its course;\n'Tis written by His finger.\nAnd though they take our life,\nGoods, honour, children, wife,\nYet is their profit small ;\nThese things shall vanish all,\nThe city of God remaineth."
+              ],
     "chorus": ""
   },
   {
