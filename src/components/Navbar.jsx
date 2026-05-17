@@ -7,6 +7,33 @@ import AppDownloadBanner from './AppDownloadBanner'
 
 const BELL_SEEN_KEY = 'ccg-notif-last-seen'
 
+const LANGUAGES = [
+  { code: 'en',    label: 'English',    flag: '🇬🇧' },
+  { code: 'yo',    label: 'Yoruba',     flag: '🇳🇬' },
+  { code: 'ig',    label: 'Igbo',       flag: '🇳🇬' },
+  { code: 'ha',    label: 'Hausa',      flag: '🇳🇬' },
+  { code: 'fr',    label: 'French',     flag: '🇫🇷' },
+  { code: 'pt',    label: 'Portuguese', flag: '🇵🇹' },
+  { code: 'es',    label: 'Spanish',    flag: '🇪🇸' },
+  { code: 'ar',    label: 'Arabic',     flag: '🇸🇦' },
+  { code: 'zh-CN', label: 'Chinese',    flag: '🇨🇳' },
+  { code: 'sw',    label: 'Swahili',    flag: '🌍' },
+]
+
+function setGoogleTranslateCookie(lang) {
+  if (lang === 'en') {
+    // Reset to English — remove the cookie
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname
+    window.location.reload()
+    return
+  }
+  const val = `/en/${lang}`
+  document.cookie = `googtrans=${val}; path=/`
+  document.cookie = `googtrans=${val}; path=/; domain=${window.location.hostname}`
+  window.location.reload()
+}
+
 const NAV_LINKS = [
   { to:'/',         label:'Home' },
   { to:'/sermons',  label:'Sermons' },
@@ -41,14 +68,23 @@ export default function Navbar() {
   const { dark, toggle: toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQ, setSearchQ] = useState('')
+  const [searchQ, setSearchQ]       = useState('')
+  const [langOpen, setLangOpen]     = useState(false)
+
+  // Detect current language from cookie
+  const currentLang = (() => {
+    try {
+      const m = document.cookie.match(/googtrans=\/en\/([^;]+)/)
+      return m ? m[1] : 'en'
+    } catch { return 'en' }
+  })()
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', h)
     return () => window.removeEventListener('scroll', h)
   }, [])
-  useEffect(() => { setMenuOpen(false); setOfflineOpen(false) }, [pathname])
+  useEffect(() => { setMenuOpen(false); setOfflineOpen(false); setLangOpen(false) }, [pathname])
 
   // Check for active programme
   useEffect(() => {
@@ -178,6 +214,35 @@ export default function Navbar() {
             </div>
 
             
+
+            {/* Language picker */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setLangOpen(o => !o)}
+                title="Translate"
+                style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', borderRadius: 6, background: langOpen ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', color: currentLang !== 'en' ? 'var(--gold)' : 'rgba(255,255,255,0.82)', fontSize: '0.82rem', fontFamily: 'var(--font-body)', fontWeight: currentLang !== 'en' ? 700 : 500, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+                onMouseLeave={e => e.currentTarget.style.background = langOpen ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.08)'}
+              >
+                🌐 {LANGUAGES.find(l => l.code === currentLang)?.label || 'English'}
+                <span style={{ fontSize: '0.55rem', opacity: 0.6 }}>{langOpen ? '▲' : '▼'}</span>
+              </button>
+              {langOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: 'white', borderRadius: 12, padding: 8, boxShadow: '0 12px 40px rgba(0,0,0,0.18)', minWidth: 180, border: '1px solid rgba(0,0,0,0.06)', zIndex: 200 }}>
+                  <div style={{ padding: '6px 12px 8px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94a3b8' }}>Select Language</div>
+                  {LANGUAGES.map(lang => (
+                    <button key={lang.code} onClick={() => { setLangOpen(false); setGoogleTranslateCookie(lang.code) }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 12px', borderRadius: 8, border: 'none', background: currentLang === lang.code ? 'var(--brand-pale)' : 'transparent', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: currentLang === lang.code ? 'var(--brand-deep)' : '#374151', fontWeight: currentLang === lang.code ? 700 : 400, textAlign: 'left', transition: 'background 0.15s' }}
+                      onMouseEnter={e => { if (currentLang !== lang.code) e.currentTarget.style.background = '#f8fafc' }}
+                      onMouseLeave={e => { if (currentLang !== lang.code) e.currentTarget.style.background = 'transparent' }}>
+                      <span style={{ fontSize: '1.1rem' }}>{lang.flag}</span>
+                      {lang.label}
+                      {currentLang === lang.code && <span style={{ marginLeft: 'auto', color: 'var(--brand-mid)', fontSize: '0.8rem' }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Search button */}
             <button
@@ -317,6 +382,17 @@ export default function Navbar() {
             <span>{dark ? '☀️' : '🌙'}</span>
             <span>{dark ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
+
+          {/* Language picker — mobile */}
+          <div style={{ margin:'12px 20px 6px', fontSize:'0.65rem', fontWeight:700, letterSpacing:'0.18em', textTransform:'uppercase', color:'rgba(255,255,255,0.35)' }}>Language</div>
+          <div style={{ padding:'0 14px 10px', display:'flex', flexWrap:'wrap', gap:6 }}>
+            {LANGUAGES.map(lang => (
+              <button key={lang.code} onClick={() => setGoogleTranslateCookie(lang.code)}
+                style={{ display:'flex', alignItems:'center', gap:5, padding:'7px 12px', borderRadius:20, border:`1.5px solid ${currentLang===lang.code?'var(--gold)':'rgba(255,255,255,0.18)'}`, background: currentLang===lang.code?'rgba(245,158,11,0.2)':'rgba(255,255,255,0.06)', color: currentLang===lang.code?'var(--gold)':'rgba(255,255,255,0.75)', fontFamily:'var(--font-body)', fontSize:'0.78rem', fontWeight: currentLang===lang.code?700:400, cursor:'pointer' }}>
+                <span>{lang.flag}</span>{lang.label}
+              </button>
+            ))}
+          </div>
 
           <div style={{margin:'12px 20px 6px',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.35)'}}>Offline Resources</div>
           {OFFLINE_LINKS.map(({to,label,sub})=>(

@@ -8,7 +8,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#00b250" />
+    <meta name="theme-color" content="#0f1f3d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="CCG World" />
@@ -78,7 +78,10 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: #00b250;
+        /* Green radial gradient — matches native Android splash exactly:
+           GREEN_CORE #00b250 (cx=50%, cy=22%) → GREEN_MID #48c878 → WHITE_TINT #dcf5e6
+           Ellipse sized to cover all corners from the 22%-high focal point. */
+        background: radial-gradient(ellipse 144% 156% at 50% 22%, #00b250 0%, #48c878 45%, #dcf5e6 100%);
         opacity: 1;
         transition: opacity 0.6s ease;
         padding-bottom: 18%;
@@ -143,5 +146,27 @@
 
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <!-- Google Translate — hidden element, triggered by Navbar language picker -->
+  <div id="google_translate_element" style="display:none;visibility:hidden;position:absolute;"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'yo,ig,ha,fr,pt,es,ar,zh-CN,sw',
+        autoDisplay: false,
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+
+  <!-- Hide the Google Translate top bar -->
+  <style>
+    body { top: 0 !important; }
+    .goog-te-banner-frame, .skiptranslate { display: none !important; }
+    .goog-tooltip { display: none !important; }
+    .goog-tooltip:hover { display: none !important; }
+    .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+  </style>
+
+</body>
 </html>
