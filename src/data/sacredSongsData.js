@@ -145,18 +145,71 @@ const SACRED_SONGS = [
     "chorus": ""
   },
   {
-    "id": 22,
-    "number": 22,
-    "title": "Holy Holy Holy Lord God Almighty",
-    "author": "Reginald Heber",
-    "verses": [
-      "Holy, Holy, Holy! Lord God Almighty!\nEarly in the morning our song shall rise to Thee;\nHoly, Holy, Holy! Merciful and Mighty!\nGod in Three Persons, blessed Trinity!",
-      "Holy, Holy, Holy! All the saints adore Thee,\nCasting down their golden crowns around the glassy sea;\nCherubim and seraphim falling down before Thee,\nWhich wert and art and evermore shalt be.",
-      "Holy, Holy, Holy! Though the darkness hide Thee,\nThough the eye of sinful man Thy glory may not see,\nOnly Thou art holy; there is none beside Thee\nPerfect in power, in love, and purity.",
-      "Holy, Holy, Holy! Lord God Almighty!\nAll Thy works shall praise Thy name, in earth and sky and sea;\nHoly, Holy, Holy! Merciful and Mighty!\nGod in Three Persons, blessed Trinity!"
-    ],
-    "chorus": ""
-  },
+  id: 12,
+  number: 12,
+  title: "Oh Praise Ye The Lord",
+  author: "",
+  verses: [
+    "Oh, praise ye the Lord\nWith heart and with voice;\nHis mercies record,\nAnd round Him rejoice.\nYe children of Zion,\nYour Saviour adore!\nAnd learn to rely on\nHis grace evermore.",
+    "Repose on His arm,\nYe sheep of His fold,\nWhat terror can harm\nWith Him to uphold?\nHis saints are His treasure,\nTheir peace will He seek,\nAnd pour without measure\nHis gifts on the meek.",
+    "Go on in His might,\nYe men of the Lord:\nHis word be your light,\nHis promise your sword:\nThe King of Salvation\nYour foes will subdue,\nBring forth your oblation,\nYour praises renew."
+  ],
+  chorus: ""
+},
+{
+  id: 13,
+  number: 13,
+  title: "Though Troubles Assail",
+  author: "",
+  verses: [
+    "Though troubles assail,\nAnd dangers affright;\nThough friends should all fail,\nAnd foes all unite;\nYet one thing secures us,\nWhatever betide:\nThe Scripture assures us,\n'The Lord will provide.'",
+    "The birds, without barn\nOr storehouse, are fed;\nFrom them let us learn\nTo trust for our bread:\nHis saints what is fitting\nShall ne'er be denied,\nSo long as 'tis written,\n'The Lord will provide.'",
+    "His call we obey,\nLike Abram of old,\nNot knowing our way;\nBut faith makes us bold:\nFor though we are strangers,\nWe have a good Guide;\nAnd trust in all dangers,\n'The Lord will provide.'",
+    "No strength of our own,\nOr goodness we claim;\nYet since we have known\nThe Saviour's great name,\nIn this our strong tower\nFor safety we hide,\nAlmighty His power:\n'The Lord will provide.'"
+  ],
+  chorus: ""
+},
+{
+  id: 14,
+  number: 14,
+  title: "Begone Unbelief",
+  author: "",
+  verses: [
+    "Begone, unbelief,\nMy Saviour is near,\nAnd for my relief\nWill surely appear:\nBy prayer let me wrestle,\nAnd He will perform;\nWith Christ in the vessel,\nI smile at the storm.",
+    "Though dark be my way,\nSince He is my Guide,\n'Tis mine to obey,\n'Tis His to provide:\nThough cisterns be broken,\nAnd creatures all fail,\nThe word He hath spoken\nShall surely prevail.",
+    "His love, in time past,\nForbids me to think\nHe'll leave me at last\nIn trouble to sink:\nEach sweet Ebenezer\nI have in review\nConfirms His good pleasure\nTo help me quite through.",
+    "Why should I complain\nOf want or distress,\nTemptation or pain?\nHe told me no less;\nThe heirs of salvation,\nI know from His Word,\nThrough much tribulation\nMust follow their Lord.",
+    "How bitter that cup\nNo heart can conceive,\nWhich He drank quite up,\nThat sinners might live!\nHis way was much rougher\nAnd darker than mine;\nDid Christ, my Lord, suffer,\nAnd shall I repine?",
+    "Since all that I meet\nShall work for my good,\nThe bitter is sweet,\nThe medicine, food;\nThough painful at present,\n'Twill cease before long,\nAnd then oh, how pleasant\nThe conqueror's song!"
+  ],
+  chorus: ""
+},
+{
+  id: 15,
+  number: 15,
+  title: "Let Us Sing Of The Love Of The Lord",
+  author: "",
+  verses: [
+    "Let us sing of the love of the Lord,\nAs now unto Him we draw nigh;\nLet us sing to the praise of the God of all grace,\nFor the love that gave Jesus to die!",
+    "Oh, how great was the love that was shown\nTo us! we can never tell why;\nNot to angels, but men; let us praise Him again,\nFor the love that gave Jesus to die!",
+    "Now this love unto all God commends,\nNot one would His mercy pass by;\n'Whosoever shall call,' there is pardon for all\nIn the love that gave Jesus to die!",
+    "Who is he that can separate those\nWhom God doth in love justify?\nWhatsoever we need He includes in the deed\nIn the love that gave Jesus to die!"
+  ],
+  chorus: "Oh, the love that gave Jesus to die!\nThe love that gave Jesus to die!\nPraise God, it is mine, this love so divine,\nThe love that gave Jesus to die!"
+},
+{
+  id: 16,
+  number: 16,
+  title: "Redemption Oh Wonderful Story",
+  author: "",
+  verses: [
+    "Redemption! oh, wonderful story,\nGlad message for you and for me:\nThat Jesus has purchased our pardon,\nAnd paid all the debt on the tree.",
+    "From death unto life He hath brought us,\nAnd made us by grace sons of God;\nA fountain is opened for sinners:\nOh, wash and be cleansed in the blood!",
+    "No longer shall sin have dominion,\nThough present to tempt and annoy;\nFor Christ, in His blessed redemption,\nThe power of sin shall destroy.",
+    "Accept now God's offer of mercy;\nTo Jesus, oh hasten today;\nFor He will receive him that cometh,\nAnd never will turn him away."
+  ],
+  chorus: "Believe it, O sinner, believe it;\nReceive the glad message—'tis true;\nTrust now in the crucified Saviour:\nSalvation He offers to you."
+},
   {
     "id": 30,
     "number": 30,
