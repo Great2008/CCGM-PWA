@@ -329,6 +329,45 @@ const SACRED_SONGS = [
   ],
   chorus: ""
 },
+{
+  "id": 27,
+  "number": 27,
+  "title": "O Little Town Of Bethlehem",
+  "author": "Phillips Brooks",
+  "verses": [
+    "O little town of Bethlehem,\nHow still we see thee lie!\nAbove thy deep and dreamless sleep\nThe silent stars go by;\nYet in thy dark streets shineth\nThe everlasting Light;\nThe hopes and fears of all the years\nAre met in thee tonight!",
+    "For Christ is born of Mary;\nAnd gathered all above,\nWhile mortals sleep, the angels keep\nTheir watch of wondering love.\nO morning stars, together\nProclaim the holy birth,\nAnd praises sing to God the King,\nAnd peace to men on earth!",
+    "How silently, how silently,\nThe wondrous gift is given!\nSo God imparts to human hearts\nThe blessings of His heaven.\nNo ear may hear His coming;\nBut in this world of sin,\nWhere meek souls will receive Him, still\nThe dear Christ enters in.",
+    "O holy Child of Bethlehem,\nDescend to us, we pray;\nCast out our sin and enter in,\nBe born in us today!\nWe hear the holy angels\nThe great glad tidings tell;\nOh, come to us, abide with us,\nOur Lord Emmanuel!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 28,
+  "number": 28,
+  "title": "Never Shone A Light So Fair",
+  "author": "",
+  "verses": [
+    "Never shone a light so fair,\nNever fell so sweet a song,\nAs the chorus in the air\nChanted by the angel throng;\nEvery star took up the story:\n\"Christ has come, the Prince of glory.\nCome in humble hearts to dwell;\nGod with us, God with us,\nGod with us, Immanuel!\"",
+    "Still that Jubilee of song\nBreaks upon the rising morn;\nWhile the anthem rolls along,\nFloods of light the earth adorn;\nOld and young take up the story:",
+    "Welcome now the blessed day,\nWhen we praise the Lord our King;\nWhen we meet to praise and pray,\nAnd His love with gladness sing;\nLet the world take up the story:"
+  ],
+  "chorus": ""
+},
+{
+  "id": 29,
+  "number": 29,
+  "title": "Angels, From The Realms Of Glory",
+  "author": "James Montgomery",
+  "verses": [
+    "Angels, from the realms of glory,\nWing your flight o'er all the earth;\nYe who sang creation's story,\nNow proclaim Messiah's birth:\nCome and worship!\nWorship Christ, the new-born King!",
+    "Shepherds in the field abiding,\nWatching o'er their flocks by night;\nGod with man is now residing,\nYonder shines the Infant-light:\nCome and worship!\nWorship Christ, the new-born King!",
+    "Sages, leave your contemplations;\nBrighter visions beam afar!\nSeek the great Desire of nations,\nYe have seen His natal star:\nCome and worship!\nWorship Christ, the new-born King!",
+    "Saints before the altar bending,\nWatching long in hope and fear,\nSuddenly the Lord, descending,\nIn His temple shall appear:\nCome and worship!\nWorship Christ, the new-born King!"
+  ],
+  "chorus": ""
+},
+
   {
     "id": 30,
     "number": 30,
@@ -342,6 +381,18 @@ const SACRED_SONGS = [
     "chorus": "Hark! the herald angels sing,\n'Glory to the newborn King!'"
   },
   {
+  "id": 31,
+  "number": 31,
+  "title": "Oh Come, All Ye Faithful",
+  "author": "John Francis Wade",
+  "verses": [
+    "Oh come, all ye faithful,\nJoyfully triumphant,\nTo Bethlehem hasten now with glad accord;\nLo! in a manger\nLies the King of angels;\nOh come, let us adore Him,\nOh come, let us adore Him,\nChrist the Lord!",
+    "Raise, raise, choirs of angels,\nSongs of loudest triumph;\nThrough heaven's high arches be your praises poured;\nNow to our God be\nGlory in the highest;\nOh come, let us adore Him,\nOh come, let us adore Him,\nChrist the Lord!",
+    "Amen! Lord, we bless Thee,\nBorn for our salvation;\nO Jesus! for ever be Thy name adored;\nWord of the Father,\nLate in flesh appearing;\nOh come, let us adore Him,\nOh come, let us adore Him,\nChrist the Lord!"
+  ],
+  "chorus": ""
+},
+  {
     "id": 32,
     "number": 32,
     "title": "Once In Royal David's City",
@@ -354,6 +405,117 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
+  {
+  "id": 33,
+  "number": 33,
+  "title": "While Shepherds Watched Their Flocks",
+  "author": "Nahum Tate",
+  "verses": [
+    "While shepherds watched their flocks by night,\nAll seated on the ground;\nThe angel of the Lord came down,\nAnd glory shone around.",
+    "\"Fear not!\" said he, \"for mighty dread\nHad seized their troubled mind;\"\n\"Glad tidings of great joy I bring\nTo you and all mankind.\"",
+    "\"To you, in David's town, this day,\nIs born of David's line\nThe Saviour, who is Christ the Lord;\nAnd this shall be the sign:\"",
+    "\"The heavenly Babe you there shall find\nTo human view displayed,\nAll meanly wrapped in swathing bands,\nAnd in a manger laid.\"",
+    "Thus spake the seraph—and forthwith\nAppeared a shining throng\nOf angels, praising God, who thus\nAddressed their joyful song:",
+    "\"All glory be to God on high!\nAnd to the earth be peace!\nGoodwill henceforth from heaven to men\nBegin, and never cease!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 34,
+  "number": 34,
+  "title": "To Us A Child Of Hope Is Born",
+  "author": "",
+  "verses": [
+    "To us a Child of hope is born,\nTo us a Son is given;\nHim shall the tribes of earth obey,\nHim all the hosts of heaven.",
+    "His name shall be the Prince of Peace,\nFor evermore adored,\nThe Wonderful, the Counsellor,\nThe great and mighty Lord!",
+    "His power, increasing, still shall spread;\nHis reign no end shall know:\nJustice shall guard His throne above,\nAnd peace abound below."
+  ],
+  "chorus": ""
+},
+{
+  "id": 35,
+  "number": 35,
+  "title": "Thou Didst Leave Thy Throne And Thy Kingly Crown",
+  "author": "Emily Elizabeth Steele Elliott",
+  "verses": [
+    "Thou didst leave Thy throne and Thy kingly crown,\nWhen Thou camest to earth for me;\nBut in Bethlehem's home was there found no room\nFor Thy holy nativity:",
+    "Heaven's arches rang when the angels sang,\nProclaiming Thy royal degree;\nBut of lowly birth cam'st Thou, Lord, on earth,\nAnd in great humility:",
+    "The foxes found rest, and the birds had their nest\nIn the shade of the forest tree;\nBut Thy couch was the sod, O Thou Son of God,\nIn the deserts of Galilee:",
+    "Thou camest, O Lord, with the living Word\nThat should set Thy people free;\nBut with mocking scorn, and with crown of thorn,\nThey bore Thee to Calvary:",
+    "When heaven's arches shall ring, and her choirs shall sing\nAt Thy coming to victory;\nLet Thy voice call me home, saying, \"Yet there is room,\nThere is room at My side for thee!\"\nAnd my heart shall rejoice, Lord Jesus!\nWhen Thou comest and callest for me."
+  ],
+  "chorus": "Oh, come to my heart, Lord Jesus!\nThere is room in my heart for Thee;\nOh, come to my heart, Lord Jesus, come!\nThere is room in my heart for Thee."
+},
+{
+  "id": 36,
+  "number": 36,
+  "title": "I Will Sing The Love Of Jesus",
+  "author": "",
+  "verses": [
+    "I will sing the love of Jesus—\nGreater love was never known;\nYielding up His life for sinners,\nOh, what love to me was shown!",
+    "I will sing the words of Jesus—\nWords of life from lips Divine;\nFull of comfort, joy, and courage,\nPrecious to this soul of mine.",
+    "I will sing the grace of Jesus—\nGrace my heart may now receive;\nHe by faith will seal my pardon,\nIf His promise I believe.",
+    "I will sing the name of Jesus—\nName of all most dear to me;\nBy the ransomed host in glory\nShall His name exalted be."
+  ],
+  "chorus": "I will praise my great Redeemer,\nAs my days are on the wing;\nI will sing of Him who saves me,\nI will magnify the Lord my King."
+},
+{
+  "id": 37,
+  "number": 37,
+  "title": "Sitting By The Wayside, Sinful, Weak And Blind",
+  "author": "",
+  "verses": [
+    "Sitting by the wayside, sinful, weak, and blind,\nWaiting in my darkness for the day,\nO Thou Saviour, Jesus, merciful and kind,\nHear me now, and take my sins away!",
+    "Long in darkness waiting, weary, sad, and lone,\nHow I long Thy glorious face to see!\nO Thou blessed Jesus, make me all Thine own;\nSpeak the word, and Thou canst set me free!",
+    "Weary with my blindness, waiting all the day,\nWeary with my sorrow and my pain;\nO Thou Son of David, pass me not, I pray:\nLeave me not in hopeless night again!",
+    "Sitting by the wayside, sinful, weak, and blind,\nIs there any hope for one like me?\nSomething seems to whisper in my darkened mind,\nChrist has power to set the sinner free."
+  ],
+  "chorus": "No one knows my sorrow, no one cares for me—\nWaiting in the darkness for the day;\nHear a sinner pleading, pleading, Lord, with Thee—\nJesus, come and take my sins away!"
+},
+{
+  "id": 38,
+  "number": 38,
+  "title": "I Am So Glad That Our Father In Heaven",
+  "author": "Philip Paul Bliss",
+  "verses": [
+    "I am so glad that our Father in heaven\nTells of His love in the Book He has given;\nWonderful things in the Bible I see;\nThis is the dearest, that Jesus loves me.",
+    "Though I forget Him, and wander away,\nStill He doth love me wherever I stray;\nBack to His dear loving arms do I flee,\nWhen I remember that Jesus loves me.",
+    "Oh, if there's only one song I can sing,\nWhen in His beauty I see the great King,\nThis shall my song in eternity be,\nOh, what a wonder that Jesus loves me!",
+    "Jesus loves me, and I know I love Him:\nLove brought Him down my poor soul to redeem;\nYes, it was love made Him die on the tree:\nOh, I am certain that Jesus loves me!",
+    "If one should ask of me, how can I tell?\nGlory to Jesus, I know very well!\nGod's Holy Spirit with mine doth agree,\nConstantly witnessing—Jesus loves me.",
+    "In this assurance I find sweetest rest,\nTrusting in Jesus, I know I am blest;\nSatan, dismayed, from my soul now doth flee,\nWhen I just tell him that Jesus loves me."
+  ],
+  "chorus": "I am so glad that Jesus loves me,\nJesus loves me, Jesus loves me,\nI am so glad that Jesus loves me,\nJesus loves even me."
+},
+{
+  "id": 39,
+  "number": 39,
+  "title": "Tell The Glad Story Of Jesus, Who Came",
+  "author": "",
+  "verses": [
+    "Tell the glad story of Jesus, who came,\nFull of compassion, the lost to reclaim;\nTell of redemption through faith in His name:\nTell the glad story again!",
+    "Tell the glad story where, sad and oppressed,\nMany in bondage are sighing for rest;\nTell them in Jesus they all may be blest:\nTell the glad story again!",
+    "Tell the glad story with patience and love,\nUrging the lost ones His mercy to prove;\nTell them of mansions preparing above:\nTell the glad story again!",
+    "Tell the glad story when Jordan's dark wave\nCalleth our loved ones its billows to brave;\nTell them that Jesus is mighty to save:\nTell the glad story again!"
+  ],
+  "chorus": "Tell it again! Tell it again!\nTell the glad story to suffering man;\nTell it, oh tell it, again!"
+},
+{
+  "id": 40,
+  "number": 40,
+  "title": "Jesus, My Saviour, To Bethlehem Came",
+  "author": "",
+  "verses": [
+    "Jesus, my Saviour, to Bethlehem came,\nBorn in a manger to sorrow and shame;\nOh, it was wonderful—blest be His name!\nSeeking for me, for me!",
+    "Jesus, my Saviour, on Calvary's tree,\nPaid the great debt, and my soul He set free;\nOh, it was wonderful—how could it be?\nDying for me, for me!",
+    "Jesus, my Saviour, the same as of old,\nWhile I was wand'ring afar from the fold,\nGently and long did He plead with my soul,\nCalling for me, for me!",
+    "Jesus, my Saviour, shall come from on high—\nSweet is the promise as weary years fly;\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
+  ],
+  "chorus": "Seeking for me! for me!\nSeeking for me! for me!\nOh, it was wonderful—blest be His name!\nSeeking for me, for me!",
+  "chorus": "Dying for me, for me !\nDying for me ! for me ! . . \nDying for me ! for me ! . .\nOh, it was wonderful-- how could it be ?\nDying for me, for me !",
+  "chorus": "Calling for me, for me !\nCalling for me ! for me ! . .\nCalling for me ! for me ! . .\nGently and long did He plead with my soul,\nCalling for me, for me !",
+  "chorus": "Coming for me ! for me ! . .  \nComing for me ! for me ! . .\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
+}
   {
     "id": 1134,
     "number": 1134,
