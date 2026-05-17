@@ -210,6 +210,125 @@ const SACRED_SONGS = [
   ],
   chorus: "Believe it, O sinner, believe it;\nReceive the glad message—'tis true;\nTrust now in the crucified Saviour:\nSalvation He offers to you."
 },
+{
+  id: 17,
+  number: 17,
+  title: "God Loved The World Of Sinners Lost",
+  author: "",
+  verses: [
+    "God loved the world of sinners lost\nAnd ruined by the Fall;\nSalvation full, at highest cost\nHe offers free to all.",
+    "E'en now by faith I claim Him mine,\nThe risen Son of God;\nRedemption by His death I find,\nAnd cleansing through the Blood.",
+    "Love brings the glorious fullness in,\nAnd to His saints makes known\nThe blessed rest from inbred sin,\nThrough faith in Christ alone.",
+    "Believing souls, rejoicing go;\nThere shall to you be given\nA glorious foretaste, here below,\nOf endless life in heaven.",
+    "Of victory now o'er Satan's power\nLet all the ransomed sing,\nAnd triumph in the dying hour,\nThrough Christ the Lord, our King."
+  ],
+  chorus: "Oh, 'twas love, 'twas wondrous love,\nThe love of God to me!\nIt brought my Saviour from above,\nTo die on Calvary."
+},
+{
+  id: 18,
+  number: 18,
+  title: "In Grace The Holy God",
+  author: "",
+  verses: [
+    "In grace the holy God\nDid full salvation plan,\nElecting in His sovereign grace\nTo save rebellious man.",
+    "This grace of God appears\nIn Jesus Christ His Son,\nHe, lifted on the cross of shame,\nThe grace of God makes known.",
+    "To all who do believe\nIn God, through Christ revealed,\nBy grace they full salvation have,\nAnd 'sons of God' are sealed."
+  ],
+  chorus: "By grace are ye saved through faith,\nThrough faith, through faith;\nThrough faith, and that not of yourselves,\nThrough faith, and that not of yourselves,\nNot of works, not of works,\nNot of works, lest any man should boast:\nIt is the gift of God.\nNot of works, lest any man should boast:\nIt is the gift of God.\nIt is the gift of God; it is the gift of God;\nIt is the gift of God—the gift of God."
+},
+{
+  id: 19,
+  number: 19,
+  title: "In Some Way Or Other",
+  author: "",
+  verses: [
+    "In some way or other\nThe Lord will provide:\nIt may not be my way,\nIt may not be thy way;\nAnd yet, in His own way,\n'The Lord will provide.'",
+    "At some time or other\nThe Lord will provide:\nIt may not be my time,\nIt may not be thy time;\nAnd yet, in His own time,\n'The Lord will provide.'",
+    "Despond then no longer;\nThe Lord will provide;\nAnd this be the token—\nNo word He hath spoken\nWas ever yet broken:\n'The Lord will provide.'",
+    "March on then right boldly;\nThe sea shall divide;\nThe pathway made glorious,\nWith shoutings victorious,\nWe'll join in the chorus,\n'The Lord will provide.'"
+  ],
+  chorus: "Then we'll trust in the Lord,\nAnd He will provide;\nYes, we'll trust in the Lord,\nAnd He will provide."
+},
+{
+  id: 20,
+  number: 20,
+  title: "Come Sing My Soul And Praise The Lord",
+  author: "",
+  verses: [
+    "Come sing, my soul, and praise the Lord,\nWho hath redeemed thee by His blood;\nDelivered thee from chains that bound,\nAnd brought thee to redemption ground.",
+    "Once from my God I wandered far,\nAnd with His holy will made war;\nBut now my songs to God abound;\nI'm standing on redemption ground.",
+    "Oh, joyous hour when God to me\nA vision gave of Calvary;\nMy bonds were loosed, my soul unbound:\nI sang upon redemption ground.",
+    "No works of merit now I plead,\nBut Jesus take for all my need;\nNo righteousness in me is found,\nExcept upon redemption ground.",
+    "Come, weary soul, and here find rest;\nAccept redemption, and be blest:\nThe Christ who died, by God is crowned\nTo pardon on redemption ground."
+  ],
+  chorus: "Redemption ground, the ground of peace,\nRedemption ground, oh wondrous grace!\nHere let our praise to God abound,\nWho saves us on redemption ground!"
+},
+{
+  id: 21,
+  number: 21,
+  title: "Behold What Love What Boundless Love",
+  author: "",
+  verses: [
+    "Behold, what love, what boundless love,\nThe Father hath bestowed\nOn sinners lost, that we should be\nNow called 'the sons of God!'",
+    "No longer far from Him, but now\nBy 'precious blood' made nigh,\nAccepted in the 'Well-beloved,'\nNear to God's heart we lie.",
+    "What we in glory soon shall be,\nIt doth not yet appear;\nBut when our precious Lord we see,\nWe shall His image bear.",
+    "With such a blessed hope in view,\nWe would more holy be,\nMore like our risen, glorious Lord,\nWhose face we soon shall see."
+  ],
+  chorus: "\"Behold, what manner of love,\nWhat manner of love the Father hath bestowed upon us,\nThat we, that we should be called,\nShould be called the sons of God!\""
+},
+{
+  id: 22,
+  number: 22,
+  title: "Holy Holy Holy Lord God Almighty",
+  author: "Reginald Heber",
+  verses: [
+    "Holy, Holy, Holy! Lord God Almighty!\nEarly in the morning our song shall rise to Thee;\nHoly, Holy, Holy! Merciful and Mighty!\nGod in Three Persons, blessed Trinity!",
+    "Holy, Holy, Holy! all the saints adore Thee,\nCasting down their golden crowns around the glassy sea;\nCherubim and Seraphim falling down before Thee,\nWhich wert, and art, and evermore shall be.",
+    "Holy, Holy, Holy! though the darkness hide Thee,\nThough the eye of sinful man Thy glory may not see;\nOnly Thou art holy, there is none beside Thee,\nPerfect in power, in love, and purity.",
+    "Holy, Holy, Holy! Lord God Almighty!\nAll Thy works shall praise Thy name in earth, and sky, and sea;\nHoly, Holy, Holy! Merciful and Mighty!\nGod in Three Persons, blessed Trinity!"
+  ],
+  chorus: ""
+},
+{
+  id: 23,
+  number: 23,
+  title: "To God Be The Glory Great Things He Hath Done",
+  author: "Fanny J. Crosby",
+  verses: [
+    "To God be the glory! great things He hath done:\nSo loved He the world that He gave us His Son;\nWho yielded His life an atonement for sin,\nAnd opened the Life-gate that all may go in.",
+    "O perfect redemption, the purchase of blood,\nTo every believer the promise of God;\nThe vilest offender who truly believes,\nThat moment from Jesus a pardon receives.",
+    "Great things He hath taught us, great things He hath done,\nAnd great our rejoicing through Jesus the Son;\nBut purer, and higher, and greater will be\nOur wonder, our transport, when Jesus we see."
+  ],
+  chorus: "Praise the Lord! praise the Lord!\nLet the earth hear His voice!\nPraise the Lord! praise the Lord!\nLet the people rejoice!\nOh, come to the Father, through Jesus the Son;\nAnd give Him the glory—great things He hath done!"
+},
+{
+  id: 24,
+  number: 24,
+  title: "Hark What Mean Those Holy Voices",
+  author: "",
+  verses: [
+    "Hark! what mean those holy voices\nSweetly sounding in the skies?\nLo! th' angelic host rejoices,\nLoudest hallelujahs rise.",
+    "Listen to the wondrous story\nWhich they chant in hymns of joy:\n'Glory in the highest, glory!\nGlory be to God most high.'",
+    "'Peace on earth, goodwill from heaven\nReaching far as man is found;\nSouls redeemed and sins forgiven,\nLoud our golden harps shall sound.'",
+    "'Christ is born! the great Anointed!\nHeaven and earth His glory sing;\nOh receive whom God appointed\nFor your Prophet, Priest, and King!'",
+    "'Hasten, mortals, to adore Him,\nLearn His name and taste His joy,\nTill in heaven ye sing before Him,\nGlory be to God most high!'",
+    "Let us learn the wondrous story\nOf our great Redeemer's birth;\nSpread the brightness of His glory,\nTill it cover all the earth."
+  ],
+  chorus: ""
+},
+{
+  id: 25,
+  number: 25,
+  title: "Hark The Glad Sound The Saviour Comes",
+  author: "",
+  verses: [
+    "Hark, the glad sound! the Saviour comes,\nThe Saviour promised long;\nLet every heart exult with joy,\nAnd every voice be song!",
+    "He comes! the prisoners to release,\nIn Satan's bondage held;\nThe gates of brass before Him burst,\nThe iron fetters yield.",
+    "He comes! the broken hearts to bind,\nThe bleeding souls to cure;\nAnd with the treasures of His grace\nTo enrich the humble poor.",
+    "Our glad hosannas, Prince of Peace!\nThy welcome shall proclaim;\nAnd heaven's exalted arches ring\nWith Thy most honoured name."
+  ],
+  chorus: ""
+},
   {
     "id": 30,
     "number": 30,
