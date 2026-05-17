@@ -1,7 +1,4 @@
-// sacredSongsData.js — Sacred Songs & Solos (Ira D. Sankey)
-// 60 most commonly sung hymns — public domain (pre-1927)
-// Bundled for offline use in CCG World
-
+// sacredSongsData.js — Sacred Songs & Solos
 const SACRED_SONGS = [
   {
     "id": 1,
@@ -54,6 +51,86 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
+{
+  "id": 5,
+  "number": 5,
+  "title": "Thou Whose Almighty Word",
+  "author": "",
+  "verses": [
+     "Thou whose almighty word\nChaos and darkness heard,\nAnd took their flight,\nHear us, we humbly pray ;\nAnd, where the Gospel day\nSheds not its glorious ray,\nLet there be light ! ",
+      "Thou, who didst come to bring.\nOn Thy redeeming wing,\nHealing and sight\nHealth to the sick in mind,\nSight to the inly blind\nOh, now to all mankind\nLet there be light !",
+      "Spirit of truth and love,\nLife-giving, holy Dove,\nSpeed forth Thy flight !\nMove on the waters face\nBy Thine almighty grace,\nAnd in earth's darkest place\nLet there be light ! ",
+      "Blessed and holy Three,\nGlorious Trinity,\nWisdom, love,might ;\nBoundless as ocean's tide\nRolling in fullest pride,\nO'er the world far and wide,\nLet there be light !"
+  ],
+  "chorus": ""
+},
+{
+    "id": 6,
+    "number": 6,
+    "title": "Come, Thou almighty King",
+    "author": "Robert Grant",
+    "verses": [
+     "Come, Thou almighty King,\nHelp us Thy name to sing,\nHelp us to praise :\nFather all-glorious,\nO'er all victorious,\nCome, and reign over us,\nAncient of Days !",
+      "Come, Thou incarnate Word,\nGird on Thy mighty sword ;\nOur prayer attend :\nCome, and Thy people bless,\nAnd giveThy Word success :\nSpirit of holiness,\nOn us descend !",
+ 
+      "Come, Holy Comforter,\nThy sacred witness bear,\nIn this glad hour :\nThou, who almighty art,\nNow rule in every heart,\nAnd ne'er from us depart,\nSpirit of power !",
+      "To the great One in Three\nThe highest praises be,\nHence evermore !\nHis sovereign majesty\nMay we in glory see,\nAnd to eternity\nLove and adore."
+    ],
+    "chorus": ""
+  },
+  {
+  id: 7,
+  number: 7,
+  title: "Glory To God On High",
+  author: "",
+  verses: [
+    "Glory to God on high!\nLet heaven and earth reply,\n'Praise ye His name!'\nHis love and grace adore,\nWho all our sorrows bore;\nSing loud for evermore,\n'Worthy the Lamb!'",
+    "While they around the throne\nCheerfully join in one,\nPraising His name,\nYe who have felt His blood\nSealing your peace with God,\nSound His dear name abroad!\n'Worthy the Lamb!'",
+    "Join, all ye ransomed race,\nOur Lord and God to bless;\nPraise ye His name!\nIn Him we will rejoice,\nAnd make a joyful noise,\nShouting with heart and voice,\n'Worthy the Lamb!'",
+    "What though we change our place,\nYet we shall never cease\nPraising His name;\nCreation, Providence, Redemption,\nTo Him our songs we bring,\nHail Him our gracious King,\nAnd without ceasing sing,\n'Worthy the Lamb!'"
+  ],
+  chorus: ""
+},
+{
+  id: 8,
+  number: 8,
+  title: "Grace! 'Tis A Charming Sound",
+  author: "",
+  verses: [
+    "Grace! 'tis a charming sound,\nHarmonious to the ear;\nHeaven with the echo shall resound,\nAnd all the earth shall hear.",
+    "'Twas grace that wrote my name\nIn life's eternal book;\n'Twas grace that gave me to the Lamb,\nWho all my sorrows took.",
+    "Grace taught my wandering feet\nTo tread the heavenly road;\nAnd new supplies each hour I meet,\nWhile pressing on to God.",
+    "Grace taught my soul to pray,\nAnd made mine eyes o'erflow;\n'Twas grace which kept me to this day,\nAnd will not let me go.",
+    "Oh, let Thy grace inspire\nMy soul with strength divine!\nMay all my powers to Thee aspire,\nAnd all my days be Thine."
+  ],
+  chorus: "Saved by grace alone;\nThis is all my plea—\nJesus died for all mankind,\nAnd Jesus died for me."
+},
+{
+  id: 9,
+  number: 9,
+  title: "All People That On Earth Do Dwell",
+  author: "",
+  verses: [
+    "All people that on earth do dwell,\nSing to the Lord with cheerful voice:\nHim serve with mirth, His praise forth tell,\nCome ye before Him and rejoice.",
+    "Know that the Lord is God indeed,\nWithout our aid He did us make:\nWe are His flock, He doth us feed,\nAnd for His sheep He doth us take.",
+    "Oh, enter then His gates with praise,\nApproach with joy His courts unto:\nPraise, laud, and bless His name always,\nFor it is seemly so to do.",
+    "For why? the Lord our God is good,\nHis mercy is for ever sure;\nHis truth at all times firmly stood,\nAnd shall from age to age endure."
+  ],
+  chorus: ""
+},
+{
+  id: 10,
+  number: 10,
+  title: "Day By Day The Manna Fell",
+  author: "",
+  verses: [
+    "Day by day the manna fell;\nOh to learn this lesson well!\nStill by constant mercy fed,\nGive us, Lord, our daily bread.",
+    "'Day by day,' the promise reads,\nDaily strength for daily needs;\nCast foreboding fear away,\nTake the manna of today.",
+    "Thou our daily task shalt give;\nDay by day to Thee we live:\nSo shall added years fulfil\nNot our own, our Father's will."
+  ],
+  chorus: ""
+},
+,
   {
     "id": 11,
     "number": 11,
