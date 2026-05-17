@@ -511,10 +511,12 @@ const SACRED_SONGS = [
     "Jesus, my Saviour, the same as of old,\nWhile I was wand'ring afar from the fold,\nGently and long did He plead with my soul,\nCalling for me, for me!",
     "Jesus, my Saviour, shall come from on high—\nSweet is the promise as weary years fly;\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
   ],
-  "chorus": "Seeking for me! for me!\nSeeking for me! for me!\nOh, it was wonderful—blest be His name!\nSeeking for me, for me!",
-  "chorus": "Dying for me, for me !\nDying for me ! for me ! . . \nDying for me ! for me ! . .\nOh, it was wonderful-- how could it be ?\nDying for me, for me !",
-  "chorus": "Calling for me, for me !\nCalling for me ! for me ! . .\nCalling for me ! for me ! . .\nGently and long did He plead with my soul,\nCalling for me, for me !",
-  "chorus": "Coming for me ! for me ! . .  \nComing for me ! for me ! . .\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
+  "chorus": [
+    "Seeking for me! for me!\nSeeking for me! for me!\nOh, it was wonderful—blest be His name!\nSeeking for me, for me!",
+  "Dying for me, for me !\nDying for me ! for me ! . . \nDying for me ! for me ! . .\nOh, it was wonderful-- how could it be ?\nDying for me, for me !",
+  "Calling for me, for me !\nCalling for me ! for me ! . .\nCalling for me ! for me ! . .\nGently and long did He plead with my soul,\nCalling for me, for me !",
+  "Coming for me ! for me ! . .  \nComing for me ! for me ! . .\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
+  ],
 }
   {
     "id": 1134,
