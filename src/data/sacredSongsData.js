@@ -517,7 +517,7 @@ const SACRED_SONGS = [
   "Calling for me, for me !\nCalling for me ! for me ! . .\nCalling for me ! for me ! . .\nGently and long did He plead with my soul,\nCalling for me, for me !",
   "Coming for me ! for me ! . .  \nComing for me ! for me ! . .\nOh, I shall see Him descend from the sky,\nComing for me, for me!"
   ],
-}
+},
   {
     "id": 1134,
     "number": 1134,
