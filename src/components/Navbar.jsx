@@ -35,18 +35,18 @@ function setGoogleTranslateCookie(lang) {
 }
 
 const NAV_LINKS = [
-  { to:'/',         label:'Home' },
-  { to:'/sermons',  label:'Sermons' },
-  { to:'/events',   label:'Events' },
+  { to:'/',         label:'🏠Home' },
+  { to:'/sermons',  label:'📒Sermons' },
+  { to:'/events',   label:'🌆Events' },
   { to:'/studio',   label:'🎬 Studio' },
-  { to:'/about',    label:'About' },
-  { to:'/blog',     label:'Blog' },
-  { to:'/gallery',  label:'Gallery' },
+  { to:'/about',    label:'ℹ️About' },
+  { to:'/blog',     label:'🧑‍💻Blog' },
+  { to:'/gallery',  label:'🖼️Gallery' },
   { to:'/sabbath-school', label:'📖 Sabbath' },
   { to:'/find-church', label:'⛪ Find Church' },
   { to:'/timeline', label:'🌐 Timeline' },
   { to:'/prayer-wall', label:'🙏 Prayer Wall' },
-  { to:'/contact',  label:'Contact' },
+  { to:'/contact',  label:'☎️Contact' },
 ]
 
 const OFFLINE_LINKS = [
