@@ -595,6 +595,131 @@ const SACRED_SONGS = [
     ],
     "chorus": "	I love to tell the Story !\n'Twill be my theme in glory,\nTo tell the Old, Old Story,\nOf jesus and His love."
   },
+  {
+    "id": 47,
+    "number": 47,
+    "title": " Neither do I condemn thee ",
+    "author": " ",
+    "verses": [
+"'Neither do I condemn thee !'\nOh, words of wondrous grace !\nThy sins were borne upon the cross :\nBelieve, and go in peace.",
+ "'Neither do I condemn thee !'\nFor there is therefore now\nNo condemnation for thee,\nAs at the cross you bow.",
+ "'Neither do I condemn thee !'\nI came not to condemn ;\nI came from God to save thee,\nAnd turn thee from thy sin.",
+ "'Neither do I condemn thee !'\nOh, praise the God of grace !\nOh, praise His Son, our Saviour\nFor this His word of peace!"
+    ],
+    "chorus": 	"'Neither do I condemn thee!'\nOh, sing it o'er and o'er :\n'Neither do I condemn thee'\nGo, and sin no more."
+  },
+  {
+    "id": 48,
+    "number": 48,
+    "title": " Jesus knows thy sorrow",
+    "author": " ",
+    "verses": [
+"Jesus knows thy sorrow,\nKnows thine every care ;\nKnows thy deep contrition,\nHears thy feeblest prayer ;\nDo not fear to trust Him--\nTell Him all thy grief;\nCast on Him thy burden,\nHe will bring relief.",
+"Trust the heart of Jesus,\nThou art precious there ;\nSurely He would shield thee\nFrom the tempter's snare ;\nSafely He would lead thee,\nBy His own sweet way,\nOut into the glory\nOf a brighter day.",
+ "Jesus knows thy conflict,\nHears thy burdened sigh; \nWhen thy heart is wounded,\nHears thy plaintive cry :\nHe thy soul will strengthen,\nOvercome thy fears;\nHe will send thee comfort,\nWipe away thy tears."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 49,
+    "number": 49,
+    "title": " What a blessed hope is mine",
+    "author": " ",
+    "verses": [
+"What a blessed hope is mine,\nThrough the love of Jesus !\nI'm an heir of life divine,\nThrough the love of Jesus !",
+ "I can sing without a fear,\nPraise the name of Jesus !\nHe, my present help,is near,\nPraise the name of Jesus !",
+ "Pressing on my pilgrim way,\nTrusting only Jesus !\nOh, 'tis joy from day to day,\nTrusting only Jesus !",
+"Thus my journey I'll pursue,\nLooking unto Jesus !\nTill the land of rest I view,\nThere to dwell with Jesus !"
+    ],
+    "chorus": 	"He will my soul defend ;\nHe, my unchanging Friend\nHe will keep me to the end :\nAll glory be to Jesus"
+  },
+  {
+    "id": 50,
+    "number": 50,
+    "title": " I met a Stranger fair to see",
+    "author": " ",
+    "verses": [
+"I met a Stranger fair to see,\nAs walked I down life's rugged way ;\nHe spoke so sweet,so tenderly,\nHe won me to Himself that day.",
+ "And when that Stranger spoke to me,\nMy heart threw off its guilty load ;\nI felt at once that I was free ;\nI left my burdens by the road.",
+ "I love that Stranger since the hour\nHe talked to me in tender tone ;\nA joy is mine, I feel its power--\nAnd Him as Lord I'm glad to own."
+    ],
+    "chorus": 	"It was the Man ...of Galilee . . .\nWho whispered words ...of joy to me : . . .\nThy many sins ...be all forgiven thee,\nThy sins be all . . . forgiven thee."
+  },
+  {
+    "id": 51,
+    "number": 51,
+    "title": " Only Jesus feels and knows",
+    "author": " ",
+    "verses": [
+"Only Jesus feels and knows\nAll the weight of human woes;\nFull and free His mercy flows,--\nBlessed,blessed Jesus !",
+ "Only Jesus looks within,\nSees our hearts and all our sin;\nOnly He can make us clean ;\nBlessed,blessed Jesus !",
+ "Only Jesus answers prayer,\nLighter makes the cross we bear,\nBids us cast on Him our care ;\nBlessed, blessed Jesus !",
+ 'Safe in Him our souls abide,\nSafe His hand our steps will guide,\nTill we sing beyond the tide,\n"Blessed, blessed Jesus ! "'
+    ],
+    "chorus": "Oh, that Name we love to hear,\nName above all others dear !\nHow it calms our every fear !\nBlessed, blessed Jesus !"
+  },
+  {
+    "id": 52,
+    "number": 52,
+    "title": " Come near me, O my Saviour",
+    "author": " ",
+    "verses": [
+"Come near me, O my Saviour !\nThy tenderness reveal ;\nOh, let me know the sympathy\nWhich Thou for me dost feel !\nneed Thee every moment ;\nThine absence brings dismay ;\nBut when the tempter hurls his darts,'Twere death with Thee away !",
+ "Come near me, my Redeemer,\nAnd never leave my side !\nMy bark, when tossed on trouble's sea\nThe storm cannot outride,\nUnless Thy word of power quell ;\nArrest the surging wave,\nNo voice but Thine its rage can\nNo arm but Thine can save !",
+ "Come near me, blessed Jesus !\nI need Thee in my joy.\nNo less than when the direst ills\nMy happiness destroy;\nFor when the sun shines o'er me,\nAnd flowers strew my way,\nWithout Thy wise and guiding hand,\nMore easily I stray.",
+ "Be near me, mighty Saviour,\nWhen comes the latest strife!\nFor Thou hast through death's\nshadows passed,\nAnd ope'd the gates of life;\nAnd when among the ransomed\nI stand with crown and palm,\nTo Thee, Divine,unfailing Friend,\nI'll raise th' eternal psalm !"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 53,
+    "number": 53,
+    "title": "Oh where is He that trod the sea ",
+    "author": " ",
+    "verses": [
+"Oh where is He that trod the sea ?\nOh where is He that spake,\nAnd demons from their victims flee,\nThe dead their slumber break ?\nThe palsied rise in freedom strong,\nThe dumb men talk and sing,\nAnd from blind eyes, benighted long,\nBright beams of morning spring.",
+ "Oh where is He that trod the sea ?\nTis only He can save ;\nTo thousands hungering wearily made,\nA wondrous meal He gave :\nThe Word, who all the worlds had\nTo His own creatures spake;\nTwas spring-tide when He blest the bread,\nAnd harvest when He brake.",
+ "Oh where is He that trod the sea ?\nMy soul, the Lord is here !\nLet all thy fears be hushed in thee,\nBe thine to know Him near :\n.Thy utmost needs He'll satisfy:\nArt thou diseased or dumb,\nOr dost thou in thy hunger cry ?\n'I come,' saith Christ, 'I come !'"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 54,
+    "number": 54,
+    "title": " Come, sing the sweet song of the ages",
+    "author": " ",
+    "verses": [
+"Come, sing the sweet song of the ages \nThe song of Immanuel sing !\nThere comes through the portals eternal\nAn anthem of praise to the King !",
+ "Foretold by the word of the prophets ;\nDecreed by the wisdom of God ;\nWe hail the fulfilment of mercy, \nWe praise our Redeemer and Lord.",
+ "The centuries sing of His coming ;\nThe nations His wonders proclaim ;\nAnd ever increasing in glory,\nWe sing of His wonderful name.",
+ "The song that is sweetest and noblest\nWe sing to the Lord we adore ; \nAnd crown Him who comes to redeem us — \nImmanuel, King evermore ! "
+    ],
+    "chorus": "Then loud let our carols of gladness \nRe-echo the song of the skies ; \nOnce more to the tidings of glory\nThe earth in its fulness replies."
+  },
+  {
+    "id": 55,
+    "number": 55,
+    "title": " She only touched the hem of His ",
+    "author": " ",
+    "verses": [
+"She only touched the hem of His garment\nAs to His side she stole,\n Amid the crowd that gathered around Him; \nAnd straightway she was whole. ",
+ "She came in fear and trembling before Him,\nShe knew her Lord had come ;\nShe felt that from Him virtue had healed her ;\nThe mighty deed was done.",
+ "He turned with 'Daughter, be of good comfort,\nThy faith hath made thee whole !'\nAnd peace that passeth all under-standing\nWith gladness filled her soul."
+    ],
+    "chorus": "Oh, touch the hem of His garment ! \nAnd thou, too, shalt be free ; \nHis saving power this very hour \nShall give new life to thee ! "
+  },
+  {
+    "id": 56,
+    "number": 56,
+    "title": "Like some sweet bird that upward flies ",
+    "author": " ",
+    "verses": [
+"Like some sweet bird that upward flies,\nMy soul to heavenly heights would rise\nAnd while I mount to worlds above,\nWould sing of Christ's redeeming love.", 
+ "Like some sweet flower of spring that wakes,\nWhen sun and shower its slumber breaks,\nMy soul would rise from doubt and gloom,\nAnd in His love eternal bloom.",
+ "Redeeming love ! oh, can it be\n That Jesus shed His blood for me ?\nHis glorious name I will adore,\nAnd praise and bless Him evermore."
+    ],
+    "chorus": "Redeeming love, . . . redeeming love ! . . . \nThe grandest theme, all themes above ;\nMy soul with joy . . . her wings would prove, \nAnd sing of Christ's redeeming love."
+  },
    {
     "id": 57,
     "number": 57,
@@ -607,7 +732,47 @@ const SACRED_SONGS = [
     ],
     "chorus": "Safe, safe, safe in the arms of Jesus,\nSafe on His gentle breast;\nThere by His love o'ershaded,\nSweetly my soul shall rest."
   },
-
+{
+    "id": 58,
+    "number": 58,
+    "title": " Can it be that Jesus bought me",
+    "author": " ",
+    "verses": [
+"Can it be that Jesus bought me,\nAnd on the shameful cross atoned for me,\nLoved me, chose me ere I knew Him ?\nOh, what a precious, precious Friend is He !",
+ "Praise His name, He sought and found me,\nSaved me from wandering and brought me near;\nFreely now His grace bestowing,\nJesus is growing unto me more dear.", 
+"Oh, how long He had been waiting,\nWaiting the dawning of the precious hour,\nWhen I should at last be yielding,\nYielding to Jesus every ransomed power.",
+ "From that hour He has been seeking\nHow He may fill me with His precious love ;\nHow He may through grace transform me,\nMeet for the fellowship of saints above."
+    ],
+    "chorus": "Oh, it is wonderful, very, very wonderful,\nAll His grace so rich and free !\nOh, it is wonderful, very, very wonderful,\nAll His love and grace to me !"
+  },
+  {
+    "id": 59,
+    "number": 59,
+    "title": " In tenderness He sought me",
+    "author": " ",
+    "verses": [
+"In tenderness He sought me,\nWeary and sick with sin,\n And on His shoulders brought me\nBack to His fold again ; \nWhile angels in His presence sang\nUntil the courts of heaven rang.",
+ "lie found me bruised and dying,\nAnd poured in oil and wine ;\nHe whispered to assure me, \nI've found thee — thou art Mine !\nI never heard a sweeter voice,\nIt made my aching heart rejoice !",
+ "He pointed to the nail-prints,\nFor me His blood was shed ;\nA mocking crown so thorny\nWas placed upon His head, \nI wondered what He saw in me \nTo suffer such deep agony.",
+ "Fro sitting in His presence, \nThe sunshine of His face, \nWhile with adoring wonder \nHis blessings I retrace. \nIt seems as if eternal days \nAre far too short to sound His praise.",
+ "  So while the hours are passing,\nAll now is perfect rest ;\nI'm waiting for the morning,\nThe brightest and the best,\nWhen He will call us to His side,\nTo be with Him, His spotless Bride."
+    ],
+    "chorus": "Oh, the love that sought me !\nOh, the blood that bought me ! \nOh, the grace that brought me to the fold !\nWondrous grace that brought me to the fold !"
+  },
+  {
+    "id": 60,
+    "number": 60,
+    "title": "Jesus, the very thought of Thee ",
+    "author": " ",
+    "verses": [
+"Jesus, the very thought of Thee\nWith sweetness fills my breast;\nBut sweeter far Thy face to see,\nAnd in Thy presence rest.",
+ "Nor voice can sing, nor heart can frame,\nNor can the memory find\nA sweeter sound than Thy blest name,\nO Saviour of mankind !",
+ "Oh hope of every contrite heart !\nOh, joy of all the meek !\nTo those who fall, how kind Thou art !\nHow good to those who seek !",
+ "And those who find Thee, find a bliss\nNor tongue nor pen can show ;\nThe love of Jesus,what it is\nNone but His loved ones know.",
+ "Jesus ! our only joy be Thou,\nAs Thou our prize wilt be;\nJesus ! be Thou our glory now,\nAnd through eternity."
+    ],
+    "chorus": ""
+  },
   {
     "id": 97,
     "number": 97,
