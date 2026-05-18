@@ -170,7 +170,7 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
         </button>
 
         <p style={{ color: subColor, fontSize: '0.72rem', margin: '4px 0 0', opacity: 0.7 }}>
-          No spam. Unsubscribe anytime. Your details are kept private.
+          Unsubscribe anytime. Your details are kept private.
         </p>
       </div>
     </div>

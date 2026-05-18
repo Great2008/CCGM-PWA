@@ -2,8 +2,6 @@ import { useEffect, useRef } from 'react'
 
 const APK_URL = 'https://gxetxqlzuipiymdmibpt.supabase.co/storage/v1/object/public/apk/CCGWorld-latest.apk'
 
-// Tiny QR code generator (no external library needed)
-// Uses the qrcode.js approach via canvas
 function QRCanvas({ url, size = 140 }) {
   const ref = useRef(null)
 
@@ -105,7 +103,7 @@ export default function AppDownloadBanner({ compact = false }) {
               color: 'rgba(255,255,255,0.72)', lineHeight: 1.75,
               fontSize: '0.95rem', marginBottom: 28, maxWidth: 420,
             }}>
-              Get the full CCG World experience on your Android phone — sermons, live services, Sabbath School, devotionals and more. Always with you, even offline.
+              Get the full CCG World experience on your Android phone — sermons, live services, Sabbath School, devotionals and more. Always with you, even when offline.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
               <a

@@ -156,7 +156,7 @@ function SacredSongsTab({ fontSize, changeFontSize }) {
             {!selected ? (
               <div style={{ background:'white', borderRadius:16, padding:48, textAlign:'center', boxShadow:'var(--shadow-sm)', border:'1.5px solid #d1fae5' }}>
                 <div style={{ fontSize:'3rem', marginBottom:12 }}>📖</div>
-                <div style={{ color:'var(--text-light)' }}>Select a song to read</div>
+                <div style={{ color:'var(--text-light)' }}>Select a song to sing</div>
               </div>
             ) : (
               <div className="hm-card" style={{ background:'white', borderRadius:16, boxShadow:'var(--shadow-sm)', border:'1.5px solid #d1fae5', overflow:'hidden' }}>
@@ -193,7 +193,7 @@ function SacredSongsTab({ fontSize, changeFontSize }) {
                     </div>
                   )}
                   <div style={{ marginTop:8, padding:'10px 14px', background:'#f8faf8', borderRadius:8, fontSize:'0.75rem', color:'var(--text-light)' }}>
-                    ✅ Available offline · Sacred Songs & Solos — Ira D. Sankey · Public Domain
+                    Sacred Songs & Solos
                   </div>
                 </div>
 
@@ -354,7 +354,7 @@ export default function Hymnal() {
         )}
         {activeTab === 'sacred' && (
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>
-            📴 {SACRED_SONGS.length} songs — Fully offline · Ira D. Sankey · Public Domain
+            📴 {SACRED_SONGS.length} songs — Sacred Songs &  Solos
           </div>
         )}
       </div>
@@ -380,7 +380,7 @@ export default function Hymnal() {
             <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, padding: '0 24px', textAlign: 'center' }}>
               <div style={{ fontSize: '3rem' }}>📴</div>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.3rem', color: 'var(--brand-deep)' }}>You are Offline</div>
-              <div style={{ color: 'var(--text-mid)', maxWidth: 320, lineHeight: 1.7 }}>No cached hymns found. Visit the Hymnal while online at least once to enable offline access.</div>
+              <div style={{ color: 'var(--text-mid)', maxWidth: 320, lineHeight: 1.7 }}>No offline hymns found. Visit the Hymnal while online at least once to enable offline access.</div>
             </div>
           ) : (
             <>

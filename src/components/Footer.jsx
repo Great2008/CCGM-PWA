@@ -48,7 +48,7 @@ export default function Footer() {
                 <span style={{ fontSize:'0.86rem', color:'rgba(255,255,255,0.62)', lineHeight:1.5 }}>{text}</span>
               </div>
             ))}
-            {!hp.contact?.address&&!hp.contact?.phone&&<p style={{ fontSize:'0.8rem', color:'rgba(255,255,255,0.3)', fontStyle:'italic' }}>Contact info managed via admin panel.</p>}
+            {!hp.contact?.address&&!hp.contact?.phone&&<p style={{ fontSize:'0.8rem', color:'rgba(255,255,255,0.3)', fontStyle:'italic' }}>Contact info</p>}
             <Link to="/contact" style={{ display:'inline-block', marginTop:14, border:'1.5px solid var(--gold)', color:'var(--gold)', padding:'8px 22px', borderRadius:30, fontSize:'0.78rem', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase' }}>🙏 Prayer Request</Link>
           </div>
         </div>
