@@ -774,6 +774,269 @@ const SACRED_SONGS = [
     "chorus": ""
   },
   {
+    "id": 61,
+    "number": 61,
+    "title": "Master, The Tempest Is Raging!",
+    "author": "Mary Ann Baker",
+    "verses": [
+      "Master, the tempest is raging!\nThe billows are tossing high!\nThe sky is o'ershadowed with blackness,\nNo shelter or help is nigh:\n\"Carest Thou not that we perish?\"\nHow canst Thou lie asleep,\nWhen each moment so madly is threatening\nA grave in the angry deep?",
+      "Master, with anguish of spirit\nI bow in my grief today;\nThe depths of my sad heart are troubled;\nOh, waken and save, I pray!\nTorrents of sin and of anguish\nSweep o'er my sinking soul;\nAnd I perish! I perish! dear Master:\nOh, hasten, and take control.",
+      "Master, the terror is over,\nThe elements sweetly rest;\nEarth's sun in the calm lake is mirrored,\nAnd heaven's within my breast;\nLinger, O blessed Redeemer,\nLeave me alone no more:\nAnd with joy I shall make the blest harbour,\nAnd rest on the blissful shore."
+    ],
+    "chorus": "\"The winds and the waves shall obey My will:\nPeace! be still!\nWhether the wrath of the storm-tost sea,\nOr demons, or men, or whatever it be,\nNo waters can swallow the ship where lies\nThe Master of ocean, and earth, and skies:\nThey all shall sweetly obey My will;\nPeace! be still! Peace! be still!\nThey all shall sweetly obey My will;\nPeace! peace! be still!\""
+  },
+  {
+    "id": 62,
+    "number": 62,
+    "title": "He Is Seeking For The Lost",
+    "author": "",
+    "verses": [
+      "He is seeking for the lost,\nFor the lone and tempest-tost,\nHear the tender Shepherd calling day by day;\nOver mountain, hill, and plain,\nIn the sunshine and the rain,\nHe is seeking for the wanderers far away.",
+      "See His feet, all bleeding, torn,\nPierced with many a cruel thorn,\nWhile He struggles thro' the valleys chill and lone;\nBut He presses eager on,\nAll the rocks and caves among,\nEver seeking to reclaim and save His own.",
+      "Oh, the night is closing round,\nHave the lost ones all been found?\nAre they coming from the mountains dark and cold?\nLet us heed the Shepherd's voice,\nLet us follow and rejoice,\nWhile He leads us, gently leads us to the fold."
+    ],
+    "chorus": "Far away, far away,\nHe is seeking for the wanderers gone astray;\nOver mountain, hill, and plain, in the sunshine and the rain,\nHear the tender Shepherd calling day by day."
+  },
+  {
+    "id": 63,
+    "number": 63,
+    "title": "Jesus, Thy Boundless Love To Me",
+    "author": "Paul Gerhardt",
+    "verses": [
+      "Jesus, Thy boundless love to me\nNo thought can reach, no tongue declare;\nOh, knit my thankful heart to Thee,\nAnd reign without a rival there!\nThine wholly, Thine alone I am;\nLord, with Thy love my heart inflame.",
+      "Oh, grant that nothing in my soul\nMay dwell, but Thy pure love alone!\nOh, may Thy love possess me whole—\nMy joy, my treasure, and my crown!\nAll coldness from my heart remove;\nMay every act, word, thought, be love.",
+      "O Love, how cheering is Thy ray!\nAll pain before Thy presence flies;\nCare, anguish, sorrow, melt away,\nWhere'er Thy healing beams arise;\nO Jesus, nothing may I see,\nNothing desire, or seek, but Thee.",
+      "In suffering be Thy love my peace;\nIn weakness be Thy love my power;\nAnd when the storms of life shall cease,\nJesus, in that important hour,\nIn death, as life, be Thou my Guide,\nAnd save me who for me hast died."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 64,
+    "number": 64,
+    "title": "Tenderly The Shepherd",
+    "author": "",
+    "verses": [
+      "Tenderly the shepherd,\nO'er the mountains cold,\nGoes to bring his lost one\nBack to the fold.",
+      "Patiently the owner\nSeeks with earnest care,\nIn the dust and darkness,\nHer treasure rare.",
+      "Lovingly the father\nSends the news around:\n\"He once dead now liveth—\nOnce lost is found.\""
+    ],
+    "chorus": "Seeking to save, seeking to save;\nLost one, 'tis Jesus seeking to save.\nSeeking to save, seeking to save;\nLost one, 'tis Jesus seeking to save."
+  },
+  {
+    "id": 65,
+    "number": 65,
+    "title": "One There Is Above All Others",
+    "author": "James H. Evans",
+    "verses": [
+      "One there is above all others,\nOh, how He loves!\nHis is love beyond a brother's,\nOh, how He loves!\nEarthly friends may fail or leave us,\nOne day soothe, the next day grieve us;\nBut this Friend will ne'er deceive us,\nOh, how He loves!",
+      "'Tis eternal life to know Him,\nOh, how He loves!\nThink, oh think, how much we owe Him,\nOh, how He loves!\nWith His precious blood He bought us,\nIn the wilderness He sought us,\nTo His fold He safely brought us,\nOh, how He loves!",
+      "Blessed Jesus! would you know Him?\nOh, how He loves!\nGive yourselves entirely to Him,\nOh, how He loves!\nThink no longer of the morrow,\nFrom the past new courage borrow,\nJesus carries all your sorrow:\nOh, how He loves!",
+      "All your sins shall be forgiven,\nOh, how He loves!\nBackward shall your foes be driven,\nOh, how He loves!\nBest of blessings He'll provide you,\nNaught but good shall e'er betide you,\nSafe to glory He will guide you,\nOh, how He loves!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 66,
+    "number": 66,
+    "title": "Who Is He In Yonder Stall",
+    "author": "Benjamin Russell Hanby",
+    "verses": [
+      "Who is He in yonder stall,\nAt whose feet the shepherds fall?",
+      "Who is He in deep distress,\nFasting in the wilderness?",
+      "Who is He the people bless\nFor His words of gentleness?",
+      "Who is He to whom they bring\nAll the sick and sorrowing?",
+      "Who is He who stands and weeps\nAt the grave where Lazarus sleeps?",
+      "Who is He the gathering throng\nGreet with loud triumphant song?",
+      "Lo, at midnight, who is He\nPrays in dark Gethsemane?",
+      "Who is He on yonder tree\nDies in grief and agony?",
+      "Who is He who from the grave\nComes to succour, help, and save?",
+      "Who is He who from His throne\nRules through all the worlds alone?"
+    ],
+    "chorus": "'Tis the Lord! O wondrous story!\n'Tis the Lord, the King of Glory!\nAt His feet we humbly fall—\nCrown Him! crown Him Lord of all!"
+  },
+  {
+    "id": 67,
+    "number": 67,
+    "title": "Hail To The Lord's Anointed",
+    "author": "James Montgomery",
+    "verses": [
+      "Hail to the Lord's Anointed,\nGreat David's greater Son;\nHail in the time appointed,\nHis reign on earth begun!\nHe comes to break oppression,\nTo set the captive free;\nTo take away transgression,\nAnd rule in equity.",
+      "He shall come down like showers\nUpon the fruitful earth;\nAnd love, joy, hope, like flowers,\nSpring in His path to birth.\nBefore Him on the mountains\nShall Peace, the herald, go;\nAnd righteousness in fountains\nFrom hill to valley flow.",
+      "Kings shall fall down before Him,\nAnd gold and incense bring;\nAll nations shall adore Him,\nHis praise all people sing.\nFor He shall have dominion\nO'er river, sea, and shore,\nFar as the eagle's pinion\nOr dove's light wing can soar.",
+      "For Him shall prayer unceasing,\nAnd daily vows ascend;\nHis kingdom still increasing,\nA kingdom without end.\nThe tide of time shall never\nHis covenant remove;\nHis name shall stand for ever,\nThat name to us is—Love!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 68,
+    "number": 68,
+    "title": "Did Christ O'er Sinners Weep?",
+    "author": "Benjamin Beddome",
+    "verses": [
+      "Did Christ o'er sinners weep?\nAnd shall our tears be dry?\nLet floods of penitential grief\nBurst forth from every eye.",
+      "The Son of God in tears\nThe wondering angels see:\nBe thou astonished, O my soul!\nHe shed those tears for thee.",
+      "He wept that we might weep;\nEach sin demands a tear:\nIn heaven alone no sin is found,\nAnd there's no weeping there."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 69,
+    "number": 69,
+    "title": "I Will Tell You The Wonderful Story Again",
+    "author": "",
+    "verses": [
+      "I will tell you the wonderful story again,\nOf Jesus, the mighty to save;\nWho purchased salvation for all on the cross,\nAnd triumphed o'er death and the grave.",
+      "I will tell you the wonderful story again,\nOf pardon to all that believe;\nAnd, oh that the Spirit will help you just now,\nThe message of grace to receive!",
+      "I will tell you the wonderful story again,\nSo precious and dear to my heart;\n'Twill give you a comfort the world cannot give,\nA joy it can never impart.",
+      "I will tell you the wonderful story again,\nThe wonderful story so true:\nOh, haste to the fountain of mercy divine,\nWhose waters are flowing for you."
+    ],
+    "chorus": "Oh, hear it again, blessed story of love,\nRedemption through Jesus from sin;\nHe opened the portals of life to my soul,\nAnd tenderly welcomed me in."
+  },
+  {
+    "id": 70,
+    "number": 70,
+    "title": "He Lives And Loves, Our Saviour King",
+    "author": "",
+    "verses": [
+      "He lives and loves, our Saviour King;\nWith joyful lips your tribute bring;\nRepeat His praise, exalt His Name,\nWhose grace and truth are still the same.",
+      "His hand is strong, His Word endures,\nHis sacrifice our peace secures;\nFrom sin and death He doth redeem,\nHis changeless love be all our theme.",
+      "Each day reveals His constant love,\nWith \"mercies new\" from heaven above;\nThro' ages past His Word hath stood;\nOh, taste and see that He is good!"
+    ],
+    "chorus": "His mercy flows, an endless stream,\nTo all eternity the same;\nTo all eternity, to all eternity,\nTo all eternity the same."
+  },
+  {
+    "id": 71,
+    "number": 71,
+    "title": "Oh, Precious Words That Jesus Said!",
+    "author": "",
+    "verses": [
+      "Oh, precious words that Jesus said!—\n\"The soul that comes to Me,\nI will in no wise cast him out,\nWhoever he may be.\"",
+      "Oh, precious words that Jesus said!—\n\"Behold, I am the Door;\nAnd all that enter in by Me\nHave life for evermore.\"",
+      "Oh, precious words that Jesus said!—\n\"Come, weary souls oppressed,\nCome, take My yoke and learn of Me;\nAnd I will give you rest.\"",
+      "Oh, precious words that Jesus said!—\n\"The world I overcame;\nAnd they who follow where I lead,\nShall conquer in My name.\""
+    ],
+    "chorus": "\"Whoever he may be,\nWhoever he may be;\nI will in no wise cast him out,\nWhoever he may be.\""
+  },
+  {
+    "id": 72,
+    "number": 72,
+    "title": "O Thou Precious Saviour",
+    "author": "",
+    "verses": [
+      "O Thou precious Saviour,\nSo kind and good to me:\nThat I might live, Thy blood was shed\nOn Calvary's cruel tree.",
+      "O Thou precious Saviour,\nTo whose kind, loving heart\nThe burdened soul may tell its grief,\nAnd in Thy love have part.",
+      "O Thou precious Saviour,\nWho suffer'd long for me,\nThy power alone can save from guilt,\nFrom Satan's yoke set free.",
+      "O Thou precious Saviour,\nWhose love will give the prize,\nWhen life's toils o'er, my soul wings on\nTo realms beyond the skies.",
+      "O Thou precious Saviour,\nLet all my added days\nBe spent to serve and honour Thee,\nBe spent to bring Thee praise."
+    ],
+    "chorus": "O my precious Saviour,\nSo wonderfully kind!\nShould I search the wide world over,\nI could none like Jesus find."
+  },
+  {
+    "id": 73,
+    "number": 73,
+    "title": "Oh, Sweet Is The Story Of Jesus",
+    "author": "",
+    "verses": [
+      "Oh, sweet is the story of Jesus,\nThe wonderful Saviour of men,\nWho suffered and died for the sinner—\nI'll tell it again and again!",
+      "He came from the mansions of glory;\nHis blood as a ransom He gave\nTo purchase eternal redemption—\nAnd oh, He is mighty to save!",
+      "His mercy flows on like a river;\nHis love is unmeasured and free;\nHis grace is for ever sufficient,\nIt reaches and saves even me."
+    ],
+    "chorus": "Oh, wonderful, wonderful story!\nThe dearest that ever was told;\nI'll repeat it in glory, the wonderful story,\nWhere I shall His beauty behold."
+  },
+  {
+    "id": 74,
+    "number": 74,
+    "title": "Go And Tell Jesus",
+    "author": "",
+    "verses": [
+      "Go and tell Jesus, weary, sin-sick soul!\nHe'll ease thee of thy burden, make thee whole;\nLook up to Him, He only can forgive;\nBelieve on Him, and thou shalt surely live.",
+      "Go and tell Jesus, when your sins arise\nLike mountains of dark guilt before your eyes;\nHis blood was shed, His precious life He gave,\nThat mercy, peace, and pardon you might have.",
+      "Go and tell Jesus: He'll dispel thy fears,\nWill calm thy doubts, and wipe away thy tears;\nHe'll take thee in His arms, and on His breast\nThou may'st be happy, and for ever blest."
+    ],
+    "chorus": "Go and tell Jesus—He only can forgive:\nGo and tell Jesus—oh, turn to Him and live!\nGo and tell Jesus! go and tell Jesus!\nGo and tell Jesus!—He only can forgive."
+  },
+  {
+    "id": 75,
+    "number": 75,
+    "title": "Who Came Down From Heaven To Earth?",
+    "author": "",
+    "verses": [
+      "Who came down from heaven to earth?\nJesus Christ our Saviour!\nCame a child of lowly birth?\nJesus Christ our Saviour!",
+      "Who was lifted on the tree?\nJesus Christ our Saviour!\nThere to ransom you and me?\nJesus Christ our Saviour!",
+      "Who hath promised to forgive?\nJesus Christ our Saviour!\nWho hath said, \"Believe and live\"?\nJesus Christ our Saviour!",
+      "Who is now enthroned above?\nJesus Christ our Saviour!\nWhom should we obey and love?\nJesus Christ our Saviour!",
+      "Who again from heaven shall come?\nJesus Christ our Saviour!\nTake to glory all His own?\nJesus Christ our Saviour!"
+    ],
+    "chorus": "Sound the chorus loud and clear—\nHe hath brought salvation near;\nNone so precious, none so dear:\nJesus Christ our Saviour!"
+  },
+  {
+    "id": 76,
+    "number": 76,
+    "title": "O Love, That Passeth Knowledge",
+    "author": "",
+    "verses": [
+      "O Love, that passeth knowledge,\nO Love, whose beams have shone\nThrough everlasting ages,\nFrom God's eternal throne;\nWhat power Thy depths can fathom?\nWhat tongue can speak Thy worth?\nAnd yet Thou condescendest\nTo dwell with men on earth.",
+      "O Love, that our redemption\nMade perfect through the blood\nOf Him whose life was offered,\nTo bring us near to God;\nO Love, that now extendeth\nA pardon full and free,\nAnd bends with eyes of pity\nOn sinners such as we.",
+      "We give our hearts' devotion,\nAnd grateful thanks we bring,\nAnd lift our hearts and voices,\nTo praise our Lord and King;\nO Love, all thought surpassing,\nWhat will our rapture be,\nWhen, safe beyond the river,\nOur souls are lost in Thee!"
+    ],
+    "chorus": "O Love, all love excelling,\nUnnumbered hosts are telling,\nIn yonder blissful dwelling,\nWhat Thou for them hast done."
+  },
+  {
+    "id": 77,
+    "number": 77,
+    "title": "What Means This Eager, Anxious Throng",
+    "author": "",
+    "verses": [
+      "What means this eager, anxious throng,\nWhich moves with busy haste along—\nThese wondrous gatherings day by day:\nWhat means this strange commotion, pray?\nIn accents hushed the throng reply,\n\"Jesus of Nazareth passeth by.\"",
+      "Who is this Jesus? Why should He\nThe city move so mightily?\nA passing stranger, has He skill\nTo move the multitude at will?\nAgain the stirring tones reply,\n\"Jesus of Nazareth passeth by.\"",
+      "Jesus! 'tis He who once below\nMan's pathway trod, 'mid pain and woe;\nAnd burdened ones, where'er He came,\nBrought out their sick, and deaf, and lame:\nThe blind rejoiced to hear the cry,\n\"Jesus of Nazareth passeth by.\"",
+      "Again He comes! From place to place\nHis holy footprints we can trace;\nHe pauseth at our threshold—nay,\nHe enters—condescends to stay:\nShall we not gladly raise the cry?—\n\"Jesus of Nazareth passeth by.\"",
+      "Ho! all ye heavy-laden, come!\nHere's pardon, comfort, rest, and home;\nYe wanderers from a Father's face,\nReturn, accept His proffered grace;\nYe tempted ones, there's refuge nigh;\n\"Jesus of Nazareth passeth by.\"",
+      "But if you still His call refuse,\nAnd all His wondrous love abuse,\nSoon will He sadly from you turn,\nYour bitter prayer for pardon spurn.\n\"Too late! too late!\" will be the cry—\n\"Jesus of Nazareth has passed by.\""
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 78,
+    "number": 78,
+    "title": "Once I Was Dead In Sin",
+    "author": "",
+    "verses": [
+      "Once I was dead in sin,\nAnd hope within me died;\nBut now I'm dead to sin,\nWith Jesus crucified.\nAnd can it be that \"He loved me,\nAnd gave Himself for me\"?",
+      "O height I cannot reach!\nO depth I cannot sound:\nO love, O boundless love,\nIn my Redeemer found!",
+      "O cold, ungrateful heart,\nThat can from Jesus turn,\nWhen living fires of love\nShould on His altar burn.",
+      "I live—and yet not I,\nBut Christ that lives in me,\nWho from the law of sin\nAnd death hath made me free."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 79,
+    "number": 79,
+    "title": "At Even, Ere The Sun Was Set",
+    "author": "Henry Twells",
+    "verses": [
+      "At even, ere the sun was set,\nThe sick, O Lord, around Thee lay;\nOh, in what divers pains they met!\nOh, with what joy they went away!",
+      "Once more 'tis eventide, and we,\nOppressed with various ills, draw near;\nWhat if Thy form we cannot see!\nWe know and feel that Thou art here.",
+      "O Saviour Christ, our woes dispel!\nFor some are sick, and some are sad,\nAnd some have never loved Thee well,\nAnd some have lost the love they had;",
+      "And all, O Lord, crave perfect rest,\nAnd to be wholly free from sin;\nAnd they who fain would serve Thee best,\nAre conscious most of wrong within.",
+      "O Saviour Christ, Thou too art man!\nThou hast been troubled, tempted, tried;\nThy kind but searching glance can scan\nThe very wounds that shame would hide;",
+      "Thy touch has still its ancient power;\nNo word from Thee can fruitless fall:\nHear in this solemn evening hour,\nAnd in Thy mercy heal us all."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 80,
+    "number": 80,
+    "title": "There Is Love, True Love",
+    "author": "",
+    "verses": [
+      "There is love, true love, and the heart grows warm,\nWhen the Lord to Bethany comes;\nAnd the word of life has a wondrous charm,\nWhen the Lord to Bethany comes.",
+      "There is peace, sweet peace, and the life grows calm,\nWhen the Lord to Bethany comes;\nAnd the trusting soul sings a sweet, soft psalm,\nWhen the Lord to Bethany comes.",
+      "There is faith, strong faith, and our home seems near,\nWhen the Lord to Bethany comes;\nAnd the crown more bright, and the cross more dear,\nWhen the Lord to Bethany comes."
+    ],
+    "chorus": "There is joy, glad joy, and a feast is spread,\nWhen the Lord to Bethany comes;\nFor His heavenly voice brings to life the dead,\nWhen the Lord to Bethany comes.\n'Twas a happy, happy day in the olden time,\nWhen the Lord to Bethany came;\nOpen wide the door, let Him enter now,\nFor His love is ever the same!\nHis love is ever the same!\nHis love is ever the same!\nOpen wide the door, let Him enter now!\nFor His love is ever the same!"
+  },
+  {
     "id": 97,
     "number": 97,
     "title": "There Were Ninety And Nine",
