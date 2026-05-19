@@ -1311,47 +1311,264 @@ const SACRED_SONGS = [
   ],
   "chorus": "In the Rifted Rock I'm resting,\nSure and safe from all alarm:\nStorms and billows have united,\nAll in vain, to do me harm."
 },
-  {
-    "id": 97,
-    "number": 97,
-    "title": "There Were Ninety And Nine",
-    "author": "Elizabeth C. Clephane",
-    "verses": [
-      "There were ninety and nine that safely lay\nIn the shelter of the fold,\nBut one was out on the hills away,\nFar off from the gates of gold—\nAway on the mountains wild and bare,\nAway from the tender Shepherd's care.",
-      "'Lord, Thou hast here Thy ninety and nine;\nAre they not enough for Thee?'\nBut the Shepherd made answer: 'This of mine\nHas wandered away from me;\nAnd although the road be rough and steep,\nI go to the desert to find my sheep.'",
-      "But none of the ransomed ever knew\nHow deep were the waters crossed;\nNor how dark was the night the Lord passed through\nEre He found His sheep that was lost.\nOut in the desert He heard its cry—\nSick and helpless and ready to die.",
-      "'Lord, whence are those blood-drops all the way\nThat mark out the mountain's track?'\n'They were shed for one who had gone astray\nEre the Shepherd could bring him back.'\n'Lord, whence are Thy hands so rent and torn?'\n'They are pierced tonight by many a thorn.'",
-      "And all through the mountains thunder-riven\nAnd up from the rocky steep,\nThere arose a glad cry to the gate of heaven,\n'Rejoice! I have found my sheep!'\nAnd the angels echoed around the throne,\n'Rejoice, for the Lord brings back His own!'"
-    ],
-    "chorus": ""
-  },
-    {
-    "id": 102,
-    "number": 102,
-    "title": "Man Of Sorrows What A Name",
-    "author": "Philip P. Bliss",
-    "verses": [
-      "Man of Sorrows! what a name\nFor the Son of God who came\nRuined sinners to reclaim!\nHallelujah! what a Saviour!",
-      "Bearing shame and scoffing rude,\nIn my place condemned He stood,\nSealed my pardon with His blood;\nHallelujah! what a Saviour!",
-      "Guilty, vile, and helpless, we;\nSpotless Lamb of God was He;\nFull atonement—can it be?\nHallelujah! what a Saviour!",
-      "Lifted up was He to die,\n'It is finished!' was His cry;\nNow in heaven exalted high;\nHallelujah! what a Saviour!",
-      "When He comes, our glorious King,\nAll His ransomed home to bring,\nThen anew this song we'll sing:\nHallelujah! what a Saviour!"
-    ],
-    "chorus": ""
-  },
-  {
-    "id": 115,
-    "number": 115,
-    "title": "When I Survey The Wondrous Cross",
-    "author": "Isaac Watts",
-    "verses": [
-      "When I survey the wondrous cross\nOn which the Prince of glory died,\nMy richest gain I count but loss,\nAnd pour contempt on all my pride.",
-      "Forbid it, Lord, that I should boast,\nSave in the death of Christ my God;\nAll the vain things that charm me most,\nI sacrifice them to His blood.",
-      "See from His head, His hands, His feet,\nSorrow and love flow mingled down;\nDid e'er such love and sorrow meet,\nOr thorns compose so rich a crown?",
-      "Were the whole realm of nature mine,\nThat were a present far too small;\nLove so amazing, so divine,\nDemands my soul, my life, my all."
-    ],
-    "chorus": ""
-  },
+{
+  "id": 101,
+  "number": 101,
+  "title": "The Lord Is Our Strength and Redeemer",
+  "author": "",
+  "verses": [
+    "The Lord is our Strength and Redeemer,\nThe Rock where in safety we hide;\nHe feedeth His flock like a Shepherd,\nHis love shall for ever abide.",
+    "The Lord is our Shield and Defender,\nHis eye never slumbers nor sleeps:\nHe feedeth His flock like a Shepherd,\nTheir footsteps from wandering He keeps.",
+    "The Lord is our Hope and Salvation,\nOh, glory and praise to His name!\nHe feedeth His flock like a Shepherd—\nThe weakest His blessings may claim."
+  ],
+  "chorus": "By cool flowing waters He leads them,\nWhere pastures are blooming and fair;\nHe gathers the lambs in His bosom,\nAnd carries them tenderly there."
+},
+{
+  "id": 102,
+  "number": 102,
+  "title": "Man of Sorrows",
+  "author": "",
+  "verses": [
+    "\"Man of Sorrows,\" what a name\nFor the Son of God, who came\nRuined sinners to reclaim!\nHallelujah! what a Saviour!",
+    "Bearing shame and scoffing rude\nIn my place condemned He stood:\nSealed my pardon with His blood—\nHallelujah! what a Saviour!",
+    "Guilty, vile, and helpless, we;\nSpotless Lamb of God was He:\n\"Full atonement!\"—can it be?\nHallelujah! what a Saviour!",
+    "\"Lifted up\" was He to die,\n\"It is finished!\" was His cry;\nNow in heaven exalted high:\nHallelujah! what a Saviour!",
+    "When He comes, our glorious King,\nAll His ransomed home to bring,\nThen anew this song we'll sing—\nHallelujah! what a Saviour!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 103,
+  "number": 103,
+  "title": "Joy to the World",
+  "author": "",
+  "verses": [
+    "JOY to the world! the Lord is come,\nThe mighty God, the Everlasting Father, and the Prince of Peace!\nLet every heart prepare Him room—\nThe mighty God, the Everlasting Father, and the Prince of Peace!",
+    "Joy to the world! the Saviour reigns—\nThe mighty God, the Everlasting Father, and the Prince of Peace!\nOh, praise Him, floods, rocks, hills, and plains—\nThe mighty God, the Everlasting Father, and the Prince of Peace!",
+    "He rules the world with truth and grace—\nThe mighty God, the Everlasting Father, and the Prince of Peace!\nAnd saves us by His righteousness—\nThe mighty God, the Everlasting Father, and the Prince of Peace!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 104,
+  "number": 104,
+  "title": "I've Found a Friend in Jesus",
+  "author": "",
+  "verses": [
+    "I've found a friend in Jesus,—He's everything to me;\nHe's the fairest of ten thousand to my soul!\nThe \"Lily of the Valley,\" in Him alone I see—\nAll I need to cleanse and make me fully whole;\nIn sorrow He's my comfort, in trouble He's my stay;\nHe tells me every care on Him to roll:\nHe's the \"Lily of the Valley,\" the \"Bright and Morning Star\";\nHe's the fairest of ten thousand to my soul!",
+    "He all my grief has taken, and all my sorrows borne;\nIn temptation He's my strong and mighty tower;\nI've all for Him forsaken, I've all my idols torn\nFrom my heart—and now He keeps me by His power.\nThough all the world forsake me, and Satan tempt me sore,\nThrough Jesus I shall safely reach the goal.\nHe's the \"Lily of the Valley,\" the \"Bright and Morning Star\";\nHe's the fairest of ten thousand to my soul!",
+    "He'll never, never leave me nor yet forsake me here,\nWhile I live by faith, and do His blessed will;\nA wall of fire about me, I've nothing now to fear:\nWith His manna He my hungry soul shall fill.\nWhen crowned at last in glory, I'll see His blessed face,\nWhere rivers of delight shall ever roll.\nHe's the \"Lily of the Valley,\" the \"Bright and Morning Star\";\nHe's the fairest of ten thousand to my soul!"
+  ],
+  "chorus": "In sorrow He's my comfort, in trouble He's my stay;\nHe tells me every care on Him to roll:\nHe's the \"Lily of the Valley,\" the \"Bright and Morning Star\";\nHe's the fairest of ten thousand to my soul!"
+},
+{
+  "id": 105,
+  "number": 105,
+  "title": "Jesus, Thou Refuge of the Soul",
+  "author": "",
+  "verses": [
+    "JESUS, Thou Refuge of the soul,\nTo Thy dear arms I flee;\nFrom Satan's wiles, from self and sin,\nOh, make and keep me free.",
+    "Though clouds may rise, though tempests rage,\nThou wilt my shelter be,\nWhile with a steadfast heart and true,\nMy trust is stayed on Thee.",
+    "No power on earth, or power below,\nCan tear me from Thy side,\nIf 'neath Thy sheltering wings of love,\nDear Refuge, I abide.",
+    "Not death itself, that last dread foe,\nCan hold me with his chain;\nThrough Christ, who conquered death, I rise,\nAnd life eternal gain."
+  ],
+  "chorus": ""
+},
+{
+  "id": 106,
+  "number": 106,
+  "title": "Dear Refuge of My Weary Soul",
+  "author": "",
+  "verses": [
+    "DEAR Refuge of my weary soul,\nOn Thee, when sorrows rise,\nOn Thee, when waves of trouble roll,\nMy fainting hope relies.",
+    "To Thee I tell each rising grief,\nFor Thou alone canst heal;\nThy Word can bring a sweet relief\nFor every pain I feel.",
+    "But oh, when gloomy doubts prevail,\nI fear to call Thee mine;\nThe springs of comfort seem to fail,\nAnd all my hopes decline.",
+    "Yet, gracious God, where shall I flee?\nThou art my only trust;\nAnd still my soul would cleave to Thee,\nThough prostrate in the dust.",
+    "Thy mercy-seat is open still,\nHere let my soul retreat;\nWith humble hope attend Thy will,\nAnd wait beneath Thy feet."
+  ],
+  "chorus": ""
+},
+{
+  "id": 107,
+  "number": 107,
+  "title": "Thou Dear Redeemer, Dying Lamb",
+  "author": "",
+  "verses": [
+    "THOU dear Redeemer, dying Lamb,\nWe love to hear of Thee;\nNo music's like Thy charming name,\nNor half so sweet can be.",
+    "Oh, may we ever hear Thy voice\nIn mercy to us speak!\nAnd in our Priest we will rejoice,\nThou great Melchisedek.",
+    "Our Jesus shall be still our theme\nWhile in the world we stay;\nWe'll sing our Jesus—lovely name!\nWhen all things else decay.",
+    "When we appear in yonder cloud,\nWith all the ransomed throng,\nThen will we sing more sweet, more loud,\nAnd Christ shall be our song."
+  ],
+  "chorus": ""
+},
+{
+  "id": 108,
+  "number": 108,
+  "title": "There Is No Name So Sweet on Earth",
+  "author": "",
+  "verses": [
+    "THERE is no name so sweet on earth,\nNo name so sweet in heaven;\nThe name before His wondrous birth,\nTo Christ the Saviour given.",
+    "And when He hung upon the tree,\nThey wrote this name above Him;\nThat all might see the reason we\nFor evermore must love Him.",
+    "So now, upon His Father's throne—\nAlmighty to release us\nFrom sin and pains—He ever reigns\nThe Prince and Saviour, Jesus.",
+    "O Jesus, by that matchless Name\nThy grace shall fail us never;\nTo-day as yesterday the same,\nThou art the same for ever!"
+  ],
+  "chorus": "We love to sing of Christ our King,\nAnd hail Him blessed Jesus!\nFor there's no word ear ever heard\nSo dear, so sweet as \"JESUS!\""
+},
+{
+  "id": 109,
+  "number": 109,
+  "title": "Rest of the Weary",
+  "author": "",
+  "verses": [
+    "REST of the weary, joy of the sad;\nHope of the dreary, light of the glad;\nHome of the stranger, strength to the end;\nRefuge from danger, Saviour and Friend.",
+    "Pillow where, lying, love rests its head;\nPeace of the dying, life of the dead;\nPath of the lowly, prize at the end;\nBreath of the holy, Saviour and Friend.",
+    "When my feet stumble, to Thee I'll cry,\nCrown of the humble, cross of the high;\nWhen my steps wander, over me bend,\nTruer and fonder, Saviour and Friend.",
+    "Ever confessing Thee, I will raise\nUnto Thee blessing, glory, and praise;\nAll my endeavour, world without end,\nThine to be ever, Saviour and Friend."
+  ],
+  "chorus": ""
+},
+{
+  "id": 110,
+  "number": 110,
+  "title": "The Day-Star Hath Risen",
+  "author": "",
+  "verses": [
+    "THE Day-star hath risen, the night clouds have flown;\nNo longer in sadness I wander alone;\nIts beams in the valley reflected I see:\nThe Day-star hath risen—it shineth for me.",
+    "The Day-star hath risen in beauty sublime,\nTo cheer and illumine each far-distant clime;\nThe regions in darkness its beauty shall see:\nThe Day-star hath risen—it shineth for me.",
+    "The Day-star hath risen, it shineth for all;\nO'er paths that are lonely its brightness will fall:\nO blessed Redeemer, all honour to Thee,\nThou Day-star of glory that shinest for me!"
+  ],
+  "chorus": "It shineth for me, shineth for me;\nThe Day-star hath risen, it shineth for me."
+},
+{
+  "id": 111,
+  "number": 111,
+  "title": "Joy to the World",
+  "author": "",
+  "verses": [
+    "JOY to the world; the Lord is come!\nLet earth receive her King;\nLet every heart prepare Him room,\nAnd heaven and nature sing.",
+    "Joy to the world; the Saviour reigns!\nLet men their songs employ;\nWhile fields and floods, rocks, hills, and plains,\nRepeat the sounding joy.",
+    "He rules the world with truth and grace;\nAnd makes the nations prove\nThe glories of His righteousness,\nAnd wonders of His love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 112,
+  "number": 112,
+  "title": "How Sweet the Name of Jesus Sounds",
+  "author": "",
+  "verses": [
+    "HOW sweet the name of Jesus sounds\nIn a believer's ear;\nIt soothes his sorrows, heals his wounds,\nAnd drives away his fear.",
+    "It makes the wounded spirit whole,\nAnd calms the troubled breast;\n'Tis manna to the hungry soul,\nAnd to the weary rest.",
+    "Dear Name, the Rock on which I build,\nMy Shield and Hiding-place,\nMy never-failing Treasury, filled\nWith boundless stores of grace.",
+    "Jesus, my Shepherd, Saviour, Friend,\nMy Prophet, Priest, and King,\nMy Lord, my Life, my Way, my End,\nAccept the praise I bring.",
+    "I would Thy boundless love proclaim\nWith every fleeting breath;\nSo shall the music of Thy Name\nRefresh my soul in death."
+  ],
+  "chorus": ""
+},
+{
+  "id": 113,
+  "number": 113,
+  "title": "Blessed Be the Fountain of Blood",
+  "author": "",
+  "verses": [
+    "BLESSED be the Fountain of blood,\nTo a world of sinners revealed;\nBlessed be the dear Son of God:\nOnly by His stripes we are healed.\nTho' I've wandered far from His fold,\nBringing to my heart pain and woe,\nWash me in the Blood of the Lamb,\nAnd I shall be whiter than snow!",
+    "Thorny was the crown that He wore,\nAnd the cross His body o'ercame;\nGrievous were the sorrows He bore,\nBut He suffered not thus in vain.\nMay I to that Fountain be led,\nMade to cleanse my sins here below!\nWash me in the Blood that He shed,\nAnd I shall be whiter than snow!",
+    "Father, I have wandered from Thee,\nOften has my heart gone astray;\nCrimson do my sins seem to me—\nWater cannot wash them away.\nJesus, to that Fountain of Thine,\nLeaning on Thy promise I go;\nCleanse me by Thy washing divine,\nAnd I shall be whiter than snow!"
+  ],
+  "chorus": "Whiter than the snow,\nWhiter than the snow,\nWash me in the Blood of the Lamb,\nAnd I shall be whiter than snow!"
+},
+{
+  "id": 114,
+  "number": 114,
+  "title": "Look Away to the Cross",
+  "author": "",
+  "verses": [
+    "LOOK away to the cross of the Crucified One,\nWhere He purchased salvation for you;\nWhen He laid down His life, and completed the work\nThat the Father had sent Him to do.",
+    "Look away to the cross of the Crucified One,\nTo the Cross where He suffered and bled;\nAnd to-day He invites you to come if you will,\nAnd be cleansed in the blood that He shed.",
+    "Look away to the cross of the Crucified One,\nWhere the wine-press alone He hath trod;\nWhere He cried in His anguish, \"Tis finished, 'tis done!\"\nAnd commended His spirit to God.",
+    "There is life at the cross of the Crucified One,\nAnd its hope is abiding and sure;\nFor the rapture that flows from the love He bestows\nShall for ever and ever endure."
+  ],
+  "chorus": "Room at the cross, there is room at the cross,\nAnd a welcome that all may receive;\nThere is room at the cross of the Crucified One,\nAnd redemption for all who believe."
+},
+{
+  "id": 115,
+  "number": 115,
+  "title": "When I Survey the Wondrous Cross",
+  "author": "",
+  "verses": [
+    "WHEN I survey the wondrous cross\nOn which the Prince of Glory died,\nMy richest gain I count but loss,\nAnd pour contempt on all my pride.",
+    "Forbid it, Lord, that I should boast,\nSave in the death of Christ my God:\nAll the vain things that charm me most,\nI sacrifice them to His blood.",
+    "See! from His head, His hands, His feet,\nSorrow and love flow mingled down!\nDid e'er such love and sorrow meet,\nOr thorns compose so rich a crown?",
+    "Were the whole realm of nature mine,\nThat were an offering far too small:\nLove so amazing, so divine,\nDemands my soul, my life, my all."
+  ],
+  "chorus": ""
+},
+{
+  "id": 116,
+  "number": 116,
+  "title": "On Calvary's Brow",
+  "author": "",
+  "verses": [
+    "ON Calvary's brow my Saviour died,\n'Twas there my Lord was crucified:\n'Twas on the cross He bled for me,\nAnd purchased there my pardon free.",
+    "'Mid rending rocks and darkening skies,\nMy Saviour bows His head and dies;\nThe opening vail reveals the way\nTo heaven's joys and endless day.",
+    "O Jesus, Lord, how can it be,\nThat Thou shouldst give Thy life for me?—\nTo bear the cross and agony,\nIn that dread hour on Calvary!"
+  ],
+  "chorus": "O Calvary! dark Calvary!\nWhere Jesus shed His blood for me:\nO Calvary! blest Calvary!\n'Twas there my Saviour died for me."
+},
+{
+  "id": 117,
+  "number": 117,
+  "title": "Not All the Blood of Beasts",
+  "author": "",
+  "verses": [
+    "NOT all the blood of beasts\nOn Jewish altars slain,\nCould give the guilty conscience peace,\nOr wash away the stain.",
+    "But Christ, the heavenly Lamb,\nTakes all our sins away;\nA sacrifice of nobler name,\nAnd richer blood than they.",
+    "My faith would lay her hand\nOn that dear head of Thine,\nWhile like a penitent I stand,\nAnd there confess my sin.",
+    "My soul looks back to see\nThe burden Thou didst bear\nWhen hanging on th' accursed tree,\nAnd knows her guilt was there."
+  ],
+  "chorus": ""
+},
+{
+  "id": 118,
+  "number": 118,
+  "title": "Christ Hath Redeemed Us",
+  "author": "",
+  "verses": [
+    "\"CHRIST hath redeemed us\": sing the glad word!\nMercy's sweet message be telling,\nHow, through the ransom made by His blood,\nChrist now within us is dwelling.",
+    "\"Christ hath redeemed us,\" making us free,\nFree from the sins that enslaved us;\nNever in bondage more can we be,\nTrusting in Him who hath saved us.",
+    "\"Christ hath redeemed us\": we are His own,\nPurchased by blood—He will hold us;\nNor will He ever leave us alone,\nSafely His arms shall enfold us.",
+    "\"Christ hath redeemed us\": soon with the throng\nGathered in glory we'll meet Him;\nOh, with what rapture join in the song,\nWhen face to face we shall greet Him!"
+  ],
+  "chorus": "\"Christ hath redeemed us\": Praise to His name!\nPraise Him, ye angels in glory!\n\"Christ hath redeemed us,\" bearing our shame;\nTell out the wonderful story!"
+},
+{
+  "id": 119,
+  "number": 119,
+  "title": "Christ Has for Sin Atonement Made",
+  "author": "",
+  "verses": [
+    "CHRIST has for sin atonement made:\nWhat a wonderful Saviour!\nWe are redeemed!—the price is paid:\nWhat a wonderful Saviour!",
+    "I praise Him for the cleansing blood:\nWhat a wonderful Saviour!\nThat reconciled my soul to God:\nWhat a wonderful Saviour!",
+    "He cleanses me from all my sin:\nWhat a wonderful Saviour!\nAnd now He reigns and rules within:\nWhat a wonderful Saviour!",
+    "He walks beside me in the way:\nWhat a wonderful Saviour!\nAnd keeps me faithful day by day:\nWhat a wonderful Saviour!",
+    "He gives me overcoming power:\nWhat a wonderful Saviour!\nAnd triumph in each trying hour:\nWhat a wonderful Saviour!",
+    "To Him I've given all my heart:\nWhat a wonderful Saviour!\nThe world shall never share a part:\nWhat a wonderful Saviour!"
+  ],
+  "chorus": "What a wonderful Saviour is Jesus, my Jesus!\nWhat a wonderful Saviour is Jesus, my Lord!"
+},
+{
+  "id": 120,
+  "number": 120,
+  "title": "Oh, What Am I",
+  "author": "",
+  "verses": [
+    "OH, what am I, that I should be\nThe object of God's wondrous grace?\nThat He should send His Son to me,\nThat I might see Him face to face?",
+    "That He should give His Son for me,\nA sacrifice of love Divine—\nOf love as boundless as the sea,\nThat I might call the Saviour mine?",
+    "Oh, wondrous love, that He should leave\nHis throne, and come to earth for me!\nShould give His life my soul to save,\nThe ransom pay that sets me free.",
+    "A life of service, death of shame,\nEnsample true for all, for me—\nOh, shall I not adore His name,\nThrough time and through eternity."
+  ],
+  "chorus": "It was for me, it was for me,\nFor me He left His throne above;\nHis grace, His goodness all for me,\nFor me the ocean of His love."
+},
   {
     "id": 129,
     "number": 129,
