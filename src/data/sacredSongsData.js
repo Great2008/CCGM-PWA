@@ -1037,6 +1037,281 @@ const SACRED_SONGS = [
     "chorus": "There is joy, glad joy, and a feast is spread,\nWhen the Lord to Bethany comes;\nFor His heavenly voice brings to life the dead,\nWhen the Lord to Bethany comes.\n'Twas a happy, happy day in the olden time,\nWhen the Lord to Bethany came;\nOpen wide the door, let Him enter now,\nFor His love is ever the same!\nHis love is ever the same!\nHis love is ever the same!\nOpen wide the door, let Him enter now!\nFor His love is ever the same!"
   },
   {
+  "id": 81,
+  "number": 81,
+  "title": "Sing, Oh Sing The Old, Old Story",
+  "author": "",
+  "verses": [
+    "Sing, oh sing the old, old story\nOf our Saviour's matchless love!\nSing of Jesus and His glory\nWith the ransomed host above!",
+    "Sing of love, to you so precious—\nTell in song how Jesus died;\nLet sweet music draw the nations\nTo the dear Redeemer's side.",
+    "Ye redeemed ones, sing the story!\nSing it o'er and o'er again!\nTill from every land the people\nJoin to sing the glad refrain."
+  ],
+  "chorus": "Sing, oh sing the love of Jesus!\nSound His praises far and near!\nSing the wondrous story over,\nTill the whole wide world shall hear!"
+},
+
+{
+  "id": 82,
+  "number": 82,
+  "title": "Oh, How Dark The Night",
+  "author": "",
+  "verses": [
+    "Oh, how dark the night that wrapt my spirit round!\nOh, how deep the woe my Saviour found\nWhen His blessed sunshine flooded all my soul,\nBade the darkness vanish: made me whole!",
+    "Tremblingly a sinner bowed before His face,\nNaught I knew of pardon—nor His grace;\nHeard a voice so tender: \"Cease thy wild regret—\nI have bought thy pardon, paid thy debt.\"",
+    "Oh, 'twas wondrous love the Saviour showed for me,\nWhen He left His throne for Calvary,\nWhen He trod the winepress, trod it all alone:\nPraise His name for ever—make it known!"
+  ],
+  "chorus": "All the way to Calvary He went for me,\nHe went for me, He went for me;\nAll the way to Calvary He went for me,\nHe died to set me free."
+},
+
+{
+  "id": 83,
+  "number": 83,
+  "title": "Blessed Redeemer, Full Of Compassion",
+  "author": "",
+  "verses": [
+    "Blessed Redeemer, full of compassion,\nGreat is Thy mercy, boundless and free;\nNow in my weakness, seeking Thy favour,\nLord, I am coming closer to Thee.",
+    "Blessed Redeemer, Thou art my Refuge,\nUnder Thy watch-care safe I shall be;\nGladly adoring, joyfully trusting,\nStill I am coming closer to Thee.",
+    "Blessed Redeemer, gracious and tender,\nNow and for ever dwell Thou in me;\nThou, my Protector, Shield, and Defender,\nDraw me and keep me closer to Thee."
+  ],
+  "chorus": "Blessed Redeemer, wonderful Saviour,\nFountain of wisdom, Ancient of days,\nHope of the faithful, Light of all ages,\nJesus, my Saviour, Thee will I praise."
+},
+
+{
+  "id": 84,
+  "number": 84,
+  "title": "One Offer Of Salvation",
+  "author": "",
+  "verses": [
+    "One offer of salvation,\nTo all the world made known;\nThe only sure foundation\nIs Christ, the Corner-Stone.",
+    "One only door of heaven\nStands open wide today;\nOne sacrifice is given—\n'Tis Christ, the Living Way.",
+    "My only song and story\nIs—Jesus died for me;\nMy only hope for glory—\nThe Cross of Calvary."
+  ],
+  "chorus": "No other name is given,\nNo other way is known;\n'Tis Jesus Christ, the First and Last—\nHe saves, and He alone!"
+},
+
+{
+  "id": 85,
+  "number": 85,
+  "title": "Friend Of Sinners! Lord Of Glory!",
+  "author": "",
+  "verses": [
+    "Friend of sinners! Lord of glory!\nLowly, mighty, Brother, King!\nMusing o'er Thy wondrous story,\nGrateful we Thy praises sing.",
+    "Friend who never fails nor grieves us—\nFaithful, tender, constant, kind!\nFriend who at all times receives us,\nFriend who came the lost to find.\nSorrow soothing, joys enhancing,\nLoving until life shall end—\nThen conferring bliss entrancing,\nStill in heaven the sinner's Friend.",
+    "Oh to love and serve Thee better!\nFrom all evil set us free;\nBreak, Lord, every sinful fetter,\nBe each thought conformed to Thee.\nLooking for Thy bright appearing,\nMay our spirits upward tend;\nTill, no longer doubting, fearing,\nWe behold the sinner's Friend."
+  ],
+  "chorus": "Friend to help us, cheer us, save us,\nIn whom power and pity blend—\nPraise we must the grace which gave us\nJesus Christ, the sinner's Friend."
+},
+
+{
+  "id": 86,
+  "number": 86,
+  "title": "Join All The Glorious Names",
+  "author": "Isaac Watts",
+  "verses": [
+    "Join all the glorious names\nOf wisdom, love, and power,\nThat mortals ever knew,\nThat angels ever bore:\nAll are too mean to speak His worth,\nToo mean to set my Saviour forth.",
+    "Great Prophet of my God,\nMy tongue would bless Thy name;\nBy Thee the joyful news\nOf our salvation came:\nThe joyful news of sins forgiven,\nOf hell subdued, and peace with heaven.",
+    "Jesus, my great High Priest,\nOffered His blood, and died;\nMy guilty conscience seeks\nNo sacrifice beside:\nHis powerful blood did once atone—\nAnd now it pleads before the throne.",
+    "My dear Almighty Lord,\nMy Conqueror and my King!\nThy matchless power and love,\nThy saving grace, I sing:\nThine is the power—oh, may I sit\nIn willing bonds beneath Thy feet.",
+    "Then let my soul arise,\nAnd tread the tempter down;\nMy Captain leads me forth\nTo conquest and a crown.\nThe feeblest saint shall win the day,\nThough death and hell obstruct the way.",
+    "Should all the hosts of death,\nAnd powers of hell unknown,\nPut their most dreadful forms\nOf rage and mischief on,\nI shall be safe; for Christ displays\nSuperior power and guardian grace."
+  ],
+  "chorus": ""
+},
+
+{
+  "id": 87,
+  "number": 87,
+  "title": "Golden Harps Are Sounding",
+  "author": "Frances Ridley Havergal",
+  "verses": [
+    "Golden harps are sounding,\nAngel voices ring,\nPearly gates are opened—\nOpened for the King;\nChrist, the King of Glory,\nJesus, King of Love,\nIs gone up in triumph\nTo His throne above.",
+    "He who came to save us,\nHe who bled and died,\nNow is crowned with glory\nAt His Father's side:\nNevermore to suffer,\nNevermore to die,\nJesus, King of Glory,\nIs gone up on high.",
+    "Praying for His children\nIn that blessed place,\nCalling them to glory,\nSending them His grace;\nHis bright home preparing,\nLittle ones, for you,\nJesus ever liveth,\nEver loveth too."
+  ],
+  "chorus": "All His work is ended,\nJoyfully we sing:\nJesus hath ascended—\nGlory to our King!"
+},
+
+{
+  "id": 88,
+  "number": 88,
+  "title": "I've Found The Pearl Of Greatest Price!",
+  "author": "",
+  "verses": [
+    "I've found the pearl of greatest price!\nMy heart doth sing for joy;\nAnd sing I must, for Christ is mine!\nChrist shall my song employ.",
+    "Christ is my Prophet, Priest, and King—\nMy Prophet full of light,\nMy great High Priest before the throne,\nMy King of heavenly might.",
+    "For He indeed is Lord of lords,\nAnd He the King of kings;\nHe is the Sun of Righteousness,\nWith healing in His wings.",
+    "Christ is my peace; He died for me,\nFor me He shed His blood;\nAnd as my wondrous Sacrifice,\nOffered Himself to God.",
+    "Christ Jesus is my All in All,\nMy comfort, and my love;\nMy life below; and He shall be\nMy joy and crown above."
+  ],
+  "chorus": "I've found the pearl of greatest price,\nMy heart doth sing for joy;\nAnd sing I must, for Christ is mine!\nChrist shall my song employ!"
+},
+
+{
+  "id": 89,
+  "number": 89,
+  "title": "The Great Physician Now Is Near",
+  "author": "William Hunter",
+  "verses": [
+    "The Great Physician now is near,\nThe sympathising Jesus;\nHe speaks the drooping heart to cheer,\nOh, hear the voice of Jesus!",
+    "Your many sins are all forgiven;\nOh, hear the voice of Jesus!\nGo on your way in peace to heaven,\nAnd wear a crown with Jesus.",
+    "All glory to the risen Lamb!\nI now believe in Jesus;\nI love the blessed Saviour's name,\nI love the name of Jesus.",
+    "His name dispels my guilt and fear,\nNo other name but Jesus;\nOh, how my soul delights to hear\nThe precious name of Jesus.",
+    "Come, brethren, help me sing His praise,\nOh, praise the name of Jesus!\nCome, sisters, all your voices raise,\nOh, bless the name of Jesus!",
+    "The children, too, both great and small,\nWho love the name of Jesus,\nMay now accept the gracious call\nTo work and live for Jesus.",
+    "And when to the bright world above\nWe rise to see our Jesus,\nWe'll sing around the throne of love\nHis name, the name of Jesus."
+  ],
+  "chorus": "Sweetest note in seraph song,\nSweetest name on mortal tongue,\nSweetest carol ever sung:\nJesus! blessed Jesus!"
+},
+
+{
+  "id": 90,
+  "number": 90,
+  "title": "Jesus, My Saviour, Is All Things To Me",
+  "author": "",
+  "verses": [
+    "Jesus, my Saviour, is all things to me;\nOh, what a wonderful Saviour is He!\nGuiding, protecting, o'er life's troubled sea,\nMighty Deliverer—Jesus for me!",
+    "Jesus in sickness, and Jesus in health,\nJesus in poverty, comfort or wealth,\nSunshine or tempest, whatever it be,\nHe is my Safety—Jesus for me!",
+    "He is my Refuge, my Rock, and my Tower—\nHe is my Fortress, my Strength and my Power;\nLife Everlasting, my Daysman is He,\nBlessed Redeemer—Jesus for me!",
+    "He is my Prophet, my Priest, and my King;\nHe is my Bread of Life, Fountain and Spring;\nBright Sun of Righteousness, Daystar is He;\nHorn of Salvation—Jesus for me!",
+    "Jesus in sorrow, in joy, or in pain:\nJesus my Treasure, in loss or in gain;\nConstant Companion where'er I may be,\nLiving or dying—Jesus for me!"
+  ],
+  "chorus": "Jesus for me! Jesus for me!\nAll the time, everywhere, Jesus for me!"
+},
+
+{
+  "id": 91,
+  "number": 91,
+  "title": "Take The Name Of Jesus With You",
+  "author": "Lydia Odell Baxter",
+  "verses": [
+    "Take the name of Jesus with you,\nChild of sorrow and of woe;\nIt will joy and comfort give you—\nTake it then where'er you go.",
+    "Take the name of Jesus ever,\nAs a shield from every snare;\nIf temptations round you gather,\nBreathe that holy name in prayer.",
+    "Oh, the precious name of Jesus!\nHow it thrills our souls with joy,\nWhen His loving arms receive us,\nAnd His songs our tongues employ.",
+    "At the name of Jesus bowing,\nFalling prostrate at His feet,\nKing of kings in heaven we'll crown Him,\nWhen our journey is complete."
+  ],
+  "chorus": "Precious name, oh, how sweet!\nHope of earth and joy of heaven!\nPrecious name, oh, how sweet!\nHope of earth and joy of heaven!"
+},
+
+{
+  "id": 92,
+  "number": 92,
+  "title": "In The Hour When Guilt Assails Me",
+  "author": "",
+  "verses": [
+    "In the hour when guilt assails me,\nOn His gracious name I call,\nThen I find the heavenly fulness,\nChrist, my righteousness, my all!",
+    "In the night when sorrow clouds me,\nAnd the burning teardrops fall,\nThen I sing the song of patience,\nChrist, my Brother and my all!",
+    "In the day when this immortal\nShall fling off its mortal thrall,\nThen my song of resurrection\nShall be—\"Christ, my all in all!\""
+  ],
+  "chorus": "All my song, when standing yonder,\nShall be—\"Christ, my joy, my all!\"\nThis shall ever be my anthem,\n\"Christ my glory, Christ my all!\"\nThis shall ever be my anthem,\n\"Christ my glory, Christ my all!\""
+},
+
+{
+  "id": 93,
+  "number": 93,
+  "title": "Beautiful The Fields Beyond The River",
+  "author": "",
+  "verses": [
+    "Beautiful the fields beyond the river!\nGlorious the thousands gathered there!\nBut who in heaven, so full of grace and glory—\nWho with Him, our Saviour, can compare?",
+    "Altogether, altogether lovely!\nHe is calling tenderly to thee;\nMy soul, why not accept His great salvation,\nOffered now so rich, so full, so free?",
+    "Altogether, altogether lovely!\nHear His voice—how tender still the call:\n\"Come, come, ye weary ones and heavy-laden,\nCome to Me, and let your burdens fall!\""
+  ],
+  "chorus": "Oh, He is the chief among ten thousand!\nRoll His praise in joyful waves along!\nFor \"altogether, altogether lovely!\"\nShall for ever be our happy song!"
+},
+
+{
+  "id": 94,
+  "number": 94,
+  "title": "Crown Him, Crown Him, Christ Our Lord And King",
+  "author": "",
+  "verses": [
+    "Crown Him, crown Him, Christ our Lord and King!\nThrough all ages let His praises ring!\nGlory, honour to His name we'll bring,\nNow and for evermore.",
+    "Hail Him, hail Him, angel-hosts on high,\nTo His throne with harps and songs draw nigh;\nLet all nations join the joyful cry:\n\"Crown Him, the King of kings!\"",
+    "He is Victor, He has conquered sin;\nLet His Spirit rule our hearts within;\nIn His name the victory we shall win:\nCrown Him for evermore."
+  ],
+  "chorus": "We will crown Him, we will crown Him;\nIn the glory land we'll crown Him King!\nCrown Him, we will crown Him—\nLoud let His praises ring!"
+},
+
+{
+  "id": 95,
+  "number": 95,
+  "title": "\"Be Still,\" The Rebuker Of Seas Hath Spoken",
+  "author": "",
+  "verses": [
+    "\"Be still,\" the Rebuker of seas hath spoken,\nThe command was for me, and my heart is at ease;\nHe hath hushed into silence the waves and the winds,\nBy applying His blood and removing my sins.",
+    "He hath quickened my soul by a life from above;\nIt was done by the Spirit, its essence is love,\nHe hath pardoned and washed me as white as the snow,\nAnd my heart with His love does this moment overflow.",
+    "He's a wonderful Jesus, this Saviour of mine;\nHe's the great Son of God—a Redeemer Divine;\nHe's my Strength and my Wisdom, my Life and my Lord,\nAnd enthroned in my heart to be loved and adored.",
+    "I will love Him, and serve Him from now till I die;\nFor His love fills my heart, and His beauty my eye,\nHe's the fairest and dearest of all to my soul,\nAnd our lives shall be one, while eternities roll."
+  ],
+  "chorus": "He's the Prince of Peacemakers, all glory to God,\nTo redeem me, and cleanse me, He shed His own blood;\nMy adoption is sealed, I'm a child of the King,\nAnd for ever and ever of Jesus I'll sing."
+},
+
+{
+  "id": 96,
+  "number": 96,
+  "title": "Oh, Wondrous Name",
+  "author": "",
+  "verses": [
+    "Oh, wondrous Name, by prophets heard,\nLong years before His birth;\nThey saw His coming from afar,\nThe Prince of Peace on earth.",
+    "Oh, glorious Name the angels praise,\nAnd ransomed saints adore—\nThe Name above all other names,\nOur refuge evermore.",
+    "Oh, precious Name, exalted high,\nTo whom all power is given;\nThrough Him we triumph over sin,\nBy Him we enter heaven."
+  ],
+  "chorus": "The Wonderful! The Counsellor!\nThe Great and Mighty Lord!\nThe Everlasting Prince of Peace!\nThe King, the Son of God!"
+},
+
+{
+  "id": 97,
+  "number": 97,
+  "title": "There Were Ninety And Nine",
+  "author": "Elizabeth Clephane",
+  "verses": [
+    "There were ninety and nine that safely lay\nIn the shelter of the fold,\nBut one was out on the hills away,\nFar off from the gates of gold—\nAway on the mountains wild and bare,\nAway from the tender Shepherd's care.",
+    "\"Lord, Thou hast here Thy ninety and nine;\nAre they not enough for Thee?\"\nBut the Shepherd made answer: \"This of Mine\nHas wandered away from Me;\nAnd although the road be rough and steep,\nI go to the desert to find My sheep.\"",
+    "But none of the ransomed ever knew\nHow deep were the waters crossed;\nNor how dark was the night that the Lord passed through\nEre He found His sheep that was lost.\nOut in the desert He heard its cry—\nSick and helpless, and ready to die.",
+    "\"Lord, whence are those blood-drops all the way\nThat mark out the mountain's track?\"\n\"They were shed for one who had gone astray\nEre the Shepherd could bring him back.\"\n\"Lord, whence are Thy hands so rent and torn?\"\n\"They are pierced tonight by many a thorn.\"",
+    "But all through the mountains, thunder-riven,\nAnd up from the rocky steep,\nThere arose a cry to the gate of heaven,\n\"Rejoice! I have found My sheep!\"\nAnd the angels echoed around the throne,\n\"Rejoice, for the Lord brings back His own!\""
+  ],
+  "chorus": ""
+},
+
+{
+  "id": 98,
+  "number": 98,
+  "title": "Thou Art Fairer Than The Morning",
+  "author": "",
+  "verses": [
+    "Thou art fairer than the morning,\nO my Saviour and my King!\nOf Thy grandeur and Thy beauty,\nHow my soul delights to sing.",
+    "Clothed in light as with a garment,\nCrowned with majesty Divine,\nLo, the sceptre of dominion\nNow and ever, Lord, is Thine.",
+    "Oh, the greatness of Thy mercy,\nAnd the richness of Thy grace!\nOh, the love that in Thy kingdom\nIs preparing me a place!",
+    "When the silver cord is broken,\nAnd this mortal life is o'er,\nWith ten thousand times ten thousand\nI shall sing for evermore."
+  ],
+  "chorus": "Thou art fairer than the morning,\nThou art brighter, brighter than the day;\nAt the glory of Thy presence\nClouds and darkness flee away."
+},
+
+{
+  "id": 99,
+  "number": 99,
+  "title": "Beautiful Star Of Promise",
+  "author": "",
+  "verses": [
+    "Beautiful star of promise,\nBeautiful morning star;\nBeaming with joy and gladness\nOver the world afar.",
+    "Beautiful star of promise,\nBeacon of hope and rest;\nLighting the couch of sorrow,\nSoothing the weary breast.",
+    "Beautiful star of promise,\nShining when waves are dark;\nInto its long-sought haven\nGuiding the lonely bark.",
+    "Beautiful star of promise,\nStar of eternal love;\nThou wilt conduct me safely\nHome to the realms above."
+  ],
+  "chorus": "Smile on me, smile on me,\nBeautiful, beautiful morning star;\nSmile on me, smile on me,\nBeautiful morning star."
+},
+
+{
+  "id": 100,
+  "number": 100,
+  "title": "In The Rifted Rock I'm Resting",
+  "author": "",
+  "verses": [
+    "In the Rifted Rock I'm resting,\nSure and safe from all alarm;\nStorms and billows have united,\nAll in vain, to do me harm;\nIn the Rifted Rock I'm resting,\nSurf is dashing at my feet,\nStorm-clouds dark are o'er me hovering,\nYet my rest is all complete.",
+    "Many a stormy sea I've traversed,\nMany a tempest-shock have known;\nHave been driven, without anchor,\nOn the barren shore and lone.\nYet I now have found a haven,\nNever moved by tempest shock,\nWhere my soul is safe for ever,\nIn the blessed Rifted Rock."
+  ],
+  "chorus": "In the Rifted Rock I'm resting,\nSure and safe from all alarm:\nStorms and billows have united,\nAll in vain, to do me harm."
+},
+  {
     "id": 97,
     "number": 97,
     "title": "There Were Ninety And Nine",
