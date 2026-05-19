@@ -2217,20 +2217,528 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
-  {
-    "id": 203,
-    "number": 203,
-    "title": "All Hail The Power Of Jesus Name",
-    "author": "Edward Perronet",
-    "verses": [
-      "All hail the power of Jesus' name!\nLet angels prostrate fall;\nBring forth the royal diadem,\nAnd crown Him Lord of all.",
-      "Crown Him, ye martyrs of your God,\nWho from His altar call;\nExtol the Stem of Jesse's rod,\nAnd crown Him Lord of all.",
-      "Ye chosen seed of Israel's race,\nYe ransomed from the fall,\nHail Him who saves you by His grace,\nAnd crown Him Lord of all.",
-      "Let every kindred, every tribe\nOn this terrestrial ball,\nTo Him all majesty ascribe,\nAnd crown Him Lord of all.",
-      "O that with yonder sacred throng\nWe at His feet may fall,\nWe'll join the everlasting song,\nAnd crown Him Lord of all."
-    ],
-    "chorus": "Crown Him! Crown Him!\nCrown Him Lord of all!"
-  },
+{
+  "id": 171,
+  "number": 171,
+  "title": "He Dies! He Dies!",
+  "author": "",
+  "verses": [
+    "HE dies! He dies! the lowly Man of Sorrows,\nOn whom were laid our many griefs and woes;\nOur sins He bore, beneath God's awful billows,\nAnd He hath triumphed over all our foes.",
+    "He lives! He lives! what glorious consolation!\nExalted at His Father's own right hand;\nHe pleads for us, and by His intercession,\nEnables all His saints by grace to stand.",
+    "He comes! He comes! Oh, blest anticipation!\nIn keeping with His true and faithful word;\nTo call us to our heavenly consummation—\nCaught up, to be \"for ever with the Lord.\""
+  ],
+  "chorus": "\"I am He that liveth, that liveth, and was dead;\nI am He that liveth, that liveth, and was dead;\nAnd behold, I am alive for evermore,\nBehold, I am alive for evermore.\nI am He that liveth, that liveth, and was dead;\nAnd behold, I am alive for evermore.\""
+},
+{
+  "id": 172,
+  "number": 172,
+  "title": "He Is Coming, the Man of Sorrows",
+  "author": "",
+  "verses": [
+    "HE is coming, the \"Man of Sorrows,\"\nNow exalted on high;\nHe is coming with loud hosannas,\nIn the clouds of the sky.",
+    "He is coming, our loving Saviour,\nBlessed Lamb that was slain!\nIn the glory of God the Father,\nOn the earth He shall reign.",
+    "He is coming, our Lord and Master,\nOur Redeemer and King;\nWe shall see Him in all His beauty,\nAnd His praise we shall sing.",
+    "He shall gather His chosen people,\nWho are called by His name;\nAnd the ransomed of every nation,\nFor His own He shall claim."
+  ],
+  "chorus": "Hallelujah! Hallelujah!\nHe is coming again;\nAnd with joy we will gather round Him,\nAt His coming to reign!"
+},
+{
+  "id": 173,
+  "number": 173,
+  "title": "There's a Light That Is Shining in Darkness",
+  "author": "",
+  "verses": [
+    "THERE'S a light that is shining in darkness,\nWhile we wait for the dawning of day;\nAnd it cheers us along on our journey,\nTill the shadows shall vanish away!",
+    "From the sure word the prophets have spoken,\nThere is light flashing forth through the gloom;\nFor the Scripture can never be broken,\nAnd the King in His glory will come.",
+    "Now we sing 'mid the darkness and shadows,\nAnd we pray and we watch for the dawn;\nTill the Day-star, in glory arising,\nShall betoken the coming of morn.",
+    "We are not of the night nor of darkness,\nLet us walk, then, as children of day;\nOur weeping shall be for a moment,\nAnd our joy shall ne'er vanish away!"
+  ],
+  "chorus": "So we'll wait and watch for the dawning,\nThe day of eternity blest;\nThen take the wings of the morning,\nAnd fly away to our rest."
+},
+{
+  "id": 174,
+  "number": 174,
+  "title": "Oh, the Weary Night Is Waning",
+  "author": "",
+  "verses": [
+    "OH, the weary night is waning,\nAnd the clouds are rolling by;\nSee, the long-expected morning\nNow is dawning in the sky;\nWhen from Zion's lofty mountain\nWe shall hear the watchmen cry,\nAnd rejoicing we shall gather\nWhen the King shall come.",
+    "When the ransomed of Jehovah,\nFrom the East and from the West,\nShall return with joy and gladness,\nTo receive the promised rest—\nThen shall every tribe and nation\nOut of every land be blessed,\nAnd rejoicing they shall gather\nWhen the King shall come.",
+    "May He find us, when He cometh,\nFaithful watchers, day and night,\nAt our royal post of duty,\nWith our armour shining bright;\nMay our lamps be trimmed and burning\nWith a clear and steady light,\nThat rejoicing we may gather\nWhen the King shall come."
+  ],
+  "chorus": "O Zion! O Zion!\nGreat will be thy triumph\nWhen the King shall come;\nO Zion! O Zion!\nThou shalt be exalted\nWhen the King shall come."
+},
+{
+  "id": 175,
+  "number": 175,
+  "title": "Behold, the Stripes He Bore for Us",
+  "author": "",
+  "verses": [
+    "BEHOLD, the stripes He bore for us, the stripes He bore for us,\nAnd blest is he whose loins are girt, whose lamp is burning bright;\nBut woe to that dull servant whom the Master shall surprise\nWith lamp untrimmed, unburning, and with slumber in his eyes.",
+    "Do thou, my soul, keep watch, beware lest thou in sleep sink down,\nLest thou be given o'er to death, and lose the golden crown;\nBut see that thou art sober, with a watchful eye, and thus\nCry, \"Holy, Holy, Holy God, have mercy upon us.\"",
+    "That day, the day of fear, shall come; my soul, slack not thy toil,\nBut light thy lamp, and feed it well, and make it bright with oil;\nThou knowest not how soon may sound the cry at eventide:\n\"Behold the Bridegroom comes! Arise, go forth to meet the Bride!\"",
+    "Beware, my soul! take thou good heed lest thou in slumber lie,\nAnd, like the five, remain without, and knock, and vainly cry;\nBut watch, and bear thy lamp undimmed, and Christ shall gird thee on\nHis own bright wedding-robe of light—the glory of the Son."
+  ],
+  "chorus": ""
+},
+{
+  "id": 176,
+  "number": 176,
+  "title": "Our Lord Is Now Rejected",
+  "author": "",
+  "verses": [
+    "OUR Lord is now rejected,\nAnd by the world disowned;\nBy the many still neglected,\nAnd by the few enthroned;\nBut soon He'll come in glory!\nThe hour is drawing nigh,\nFor the crowning day is coming\nBy and by.",
+    "The heavens shall glow with splendour,\nBut brighter far than they,\nThe saints shall shine in glory,\nAs Christ shall them array:\nThe beauty of the Saviour\nShall dazzle every eye,\nIn the crowning day that's coming\nBy and by.",
+    "Our pain shall then be over:\nWe'll sin and sigh no more;\nBehind us all of sorrow,\nAnd nought but joy before—\nA joy in our Redeemer,\nAs we to Him are nigh,\nIn the crowning day that's coming\nBy and by.",
+    "Let all that look for, hasten\nThe coming joyful day,\nBy earnest consecration,\nTo walk the narrow way;\nBy gathering in the lost ones,\nFor whom our Lord did die,\nFor the crowning day that's coming\nBy and by."
+  ],
+  "chorus": "Oh, the crowning day is coming!\nIs coming by and by!\nWhen our Lord shall come in \"power\"\nAnd \"glory\" from on high!\nOh, the glorious sight will gladden\nEach waiting, watchful eye,\nIn the crowning day that's coming\nBy and by."
+},
+{
+  "id": 177,
+  "number": 177,
+  "title": "Jesus, Thy Blood and Righteousness",
+  "author": "",
+  "verses": [
+    "JESUS, Thy blood and righteousness\nMy beauty are, my glorious dress;\n'Midst flaming worlds, in these arrayed,\nWith joy shall I lift up my head.",
+    "When, from the dust of death, I rise\nTo take my mansion in the skies;\nE'en then shall this be all my plea—\nJesus hath lived and died for me.",
+    "Bold shall I stand in that great day,\nFor who aught to my charge shall lay,\nWhile, through Thy blood, absolved I am\nFrom sin's tremendous curse and shame?",
+    "This spotless robe the same appears\nWhen ruined nature sinks in years:\nNo age can change its glorious hue;\nThe robe of Christ is ever new.",
+    "Oh, let the dead now hear Thy voice!\nBid, Lord, Thy banished ones rejoice:\nTheir beauty this, their glorious dress,\nJesus, Thy blood and righteousness."
+  ],
+  "chorus": ""
+},
+{
+  "id": 178,
+  "number": 178,
+  "title": "Jesus Is Coming! Sing the Glad Word",
+  "author": "",
+  "verses": [
+    "JESUS is coming! sing the glad word!\nComing for those He redeemed by His blood,\nComing to reign as the glorified Lord!\nJesus is coming again!",
+    "Jesus is coming! the dead shall arise,\nLoved ones shall meet in a joyful surprise,\nCaught up together to Him in the skies.\nJesus is coming again!",
+    "Jesus is coming! His saints to release;\nComing to give to the warring earth peace:\nSinning, and sighing, and sorrow shall cease.\nJesus is coming again!",
+    "Jesus is coming! the promise is true;\nWho are the chosen, the faithful, the few,\nWaiting and watching, prepared for review?\nJesus is coming again!"
+  ],
+  "chorus": "Jesus is coming, is coming again!\nJesus is coming again!\nShout the glad tidings o'er mountain and plain!\nJesus is coming again!"
+},
+{
+  "id": 179,
+  "number": 179,
+  "title": "In the Crimson Blush of Morning",
+  "author": "",
+  "verses": [
+    "IN the crimson blush of morning,\nIn the glitter of the noon,\nIn the midnight's gloomy darkness,\nOr the gleaming of the moon,\nIn the stillness of the twilight,\nAs it shimmers in the sky,\nWe are watching, we are waiting,\nFor the end that draweth nigh.",
+    "We shall see our Lord in splendour,\nAnd amid a countless throng,\nOn the clouds to earth descending,\nWith a movement swift and strong;\nAnd the angels round about Him,\nIn their dazzling white array,\nWhile before Him sounds the summons\nFor the final Judgment-day.",
+    "He will welcome all His people,\nHe will diadem His own;\nHe will show to them His glory,\nAnd will share with them His throne;\nAnd for ever in His presence\nThey shall see Him face to face,\nWhile they chant His matchless wisdom,\nAnd extol His wondrous grace.",
+    "He is coming, surely coming,\nFor His promise cannot fail;\nAnd the scoffers shall behold Him,\nAnd before Him they shall quail!\nHe is coming, quickly coming!\nBut His coming we shall greet;\nWe have waited for His advent,\nAnd have listened for His feet."
+  ],
+  "chorus": ""
+},
+{
+  "id": 180,
+  "number": 180,
+  "title": "Come on the Wings of the Morning",
+  "author": "",
+  "verses": [
+    "COME on the wings of the morning;\nCome, Thou Redeemer and King,\nHail to the day that is dawning,\nHail to the joy it will bring.",
+    "Come on the wings of the morning;\nCome with Thy glory and grace,\nAll of Thy promise performing,\nShowing the light of Thy face.",
+    "Come on the wings of the morning;\nCome with a joyful surprise,\nLifting the sad and the mourning,\nWiping the tears from their eyes.",
+    "Come on the wings of the morning;\nCome as the King to Thy throne;\nHave we not sounded Thy warning?\nNow let Thy glory be known."
+  ],
+  "chorus": "Oh, come on the wings of the morning!\nOh, come to our hearts as we sing!\nCome as we sing in the day that is dawning;\nOh, come, Thou Redeemer and King!"
+},
+{
+  "id": 181,
+  "number": 181,
+  "title": "Watch, Earnestly Watch",
+  "author": "",
+  "verses": [
+    "WATCH, earnestly watch, the Lord's approach is nearing;\nPray, fervently pray, no man can know the hour;\nLike as a thief at night is His appearing;\nHe cometh to judge the world in truth and power.",
+    "Work, joyfully work, all ye who know His chastening;\nWait, patiently wait, for your reward is nigh;\nLift up your heads, the day of rest is hastening;\nRest, glorious rest, with Jesus by and by.",
+    "Trust, loyally trust, and as to Him thou'rt clinging,\nKeep, faithfully keep the Saviour's blest commands;\nThen in thy heart the blest assurance ringing,\nKnow surely thy name is written in His hands."
+  ],
+  "chorus": "Watch ye, pray ye, soldiers of the Lord;\nWork ye, wait ye, trusting in His word;\nKeep His commandments, and His law obey,\nAnd He will reward you in the last great day."
+},
+{
+  "id": 182,
+  "number": 182,
+  "title": "The Lord Is Coming By-and-By",
+  "author": "",
+  "verses": [
+    "THE Lord is coming by-and-by:\nBe ready when He comes!\nHe comes from His fair home on high:\nBe ready when He comes!\nHe is the Lord our Righteousness,\nAnd comes His chosen ones to bless,\nAnd at His Father's throne confess:\nBe ready when He comes!",
+    "He soon will come to earth again:\nBe ready when He comes!\nBegin His universal reign:\nBe ready when He comes!\nWith hallelujahs heaven will ring,\nWhen Jesus doth redemption bring;\nOh, trim your lamps to meet your King!\nBe ready when He comes!",
+    "Behold! He comes to one and all:\nBe ready when He comes!\nAnd soon we'll hear the trumpet call:\nBe ready when He comes!\nTo Judgment called at His command,\nFrom every clime, from every land,\nBefore His throne we all must stand:\nBe ready when He comes!"
+  ],
+  "chorus": "Will you be ready when the Bridegroom comes?\nWill you be ready when the Bridegroom comes?\nWill your lamps be trimmed and bright,\nBe it morning, noon, or night?\nWill you be ready when the Bridegroom comes?"
+},
+{
+  "id": 183,
+  "number": 183,
+  "title": "Impatient Heart, Be Still",
+  "author": "",
+  "verses": [
+    "IMPATIENT heart, be still!\nWhat though He tarries long?\nWhat though the triumph song\nIs still delayed?\nThou hast His promise sure,\nAnd that is all secure:\nBe not afraid!\nBe still! be still!\nImpatient heart, be still!",
+    "My eager heart, be still!\nThy Lord will surely come,\nAnd take thee to His home,\nWith Him to dwell:\nIt may not be to-day;\nAnd yet, my soul, it may—\nI cannot tell!\nBe still! be still!\nMy eager heart, be still!",
+    "My anxious heart, be still!\nWatch, work, and pray; and then\nIt will not matter when\nThy Lord shall come,\nAt midnight or at noon;\nHe cannot come too soon\nTo take thee home.\nBe still! be still!\nMy anxious heart, be still!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 184,
+  "number": 184,
+  "title": "A Lamp in the Night",
+  "author": "",
+  "verses": [
+    "A LAMP in the night, a song in time of sorrow,\nA great glad hope which faith can ever borrow\nTo gild the passing day with the glory of the morrow,\nIs the hope of the coming of the Lord.",
+    "A star in the sky, a beacon bright to guide us;\nAn anchor sure to hold when storms betide us;\nA refuge for the soul, where in quiet we may hide us—\nIs the hope of the coming of the Lord.",
+    "A call of command, like trumpet clearly sounding,\nTo make us bold when evil is surrounding;\nTo stir the sluggish heart, and to keep in good abounding—\nIs the hope of the coming of the Lord.",
+    "A word from the One to all our hearts the dearest,\nA parting word to make Him aye the nearest;\nOf all His precious words, the sweetest, brightest, clearest,\nIs the hope of the coming of the Lord."
+  ],
+  "chorus": "Blessed hope, blessed hope,\nBlessed hope of the coming of the Lord!\nHow the aching heart it cheers;\nHow it glistens through our tears,\nBlessed hope of the coming of the Lord."
+},
+{
+  "id": 185,
+  "number": 185,
+  "title": "Will Your Lamps Be Filled and Ready",
+  "author": "",
+  "verses": [
+    "WILL your lamps be filled and ready,\nWhen the Bridegroom comes?\nAnd our lights be clear and steady,\nWhen the Bridegroom comes?\nIn the night, that solemn night,\nWill our lamps be burning bright,\nWhen the Bridegroom comes?",
+    "Shall we hear a welcome sounding,\nWhen the Bridegroom comes?\nAnd a shout of joy resounding,\nWhen the Bridegroom comes?\nIn the night, that solemn night,\nWill our lamps be burning bright,\nWhen the Bridegroom comes?",
+    "Don't delay our preparation\nTill the Bridegroom comes;\nLest there be a separation,\nWhen the Bridegroom comes.\nIn the night, that solemn night,\nWill our lamps be burning bright,\nWhen the Bridegroom comes?",
+    "It may be a time of sorrow,\nWhen the Bridegroom comes;\nIf our oil we hope to borrow,\nWhen the Bridegroom comes.\nIn the night, that solemn night,\nWill our lamps be burning bright,\nWhen the Bridegroom comes?",
+    "Oh, there'll be a glorious meeting\nWhen the Bridegroom comes!\nAnd a hallelujah greeting,\nWhen the Bridegroom comes!\nIn the night, that joyful night,\nWith our lamps all burning bright,\nWhen the Bridegroom comes."
+  ],
+  "chorus": "Oh, be ready! Oh, be ready!\nOh, be ready when the Bridegroom comes!"
+},
+{
+  "id": 186,
+  "number": 186,
+  "title": "O Watchman on the Mountain Height",
+  "author": "",
+  "verses": [
+    "O WATCHMAN on the mountain height,\nProclaim the coming day;\nBehold the spires of golden fires\nPoint upward far away.",
+    "O watchman, bid the sleeping Church\nAwake, arise, and pray;\nThe heavenly Bridegroom soon will come,\nAnd now is on His way.",
+    "All hail to Zion's glorious King,\nBy prophets long foretold;\nPraise Him in song, ye angel throng,\nStrike all your harps of gold."
+  ],
+  "chorus": "Coming, yes, He's coming, the Day-spring from on high;\nComing, yes, He's coming; the promised hour is nigh;\nComing, yes, He's coming; let all the ransomed sing;\nThe hills are bright with shining light; all hail the coming King!"
+},
+{
+  "id": 187,
+  "number": 187,
+  "title": "Jesus, Thine All-Victorious Love",
+  "author": "",
+  "verses": [
+    "JESUS, Thine all-victorious love\nShed in my soul abroad;\nThen shall my heart no longer rove,\nRooted and fixed in God.",
+    "Oh that in me the sacred fire\nMight now begin to glow!\nBurn up the dross of base desire,\nAnd make the mountains flow.",
+    "Thou, who at Pentecost didst fall,\nDo Thou my sins consume;\nCome, Holy Ghost, for Thee I call;\nSpirit of Burning, come!",
+    "Refining Fire, go through my heart,\nIlluminate my soul;\nScatter Thy life through every part,\nAnd sanctify the whole.",
+    "My steadfast soul, from falling free,\nShall then no longer move,\nWhile Christ is all the world to me,\nAnd all my heart is love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 188,
+  "number": 188,
+  "title": "Come, Holy Spirit, Heavenly Dove",
+  "author": "",
+  "verses": [
+    "COME, Holy Spirit, Heavenly Dove!\nWith all Thy quickening powers,\nKindle a flame of sacred love\nIn these cold hearts of ours.",
+    "O Lord, and shall we ever live\nAt this poor dying rate?—\nOur love so faint, so cold to Thee,\nAnd Thine to us so great.",
+    "Come, Holy Spirit, Heavenly Dove!\nWith all Thy quickening powers,\nCome, shed abroad a Saviour's love,\nAnd that shall kindle ours."
+  ],
+  "chorus": ""
+},
+{
+  "id": 189,
+  "number": 189,
+  "title": "Come, Holy Ghost, Our Hearts Inspire",
+  "author": "",
+  "verses": [
+    "COME, Holy Ghost, our hearts inspire;\nLet us Thine influence prove,\nSource of the old prophetic fire,\nFountain of light and love.",
+    "Come, Holy Ghost, for, moved by Thee,\nThe prophets wrote and spoke;\nUnlock the truth, Thyself the Key,\nUnseal the sacred book.",
+    "Expand Thy wings, celestial Dove,\nBrood o'er our nature's night;\nOn our disordered spirits move,\nAnd let there now be light.",
+    "God, through Himself, we then shall know,\nIf Thou within us shine;\nAnd sound, with all Thy saints below,\nThe depths of love divine."
+  ],
+  "chorus": ""
+},
+{
+  "id": 190,
+  "number": 190,
+  "title": "Come, Holy Spirit, Come",
+  "author": "",
+  "verses": [
+    "COME, Holy Spirit, come;\nLet Thy bright beams arise,\nDispel the darkness from our minds,\nAnd open all our eyes.",
+    "Revive our drooping faith,\nOur doubts and fears remove,\nAnd kindle in our breasts the flame\nOf never-dying love.",
+    "Convince us of our sin,\nThen lead to Jesus' blood,\nAnd to our wondering view reveal\nThe secret love of God.",
+    "'Tis Thine to cleanse the heart,\nTo sanctify the soul,\nTo pour fresh life in every part,\nAnd new-create the whole.",
+    "Dwell therefore in our hearts,\nOur minds from bondage free;\nThen we shall know, and praise, and love\nThe Father, Son, and Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 191,
+  "number": 191,
+  "title": "Our Blest Redeemer, Ere He Breathed",
+  "author": "",
+  "verses": [
+    "OUR blest Redeemer, ere He breathed\nHis tender, last farewell,\nA Guide, a Comforter bequeathed\nWith us to dwell.",
+    "He came in semblance of a dove,\nWith sheltering wings outspread,\nThe holy balm of peace and love\nOn earth to shed.",
+    "He came in tongues of living flame,\nTo teach, convince, subdue;\nAll-powerful as the wind He came—\nAs viewless too.",
+    "He comes sweet influence to impart,\nA gracious, willing Guest,\nWhile He can find one humble heart\nWherein to rest.",
+    "And His that gentle voice we hear,\nSoft as the breath of even,\nThat checks each fault, that calms each fear,\nAnd speaks of heaven.",
+    "And every virtue we possess,\nAnd every victory won,\nAnd every thought of holiness,\nAre His alone.",
+    "Spirit of purity and grace,\nOur weakness pitying see;\nO make our hearts Thy dwelling place,\nAnd worthier Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 192,
+  "number": 192,
+  "title": "Holy Spirit, Lead Us Now",
+  "author": "",
+  "verses": [
+    "HOLY Spirit, lead us now\nBoldly to the throne of grace;\nWhile our heads in prayer we bow,\nLet Thy presence fill this place:\nHoly Spirit, Heavenly Guide,\nLead us to the Crucified!",
+    "This is now our time of need,\nThis is now the day of grace;\nNow our souls with manna feed\nEre we leave this sacred place:\nHoly Spirit, Heavenly Dove,\nLead us to the feast of love!",
+    "At the blessed mercy-seat\nPeace and joy are freely given;\nWhile we wait at Jesus' feet,\nMake this place the gate of heaven:\nHoly Spirit, Heavenly Friend,\nNow upon our hearts descend!",
+    "Weak and sinful though we be,\nJesus' blood can cleanse from sin;\nAt the fountain full and free\nWash and make us pure within:\nHoly Spirit, Cleansing fire,\nBurn up every base desire!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 193,
+  "number": 193,
+  "title": "Spirit Divine",
+  "author": "",
+  "verses": [
+    "SPIRIT Divine, Spirit Divine—\nBe Thou the Day-star on my darkness to shine!",
+    "Spirit of Truth, Spirit of Truth—\nBe Thou the Teacher and the Guide of my youth!",
+    "Spirit of Love, Spirit of Love—\nBe Thou the Leader to my mansion above!",
+    "Spirit of Power, Spirit of Power—\nBe Thou the praises of my song evermore! Amen."
+  ],
+  "chorus": ""
+},
+{
+  "id": 194,
+  "number": 194,
+  "title": "Holy Spirit, Faithful Guide",
+  "author": "",
+  "verses": [
+    "HOLY Spirit, faithful Guide!\nEver near the Christian's side,\nGently lead us by the hand,\nPilgrims in a desert land;\nWeary souls for aye rejoice,\nWhile they hear that sweetest voice,\nWhispering softly, \"Wanderer, come!\nFollow Me, I'll guide thee home!\"",
+    "Ever present, truest Friend,\nEver near, Thine aid to lend,\nLeave us not to doubt and fear,\nGroping on in darkness drear:\nWhen the storms are raging sore,\nHearts grow faint, and hopes give o'er,\nWhisper softly, \"Wanderer, come!\nFollow Me, I'll guide thee home!\"",
+    "When our days of toil shall cease,\nWaiting still for sweet release,\nNothing left but heaven and prayer,\nTrusting that our names are there,\nWading deep the dismal flood,\nPleading naught but Jesus' blood;\nWhisper softly, \"Wanderer, come!\nFollow Me, I'll guide thee home!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 195,
+  "number": 195,
+  "title": "Come, Holy Spirit, Like a Dove Descending",
+  "author": "",
+  "verses": [
+    "COME, Holy Spirit, like a dove descending,\nRest Thou upon us while we meet to pray;\nShow us the Saviour, His great love revealing;\nLead us to Him, the Life, the Truth, the Way.",
+    "Come, Holy Spirit, every cloud dispelling;\nFill us with gladness, through the Master's name;\nBring to our memory words that He hath spoken,\nThen shall our tongues His wondrous grace proclaim.",
+    "Come, Holy Spirit, sent from God the Father—\nThou Friend and Teacher, Comforter and Guide—\nOur thoughts directing, keep us close to Jesus,\nAnd in our hearts for evermore abide."
+  ],
+  "chorus": ""
+},
+{
+  "id": 196,
+  "number": 196,
+  "title": "Come, Holy Ghost, in Love",
+  "author": "",
+  "verses": [
+    "COME, Holy Ghost, in love,\nShed on us from above\nThine own bright ray:\nDivinely good Thou art;\nThy sacred gifts impart\nTo gladden each sad heart:\nOh, come to-day!",
+    "Come, tenderest Friend and best,\nOur most delightful Guest,\nWith soothing power:\nRest, which the weary know;\nShade, 'mid the noontide glow;\nPeace, when deep griefs o'erflow:\nCheer us this hour.",
+    "Come, Light serene and still,\nOur inmost bosoms fill;\nDwell in each breast!\nWe know no dawn but Thine;\nSend forth Thy beams divine,\nOn our dark souls to shine,\nAnd make us blest.",
+    "Exalt our low desires,\nExtinguish passion's fires,\nHeal every wound;\nOur stubborn spirits bend,\nOur icy coldness end,\nOur devious steps attend\nWhile heavenward bound.",
+    "Come, all the faithful bless:\nLet all who Christ confess\nHis praise employ;\nGive virtue's rich reward;\nVictorious death accord,\nAnd, with our glorious Lord,\nEternal joy."
+  ],
+  "chorus": ""
+},
+{
+  "id": 197,
+  "number": 197,
+  "title": "Hear Us, Thou That Broodedst O'er the Watery Deep",
+  "author": "",
+  "verses": [
+    "HEAR us, Thou that broodedst o'er the watery deep,\nWaking all creation from its primal sleep:\nHoly Spirit, breathing breath of life divine,\nBreathe into our spirits, blending them with Thine.",
+    "When the sun ariseth in a cloudless sky,\nMay we feel Thy presence, Holy Spirit, nigh;\nShed Thy radiance o'er us, keep it cloudless still,\nThrough the day before us, perfecting Thy will.",
+    "When the fight is fiercest in the noontide heat,\nBear us, Holy Spirit, to our Saviour's feet,\nThere to find a refuge till our work is done,\nThere to fight the battle till the battle's won.",
+    "If the day be falling sadly as it goes,\nSlowly in its sadness sinking to its close,\nMay Thy love in mercy, kindling ere it die,\nCast a ray of glory o'er our evening sky.",
+    "Morning, noon, and evening, whensoe'er it be,\nGrant us, gracious Spirit, quickening life in Thee;\nLife, that gives us, living, life of heavenly love;\nLife, that brings us, dying, life from heaven above."
+  ],
+  "chorus": "Light and Life Immortal!\nHear us as we raise\nHearts, as well as voices,\nMingling prayer and praise."
+},
+{
+  "id": 198,
+  "number": 198,
+  "title": "Oh, Spread the Tidings Round",
+  "author": "",
+  "verses": [
+    "OH, spread the tidings round, wherever man is found,\nWherever human hearts and human woes abound;\nLet every Christian tongue proclaim the joyful sound:\nThe Comforter has come!",
+    "The long, long night is past, the morning breaks at last;\nAnd hushed the dreadful wail and fury of the blast,\nAs o'er the golden hills the day advances fast:\nThe Comforter has come!",
+    "The mighty King of kings, with healing in His wings,\nTo every captive soul a full deliverance brings;\nAnd through the vacant cells the song of triumph rings:\nThe Comforter has come!",
+    "Oh, boundless love divine! how shall this tongue of mine\nTo wondering mortals tell the matchless grace divine—\nThat I may with Him dwell, and in His image shine!—\nThe Comforter has come!",
+    "Oh, let the echoes fly above the vaulted sky,\nAnd all the saints above to all below reply\nIn strains of endless love, the song that ne'er will die:\nThe Comforter has come!"
+  ],
+  "chorus": "The Comforter has come, the Comforter has come!\nThe Holy Ghost from heaven, the Father's promise given;\nOh, spread the tidings round, wherever man is found:\nThe Comforter has come!"
+},
+{
+  "id": 199,
+  "number": 199,
+  "title": "Holy Ghost, With Light Divine",
+  "author": "",
+  "verses": [
+    "HOLY Ghost, with light divine,\nShine upon this heart of mine;\nChase the shades of night away,\nTurn my darkness into day.",
+    "Holy Ghost, with power divine,\nCleanse this guilty heart of mine;\nLong hath sin, without control,\nHeld dominion o'er my soul.",
+    "Holy Ghost, with joy divine,\nCheer this saddened heart of mine;\nBid my many woes depart,\nHeal my wounded, bleeding heart.",
+    "Holy Spirit, all divine,\nDwell within this heart of mine;\nCast down every idol-throne,\nReign supreme—and reign alone!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 200,
+  "number": 200,
+  "title": "Descend, O Flame of Sacred Fire",
+  "author": "",
+  "verses": [
+    "DESCEND, O Flame of sacred fire:\nNow may we feel Thy quickening power;\nTo purest love each heart inspire,\nAnd keep us in each trying hour.",
+    "Come like a rushing wind, we pray,\nAnd let Thy presence fill this place:\nOh, take our unbelief away,\nBaptize us with Thy boundless grace.",
+    "Come down from heaven, O quenchless Flame,\nThrough Christ, the Everlasting Son;\nThe riches of His love proclaim,\nAnd melt our every heart in one."
+  ],
+  "chorus": ""
+},
+{
+  "id": 201,
+  "number": 201,
+  "title": "Spirit Divine! Attend Our Prayers",
+  "author": "",
+  "verses": [
+    "SPIRIT Divine! attend our prayers,\nAnd make our hearts Thy home;\nDescend with all Thy gracious powers\nOh come, great Spirit, come!",
+    "Come as the light—to us reveal\nOur emptiness and woe;\nAnd lead us in those paths of life\nWhere all the righteous go.",
+    "Come as the fire—and purge our hearts,\nLike sacrificial flame;\nLet our whole soul an offering be\nTo our Redeemer's name.",
+    "Come as the dew—and sweetly bless\nThis consecrated hour;\nMay barrenness rejoice to own\nThy fertilising power.",
+    "Come as the dove—and spread Thy wings,\nThe wings of peaceful love;\nAnd let Thy church on earth become\nBlest as the church above.",
+    "Come as the wind—with rushing sound,\nAnd Pentecostal grace;\nThat all of woman born may see\nThe glory of Thy face."
+  ],
+  "chorus": ""
+},
+{
+  "id": 202,
+  "number": 202,
+  "title": "Come, Spirit, Source of Light",
+  "author": "",
+  "verses": [
+    "COME, Spirit, source of light,\nThy grace is unconfined;\nDispel the gloomy shades of night,\nThe darkness of the mind.",
+    "Now to our eyes display\nThe truth Thy words reveal:\nCause us to run the heavenly way,\nDelighting in Thy will.",
+    "Thy teachings make us know\nThe mysteries of Thy love;\nThe vanity of things below,\nThe joy of things above.",
+    "While through this maze we stray,\nOh, spread Thy beams abroad;\nDisclose the dangers of the way,\nAnd guide our steps to God."
+  ],
+  "chorus": ""
+},
+{
+  "id": 203,
+  "number": 203,
+  "title": "All Hail the Power of Jesus' Name",
+  "author": "",
+  "verses": [
+    "ALL hail the power of Jesus' name!\nLet angels prostrate fall;\nBring forth the royal diadem,\nAnd crown Him Lord of all!",
+    "Crown Him, ye martyrs of our God,\nWho from His altar call;\nExtol the stem of Jesse's rod,\nAnd crown Him Lord of all!",
+    "Ye chosen seed of Israel's race,\nA remnant weak and small,\nHail Him who saves you by His grace,\nAnd crown Him Lord of all!",
+    "Ye Gentile sinners, ne'er forget\nThe wormwood and the gall;\nGo, spread your trophies at His feet,\nAnd crown Him Lord of all!",
+    "Let every kindred, every tribe,\nOn this terrestrial ball,\nTo Him all majesty ascribe,\nAnd crown Him Lord of all!",
+    "Oh that with yonder sacred throng\nWe at His feet may fall;\nJoin in the everlasting song,\nAnd crown Him Lord of all!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 204,
+  "number": 204,
+  "title": "Jesus, Thy Name I Love",
+  "author": "",
+  "verses": [
+    "JESUS, Thy name I love,\nAll other names above;\nJesus, my Lord!\nOh, Thou art all to me!\nNothing to please I see,\nNothing apart from Thee,\nJesus, my Lord!",
+    "Thou, blessed Son of God,\nHast bought me with Thy blood,\nJesus, my Lord!\nOh, how great is Thy love,\nAll other loves above,\nLove that I daily prove,\nJesus, my Lord!",
+    "When unto Thee I flee,\nThou wilt my refuge be,\nJesus, my Lord!\nWhat need I now to fear?\nWhat earthly grief or care,\nSince Thou art ever near?\nJesus, my Lord!",
+    "Soon Thou wilt come again!\nI shall be happy then,\nJesus, my Lord!\nThen Thine own face I'll see,\nThen I shall like Thee be,\nThen evermore with Thee,\nJesus, my Lord!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 205,
+  "number": 205,
+  "title": "Oh, Could I Speak the Matchless Worth",
+  "author": "",
+  "verses": [
+    "OH, could I speak the matchless worth,\nOh, could I sound the glories forth\nWhich in my Saviour shine,\nI'd soar, and touch the heavenly strings,\nAnd vie with Gabriel, while he sings\nIn notes almost divine.",
+    "I'd sing the precious blood He spilt,\nMy ransom from the dreadful guilt\nOf sin, and wrath divine:\nI'd sing His glorious righteousness,\nIn which all-perfect, heavenly dress\nMy soul shall ever shine.",
+    "I'd sing the characters He bears,\nAnd all the forms of love He wears,\nExalted on His throne:\nIn loftiest songs of sweetest praise\nI would, to everlasting days,\nMake all His glories known.",
+    "Well, the delightful day will come\nWhen my dear Lord will take me home,\nAnd I shall see His face;\nThen with my Saviour, Brother, Friend,\nA blest eternity I'll spend,\nTriumphant in His grace!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 206,
+  "number": 206,
+  "title": "We Praise Thee, We Bless Thee",
+  "author": "",
+  "verses": [
+    "WE praise Thee, we bless Thee, our Saviour divine,\nAll power and dominion for ever be Thine!\nWe sing of Thy mercy with joyful acclaim,\nFor Thou hast redeemed us: all praise to Thy name!",
+    "All honour and praise to Thine excellent name,\nThy love is unchanging—for ever the same!\nWe bless and adore Thee, O Saviour and King;\nWith joy and thanksgiving Thy praises we sing!",
+    "The strength of the hills and the depths of the sea,\nThe earth and its fulness, belong unto Thee;\nAnd yet to the lowly Thou bendest Thine ear,\nSo ready their humble petitions to hear!",
+    "Thine infinite goodness our tongues shall employ;\nThou givest us richly all things to enjoy;\nWe'll follow Thy footsteps, we'll rest in Thy love,\nAnd soon we shall praise Thee in mansions above!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 207,
+  "number": 207,
+  "title": "Be Glad in the Lord, and Rejoice",
+  "author": "",
+  "verses": [
+    "BE glad in the Lord, and rejoice,\nAll ye that are upright in heart;\nAnd ye that have made Him your choice,\nBid sadness and sorrow depart.",
+    "Be joyful, for He is the Lord,\nOn earth and in heaven supreme;\nHe fashions and rules by His word;\nThe \"Mighty\" and \"Strong\" to redeem.",
+    "What though in the conflict for right\nYour enemies almost prevail!\nGod's armies, just hid from your sight,\nAre more than the foes which assail.",
+    "Though darkness surround you by day,\nYour sky by the night be o'ercast,\nLet nothing your spirit dismay,\nBut trust till the danger is past.",
+    "Be glad in the Lord, and rejoice,\nHis praises proclaiming in song;\nWith harp, and with organ, and voice,\nThe loud hallelujahs prolong!"
+  ],
+  "chorus": "Rejoice! Rejoice!\nBe glad in the Lord and rejoice!"
+},
+{
+  "id": 208,
+  "number": 208,
+  "title": "Praise Him! Praise Him!",
+  "author": "",
+  "verses": [
+    "PRAISE Him! praise Him! Jesus, our blessed Redeemer!\nSing, O earth—His wonderful love proclaim!\nHail Him! hail Him! highest archangels in glory;\nStrength and honour give to His holy name!\nLike a shepherd, Jesus will guard His children,\nIn His arms He carries them all day long:",
+    "Praise Him! praise Him! Jesus, our blessed Redeemer!\nFor our sins He suffered, and bled, and died;\nHe—our Rock, our hope of eternal salvation,\nHail Him! hail Him! Jesus, the Crucified!\nSound His praises—Jesus who bore our sorrows,\nLove unbounded, wonderful, deep, and strong:",
+    "Praise Him! praise Him! Jesus, our blessed Redeemer!\nHeavenly portals, loud with hosannas ring!\nJesus, Saviour, reigneth for ever and ever;\nCrown Him! crown Him! Prophet, and Priest, and King!\nChrist is coming, over the world victorious,\nPower and glory unto the Lord belong:"
+  ],
+  "chorus": "Praise Him! praise Him! tell of His excellent greatness;\nPraise Him! praise Him ever in joyful song!"
+},
+{
+  "id": 209,
+  "number": 209,
+  "title": "Praise the King of Glory",
+  "author": "",
+  "verses": [
+    "PRAISE the King of Glory,\nHe is God alone;\nPraise Him for the wonders\nHe to us hath shown;\nFor His promised presence all the pilgrim way,\nFor the flaming pillar, and the cloud by day.",
+    "Praise Him for redemption,\nFree to every soul;\nPraise Him for the Fountain\nThat can make us whole;\nFor His gifts of kindness and His loving care,\nFor the blest assurance that He answers prayer.",
+    "Praise Him for the trials\nSent as cords of love,\nBinding us more closely\nTo the things above;\nFor the faith that conquers, hope, that naught can dim,\nFor the land where loved ones gather unto Him."
+  ],
+  "chorus": "Praise Him, shining angels,\nStrike your harps of gold,\nAll His hosts adore Him,\nWho His face behold:\nThrough His great dominion,\nWhile the ages roll,\nAll His works shall praise Him,\nAll His works shall praise Him,\nAll His works shall praise Him;\nBless the Lord, my soul!"
+},
+{
+  "id": 210,
+  "number": 210,
+  "title": "Glory Ever Be to Jesus",
+  "author": "",
+  "verses": [
+    "GLORY ever be to Jesus!—\nGod's own well-beloved Son!\nBy His grace He hath redeemed us,\n\"It is finished,\" all is done.",
+    "Oh, the weary days of wandering,\nLonging, hoping for the light!\nThese at last lie all behind us,\nJesus is our strength and might.",
+    "In His safe and holy keeping,\n'Neath the shadow of His wing;\nGladly in His love confiding,\nMay our souls His praises sing."
+  ],
+  "chorus": "Saved by grace through faith in Jesus,\nSaved by His own precious blood,\nMay we in His love abiding,\nFollow on to know the Lord."
+},
   {
     "id": 216,
     "number": 216,
