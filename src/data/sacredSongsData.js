@@ -1859,6 +1859,32 @@ const SACRED_SONGS = [
   ],
   "chorus": "\"It is finished!\" yes, indeed,\nFinished every jot:\nSinner, this is all you need—\nTell me, is it not?"
 },
+{
+  "id": 143,
+  "number": 143,
+  "title": "Free from the Law",
+  "author": "",
+  "verses": [
+    "FREE from the law, oh, happy condition!\nJesus hath bled, and there is remission!\nCursed by the law, and bruised by the fall,\nGrace hath redeemed us once for all.",
+    "Now are we free—there's no condemnation,\nJesus provides a perfect salvation;\n\"Come unto Me\"—oh, hear His sweet call,\nCome, and He saves us once for all.",
+    "\"Children of God!\" oh, glorious calling!\nSurely His grace will keep us from falling;\nPassing from death to life at His call,\nBlessed salvation once for all."
+  ],
+  "chorus": "Once for all, O sinner, receive it;\nOnce for all, O brother, believe it:\nCling to the Cross, the burden will fall;\nChrist hath redeemed us once for all."
+},
+{
+  "id": 144,
+  "number": 144,
+  "title": "When God of Old the Way of Life",
+  "author": "",
+  "verses": [
+    "WHEN God of old the way of life\nWould teach to all His own,\nHe placed them safe beyond the reach\nOf death, by blood alone.",
+    "By Christ, the sinless Lamb of God,\nThe precious blood was shed,\nWhen He fulfilled God's holy Word,\nAnd suffered in our stead.",
+    "O soul, for thee salvation thus\nBy God is freely given;\nThe blood of Christ atones for sin,\nAnd makes us meet for heaven.",
+    "The wrath of God that was our due,\nUpon the Lamb was laid;\nAnd by the shedding of His blood\nThe debt for us was paid.",
+    "How calm the judgment hour shall pass\nTo all who do obey\nThe Word of God, and trust the blood,\nAnd make that Word their stay!"
+  ],
+  "chorus": "It is His word, God's precious word,\nIt stands for ever true:\n\"When I the Lord shall see the blood,\nI will pass over you.\""
+},
   {
     "id": 145,
     "number": 145,
