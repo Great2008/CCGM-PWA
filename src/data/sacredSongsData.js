@@ -1899,6 +1899,325 @@ const SACRED_SONGS = [
     "chorus": "There is power, power, wonder-working power\nIn the blood of the Lamb;\nThere is power, power, wonder-working power\nIn the precious blood of the Lamb."
   },
   {
+  "id": 146,
+  "number": 146,
+  "title": "Behold, the Easter-tide Is Here",
+  "author": "",
+  "verses": [
+    "BEHOLD, the Easter-tide is here,\nWith Easter joy and bloom:\nBehold, the stone is rolled away,\nTo show a conquered tomb.",
+    "Behold, the vestures of the dead,\nAll folded back with care:\nBehold, the dark and vacant tomb,\nFor Jesus is not there.",
+    "Behold, He walks the earth again,\nExalted in His love:\nBehold, the glory on His brow,\nReflected from above.",
+    "Behold, the Easter-tide is here,\nWith Easter song and word:\nBehold, amid these Easter gifts,\nThe triumph of the Lord."
+  ],
+  "chorus": "Jesus is risen, as He said—\nRisen in triumph from the grave!\nRejoice and sing on this Easter-tide—\nJesus is risen, mighty to save!"
+},
+{
+  "id": 147,
+  "number": 147,
+  "title": "The Lord of Glory! Who Is He?",
+  "author": "",
+  "verses": [
+    "THE Lord of glory! who is He?\nWho is the King of glory?\nOnly the Son of God can be\nThe Christ, the King of glory:\nConsider all His wounds, and see\nHow Jesus' death upon the tree\nProclaims Him King of glory.",
+    "Above all heavens, at God's right hand,\nNow sits the King of glory;\nThe angels by His favour stand\nBefore the throne of glory:\nSwiftly they fly at His command,\nTo guard His own of every land,\nTo keep the heirs of glory.",
+    "Death and the grave confess the Lamb\nTo be the King of glory;\nThe powers of darkness dread His name,\nAll creatures show His glory:\nHe said, \"Ere Abraham was I AM\"\nJesus is evermore the same,\nTh' Almighty King of glory.",
+    "Thrice happy who in Him believe,\nThey soon will share His glory;\nBorn of His Spirit, they receive\nHis secret pledge of glory:\nTaught by His cross, for sin they grieve;\nHe calls them brethren, and they cleave\nTo Him, their hope of glory."
+  ],
+  "chorus": ""
+},
+{
+  "id": 148,
+  "number": 148,
+  "title": "Soft and Sweet the Bells Are Ringing",
+  "author": "",
+  "verses": [
+    "SOFT and sweet the bells are ringing\nFrom the steeple old and grey;\nSweet and soft the children singing—\nChrist the Lord arose to-day!",
+    "Sweeter far than earthly music\nSince the Christmas melody,\nIs this song of Easter glory,\nThis glad psalm of victory.",
+    "Love's redeeming work is finished,\nFought the fight, the victory won;\nGlory, glory in the highest!\nTo the Father and the Son."
+  ],
+  "chorus": "Sweetly, softly sounds the anthem,\nFor the stone is rolled away;\nGlory, honour give to Jesus\nOn this resurrection day!"
+},
+{
+  "id": 149,
+  "number": 149,
+  "title": "Hark! Ten Thousand Harps and Voices",
+  "author": "",
+  "verses": [
+    "HARK! ten thousand harps and voices\nSound the note of praise above;\nJesus reigns, and heaven rejoices;\nJesus reigns, the God of love:\nSee, He sits on yonder throne;\nJesus rules the world alone.",
+    "King of glory! reign for ever—\nThine an everlasting crown;\nNothing from Thy love shall sever\nThose whom Thou hast made Thine own:\nHappy objects of Thy grace,\nDestined to behold Thy face.",
+    "Saviour! hasten Thine appearing;\nBring, oh bring the glorious day,\nWhen the awful summons hearing,\nHeaven and earth shall pass away:\nThen, with golden harps we'll sing,\n\"Glory, glory to our King!\""
+  ],
+  "chorus": "Hallelujah! hallelujah!\nJesus rules the world alone."
+},
+{
+  "id": 150,
+  "number": 150,
+  "title": "Jesus Lives, and Jesus Leads",
+  "author": "",
+  "verses": [
+    "JESUS lives, and Jesus leads,\nThough the way be dreary;\nMorn to darkest night succeeds,\nCourage, then, ye weary:\nStill the faithful Shepherd feeds;\nJesus lives, and Jesus leads.",
+    "All the words He ever spoke,\nStill to us He speaketh;\nAll the bread He ever broke,\nStill for us He breaketh:\nStill the faithful Shepherd feeds;\nJesus lives, and Jesus leads.",
+    "Jesus lives, but Jesus died;\nLove to death consigned Him;\nDeath the mighty Love resigned,\nCould not hold or bind Him:\nTherefore still He meets our needs;\nJesus lives, and Jesus leads.",
+    "Jesus lives, and every grace\nComes because He giveth;\nLife and love in every place\nLive, for Jesus liveth:\nAll our thoughts His love exceeds;\nJesus lives, and Jesus leads.",
+    "Yes, if Jesus lives, He leads—\nHe will not forsake us;\nHe will crown His gracious deeds,\nAnd to glory take us:\nTill that hour the Shepherd feeds;\nJesus lives, and Jesus leads."
+  ],
+  "chorus": ""
+},
+  {
+  "id": 151,
+  "number": 151,
+  "title": "Behold the Saviour of Mankind",
+  "author": "",
+  "verses": [
+    "BEHOLD the Saviour of mankind\nNailed to the shameful tree;\nHow vast the love that Him inclined\nTo bleed and die for thee!",
+    "Hark, how He groans, while nature shakes,\nAnd earth's strong pillars bend;\nThe temple's vail in sunder breaks,\nThe solid marbles rend.",
+    "'Tis done! the precious ransom's paid;\n\"Receive My soul!\" He cries;\nSee where He bows His sacred head—\nHe bows His head and dies.",
+    "But soon He'll break death's envious chain,\nAnd in full glory shine:\nO Lamb of God, was ever pain,\nWas ever love, like Thine?"
+  ],
+  "chorus": ""
+},
+{
+  "id": 152,
+  "number": 152,
+  "title": "Low in the Grave He Lay",
+  "author": "",
+  "verses": [
+    "LOW in the grave He lay—Jesus, my Saviour!\nWaiting the coming day—Jesus, my Lord!",
+    "Vainly they watch His bed—Jesus, my Saviour!\nVainly they seal the dead—Jesus, my Lord!",
+    "Death cannot keep his prey—Jesus, my Saviour!\nHe tore the bars away—Jesus, my Lord!"
+  ],
+  "chorus": "Up from the grave He arose,\nWith a mighty triumph o'er His foes;\nHe arose a Victor from the dark domain,\nAnd He lives for ever with His saints to reign:\nHe arose! He arose!\nHallelujah! Christ arose!"
+},
+{
+  "id": 153,
+  "number": 153,
+  "title": "Hallelujah! Hallelujah!",
+  "author": "",
+  "verses": [
+    "HALLELUJAH! hallelujah!\nHearts to heaven and voices raise;\nSing to God a hymn of gladness,\nSing to God a hymn of praise;\nHe who on the cross a victim\nFor the world's salvation bled,\nJesus Christ, the King of glory,\nNow is risen from the dead.",
+    "Christ is risen, Christ the first-fruits\nOf the holy harvest-field;\nWhich will all its full abundance\nAt His glorious advent yield;\nThen the golden ears of harvest\nWill their heads before Him wave,\nRipened by His glorious sunshine\nFrom the furrows of the grave.",
+    "Hallelujah! hallelujah!\nGlory be to God on high!\nHallelujah to the Saviour,\nWho has gained the victory;\nHallelujah to the Spirit;\nLet our high ascriptions be,\nHallelujah, now and ever,\nTo the blessed Trinity!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 154,
+  "number": 154,
+  "title": "Arise, My Soul, Arise",
+  "author": "",
+  "verses": [
+    "ARISE, my soul, arise!\nShake off thy guilty fears;\nThe bleeding Sacrifice\nIn my behalf appears.\nBefore the throne my Surety stands;\nMy name is written on His hands.",
+    "He ever lives above,\nFor me to intercede,\nHis all-redeeming love,\nHis precious blood to plead;\nHis blood atoned for all our race,\nAnd sprinkles now the throne of grace.",
+    "Five bleeding wounds He bears,\nReceived on Calvary;\nThey pour effectual prayers,\nThey strongly plead for me:\n\"Forgive him, oh, forgive!\" they cry,\n\"Nor let that ransomed sinner die.\"",
+    "My God is reconciled;\nHis pardoning voice I hear:\nHe owns me for His child;\nI can no longer fear:\nWith confidence I now draw nigh,\nAnd \"Father, Abba Father!\" cry."
+  ],
+  "chorus": ""
+},
+{
+  "id": 155,
+  "number": 155,
+  "title": "Rejoice, the Lord is King",
+  "author": "",
+  "verses": [
+    "REJOICE, the Lord is King!\nYour God and King adore;\nMortals, give thanks and sing,\nAnd triumph evermore:\nLift up the heart, lift up the voice:\nRejoice aloud, ye saints, rejoice!",
+    "Rejoice! the Saviour reigns—\nThe God of truth and love;\nWhen He had purged our stains,\nHe took His seat above:\nLift up the heart, lift up the voice:\nRejoice aloud, ye saints, rejoice!",
+    "He all His foes shall quell,\nShall all our sins destroy;\nAnd every bosom swell\nWith pure, seraphic joy;\nLift up the heart, lift up the voice:\nRejoice aloud, ye saints, rejoice!",
+    "Rejoice in glorious hope!\nJesus, the Judge, shall come,\nAnd take His servants up\nTo their eternal home:\nWe soon shall hear th' archangel's voice:\nThe trump of God shall sound: Rejoice!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 156,
+  "number": 156,
+  "title": "Christ Hath Risen! Hallelujah!",
+  "author": "",
+  "verses": [
+    "CHRIST hath risen! Hallelujah!\nBlessed morn of life and light!\nLo, the grave is rent asunder,\nDeath is conquered through His might.",
+    "Christ hath risen! Hallelujah!\nFriends of Jesus, dry your tears;\nThrough the vail of gloom and darkness,\nLo, the Son of God appears!",
+    "Christ hath risen! Hallelujah!\nHe hath risen, as He said;\nHe is now the King of glory,\nAnd our great exalted Head."
+  ],
+  "chorus": "Christ is risen! Hallelujah!\nGladness fills the world to-day;\nFrom the tomb that could not hold Him,\nSee, the stone is rolled away!"
+},
+{
+  "id": 157,
+  "number": 157,
+  "title": "Hallelujah, He Is Risen!",
+  "author": "",
+  "verses": [
+    "HALLELUJAH, \"He is risen!\"\nJesus is gone up on high!\nBurst the bars of death asunder;\nAngels, shout; and men, reply:\nHe is risen, He is risen,\nLiving now, no more to die.",
+    "Hallelujah, He is risen!\nOur exalted Head to be;\nSends the witness of the Spirit\nThat our Advocate is He:\nHe is risen, He is risen,\nJustified in Him are we.",
+    "Hallelujah, He is risen!\nDeath for aye has lost his sting;\nChrist, Himself the Resurrection,\nFrom the grave His own will bring:\nHe is risen, He is risen,\nLiving Lord and coming King."
+  ],
+  "chorus": ""
+},
+{
+  "id": 158,
+  "number": 158,
+  "title": "Christ the Lord Is Risen Today",
+  "author": "",
+  "verses": [
+    "\"CHRIST the Lord is risen to-day!\"\nHallelujah!\nSons of men and angels say;\nHallelujah!\nRaise your joy and triumph high,\nHallelujah!\nSing, ye heavens! and earth, reply:\nHallelujah!",
+    "Love's redeeming work is done:\nFought the fight, the battle won:\nLo! our Sun's eclipse is o'er;\nLo! He sets in blood no more:",
+    "Vain the stone, the watch, the seal,\nChrist hath burst the gates of hell;\nDeath in vain forbids His rise,\nChrist hath opened Paradise:",
+    "Lives again our glorious King;\nWhere, O death, is now thy sting?\nOnce He died our souls to save;\nWhere's thy victory, boasting grave?",
+    "King of glory! Soul of bliss!\nEverlasting life is this:\nThee to know, Thy power to prove,\nThus to sing, and thus to love:"
+  ],
+  "chorus": ""
+},
+{
+  "id": 159,
+  "number": 159,
+  "title": "On That Bright and Golden Morning",
+  "author": "",
+  "verses": [
+    "ON that bright and golden morning when the Son of Man shall come,\nAnd the radiance of His glory we shall see;\nWhen from every clime and nation He shall call His people home—\nWhat a gath'ring of the ransomed that will be!",
+    "When the blest who sleep in Jesus at His bidding shall arise\nFrom the silence of the grave, and from the sea;\nAnd with bodies all celestial they shall meet Him in the skies—\nWhat a gath'ring and rejoicing there will be!",
+    "When our eyes behold the City, with its \"many mansions\" bright,\nAnd its river, calm and restful, flowing free—\nWhen the friends that death has parted shall in bliss again unite—\nWhat a gath'ring and a greeting there will be!",
+    "Oh, the King is surely coming, and the time is drawing nigh,\nWhen the blessed day of promise we shall see;\nThen the changing \"in a moment,\" \"in the twinkling of an eye,\"\nAnd for ever in His presence we shall be."
+  ],
+  "chorus": "What a gath'ring! what a gath'ring!\nWhat a gath'ring of the ransomed in the summer land of love!\nWhat a gath'ring! what a gath'ring\nOf the ransomed in that happy home above!"
+},
+{
+  "id": 160,
+  "number": 160,
+  "title": "What Will It Be When the King Comes",
+  "author": "",
+  "verses": [
+    "THEY come and go, the seasons fair,\nAnd bring their spoil to vale and hills;\nBut oh, there is waiting in the air,\nAnd a passionate hope the spirit fills.\nWhy doth He tarry, the absent Lord?\nWhen shall the Kingdom be restored,\nAnd earth and heaven with one accord,\nRing out the cry that the King comes?",
+    "The floods have lifted up their voice;\nThe King hath come to His own—His own!\nThe little hills and vales rejoice,\nHis right it is to take the crown.\nSleepers, awake, and meet Him first!\nNow let the marriage hymn outburst!\nAnd powers of darkness flee, dispersed—\nWhat will it be when the King comes!",
+    "A ransomed earth breaks forth in song,\nHer sin-stained ages over-past;\nHer yearning, \"Lord, how long, how long?\"\nExchanged for joy at last—at last!\nAngels, carry the royal commands;\nPeace beams forth throughout all the lands:\nThe trees of the field shall clap their hands—\nWhat will it be when the King comes!",
+    "Now Zion's hill, with glory crowned,\nUplifts her head with joy once more;\nAnd Zion's King, once scorned, disowned,\nExtends her rule from shore to shore.\nSing, for the land her Lord regains!\nSing, for the Son of David reigns!\nAnd living streams o'erflow her plains—\nWhat will it be when the King comes!",
+    "O brothers, stand as men that wait,\nThe dawn is purpling in the east,\nAnd banners wave from heaven's high gate;\nThe conflict now—but soon the feast.\nMercy and truth shall meet again;\nWorthy the Lamb that once was slain;\nWe can suffer now—He will know us then—\nWhat will it be when the King comes!"
+  ],
+  "chorus": "What will it be when the King comes!\nWhat will it be when the King comes!\nWhat will it be when He comes!\nWhat will it be when the King comes!"
+},
+{
+  "id": 161,
+  "number": 161,
+  "title": "Lo, He Comes with Clouds Descending",
+  "author": "",
+  "verses": [
+    "LO, He comes with clouds descending,\nOnce for favoured sinners slain;\nThousand thousand saints attending,\nSwell the triumph of His train;\nHallelujah!\nJesus comes, and comes to reign!",
+    "Every eye shall now behold Him,\nRobed in dreadful majesty;\nThose who set at naught and sold Him,\nPierced and nailed Him to the tree.\nDeeply wailing,\nShall the true Messiah see.",
+    "When the solemn trump has sounded,\nHeaven and earth shall flee away;\nAll who hate Him must, confounded,\nHear the summons of that day—\nCome to Judgment!\nCome to Judgment, come away!",
+    "Now redemption, long expected,\nSee in solemn pomp appear!\nAll His saints, by men rejected,\nNow shall meet Him in the air:\nHallelujah!\nSee the day of God appear!",
+    "Yea, Amen! let all adore Thee,\nHigh on Thine eternal throne;\nSaviour, take the power and glory,\nClaim the kingdom for Thine own!\nOh, come quickly!\nHallelujah! come, Lord, come!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 162,
+  "number": 162,
+  "title": "Christ Is Coming",
+  "author": "",
+  "verses": [
+    "CHRIST is coming! let creation\nFrom her groans and travail cease;\nLet the glorious proclamation\nHope restore and faith increase:\nChrist is coming! Christ is coming!\nCome, Thou blessed Prince of Peace!\nChrist is coming! Christ is coming!\nCome, Thou blessed Prince of Peace!",
+    "Earth can now but tell the story\nOf Thy bitter cross and pain;\nShe shall yet behold Thy glory\nWhen Thou comest back to reign.",
+    "Though once cradled in a manger,\nOft no pillow but the sod;\nHere an alien and a stranger,\nMocked of men, disowned of God:",
+    "Long Thy exiles have been pining,\nFar from rest, and home, and Thee;\nBut, in heavenly vesture shining,\nSoon they shall Thy glory see.",
+    "With that \"blessed hope\" before us,\nLet no harp remain unstrung;\nLet the mighty ransomed chorus\nOnward roll from tongue to tongue."
+  ],
+  "chorus": ""
+},
+{
+  "id": 163,
+  "number": 163,
+  "title": "It May Be at Morn",
+  "author": "",
+  "verses": [
+    "IT may be at morn, when the day is awaking,\nWhen sunlight through darkness and shadow is breaking,\nThat Jesus will come in the fulness of glory,\nTo receive from the world \"His own.\"",
+    "It may be at midday, it may be at twilight,\nIt may be, perchance, that the blackness of midnight\nWill burst into light in the blaze of His glory,\nWhen Jesus receives \"His own.\"",
+    "While hosts cry Hosanna, from heaven descending.\nWith glorified saints and the angels attending,\nWith grace on His brow, like a halo of glory,\nWill Jesus receive \"His own.\"",
+    "Oh, joy! oh, delight! should we go without dying;\nNo sickness, no sadness, no dread, and no crying;\nCaught up through the clouds with our Lord into glory,\nWhen Jesus receives \"His own.\""
+  ],
+  "chorus": "O Lord Jesus, how long?\nHow long ere we shout the glad song?—\nChrist returneth! Hallelujah!\nHallelujah! Amen!\nHallelujah! Amen!"
+},
+{
+  "id": 164,
+  "number": 164,
+  "title": "Rejoice! Rejoice! Our King Is Coming",
+  "author": "",
+  "verses": [
+    "REJOICE! Rejoice! our King is coming!\nAnd the time will not be long,\nUntil we hail the radiant dawning,\nAnd lift up the glad new song.",
+    "With joy we wait our King's returning\nFrom His heavenly mansions fair;\nAnd with ten thousand saints appearing\nWe shall meet Him in the air.",
+    "Oh, may we never weary, watching,\nNever lay our armour down,\nUntil He come, and with rejoicing\nGive to each the promised crown."
+  ],
+  "chorus": "Oh, wondrous day! oh, glorious morning,\nWhen the Son of Man shall come!\nMay we with lamps all trimmed and burning\nGladly welcome His return!\nRejoice! Rejoice! our King is coming!\nAnd the time will not be long,\nUntil we hail the radiant dawning,\nAnd lift up the glad new song."
+},
+{
+  "id": 165,
+  "number": 165,
+  "title": "Our Lamps Are Trimmed and Burning",
+  "author": "",
+  "verses": [
+    "OUR lamps are trimmed and burning,\nOur robes are white and clean,\nWe've tarried for the Bridegroom,\nOh, may we enter in?\nWe know we've nothing worthy\nThat we can call our own:\nThe light, the oil, the robes we wear,\nAll come from Him alone.",
+    "Go forth, go forth to meet Him!\nThe way is open now,\nAll lighted with the glory\nThat's streaming from His brow:\nAccept the invitation,\nBeyond deserving kind;\nMake no delay, but take your lamps,\nAnd joy eternal find.",
+    "We see the marriage splendour\nWithin the open door;\nWe know that those who enter\nAre blest for evermore.\nWe see He is more lovely\nThan all the sons of men,\nBut still we know the door, once shut,\nWill never ope again."
+  ],
+  "chorus": "Behold, the Bridegroom cometh\nAnd all may enter in,\nWhose lamps are trimmed and burning,\nWhose robes are white and clean."
+},
+{
+  "id": 166,
+  "number": 166,
+  "title": "When Jesus Shall Gather the Nations",
+  "author": "",
+  "verses": [
+    "WHEN Jesus shall gather the nations\nBefore Him at last to appear,\nOh, how shall we stand in the Judgment,\nWhen summoned our sentence to hear?",
+    "Shall we hear from the lips of the Saviour\nThe words, \"Faithful servant, well done!\"\nOr, trembling with fear and with anguish,\nBe banished away from His throne?",
+    "Then let us be watching and waiting—\nOur lamps burning steady and bright—\nThat when we are called by the Bridegroom,\nWe'll answer the call with delight.",
+    "Thus living with hearts fixed on Jesus,\nIn patience we wait for the time\nWhen the days of our pilgrimage ended,\nWe'll rest in His presence divine."
+  ],
+  "chorus": "He will gather the wheat in His garner,\nBut the chaff will He scatter away;\nThen how shall we stand in the Judgment—\nOh, how shall we stand in that day?"
+},
+{
+  "id": 167,
+  "number": 167,
+  "title": "Do You See the Hebrew Captive Kneeling",
+  "author": "",
+  "verses": [
+    "DO you see the Hebrew captive kneeling,\nAt morning, noon, and night, to pray?\nIn his chamber he remembers Zion,\nThough in exile far away.",
+    "Do not fear to tread the fiery furnace,\nNor shrink the lions' den to share;\nFor the God of Daniel will deliver,\nHe will send His angel there.",
+    "Children of the living God, take courage,\nYour great deliverance sweetly sing;\nSet your faces toward the hill of Zion,\nThence to hail your coming King!"
+  ],
+  "chorus": "Are your windows open toward Jerusalem,\nThough as captives here a \"little while\" we stay?\nFor the coming of the King in His glory,\nAre you watching day by day?"
+},
+{
+  "id": 168,
+  "number": 168,
+  "title": "There's a Glorious Kingdom Waiting",
+  "author": "",
+  "verses": [
+    "THERE'S a glorious Kingdom waiting in the land beyond the sky,\nWhere the saints have been gathering year by year;\nAnd the days are swiftly passing that will bring the Kingdom nigh:\nFor the coming of the Kingdom draweth near!",
+    "'Tis the hope of yonder Kingdom, and the glory there prepared,\nAnd the looking for the Saviour to appear,\nThat delivers us from bondage to the world that once ensnared:\nFor the coming of the Kingdom draweth near!",
+    "With the coming of the Kingdom we shall see our blessed Lord,\nFor the King ere the Kingdom must appear,\nHallelujah to His name, who redeemed us by His blood!\nOh, the coming of the Kingdom draweth near!",
+    "Oh, the world is growing weary, it has waited now so long,\nAnd the hearts of men are failing them for fear;\nLet us tell them of the Kingdom, let us cheer them with the song,\nThat the coming of the Kingdom draweth near!"
+  ],
+  "chorus": "Oh, the coming of the Kingdom draweth near!\nOh, the coming of the Kingdom draweth near!\nBe thou ready, O my soul, for the trumpet soon may roll,\nAnd the King in His glory shall appear!"
+},
+{
+  "id": 169,
+  "number": 169,
+  "title": "A Better Day Is Coming",
+  "author": "",
+  "verses": [
+    "A BETTER day is coming,\nA morning promised long,\nWhen girded Right, with holy Might,\nWill overthrow the Wrong;\nWhen God the Lord will listen\nTo every plaintive sigh,\nAnd stretch His hand o'er every land,\nWith justice by and by.",
+    "The boast of haughty Error\nNo more will fill the air,\nBut Age and Youth will love the Truth,\nAnd spread it everywhere;\nNo more from Want and Sorrow\nWill come the hopeless cry;\nFor strife will cease, and perfect Peace\nWill flourish by and by.",
+    "Oh, for that holy dawning\nWe watch, and wait, and pray,\nTill o'er the height the morning light\nShall drive the gloom away;\nAnd when the heavenly glory\nShall flood the earth and sky,\nWe'll bless the Lord for all His word,\nAnd praise Him by and by."
+  ],
+  "chorus": "Coming by and by, coming by and by!\nThe better day is coming, the morning draweth nigh;\nComing by and by, coming by and by!\nThe welcome dawn will hasten on, 'tis coming by and by."
+},
+{
+  "id": 170,
+  "number": 170,
+  "title": "We Are Waiting, Blessed Saviour",
+  "author": "",
+  "verses": [
+    "WE are waiting, blessed Saviour,\nWe are watching for the hour\nWhen in majesty descending,\nThou shalt come in mighty power;\nThen the shadows will be lifted,\nAnd the darkness rolled away,\nAnd our eyes behold the splendour\nOf the glorious crowning-day.",
+    "We are waiting, blessed Saviour,\nWe are watching not in vain\nFor the cloud that bore Thee upward,\nAnd will bring Thee back again;\nThen, among Thy ransomed people,\nWe shall tread the shining way,\nAnd our eyes behold the splendour\nOf the glorious crowning-day.",
+    "We are waiting, blessed Saviour,\nFor a union, heart to heart,\nWith our dear ones o'er the river,\nWhere we nevermore shall part;\nThen our sorrows, in a moment,\nLike a dream will pass away,\nWhen our eyes behold the splendour\nOf the glorious crowning-day."
+  ],
+  "chorus": ""
+},
+  {
     "id": 203,
     "number": 203,
     "title": "All Hail The Power Of Jesus Name",
