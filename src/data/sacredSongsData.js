@@ -2740,17 +2740,161 @@ const SACRED_SONGS = [
   "chorus": "Saved by grace through faith in Jesus,\nSaved by His own precious blood,\nMay we in His love abiding,\nFollow on to know the Lord."
 },
   {
-    "id": 216,
-    "number": 216,
-    "title": "I Heard The Voice Of Jesus Say",
-    "author": "Horatius Bonar",
-    "verses": [
-      "I heard the voice of Jesus say,\n'Come unto Me and rest;\nLay down, thou weary one, lay down\nThy head upon My breast.'\nI came to Jesus as I was,\nWeary and worn and sad;\nI found in Him a resting-place,\nAnd He has made me glad.",
-      "I heard the voice of Jesus say,\n'Behold, I freely give\nThe living water; thirsty one,\nStoop down, and drink, and live.'\nI came to Jesus, and I drank\nOf that life-giving stream;\nMy thirst was quenched, my soul revived,\nAnd now I live in Him.",
-      "I heard the voice of Jesus say,\n'I am this dark world's light;\nLook unto Me, thy morn shall rise,\nAnd all thy day be bright.'\nI looked to Jesus, and I found\nIn Him my star, my sun;\nAnd in that light of life I'll walk\nTill travelling days are done."
-    ],
-    "chorus": ""
-  },
+  "id": 211,
+  "number": 211,
+  "title": "Redeemed from Death",
+  "author": "",
+  "verses": [
+    "Redeemed from death, redeemed from sin,\nRedeemed from ills without, within;\nRedeemed! what new light gilds the skies!\nWhat glories on the soul arise!\nRedeemed! redeemed! my song shall be,\nThrough time and through eternity!\nRedeemed! let all the ransomed sing,\nEternal praise to Christ our King!",
+    "Glory to Him, whose love unknown\nTouched man's abyss from heaven's high throne;\nLike some new star its radiance beamed,\nA new song rose—Redeemed! redeemed!",
+    "As ocean's billows swell and break,\nThe mighty tide of praise shall wake;\nThy love, Lord, like th' unfathomed sea,\nShall waft a world redeemed to Thee.",
+    "Redeemed! creation joyful brings\nIts tribute to the King of kings;\nRedeemed! earth's million voices raise\nOne sounding anthem to His praise."
+  ],
+  "chorus": ""
+},
+{
+  "id": 212,
+  "number": 212,
+  "title": "Ye Servants of God",
+  "author": "",
+  "verses": [
+    "Ye servants of God,\nYour Master proclaim,\nAnd publish abroad\nHis wonderful name;\nThe name all-victorious\nOf Jesus extol;\nHis kingdom is glorious,\nAnd rules over all.",
+    "God ruleth on high,\nAlmighty to save;\nAnd still He is nigh,\nHis presence we have!\nThe great congregation\nHis triumph shall sing,\nAscribing salvation\nTo Jesus our King.",
+    "Salvation to God,\nWho sits on the throne;\nLet all cry aloud,\nAnd honour the Son;\nThe praises of Jesus\nAll angels proclaim,\nFall down on their faces,\nAnd worship the Lamb.",
+    "Then let us adore,\nAnd give Him His right;\nAll glory and power,\nAll wisdom and might;\nAll honour and blessing,\nWith angels above;\nAnd thanks never-ceasing,\nAnd infinite love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 213,
+  "number": 213,
+  "title": "How Honoured, How Dear",
+  "author": "",
+  "verses": [
+    "How honoured, how dear, that sacred abode,\nWhere Christians draw near their Father and God!\n'Mid worldly commotion, my wearied soul faints\nFor the house of devotion, the home of Thy saints.",
+    "The birds have their home, they fix on their nest;\nWherever they roam, they turn to their rest:\nFrom them fondly learning, my soul would take wing;\nTo Thee so returning, my God and my King.",
+    "O happy the choirs who praise Thee above!\nWhat joy tunes their lyres! their worship is love.\nYet safe in Thy keeping and happy they be\nIn this world of weeping, whose strength is in Thee.",
+    "Though rugged their way, they drink, as they go,\nOf springs that convey new life as they flow:\nThe God they rely on, their strength shall renew,\nTill each, brought to Zion, His glory shall view.",
+    "Thou Hearer of prayer, still grant me a place\nWhere Christians repair to the courts of Thy grace:\nMore blest, beyond measure, one day so employed,\nThan years of vain pleasure by worldlings enjoyed.",
+    "The Lord is a Sun, the Lord is a Shield;\nWhat grace has begun, with glory is sealed.\nHe hears the distressed, He succours the just:\nAnd they shall be blessed who make Him their trust."
+  ],
+  "chorus": ""
+},
+{
+  "id": 214,
+  "number": 214,
+  "title": "Coming, Coming, We Are Coming",
+  "author": "",
+  "verses": [
+    "Coming, coming, we are coming\nTo Thy temple, gracious Lord,\nTo receive the blessed teaching\nOf Thy pure and perfect Word;\nMeekly would we learn our duty,\nLearn it kneeling at Thy feet,\nWhile a radiance from Thy glory\nCovers all the Mercy-seat.",
+    "Singing, singing, we are singing\nOf Thy wondrous love so free,\nHow it floweth ever onward\nLike a vast and mighty sea;\nAnd our souls mount up with gladness,\nWhile we swell the lofty strain,\n\"Glory, glory, hallelujah\nTo the Lamb for sinners slain!\"",
+    "Praying, praying, we are praying\nThat Thy Spirit, like a dove,\nMay descend with gifts of mercy\nFrom Thy gracious hand above.\nLord, we ask that, by Thy watch-care,\nWe may all protected be,\nEvery hand be quick to labour,\nAnd our hearts be stayed on Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 215,
+  "number": 215,
+  "title": "Praise Ye the Lord",
+  "author": "",
+  "verses": [
+    "Praise ye the Lord! joyfully shout hosanna!\nPraise the Lord with glad acclaim;\nLift up your hearts unto His throne with gladness—\nMagnify His holy name.\nMarching along under His banner bright,\nTrusting in His mercy as we go,\nHis light divine tenderly o'er us will shine;\nWe shall be guided by His hand now and for ever.",
+    "Praise ye the Lord! He is the King eternal;\nGlory be to God on high!\nPraise ye the Lord, tell of His lovingkindness—\nJoin the chorus of the sky.\nStill marching on, cheerily marching on,\nIn the ranks of Jesus we will go:\nHome to our rest, joyfully home where the blest\nGather and praise the Saviour's name, praise Him for ever."
+  ],
+  "chorus": "Steadily marching on, with our banner waving o'er us;\nSteadily marching on, while we sing the joyful chorus;\nSteadily marching on, pillar and cloud going before us,\nTo the realms of glory, to our home on high."
+},
+{
+  "id": 216,
+  "number": 216,
+  "title": "I Heard the Voice of Jesus Say",
+  "author": "",
+  "verses": [
+    "I heard the voice of Jesus say,\n\"Come unto Me, and rest;\nLay down, thou weary one, lay down\nThy head upon My breast.\"\nI came to Jesus as I was—\nWeary, and worn, and sad;\nI found in Him a resting-place,\nAnd He has made me glad.",
+    "I heard the voice of Jesus say,\n\"Behold, I freely give\nThe living water—thirsty one,\nStoop down, and drink, and live.\"\nI came to Jesus, and I drank\nOf that life-giving stream;\nMy thirst was quenched, my soul revived,\nAnd now I live in Him.",
+    "I heard the voice of Jesus say,\n\"I am this dark world's Light;\nLook unto Me, thy morn shall rise,\nAnd all thy day be bright.\"\nI looked to Jesus, and I found\nIn Him my Star, my Sun;\nAnd in that light of life I'll walk,\nTill travelling days are done."
+  ],
+  "chorus": ""
+},
+{
+  "id": 217,
+  "number": 217,
+  "title": "Jerusalem the Golden",
+  "author": "",
+  "verses": [
+    "Jerusalem the golden!\nWith milk and honey blest;\nBeneath thy contemplation\nSink heart and voice opprest.\nI know not, oh, I know not\nWhat holy joys are there;\nWhat radiancy of glory,\nWhat bliss beyond compare.",
+    "They stand, those halls of Zion,\nAll jubilant with song,\nAnd bright with many an angel,\nAnd all the martyr-throng.\nThere is the throne of David;\nAnd there, from toil released,\nThe shout of them that triumph,\nThe song of them that feast.",
+    "And they who, with their Leader,\nHave conquered in the fight,\nFor ever and for ever\nAre clad in robes of white.\nO land that see'st no sorrow!\nO state that fear'st no strife!\nO royal land of flowers!\nO realm and home of life!",
+    "O sweet and blessed country!\nThe home of God's elect:\nO sweet and blessed country\nThat eager hearts expect!\nJesus, in mercy bring us\nTo that land of rest;\nWho art, with God the Father,\nAnd Spirit, ever blest!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 218,
+  "number": 218,
+  "title": "I Feel Like Singing All the Time",
+  "author": "",
+  "verses": [
+    "I feel like singing all the time,\nMy tears are wiped away;\nFor Jesus is a Friend of mine,\nI'll serve Him every day.",
+    "When on the cross my Lord I saw,\nNailed there by sins of mine,\nFast fell the burning tears; but now\nI'm singing all the time.",
+    "When fierce temptations try my heart,\nI'll sing, \"Jesus is mine!\"\nAnd so, though tears at times may start,\nI'm singing all the time.",
+    "The wondrous story of the Lamb\nTell with that voice of thine,\nTill others, with the glad new song,\nGo singing all the time."
+  ],
+  "chorus": "I'll praise Him! praise Him! praise Him all the time!\nPraise Him! praise Him! I'll praise Him all the time!"
+},
+{
+  "id": 219,
+  "number": 219,
+  "title": "Praise Our Creator and Saviour Eternal",
+  "author": "",
+  "verses": [
+    "Praise our Creator and Saviour eternal!\nHim who redeemed us from death and the grave;\nSing of His greatness, oh, hail and adore Him,\nStrong to deliver and mighty to save.",
+    "Praise our Creator and gracious Defender!\nRock where in safety we still may abide;\nHe is our Shepherd, how gently He leads us\nWhere in the valley the cool waters glide!",
+    "Praise our Creator, the Fountain of goodness!\nNow in His grandeur exalted above;\nRest in His mercy and trust in His promise,\nEver to keep us, upheld by His love."
+  ],
+  "chorus": "Praise Him! praise Him!\nGlory in the highest unto Him ascribing;\nPraise Him! praise Him!\nBlessed be His name, our Lord and King!"
+},
+{
+  "id": 220,
+  "number": 220,
+  "title": "Praise the Lord and Worship Him",
+  "author": "",
+  "verses": [
+    "Praise the Lord and worship Him, a song prepare,\nWhile we enter joyfully the house of prayer;\nPraise the Lord and honour Him who guards our way,\nWatching o'er us tenderly by night and day.",
+    "Praise Him in His majesty and strength arrayed;\nPraise Him in the firmament His hands have made;\nIn our lives acknowledge Him the King of kings,\nThen in safety we may dwell beneath His wings.",
+    "Praise Him in His righteousness, the Holy One;\nSpread abroad the wondrous work that He hath done;\nThrough His perfect sacrifice the world is blest,\nWhosoever will, may come to Him and rest."
+  ],
+  "chorus": "Praise Him! praise Him! join the loud acclaim;\nPraise Him! praise Him! bless His holy name;\nEver kind and merciful in all His ways,\nHe alone is worthy to receive our praise."
+},
+{
+  "id": 221,
+  "number": 221,
+  "title": "Glorious Things of Thee Are Spoken",
+  "author": "",
+  "verses": [
+    "Glorious things of thee are spoken,\nZion, city of our God!\nHe, whose word cannot be broken,\nFormed thee for His own abode.\nOn the Rock of Ages founded,\nWhat can shake thy sure repose?\nWith salvation’s walls surrounded,\nThou may’st smile at all thy foes.",
+    "See, the streams of living waters,\nSpringing from eternal love,\nWell supply thy sons and daughters,\nAnd all fear of want remove:\nWho can faint, while such a river\nEver flows their thirst t' assuage?—\nGrace, which, like the Lord, the giver,\nNever fails from age to age.",
+    "Round each habitation hovering,\nSee the cloud and fire appear!\nFor a glory and a covering,\nShowing that the Lord is near;\nHe who gives them daily manna,\nHe who listens when they cry—\nLet Him hear the loud hosanna,\nRising to His throne on high."
+  ],
+  "chorus": ""
+},
+{ "id": 222, 
+  "number": 222, 
+  "title": "Awake, Awake, O Heart of Mine", 
+    "author": "", 
+    "verses": 
+      [ "AWAKE, awake, O heart of mine!\nSing praise to God above;\nTake up the song of endless years,\nAnd sing redeeming love!\nRedeemed by Him who bore my sins,\nWhen on the cross He died;\nRedeemed and purchased with His blood,\nRedeemed and sanctified,\nAwake, awake, O heart of mine!\nSing praise, sing praise to God above;\nTake up the song of endless years,\nAnd sing redeeming love!", "Redeemed by Him, my Lord and King,\nWho saves me day by day;\nMy life and all its ransomed powers\nCould ne'er His love repay.\nAnd yet His mercy condescends\nMy humble gift to own;\nAnd through the riches of His grace,\nHe brings me near His throne.", "Oh, love unchanging, love sublime!\nNot all the hosts above\nCan reach the height or sound the depth\nOf God's eternal love.\nThis wondrous love enfolds the world,\nIt fills the realms above;\n'Tis boundless as eternity:\nOh, praise the God of love!" 
+],
+  "chorus": "" },
+  
+{ "id": 223,
+  "number": 223, 
+  "title": "Holy, Holy, Holy Is the Lord",
+  "author": "",
+  "verses":
+    [ "HOLY, holy, holy is the Lord!\nSing, O ye people, gladly adore Him;\nLet the mountains tremble at His word,\nLet the hills be joyful before Him;\nMighty in wisdom, boundless in mercy,\nGreat is Jehovah, King over all!\nHoly, holy, holy is the Lord,\nLet the hills be joyful before Him!", "Praise Him, praise Him, shout aloud for joy!\nWatchman of Zion, herald the story;\nSin and death His kingdom shall destroy,\nAll the earth shall sing of His glory;\nPraise Him, ye angels, ye who behold Him\nRobed in His splendour, matchless, divine!", "King eternal, blessed be His name!\nSo may His children gladly adore Him;\nWhen in heaven we join the happy strain,\nWhen we cast our bright crowns before Him;\nThere in His likeness joyful awaking,\nThere we shall see Him, there we shall sing!" 
+], 
+  "chorus": ""
+},
   {
     "id": 235,
     "number": 235,
