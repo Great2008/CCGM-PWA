@@ -3052,7 +3052,19 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
-  {
+{
+  "id": 236,
+  "number": 236,
+  "title": "Come, Oh Come, and Let Us Worship",
+  "author": "",
+  "verses": [
+    "Come, oh come, and let us worship,\nGathered in the house of prayer ;\nPraise the God of our salvation\nWhile He waits to meet us there.",
+    "He hath pardoned our transgressions\nTaken all our sins away ;\nHe will lead us, by His Spirit,\nSafely to the perfect day.",
+    "Soon our trials will be ended,\nAnd, among the loved and blest,\nWe shall join the bright immortals\nIn that Home of joy and rest."
+  ],
+  "chorus": "Come, oh come, and let us worship.\nBringing songs of love and praise,\nUnto Him whose loving kindness\nHas been o'er us all our days."
+},
+{
     "id": 237,
     "number": 237,
     "title": "Rock Of Ages",
@@ -3065,6 +3077,47 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
+{
+  "id": 238,
+  "number": 238,
+  "title": "God of Love, and God of Might",
+  "author": "",
+  "verses": [
+    "God of love, and God of might,\nGod of truth, and God of light,\nHeart and voice we would unite,\nGiving praise to Thee.",
+    "With the sweets of morning's balm,\nWith the hush of evening's calm,\nFervent Hymns and holy psalm\nRise continually.",
+    "We adore Thee, God most high,\nWe Thy mercy magnify ;\nOn Thy word our souls rely,\nTrusting peacefully.",
+    "We have heard Thy words of cheer\nOn our pilgrim journey here ;\nWe have known Thy presence near,\nShining constantly."
+  ],
+  "chorus": ""
+},
+{
+  "id": 239,
+  "number": 239,
+  "title": "In the Cross of Christ I Glory",
+  "author": "",
+  "verses": [
+    "In the cross of Christ I glory,\nTowering o'er the wrecks of time ;\nAll the light of sacred story\nGathers round its head sublime.",
+    "When the woes of life o'ertake me,\nHopes deceive, and fears annoy,\nNever shall the cross forsake me ;\nLo ! it glows with peace and joy.",
+    "When the sun of bliss is beaming\nLight and love upon my way,\nFrom the cross the radiance streaming\nAdds new lustre to the day.",
+    "Bane and blessing, pain and pleasure,\nBy the cross are sanctified ;\nPeace is there that knows no measure,\nJoys that through all time abide."
+  ],
+  "chorus": ""
+},
+{
+  "id": 240,
+  "number": 240,
+  "title": "I've Learned to Sing a Glad New Song",
+  "author": "",
+  "verses": [
+    "I've learned to sing a glad new song\nOf praise unto our King !\nAnd now with all my ransomed powers\nHis praises I will sing.",
+    "I've learned to sing the song of peace,\n‘Tis sweeter every day,\nSince Jesus calmed my troubled soul,\nAnd bore my sins away.",
+    "I sing the song of perfect love,\nIt casteth out all fear !\nOh breadth, oh length, oh depth, oh height !\nOh love so full of cheer !",
+    "I've learned to sing the song of joy;\nMy cup is running o'er\nWith blessings full of peace and love :\nAnd still there's more and more.",
+    "Soon I shall sing the new, new song\nOf Moses and the Lamb,\nWith all the sainted hosts above,\nBefore the great I AM !"
+  ],
+  "chorus": "His praises I will sing !\nHe is my Lord and King !\nAnd now with all my ransomed powers\nHis praises I will sing !"
+},
+
   {
     "id": 242,
     "number": 242,
