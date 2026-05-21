@@ -4147,6 +4147,271 @@ const SACRED_SONGS = [
   ],
   "chorus": "Precious hour of prayer!\nHallowed hour of prayer!\nSacred season of communion,\nIt is sweet to be there!"
 },
+{
+  "id": 321,
+  "number": 321,
+  "title": "How sweet the hour of praise and prayer",
+  "author": "",
+  "verses": [
+    "How sweet the hour of praise and prayer,\nWhen our devotions blend,\nAnd on the wings of faith divine,\nOur songs of joy ascend!\n'Tis then we hear in tones more clear\nThe gracious promise given,\nThat, though we part from friends on earth,\nWe all shall meet in heaven.",
+    "How sweet the tie of hallowed love\nThat binds our hearts in one,\nWhen gathered in the blessed name\nOf Christ, the Father's Son!\nAnd though the parting soon may come,\nYet in His Word is given\nThe blessed hope that by and by\nWe all shall meet in heaven.",
+    "Yes, soon our worn and weary feet\nWill reach the golden strand,\nWhere those we love our coming wait\nIn yonder summer land;\nA few more days, a few more years,\nBy storm and tempest driven,\nWith songs and everlasting joy,\nWe all shall meet in heaven."
+  ],
+  "chorus": "We all shall meet in heaven at last,\nWe all shall meet in heaven;\nThrough faith in Jesus' precious blood,\nWe all shall meet in heaven."
+},
+{
+  "id": 322,
+  "number": 322,
+  "title": "O Lord, Thy work revive",
+  "author": "",
+  "verses": [
+    "O Lord, Thy work revive,\nIn Zion's gloomy hour;\nAnd make her dying graces live\nBy Thy restoring power.",
+    "Awake Thy chosen few\nTo fervent, earnest prayer;\nAgain may they their vows renew,\nThy blessed presence share.",
+    "Thy Spirit then will speak\nThrough lips of feeble clay;\nAnd hearts of adamant will break,\nAnd rebels will obey.",
+    "Lord, lend Thy gracious ear;\nOh, listen to our cry;\nOh come, and bring salvation here:\nOur hopes on Thee rely."
+  ],
+  "chorus": ""
+},
+{
+  "id": 323,
+  "number": 323,
+  "title": "Lord God, the Holy Ghost",
+  "author": "",
+  "verses": [
+    "Lord God, the Holy Ghost,\nIn this accepted hour,\nAs on the day of Pentecost,\nDescend in all Thy power.",
+    "We meet with one accord\nIn our appointed place,\nAnd wait the promise of our Lord,\nThe Spirit of all grace.",
+    "The young, the old, inspire\nWith wisdom from above,\nAnd give us hearts and tongues of fire\nTo pray, and praise, and love.",
+    "Spirit of Light, explore\nAnd chase our gloom away,\nWith lustre shining more and more\nUnto the perfect day!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 324,
+  "number": 324,
+  "title": "Lord, we gather in Thy name",
+  "author": "",
+  "verses": [
+    "Lord, we gather in Thy name;\nMay we now Thy promise claim;\nGrant Thy presence from above,\nAnd fill our souls with love.\nLord, we come on bended knee,\nLooking up by faith to Thee:\nThou, on whom we cast our care,\nBless this hour of prayer!",
+    "Welcome hour that ever brings\nPeace and gladness on its wings;\nHallowed rest and calm repose\nThy tranquil joy bestows.",
+    "Now to us Thy grace impart,\nNearer draw each waiting heart;\nConsecrate us all Thine own,\nWhile here before Thy throne."
+  ],
+  "chorus": ""
+},
+{
+  "id": 325,
+  "number": 325,
+  "title": "Here from the world we turn",
+  "author": "",
+  "verses": [
+    "Here from the world we turn,\nJesus to seek;\nHere may His loving voice\nTenderly speak!\nJesus, our dearest Friend,\nWhile at Thy feet we bend,\nOh, let Thy smile descend!\n'Tis Thee we seek.",
+    "Come, Holy Comforter,\nPresence divine.\nNow in our longing hearts\nGraciously shine;\nOh for Thy mighty power!\nOh for a blessed shower,\nFilling this hallowed hour\nWith joy divine!",
+    "Saviour, Thy work revive,\nHere may we see\nThose who are dead in sin\nQuickened by Thee;\nCome to our hearts' delight,\nMake every burden light,\nCheer Thou our waiting sight;\nWe long for Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 326,
+  "number": 326,
+  "title": "Come, Thou Desire of all Thy saints",
+  "author": "",
+  "verses": [
+    "Come, Thou Desire of all Thy saints!\nOur humble strains attend;\nWhile with our praises and complaints,\nLow at Thy feet we bend.",
+    "How should our songs, like those above,\nWith warm devotion rise!\nHow should our souls, on wings of love,\nMount upward to the skies!",
+    "Come, Lord! Thy love alone can raise\nIn us the heavenly flame;\nThen shall our lips resound Thy praise,\nOur hearts adore Thy name.",
+    "Dear Saviour, let Thy glory shine,\nAnd fill Thy dwellings here;\nTill life, and love, and joy divine\nA heaven on earth appear."
+  ],
+  "chorus": ""
+},
+{
+  "id": 327,
+  "number": 327,
+  "title": "Oh for a faith that will not shrink",
+  "author": "",
+  "verses": [
+    "Oh for a faith that will not shrink,\nThough pressed by every foe;\nThat will not tremble on the brink\nOf any earthly woe:",
+    "That will not murmur or complain\nBeneath the chastening rod;\nBut in the hour of grief or pain\nWill lean upon its God:",
+    "A faith that shines more bright and clear\nWhen tempests rage without;\nThat when in danger knows no fear,\nIn darkness feels no doubt—",
+    "A faith that keeps the narrow way\nTill life's last spark is fled,\nAnd with a pure and heavenly ray\nLights up the dying bed.",
+    "Lord, give us such a faith as this,\nAnd then, whate'er may come,\nWe'll taste, e'en here, the hallowed bliss\nOf our eternal home!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 328,
+  "number": 328,
+  "title": "Hear us, O Saviour, while we pray",
+  "author": "",
+  "verses": [
+    "Hear us, O Saviour, while we pray,\nHumbly our need confessing;\nGrant us the promised showers to-day—\nSend them upon us, O Lord!",
+    "Knowing Thy love, on Thee we call,\nBoldly Thy throne addressing;\nPleading that showers of grace may fall—\nSend them upon us, O Lord!",
+    "Trusting Thy Word that cannot fail,\nMaster, we claim Thy promise;\nOh that our faith may now prevail—\nSend us the showers, O Lord!"
+  ],
+  "chorus": "Send showers of blessing;\nSend showers refreshing;\nSend us showers of blessing;\nSend them, Lord, we pray!"
+},
+{
+  "id": 329,
+  "number": 329,
+  "title": "Jesus, we Thy promise claim",
+  "author": "",
+  "verses": [
+    "Jesus, we Thy promise claim,\nWe are gathered in Thy name;\nIn the midst do Thou appear;\nManifest Thy presence here.",
+    "Sanctify us, Lord, and bless;\nBreathe Thy Spirit, give Thy peace;\nCome and dwell within each heart;\nLight, and life, and joy impart.",
+    "Make us all in Thee complete,\nMake us all for glory meet—\nMeet t' appear before Thy sight;\nPartners with the saints in light!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 330,
+  "number": 330,
+  "title": "Come, my soul, thy suit prepare",
+  "author": "",
+  "verses": [
+    "Come, my soul, thy suit prepare;\nJesus loves to answer prayer;\nHe Himself has bid thee pray,\nTherefore will not say thee nay.",
+    "Thou art coming to a King:\nLarge petitions with thee bring;\nFor His grace and power are such,\nNone can ever ask too much.",
+    "With my burden I begin—\nLord, remove this load of sin;\nLet thy blood, for sinners spilt,\nSet my conscience free from guilt.",
+    "Lord, I come to Thee for rest—\nTake possession of my breast,\nThere Thy blood-bought right maintain,\nAnd without a rival reign.",
+    "While I am a pilgrim here\nLet Thy love my spirit cheer;\nAs my Guide, my Guard, my Friend,\nLead me to my journey's end.",
+    "Show me what I have to do,\nEvery hour my strength renew;\nLet me live a life of faith,\nLet me die Thy people's death."
+  ],
+  "chorus": ""
+},
+{
+  "id": 331,
+  "number": 331,
+  "title": "Lord, we come before Thee now",
+  "author": "",
+  "verses": [
+    "Lord, we come before Thee now,\nAt Thy feet we humbly bow;\nOh, do not our suit disdain!\nShall we seek Thee, Lord, in vain?",
+    "Lord, on Thee our souls depend;\nIn compassion now descend:\nFill our hearts with Thy rich grace,\nTune our lips to sing Thy praise.",
+    "In Thine own appointed way\nNow we seek Thee; here we stay:\nLord, we know not how to go,\nTill a blessing Thou bestow.",
+    "Send some message from Thy Word\nThat may joy and peace afford;\nLet Thy Spirit now impart\nFull salvation to each heart.",
+    "Comfort those who weep and mourn;\nLet the time of joy return;\nThose that are cast down lift up;\nMake them strong in faith and hope.",
+    "Grant that all may seek and find\nThee a God supremely kind;\nHeal the sick; the captive free;\nLet us all rejoice in Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 332,
+  "number": 332,
+  "title": "Pray, always pray",
+  "author": "",
+  "verses": [
+    "Pray, always pray;\nThe Holy Spirit pleads\nWithin thee all thy daily, hourly needs.",
+    "Pray, always pray;\nBeneath sin's heaviest load\nPrayer sees the blood from Jesus' side that flowed.",
+    "Pray, always pray,\nThough weary, faint, and lone,\nPrayer nestles by the Father's sheltering throne.",
+    "Pray, always pray;\nAmid the world's turmoil\nPrayer keeps the heart at rest, and nerves for toil.",
+    "Pray, always pray;\nIf joys thy pathway throng,\nPrayer strikes the harp, and sings the angels' song.",
+    "Pray, always pray;\nIf loved ones pass the veil,\nPrayer drinks with them of springs that cannot fail.",
+    "All earthly things with earth shall fade away;\nPrayer grasps eternity: pray, always pray."
+  ],
+  "chorus": ""
+},
+{
+  "id": 333,
+  "number": 333,
+  "title": "Lord, teach us how to pray aright",
+  "author": "",
+  "verses": [
+    "Lord, teach us how to pray aright,\nWith reverence and with fear;\nThough dust and ashes in Thy sight,\nWe may, we must draw near.",
+    "Burdened with guilt, convinced of sin,\nIn weakness, want, and woe,\nFightings without, and fears within,\nLord, whither shall we go?",
+    "God of all grace, we come to Thee\nWith broken, contrite hearts;\nGive, what Thine eye delights to see,\nTruth in the inward parts.",
+    "Give deep humility; the sense\nOf godly sorrow give;\nA strong, desiring confidence\nTo hear Thy voice and live;",
+    "Faith in the holy sacrifice\nThat can for sin atone;\nTo cast our hopes, to fix our eyes,\nOn Christ, on Christ alone;",
+    "Patience to watch, and wait, and weep,\nThough mercy long delay;\nCourage, our fainting souls to keep,\nAnd trust Thee, though Thou slay:",
+    "Give these, and then Thy will be done;\nThus strengthened with all might,\nWe by Thy Spirit, and Thy Son,\nShall pray, and pray aright."
+  ],
+  "chorus": ""
+},
+{
+  "id": 334,
+  "number": 334,
+  "title": "So near to the Kingdom",
+  "author": "",
+  "verses": [
+    "So near to the Kingdom! yet what dost thou lack?\nSo near to the Kingdom! what keepeth thee back?\nRenounce every idol, though dear it may be,\nAnd come to the Saviour now pleading with thee!",
+    "So near, that thou hearest the songs that resound\nFrom those who, believing, a pardon have found!\nSo near, yet unwilling to give up thy sin,\nWhen Jesus is waiting to welcome thee in.",
+    "To die with no hope! hast thou counted the cost?—\nTo die out of Christ, and thy soul to be lost?\nSo near to the Kingdom! oh come, we implore!\nWhile Jesus is pleading, come enter the door!"
+  ],
+  "chorus": "Pleading with thee!\nThe Saviour is pleading, is pleading with thee!"
+},
+{
+  "id": 335,
+  "number": 335,
+  "title": "Oh, do not let the Word depart",
+  "author": "",
+  "verses": [
+    "Oh, do not let the Word depart,\nNor close thine eyes against the light;\nPoor sinner, harden not thy heart:\nThou wouldst be saved—Why not to-night?",
+    "To-morrow's sun may never rise,\nTo bless thy long-deluded sight;\nThis is the time! oh then, be wise!\nThou wouldst be saved—Why not to-night?",
+    "The world has nothing left to give—\nIt has no new, no pure delight:\nOh, try the life which Christians live!\nThou wouldst be saved—Why not to-night?",
+    "Our blessed Lord refuses none\nWho would to Him their souls unite;\nThen be the work of grace begun!\nThou wouldst be saved—Why not to-night?"
+  ],
+  "chorus": "Why not to-night?\nWhy not to-night?\nThou wouldst be saved—Why not to-night?"
+},
+{
+  "id": 336,
+  "number": 336,
+  "title": "While Jesus whispers to you",
+  "author": "",
+  "verses": [
+    "While Jesus whispers to you,\nCome, sinner, come!\nWhile we are praying for you,\nCome, sinner, come!\nNow is the time to own Him,\nCome, sinner, come!\nNow is the time to know Him,\nCome, sinner, come!",
+    "Are you too heavy laden?\nCome, sinner, come!\nJesus will bear your burden,\nCome, sinner, come!\nJesus will not deceive you,\nCome, sinner, come!\nJesus will now receive you,\nCome, sinner, come!",
+    "Oh, hear His tender pleading!\nCome, sinner, come!\nCome, and receive the blessing!\nCome, sinner, come!\nWhile Jesus whispers to you,\nCome, sinner, come!\nWhile we are praying for you,\nCome, sinner, come!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 337,
+  "number": 337,
+  "title": "Weeping will not save me",
+  "author": "",
+  "verses": [
+    "Weeping will not save me!\nThough my face were bathed in tears,\nThat could not allay my fears,\nCould not wash the sins of years:\nWeeping will not save me!",
+    "Working will not save me!\nPurest deeds that I can do,\nHoliest thoughts and feelings too,\nCannot form my soul anew:\nWorking will not save me!",
+    "Waiting will not save me!\nHelpless, guilty, lost, I lie;\nIn my ear is Mercy's cry;\nIf I wait I can but die:\nWaiting will not save me!",
+    "Faith in Christ will save me!\nLet me trust Thy weeping Son,\nTrust the work that He has done;\nTo His arms, Lord, help me run:\nFaith in Christ will save me!"
+  ],
+  "chorus": "Jesus wept and died for me;\nJesus suffered on the tree;\nJesus waits to make me free:\nHe alone can save me!"
+},
+{
+  "id": 338,
+  "number": 338,
+  "title": "Someone will enter the pearly gate",
+  "author": "",
+  "verses": [
+    "Someone will enter the pearly gate\nBy and by, by and by;\nTaste of the glories that there await:\nShall you? shall I?\nSomeone will travel the streets of gold,\nBeautiful visions will there behold,\nFeast on the pleasures so long foretold:\nShall you? shall I?",
+    "Someone at last will his cross lay down\nBy and by, by and by;\nFaithful, approved, shall receive a crown:\nShall you? shall I?\nSomeone the glorious King will see,\nEver from sorrow of earth be free,\nHappy with Him through eternity:\nShall you? shall I?",
+    "Someone will knock when the door is shut\nBy and by, by and by;\nHear a voice saying, \"I know you not\":\nShall you? shall I?\nSomeone will call and shall not be heard,\nVainly will strive when the door is barred,\nSomeone will fail of the saint's reward:\nShall you? shall I?",
+    "Someone will sing the triumphant song\nBy and by, by and by;\nJoin in the praise with the blood-bought throng:\nShall you? shall I?\nSomeone will greet on the golden shore\nLoved ones of earth who have gone before,\nSafe in the glory for evermore:\nShall you? shall I?"
+  ],
+  "chorus": ""
+},
+{
+  "id": 339,
+  "number": 339,
+  "title": "God calling yet",
+  "author": "",
+  "verses": [
+    "God calling yet! shall I not hear?\nEarth's pleasures shall I still hold dear?\nShall life's swift passing years all fly,\nAnd still my soul in slumber lie?",
+    "God calling yet! shall I not rise?\nCan I His loving voice despise,\nAnd basely His kind care repay?\nHe calls me still; can I delay?",
+    "God calling yet! and shall He knock,\nAnd I my heart the closer lock?\nHe still is waiting to receive;\nAnd shall I dare His Spirit grieve?",
+    "God calling yet! and shall I give\nNo heed, but still in bondage live?\nI wait; but He does not forsake:\nHe calls me still: my heart, awake!",
+    "God calling yet! I cannot stay;\nMy heart I yield without delay:\nVain world, farewell! from thee I part;\nThe voice of God has reached my heart."
+  ],
+  "chorus": "Calling yet, oh, hear Him!\nCalling yet, oh, hear Him!\nGod is calling yet; oh, hear Him calling, calling!\nCalling yet, oh, hear Him!\nCalling yet, oh, hear Him!\nGod is calling yet; oh, hear Him calling yet!"
+},
+{
+  "id": 340,
+  "number": 340,
+  "title": "To-day the Saviour calls",
+  "author": "",
+  "verses": [
+    "To-day the Saviour calls:\nYe wanderers, come;\nOh, ye benighted souls,\nWhy longer roam?",
+    "To-day the Saviour calls:\nOh, listen now!\nWithin these sacred walls\nTo Jesus bow.",
+    "To-day the Saviour calls:\nFor refuge fly;\nThe storm of justice falls,\nAnd death is nigh.",
+    "The Spirit calls to-day:\nYield to His power;\nOh, grieve Him not away!\n'Tis mercy's hour."
+  ],
+  "chorus": ""
+},
    {
     "id": 414,
     "number": 414,
