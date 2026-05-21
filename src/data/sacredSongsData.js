@@ -4673,31 +4673,1291 @@ const SACRED_SONGS = [
     ],
     "chorus": "The Spirit and the bride say, Come! And let him that heareth say, Come! And let him that is athirst come, And whosoever will, let him take the water of life freely."
   },
-   {
-    "id": 414,
-    "number": 414,
-    "title": "Softly And Tenderly",
-    "author": "Will L. Thompson",
+  {
+    "id": 361,
+    "number": 361,
+    "title": "Behold, behold the wondrous love",
+    "author": "",
     "verses": [
-      "Softly and tenderly Jesus is calling,\nCalling for you and for me;\nSee, on the portals He's waiting and watching,\nWatching for you and for me.",
-      "Why should we tarry when Jesus is pleading,\nPleading for you and for me?\nWhy should we linger and heed not His mercies,\nMercies for you and for me?",
-      "Time is now fleeting, the moments are passing,\nPassing from you and from me;\nShadows are gathering, deathbeds are coming,\nComing for you and for me.",
-      "O for the wonderful love He has promised,\nPromised for you and for me!\nThough we have sinned, He has mercy and pardon,\nPardon for you and for me."
+      "Behold, behold the wondrous love,\nThat ever flows from God above;\nThro' Christ, His only Son, who gave\nHis precious blood our souls to save.",
+      "Behold, a fountain in His side,\nTo all the world is opened wide;\nWhere all may come, by sin opprest,\nAnd find in Him sweet peace and rest.",
+      "Behold Him now exalted high\nAbove the bright and starry sky;\nYet through His Word He calleth still,\n\"Come unto Me,\" whoever will.",
+      "Behold in Him the Living Way,\nThat onward leads to endless day;\nWhere, saved by grace, the ransomed throng\nLift up the everlasting song."
     ],
-    "chorus": "Come home, come home,\nYe who are weary, come home;\nEarnestly, tenderly, Jesus is calling,\nCalling, O sinner, come home!"
+    "chorus": "All praise and glory be unto Jesus,\nFor He hath purchased a full salvation;\nBehold, how wondrous the proclamation,\n\"Whosoever will may come!\""
   },
   {
-    "id": 452,
-    "number": 452,
-    "title": "Almost Persuaded",
-    "author": "Philip P. Bliss",
+    "id": 362,
+    "number": 362,
+    "title": "Thy Saviour calls! oh, come and see",
+    "author": "",
     "verses": [
-      "'Almost persuaded' now to believe;\n'Almost persuaded' Christ to receive;\nSeems now some soul to say,\n'Go, Spirit, go Thy way,\nSome more convenient day\nOn Thee I'll call.'",
-      "'Almost persuaded,' come, come today;\n'Almost persuaded,' turn not away;\nJesus invites you here,\nAngels are lingering near,\nPrayers rise from hearts so dear:\nO wanderer, come!",
-      "'Almost persuaded,' harvest is past!\n'Almost persuaded,' doom comes at last!\n'Almost' cannot avail;\n'Almost' is but to fail!\nSad, sad, that bitter wail—\n'Almost,' but lost!"
+      "Thy Saviour calls! oh, come and see\nWhat things He hath prepared for thee!\nLife, love, and joy, from God on high,\nBy Christ Himself to thee brought nigh.",
+      "Thy Saviour calls! oh, can it be\nThat call has no sweet charm for thee?\nWilt thou not turn and give Him heed?\nWilt thou not think while He doth plead?",
+      "Thy Saviour calls! He knows thy sin;\nBut trust Him now, He'll enter in:\nAnd He thy heart will purify,\nAnd every needed grace supply."
+    ],
+    "chorus": "\"Him that cometh, him that cometh, him that cometh to Me,\nI will in no wise, I will in no wise, I will in no wise cast out.\""
+  },
+  {
+    "id": 363,
+    "number": 363,
+    "title": "There's a Stranger at the door",
+    "author": "",
+    "verses": [
+      "There's a Stranger at the door:\nLet . . . Him in! . . .\nHe has been there oft before:\nLet . . . Him in! . . .\nLet Him in ere He is gone;\nLet Him in, the Holy One.\nJesus Christ, the Father's Son:\nLet . . . Him in! . . .",
+      "Open now to Him your heart:\nLet . . . Him in! . . .\nIf you wait He will depart:\nLet . . . Him in! . . .\nLet Him in: He is your Friend;\nHe your soul will sure defend:\nHe will keep you to the end:\nLet . . . Him in! . . .",
+      "Hear you now His loving voice!\nLet . . . Him in! . . .\nNow, oh, now make Him your choice;\nLet . . . Him in! . . .\nHe is standing at the door;\nJoy to you He will restore,\nAnd His name you will adore:\nLet . . . Him in! . . .",
+      "Now admit the heavenly Guest:\nLet . . . Him in! . . .\nHe will make for you a feast:\nLet . . . Him in! . . .\nHe will speak your sins forgiven;\nAnd when earth-ties all are riven,\nHe will take you home to heaven:\nLet . . . Him in! . . ."
     ],
     "chorus": ""
   },
+  {
+    "id": 364,
+    "number": 364,
+    "title": "Is there a sinner awaiting",
+    "author": "",
+    "verses": [
+      "Is there a sinner awaiting\nMercy and pardon to-day?\nWelcome the news that we bring him:\n\"Jesus is passing this way!\"\nComing in love and in mercy,\nPardon and peace to bestow,\nComing to save the poor sinner\nFrom his heart-anguish and woe.",
+      "Brother, the Master is waiting,\nWaiting to freely forgive;\nWhy not this moment accept Him,\nTrust in His grace and live?\nHe is so tender and precious,\nHe is so near you to-day;\nOpen your heart to receive Him,\nWhile He is passing this way.",
+      "Yes, He is coming to bless you\nWhile in contrition you bow:\nComing from sin to redeem you,\nReady to save you now;\nCan you refuse the salvation\nJesus is offering here?\nOpen your heart to admit Him,\nWhile He is coming so near."
+    ],
+    "chorus": "Jesus is passing this way . .\nTo-day, . . to-day ; . . .\nWhile He is near, O believe Him,\nOpen your heart to receive Him,\nFor Jesus is passing this way, . .\nIs passing this way to-day."
+  },
+  {
+    "id": 365,
+    "number": 365,
+    "title": "Hark, my soul! it is the Lord",
+    "author": "",
+    "verses": [
+      "Hark, my soul! it is the Lord;\n'Tis thy Saviour, hear His word;\nJesus speaks, and speaks to thee—\n\"Say, poor sinner, lov'st thou Me?\"",
+      "\"I delivered thee when bound,\nAnd, when bleeding, healed thy wound;\nSought thee wandering, set thee right;\nTurned thy darkness into light.",
+      "\"Can a woman's tender care\nCease towards the child she bare?\nYes! she may forgetful be;\nYet will I remember thee.",
+      "\"Mine is an unchanging love,\nHigher than the heights above;\nDeeper than the depths beneath,\nFree and faithful, strong as death.",
+      "\"Thou shalt see My glory soon,\nWhen the work of grace is done;\nPartner of My throne shalt be;\n—\nSay, poor sinner, lov'st thou Me?\"",
+      "Lord, it is my chief complaint\nThat my love is weak and faint;\nYet, I love Thee and adore;\nOh for grace to love Thee more."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 366,
+    "number": 366,
+    "title": "A ruler once came to Jesus by night",
+    "author": "",
+    "verses": [
+      "A ruler once came to Jesus by night,\nTo ask Him the way of salvation and light;\nThe Master made answer in words true and plain,\n\"Ye must be born again!\"",
+      "Ye children of men, attend to the word\nSo solemnly uttered by Jesus, the Lord;\nAnd let not this message to you be in vain:\n\"Ye must be born again!\"",
+      "O ye who would enter this glorious rest,\nAnd sing with the ransomed the song of the blest—\nThe life everlasting if ye would obtain,\n\"Ye must be born again!\"",
+      "A dear one in heaven thy heart yearns to see,\nAt the beautiful gate may be watching for thee;\nThen list to the note of this solemn refrain,\n\"Ye must be born again!\""
+    ],
+    "chorus": "\"Ye must be born again!\" . .\n\"Ye must be born again!\" . .\nI verily, verily say unto thee—\n\"Ye must be born again!\" . ."
+  },
+  {
+    "id": 367,
+    "number": 367,
+    "title": "Tis a true and faithful saying",
+    "author": "",
+    "verses": [
+      "Tis a true and faithful saying,\nJesus died for sinful men;\nThough we've told the story often,\nWe must tell it o'er again.",
+      "He has made a full atonement,\nNow His saving work is done;\nHe has satisfied the Father,\nWho accepts us in His Son.",
+      "Still upon His hands the nail-prints,\nAnd the scars upon His brow;\nOur Redeemer, Lord, and Saviour,\nIn the glory standeth now.",
+      "But remember, this same Jesus\nIn the clouds will come again;\nAnd with Him His blood-bought people\nEvermore shall live and reign."
+    ],
+    "chorus": "Oh, glad and glorious Gospel!\nWith joy we now proclaim . .\nA full and free salvation,\nThrough faith in Jesus' name!"
+  },
+  {
+    "id": 368,
+    "number": 368,
+    "title": "We never grow weary of telling",
+    "author": "",
+    "verses": [
+      "We never grow weary of telling\nThe story of Jesus our King;\nWho left the bright throne of His glory,\nAnd came His great treasures to bring.",
+      "We never grow weary of telling\nHis love to the poor and oppressed;\nAnd still He is tenderly calling,\n\"Come hither, ye weary, and rest!\"",
+      "We never grow weary of telling\nOf yonder bright mansions above;\nWhere we shall behold our Redeemer,\nAnd dwell in the smile of His love."
+    ],
+    "chorus": "Oh, wonderful gift of the Gospel,\nThat each in our hearts may receive!\nIt offers to all free salvation,\nAnd happy are they that believe."
+  },
+  {
+    "id": 369,
+    "number": 369,
+    "title": "The Spirit and the bride say \"Come!\"",
+    "author": "",
+    "verses": [
+      "The Spirit and the bride say \"Come!\"\nAnd take the water of life!\nOh, blessed call!—good news to all\nWho tire of sin and strife!",
+      "Let every one who hears, say \"Come!\"\nAnd joyful witness give;\nI heard the sound, the stream I found,\nI drank, and now I live!",
+      "Ye souls who are athirst, forsake\nYour broken cisterns first;\nThen come, partake: one draught will slake\nYour soul's consuming thirst.",
+      "Yea, \"whosoever will\" may come—\nYour longings Christ can fill;\nThe stream is free to you and me,\nAnd whosoever will."
+    ],
+    "chorus": "The Spi - - rit says \"Come!\" . . The Bride . . says \"Come!\" . . .\nAnd take . . of the wa - - ter of life . . freely.\nThe Spi - - rit says \"Come!\" . . The bride . . says \"Come!\" . . .\nAnd take . . of the wa - - ter of life . . . freely."
+  },
+  {
+    "id": 370,
+    "number": 370,
+    "title": "Are you coming Home, ye wanderers",
+    "author": "",
+    "verses": [
+      "Are you coming Home, ye wanderers,\nWhom Jesus died to win?—\nAll footsore, lame, and weary,\nYour garments stained with sin?\nWill you seek the blood of Jesus\nTo wash your garments white?\nWill you trust His precious promise?\nAre you coming Home to-night?",
+      "Are you coming Home, ye lost ones?\nBehold, your Lord doth wait;\nCome then! no longer linger;\nCome ere it be too late!\nWill you come, and let Him save you?\nOh, trust His love and might!\nWill you come while He is calling?\nAre you coming Home to-night?",
+      "Are you coming Home, ye guilty,\nWho bear the load of sin?\nOutside you've long been standing,\nCome now, and venture in!\nWill you heed the Saviour's promise,\nAnd dare to trust Him quite!—\n\"Come unto Me!\" saith Jesus:\nAre you coming Home to-night?"
+    ],
+    "chorus": "Are you coming Home to-night?\nAre you coming Home to-night?\nAre you coming Home to Jesus,\nOut of darkness into light?\nAre you coming Home to-night?\nAre you coming Home to-night?\nTo your loving heavenly Father\nAre you coming Home to-night?"
+  },
+  {
+    "id": 371,
+    "number": 371,
+    "title": "Look to Jesus, weary one",
+    "author": "",
+    "verses": [
+      "Look to Jesus, weary one,\nLook and live! look and live!\nLook at what the Lord has done,\nLook and live!",
+      "See Him lifted on the tree,\nLook and live! look and live!\nHear Him say, \"Look unto Me!\"\nLook and live!",
+      "Though unworthy, vile, unclean,\nLook and live! look and live!\nLook away from self and sin,\nLook and live!",
+      "Long by Satan's power enslaved,\nLook and live! look and live!\nLook to Me, ye shall be saved,\nLook and live!",
+      "Though you've wandered far away,\nLook and live! look and live!\nHarden not your hearts to-day,\nLook and live!",
+      "'Tis Thy Father calls thee home,\nLook and live! look and live!\nWhosoever will may come,\nLook and live!"
+    ],
+    "chorus": "Look ! the Lord is lifted high ;\nLook to Him, He's ever nigh :\nLook and live ! why will ye die\nLook and live !"
+  },
+  {
+    "id": 372,
+    "number": 372,
+    "title": "There is a gate that stands ajar",
+    "author": "",
+    "verses": [
+      "There is a gate that stands ajar,\nAnd through its portals gleaming\nA radiance from the cross afar,\nThe Saviour's love revealing.",
+      "That gate ajar stands free for all\nWho seek through it salvation;\nThe rich and poor, the great and small\nOf every tribe and nation.",
+      "Press onward, then, though foes may frown,\nWhile mercy's gate is open;\nAccept the cross, and win the crown,\nLove's everlasting token.",
+      "Beyond the river's brink we'll lay\nThe cross that here is given,\nAnd bear the crown of life away,\nAnd love Him more in heaven."
+    ],
+    "chorus": "Oh, depth of mercy ! can it be\nThat gate was left ajar for me,\nFor me, . . for me ? . .\nWas left ajar for me ?"
+  },
+  {
+    "id": 373,
+    "number": 373,
+    "title": "Back from the weary wandering",
+    "author": "",
+    "verses": [
+      "Back from the weary wandering\nInto the narrow way;\nJesus is tenderly calling,\nCalling the sheep that stray.",
+      "Out of the desert\nInto the pastures green,\nOut of the land of darkness\nInto the light serene.",
+      "Why should we longer tarry,\nWhy should we longer roam\nFar from the place of refuge,\nFar from the sheltering home?",
+      "Come, for the hours are waning;\nCome from the mountains cold;\nCome from the storm and tempest\nInto the Shepherd's fold!"
+    ],
+    "chorus": "Still, still Jesus is calling :\nHear, oh hear Him say :\n\"Weary, heavy laden,\nCome, come to-day !\""
+  },
+  {
+    "id": 374,
+    "number": 374,
+    "title": "Come unto Me, ye weary",
+    "author": "",
+    "verses": [
+      "\"Come unto Me, ye weary,\nAnd I will give you rest.\"\nOh, blessed voice of Jesus,\nWhich comes to hearts opprest!\nIt tells of benediction;\nOf pardon, grace, and peace;\nOf joy that hath no ending;\nOf love which cannot cease.",
+      "\"Come unto Me, ye wanderers,\nAnd I will give you light.\"\nOh, loving voice of Jesus,\nWhich comes to cheer the night!\nOur hearts were filled with sadness,\nAnd we had lost our way;\nBut He has brought us gladness,\nAnd songs at break of day.",
+      "\"Come unto Me, ye fainting,\nAnd I will give you life.\"\nOh, cheering voice of Jesus,\nWhich comes to aid our strife:\nThe foe is stern and eager,\nThe fight is fierce and long,\nBut He has made us mighty,\nAnd stronger than the strong.",
+      "\"And whosoever cometh\nI will not cast him out.\"\nOh, welcome voice of Jesus,\nWhich drives away our doubt:\nWhich calls us—very sinners,\nUnworthy though we be\nOf love so free and boundless—\nTo come, dear Lord, to Thee!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 375,
+    "number": 375,
+    "title": "Come, weary one, and find sweet rest",
+    "author": "",
+    "verses": [
+      "Come, weary one, and find sweet rest;\nJesus is passing by!\nCome where the longing heart is blest,\nAnd on His word rely.",
+      "Come, burdened one, bring all your care;\nJesus is passing by!:\nThe love that listens to your prayer\nWill \"no good thing\" deny.",
+      "Come, hungry one, and tell your need;\nJesus is passing by!:\nThe Bread of Life your soul will feed,\nAnd fully satisfy.",
+      "Come, contrite one, and seek His grace;\nJesus is passing by!\nSee in His reconciled face\nThe sunshine of the sky."
+    ],
+    "chorus": "Pass - - ing by ! . . pass - - ing by I . .\nHasten to meet Him on the way,\nJesus is passing by to-day !\nPass - - ing by ! . . pass - - ing by ! . ."
+  },
+  {
+    "id": 376,
+    "number": 376,
+    "title": "Come, ye sinners, poor and needy",
+    "author": "",
+    "verses": [
+      "Come, ye sinners, poor and needy,\nWeak and wounded, sick and sore;\nJesus ready stands to save you,\nFull of pity, love, and power.\nHe is able;\nHe is willing : doubt no more.",
+      "Now ye needy, come and welcome;\nGod's free bounty glorify:\nTrue belief and true repentance—\nEvery grace that brings you nigh—\nWithout money,\nCome to Jesus Christ and buy.",
+      "Let not conscience make you linger,\nNor of fitness fondly dream;\nAll the fitness He requireth\nIs to feel your need of Him:\nThis He gives you—\n'Tis the Spirit's rising beam.",
+      "Come, ye weary, heavy-laden,\nBruised and ruined by the Fall;\nIf you tarry till you're better,\nYou will never come at all:\nNot the righteous—\nSinners, Jesus came to call.",
+      "View Him prostrate in the garden,\nOn the ground your Maker lies!\nOn the bloody tree behold Him,\nHear Him cry before He dies,\n\"It is finished!\"\nSinner, will not this suffice?",
+      "Lo, th' incarnate God, ascended,\nPleads the merit of His blood;\nVenture on Him, venture wholly,\nLet no other trust intrude;\nNone but Jesus\nCan do helpless sinners good."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 377,
+    "number": 377,
+    "title": "Step over the threshold, and wander no more",
+    "author": "",
+    "verses": [
+      "Step over the threshold, and wander no more,\nOppressed with the burden of sin;\nStep over the threshold; why stand at the door?\nThe Healer is waiting within.",
+      "Step over the threshold: let faith be thy guide\nTo Him, thy Physician so kind;\nGo wash in the fountain that flows from His side,\nAnd health to thy soul thou shalt find.",
+      "Step over the threshold, repent and believe,\nAnd quickly thy burden will fall;\nOh, touch but His garment, and thou shalt receive\nThe pardon He offers to all.",
+      "Step over the threshold, no shelter hast thou;\nThy refuge He offers to be;\nStep over the threshold, and come to Him now;\nO lost one, He tarries for thee!"
+    ],
+    "chorus": "Then come as thou art ; thy poor broken heart\nRenewed by His Spirit shall be :\nStep over the threshold : why stand at the door ?\nCome in, there is mercy for thee."
+  },
+  {
+    "id": 378,
+    "number": 378,
+    "title": "Behold Me standing at the door",
+    "author": "",
+    "verses": [
+      "Behold Me standing at the door,\nAnd hear Me pleading evermore,\nWith gentle voice: Oh, heart of sin,\nMay I come in? may I come in?",
+      "I bore the cruel thorns for thee,\nI waited long and patiently:\nSay, weary heart, oppressed with sin,\nMay I come in? may I come in?",
+      "I would not plead with thee in vain;\nRemember all My grief and pain!\nI died to ransom thee from sin:\nMay I come in? may I come in?",
+      "I bring thee joy from heaven above,\nI bring thee pardon, peace, and love:\nSay, weary heart, oppressed with sin,\nMay I come in? may I come in?"
+    ],
+    "chorus": "Behold Me standing at the door,\nAnd hear Me pleading evermore :\nSay, weary heart, oppressed with sin,\nMay I come in? may I come in?"
+  },
+  {
+    "id": 379,
+    "number": 379,
+    "title": "Have you been to Jesus for the cleansing power",
+    "author": "",
+    "verses": [
+      "Have you been to Jesus for the cleansing power?\nAre you washed in the blood of the soul-cleansing?\nAre you fully trusting in His grace this hour?\nAre you washed in the blood of the Lamb?",
+      "Are you walking daily by the Saviour's side?\nAre you washed in the blood of the Lamb?\nDo you rest each moment in the Crucified?\nAre you washed in the blood of the Lamb?",
+      "When the Bridegroom cometh will your robes be white?\nPure and white in the blood of the Lamb?\nWill your soul be ready for the mansions bright,\nAnd be washed in the blood of the Lamb?",
+      "Lay aside the garments that are stained with sin,\nAnd be washed in the blood of the Lamb!\nThere's a fountain flowing for the soul unclean—\nOh, be washed in the blood of the Lamb!"
+    ],
+    "chorus": "Are you washed . . . in the blood, . . .\nIn the soul-cleansing blood of the Lamb? . . .\nAre your garments spotless? Are they white as snow?\nAre you washed in the blood of the Lamb?"
+  },
+  {
+    "id": 380,
+    "number": 380,
+    "title": "Art thou troubled, sin-oppressed",
+    "author": "",
+    "verses": [
+      "Art thou troubled, sin-oppressed?\nCome to Jesus now;\nWouldst thou find thy only rest?\nCome to Jesus now.",
+      "Day is fading in the west,\nCome to Jesus now;\nLean thy head upon His breast—\nCome to Jesus now.",
+      "He will all thy sins forgive,\nCome to Jesus now;\nLook to Him and thou shalt live;\nCome to Jesus now."
+    ],
+    "chorus": "Weary wanderer, come and see\nWhat His grace will do for thee\nHear Him say, Come away,\nCome, oh come to-day I"
+  },
+  {
+  "id": 381,
+  "number": 381,
+  "title": "Once again the Gospel message",
+  "author": "",
+  "verses": [
+    "Once again the Gospel message\nFrom the Saviour you have heard;\nWill you heed the invitation?\nWill you turn and seek the Lord ?",
+    "Many summers you have wasted,\nRipened harvests you have seen;\nWinter snows by spring have melted,\nYet you linger in your sin.",
+    "Jesus for your choice is waiting;\nTarry not: at once decide!\nWhile the Spirit now is striving,\nYield, and seek the Saviour's side.",
+    "Cease of fitness to be thinking;\nDo not longer try to feel;\nIt is trusting, and not feeling,\nThat will give the Spirit's seal.",
+    "Let your will to God be given,\nTrust in Christ's atoning blood;\nLook to Jesus now in heaven,\nRest on His unchanging word."
+  ],
+  "chorus": "Come believing! . . come believing! . .\nCome to Jesus! look and live 1 . .\nCome believing! . . come believing! . .\nCome to Jesus! look and live !"
+},
+{
+  "id": 382,
+  "number": 382,
+  "title": "Believe and receive the Saviour",
+  "author": "",
+  "verses": [
+    "Believe and receive the Saviour,\nGod's gift of love divine,\nAnd Christ and heaven and glory\nShall evermore be thine.",
+    "Believe and receive the Saviour,\nFor you His blood was shed;\nHe took your sins upon Him,\nAnd suffered in your stead.",
+    "Believe and receive the Saviour,\nAnd ne'er from Him depart;\nHe'll set His mark in your forehead,\nHis seal upon your heart.",
+    "Believe and receive the Saviour,\nForth to the conflict go,\nWith the word, the sword of the Spirit,\nTo meet the advancing foe.",
+    "Go forth in the Spirit's power,\nAnd the all-prevailing name\nOf Christ, the world's Redeemer,\nHis Gospel to proclaim."
+  ],
+  "chorus": "Believe, and receive Him,\n'Tis all that you have to do;\nFor He, your great Redeemer,\nHas done all the rest for you."
+},
+{
+  "id": 383,
+  "number": 383,
+  "title": "O wandering souls, why will you roam",
+  "author": "",
+  "verses": [
+    "O wandering souls, why will you roam\nAway from God, away from Home?\nThe Saviour calls, oh, hear Him say—\n'Whoever will' may come to-day!",
+    "Behold His hands extended now,\nThe dews of night are on His brow;\nHe knocks, He calls, He waiteth still:\nOh, come to Him, 'whoever will!'",
+    "In simple faith His word believe,\nAnd His abundant grace receive;\nNo love like His the heart can fill;\nOh, come to Him, 'whoever will!'",
+    "The 'Spirit and the bride say, Come!'\nAnd find in Him sweet rest, and home;\nLet him that heareth echo still\nThe blessed 'Whosoever will I'"
+  ],
+  "chorus": "\"Whoever will!\" \"whoever will!\"\n\"Whoever will\" may come to-day ;\n\"Whoever will\" may come to-day,\nAnd drink of the water of life."
+},
+{
+  "id": 384,
+  "number": 384,
+  "title": "O weary heart, why seek in vain",
+  "author": "",
+  "verses": [
+    "O weary heart, why seek in vain\nThe balm of rest from earth to gain,\nWhile Jesus waits, your King to reign,\nAnd all your sins forgive?",
+    "He calls again; on Him believe,\nHis gift of grace through faith receive;\nYour truest Friend no longer grieve,\nBut haste your heart to give.",
+    "To Jesus come, and at His feet\nThat precious name with praise repeat;\nOh, trust Him now, and learn how sweet\nThe peace His love will give."
+  ],
+  "chorus": "Awake, arise! no more delay;\nHe calls you now—His voice obey;\nThe loving words He speaks to-day,\nOh hear, and you shall live!"
+},
+{
+  "id": 385,
+  "number": 385,
+  "title": "Look unto Me, and be ye saved",
+  "author": "",
+  "verses": [
+    "\"Look unto Me, and be ye saved!\"\nOh, hear the blest command!\nSalvation full, salvation free,\nProclaim o'er every land!",
+    "\"Look unto Me,\" upon the cross,\nO weary, burdened soul;\n'Twas there on Me thy sins were laid—\nBelieve, and be made whole!",
+    "\"Look unto Me,\" thy risen Lord,\nIn dark temptation's hour;\nThe needful grace I'll freely give,\nTo keep from Satan's power.",
+    "\"Look unto Me,\" and not within—\nNo help is there for thee:\nFor pardon, peace, and all thy need,\nLook only unto Me!"
+  ],
+  "chorus": "\"Look unto Me, . . . and be ye saved, . . .\nAll ye ends of the earth! . . .\nFor I am God; . . . there is none else: . . .\nLook unto me, and be ye saved.\""
+},
+{
+  "id": 386,
+  "number": 386,
+  "title": "Jesus, Gracious One, calleth now to thee",
+  "author": "",
+  "verses": [
+    "Jesus, Gracious One, calleth now to thee,\n\"Come, O sinner, come!\"\nCalls so tenderly, calls so lovingly,\n\"Now, O sinner, come!\"\nWords of peace and blessing,\nChrist's own love confessing!",
+    "Still He waits for thee, pleading patiently,\n\"Come, oh come, to Me!\"\n\"Heavy-laden one, I thy grief have borne,\nCome and rest in Me.\"\nWords with love o'erflowing,\nLife and bliss bestowing!",
+    "Weary, sin-sick soul, called so graciously,\nCanst thou dare refuse?\nMercy offered thee, freely, tenderly,\nWilt thou still abuse?\nCome, for time is flying!\nHaste, thy lamp is dying!"
+  ],
+  "chorus": "Hear the sweet voice of Jesus,\nFull, full of love;\nCalling tenderly, calling lovingly,\n\"Come, O sinner, come!\""
+},
+{
+  "id": 387,
+  "number": 387,
+  "title": "Take the wings of the morning",
+  "author": "",
+  "verses": [
+    "Take the wings of the morning, speed quickly thy flight\nTo Jesus, thy Saviour, thy hope, and thy light!\nThe fount of His mercy is open for thee,\nGo wash, and be cleansed in its waters so free!",
+    "Fly away to thy Saviour, He waits to forgive;\nOne look of His love, and thy spirit shall live:\nThy faith will secure thee His blessing divine;\nGo plead thou His merit, and peace will be thine!",
+    "On the wings of the morning fly home to His breast—\nThere only thy refuge, there only thy rest;\nThe moments are precious, the noontide is near;\nFly home to thy Saviour! oh, linger not here!"
+  ],
+  "chorus": "Fly away, fly away on the wings of the morning!\nFly away, fly away, to thy Saviour and Friend!"
+},
+{
+  "id": 388,
+  "number": 388,
+  "title": "Come, oh, come, while Christ is calling",
+  "author": "",
+  "verses": [
+    "Come, oh, come, while Christ is calling,\nLinger not in paths of sin;\nSever every tie that binds you,\nAnd the heavenly race begin.",
+    "Come, oh, come, while Christ is pleading;\nOh, what love His tones convey!\nWill you slight His proffered mercy,\nWill you longer from Him stray?",
+    "Come, oh, come, delay no longer,\nFor th' accepted time is now;\nYield, oh, yield yourself to Jesus,\nAnd before His sceptre bow."
+  ],
+  "chorus": "Calling now, . . calling now, . .\nHear the Saviour calling now; . .\nCalling now, . . calling now, . .\nHear the Saviour calling now."
+},
+{
+  "id": 389,
+  "number": 389,
+  "title": "Whosoever heareth! shout, shout the sound!",
+  "author": "",
+  "verses": [
+    "\"Whosoever heareth!\" shout, shout the sound!\nSend the blessed tidings all the world around;\nSpread the joyful news wherever man is found,\n\"Whosoever will may come.\"",
+    "Whosoever cometh need not delay;\nNow the door is open, enter while you may;\nJesus is the True, the only Living Way:\n\"Whosoever will may come.\"",
+    "\"Whosoever will,\" the promise is secure;\n\"Whosoever will,\" for ever shall endure;\n\"Whosoever will,\" 'tis life for evermore:\n\"Whosoever will may come.\""
+  ],
+  "chorus": "\"Whosoever will!\" \"whosoever will!\"\nSend the proclamation over vale and hill;\n'Tis a loving Father calls the wanderer home:\n\"Whosoever will may come.\""
+},
+{
+  "id": 390,
+  "number": 390,
+  "title": "Sinners Jesus will receive",
+  "author": "",
+  "verses": [
+    "Sinners Jesus will receive;\nSound this word of grace to all\nWho the heavenly pathway leave,\nAll who linger, all who fall!",
+    "Come: and He will give you rest;\nTrust Him: for His word is plain;\nHe will take the sinfulest:\nChrist receiveth sinful men.",
+    "Now my heart condemns me not,\nPure before the law I stand;\nHe who cleansed me from all spot,\nSatisfied its last demand.",
+    "Christ receiveth sinful men,\nEven me with all my sin;\nPurged from every spot and stain,\nHeaven with Him I enter in."
+  ],
+  "chorus": "Sing it o'er . . . and o'er again: . . .\nChrist receiv - - eth sinful men ; . . .\nMake the message clear and plain :\nChrist receiveth sinful men."
+},
+{
+  "id": 391,
+  "number": 391,
+  "title": "Call them in—the poor, the wretched",
+  "author": "",
+  "verses": [
+    "\"Call them in\"—the poor, the wretched,\nSin-stained wanderers from the fold;\nPeace and pardon freely offer;\nCan you weigh their worth with gold?\n\"Call them in\"—the weak, the weary,\nLaden with the doom of sin;\nBid them come and rest in Jesus;\nHe is waiting—\"Call them in.\"",
+    "\"Call them in\"—the Jew, the Gentile,\nBid the stranger to the feast;\n\"Call them in\"—the rich, the noble,\nFrom the highest to the least;\nForth the Father runs to meet them,\nHe hath all their sorrows seen;\nRobe, and ring, and royal sandals,\nWait the lost ones—\"Call them in.\"",
+    "\"Call them in\"—the little children,\nTarrying far away . . . away;\nWait—oh, wait not for to-morrow,\nChrist would have them come to-day.\nFollow on! the Lamb is leading!\nHe has conquered—we shall win;\nBring the halt and blind to Jesus;\nHe will heal them—\"Call them in.\"",
+    "\"Call them in\"—the broken-hearted,\nCowering 'neath the brand of shame;\nSpeak Love's message, low and tender—\n'Twas for sinners Jesus came;\nSee! the shadows lengthen round us,\nSoon the day-dawn will begin;\nCan you leave them lost and lonely?\nChrist is coming—\"Call them in.\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 392,
+  "number": 392,
+  "title": "Come, every soul by sin oppressed",
+  "author": "",
+  "verses": [
+    "Come, every soul by sin oppressed,\nThere's mercy with the Lord;\nAnd He will surely give you rest\nBy trusting in His word.",
+    "For Jesus shed His precious blood\nRich blessings to bestow;\nPlunge now into the crimson flood\nThat washes white as snow.",
+    "Yes, Jesus is the Truth, the Way\nThat leads you into rest;\nBelieve in Him without delay,\nAnd you are fully blest.",
+    "Come then, and join this holy band,\nAnd on to glory go,\nTo dwell in that celestial land\nWhere joys immortal flow."
+  ],
+  "chorus": "Only trust Him! only trust Him\nOnly trust Him now!\nHe will save you ! He will save you I\nHe will save you now I"
+},
+{
+  "id": 393,
+  "number": 393,
+  "title": "Praise be to Jesus, His mercy is free",
+  "author": "",
+  "verses": [
+    "Praise be to Jesus, His mercy is free:\nMercy is free, mercy is free!\nSinner, that mercy is flowing for thee—\nMercy is boundless and free!\nIf thou art willing on Him to believe:\nMercy is free, mercy is free!\nLife everlasting thou mayest receive:\nMercy is boundless and free!",
+    "Why on the mountains of sin wilt thou roam?\nGently the Spirit is calling thee home:\nArt thou in darkness? oh, come to the light:\nJesus is waiting, He'll save you to-night:",
+    "Think of His goodness, His patience, and love:\nPleading thy cause with His Father above:\nCome, and repenting, oh, give Him thy heart:\nGrieve Him no longer, but come as thou art:",
+    "Yes, there is pardon for all who believe:\nCome, and this moment a blessing receive:\nJesus is waiting, oh, hear Him proclaim:\nCling to His promise, believe on His name:"
+  ],
+  "chorus": "Jesus, the Saviour, is seeking for thee,\nSeeking for thee, seeking for thee;\nLovingly, tenderly calling for thee,\nCalling and seeking for thee!"
+},
+{
+  "id": 394,
+  "number": 394,
+  "title": "Wilt thou not come, O soul opprest",
+  "author": "",
+  "verses": [
+    "Wilt thou not come, O soul opprest,\nTo Him who offers peace and rest?\nWhile Jesus pleads, no longer stay;\nHe's calling thee to-day.",
+    "Wilt thou not heed the Saviour's voice,\nBelieve His word, make Him thy choice?\nAccept His grace without delay;\nHe's calling thee to-day.",
+    "Oh, hear Him say, \"Be not afraid,\nOn Me thy load of guilt was laid;\"\n\"Come unto Me,\" \"I am the Way;\"\nHe's calling thee to-day.",
+    "O wandering one, no longer roam\nAway from God, away from home;\nThe Spirit's voice at once obey;\nHe's calling thee to-day."
+  ],
+  "chorus": "He is call - - ing, gently call - - ing,\nDo not turn from Him away;\nHe is call - - ing, gently call - - ing,\nHe is calling thee to-day."
+},
+{
+  "id": 395,
+  "number": 395,
+  "title": "Our life is like a stormy sea",
+  "author": "",
+  "verses": [
+    "Our life is like a stormy sea\nSwept by the gales of sin and grief;\nWhile on the windward and the lee\nHang heavy clouds of unbelief.\nBut o'er the deep a call we hear,\nLike harbour bell's inviting voice;\nIt tells the lost that hope is near,\nAnd bids the trembling soul rejoice.",
+    "Oh, let us now the call obey,\nAnd steer our bark for yonder shore;\nWhere still that voice directs the way,\nIn pleading tones for evermore.\nA thousand life-wrecks strew the sea;\nThey're going down at every swell:\n\"Come unto me! Come unto me!\"\nRings out th' assuring harbour bell.",
+    "O tempted one, look up, be strong!\nThe promise of the Lord is sure,\nThat they shall sing the victor's song,\nWho faithful to the end endure.\nGod's Holy Spirit comes to thee,\nOf His abiding love to tell;\nTo blissful port, o'er stormy sea,\nCalls heaven's inviting harbour bell.",
+    "Come, gracious Lord, and in Thy love\nConduct us o'er life's stormy wave;\nOh, guide us to the home above,\nThe blissful home beyond the grave;\nThere, safe from rock, and storm, and flood,\nOur song of praise shall never cease,\nTo Him who bought us with His blood,\nAnd brought us to the port of peace."
+  ],
+  "chorus": "\"This way, this way, O heart opprest,\nSo long by storm and tempest driven;\nThis way, this way—lo! here is rest,\"\nRings out the harbour bell of heaven."
+},
+{
+  "id": 396,
+  "number": 396,
+  "title": "Jesus is tenderly calling thee home",
+  "author": "",
+  "verses": [
+    "Jesus is tenderly calling thee home—\nCalling to-day, calling to-day!\nWhy from the sunshine of love wilt thou roam,\nFarther and farther away?",
+    "Jesus is calling the weary to rest—\nCalling to-day, calling to-day!\nBring Him thy burden, and thou shalt be blest:\nHe will not turn thee away.",
+    "Jesus is waiting, oh, come to Him now—\nWaiting to-day, waiting to-day!\nCome with thy sins, at His feet lowly bow;\nCome, and no longer delay!",
+    "Jesus is pleading: oh, list to His voice—\nHear Him to-day, hear Him to-day!\nThey who believe on His name shall rejoice;\nQuickly arise and away!"
+  ],
+  "chorus": "Call - - ing to-day! . . call - - ing to-day! . .\nJe - - - sus is call-ing, is tenderly calling to-day!"
+},
+{
+  "id": 397,
+  "number": 397,
+  "title": "Look unto Me, and be ye saved",
+  "author": "",
+  "verses": [
+    "\"Look unto Me, and be ye saved!\"\nLook, men of nations all;\nLook, rich and poor; look, old and young;\nLook, sinners, great and small!",
+    "\"Look unto Me, and be ye saved!\"\nLook now, nor dare delay;\nLook as you are—lost, guilty, dead;\nLook while 'tis called to-day.",
+    "\"Look unto Me, and be ye saved!\"\nLook from your doubts and fears;\nLook from your sins of crimson dye,\nLook from your prayers and tears.",
+    "\"Look unto Me, and be ye saved!\"\nLook to the work all done;\nLook to the pierced Son of Man;\nLook, and your sins are gone!"
+  ],
+  "chorus": "Look unto Him, and be ye saved!\nO weary, troubled soul;\nOh, look to Jesus while you may:\nOne look will make thee whole!"
+},
+{
+  "id": 398,
+  "number": 398,
+  "title": "Tis looking unto Jesus",
+  "author": "",
+  "verses": [
+    "'Tis looking unto Jesus,\nThe holy One and just;\n'Tis His great work that saves us—\nIt is not Try, but Trust!",
+    "'Twas vain for Israel bitten\nBy serpents, on their way,\nTo look to their own doing,\nThat awful plague to stay;\nThe only means for healing,\nWhen humbled in the dust,\nWas of the Lord's revealing—\nIt was not Try, but Trust!",
+    "No deeds of ours are needed\nTo make Christ's merit more;\nNo frames of mind, or feelings,\nCan add to His great store;\n'Tis simply to receive Him,\nThe holy One and just;\n'Tis only to believe Him—\nIt is not Try, but Trust!"
+  ],
+  "chorus": "It is not Try, but Trust!\nIt is not Try, but Trust!\n'Tis His great work that saves us:\nIt is not Try, but Trust!"
+},
+{
+  "id": 399,
+  "number": 399,
+  "title": "Not saved are we by trying",
+  "author": "",
+  "verses": [
+    "Not saved are we by trying,\nFrom self can come no aid;\n'Tis on the Blood relying,\nOnce for our ransom paid.",
+    "Come to the Saviour now!\nGaze on that cleansing tide—\nWater and blood that flow\nForth from His wounded side.\nHark to the suffering One:\n\"'Tis finished!\" now He cries;\nRedemption's work is done,\nThen bows His head and dies.",
+    "Come to the Saviour now!\nHe suffered all for thee;\nAnd in His merits thou\nHast an unfailing plea:\nNo vain excuses frame,\nFor feelings do not stay;\nNone who to Jesus came\nWere ever sent away.",
+    "Come to the Saviour now!\nYe who have wandered far,\nRenew your solemn vow,\nFor His by right you are.\nCome, like poor wandering sheep\nReturning to His fold—\nHis arm will safely keep,\nHis love will ne'er grow cold.",
+    "Come to the Saviour, all!\nWhate'er your burdens be;\nHear now His loving call—\n\"Cast all your care on Me.\""
+  ],
+  "chorus": "Come to the Saviour now!\nHe gently calleth thee;\nIn true repentance bow,\nBefore Him bend the knee!\nHe waiteth to bestow\nSalvation, peace, and love,\nTrue joy on earth below,\nA home in heaven above.\nCome, come, come."
+},
+{
+  "id": 400,
+  "number": 400,
+  "title": "Whoever receiveth the crucified One",
+  "author": "",
+  "verses": [
+    "Whoever receiveth the crucified One,\nWhoever believeth on God's only Son,\nA free and a perfect salvation shall have;\nFor He is abundantly able to save.",
+    "Whoever receiveth the message of God,\nAnd trusts in the power of the soul-cleansing blood,\nA full and eternal redemption shall have;\nFor He is both able and willing to save.",
+    "Whoever repents and forsakes every sin,\nAnd opens his heart for the Lord to come in,\nA present and perfect salvation shall have;\nFor Jesus is ready this moment to save."
+  ],
+  "chorus": "My brother, the Master is calling for thee;\nHis grace and His mercy are wondrously free!\nHis blood as a ransom for sinners He gave,\nAnd He is abundantly able to save."
+},
+   {
+  "id": 401,
+  "number": 401,
+  "title": "Art thou weary? art thou languid?",
+  "author": "",
+  "verses": [
+    "Art thou weary? art thou languid?\nArt thou sore distrest?\n\"Come to Me,\" saith One; \"and coming,\nBe at rest!\"",
+    "Hath He marks to lead me to Him,\nIf He be my guide?\n\"In His feet and hands are woundprints,\nAnd His side.\"",
+    "Is there diadem as Monarch\nThat His brow adorns?\n\"Yea, a crown, in very surety,\nBut of thorns.\"",
+    "If I find Him, if I follow,\nWhat His guerdon here?\n\"Many a sorrow, many a labour,\nMany a tear.\"",
+    "If I still hold closely to Him,\nWhat hath He at last?\n\"Sorrow vanquished, labour ended,\nJordan passed.\"",
+    "If I ask Him to receive me,\nWill He say me nay?\n\"Not till earth, and not till heaven,\nPass away.\"",
+    "Finding, following, keeping, struggling,\nIs He sure to bless?\n\"Saints, Apostles, Prophets, Martyrs,\nAnswer—Yes!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 402,
+  "number": 402,
+  "title": "Press onward, press onward, and, trusting the Lord",
+  "author": "",
+  "verses": [
+    "Press onward, press onward, and, trusting the Lord,\nRemember the promise proclaimed in His Word;\nHe guideth the footsteps, directeth the way,\nOf all who confess Him: believe and obey!",
+    "Press onward, press onward, if you would secure\nThe rest of the faithful, abiding and sure;\nThe gift of salvation is offered to-day\nTo all who confess Him: believe and obey!",
+    "Press onward, press onward, your courage renew;\nThe prize is before you, the crown is in view;\nHis love is so boundless, He'll never say Nay\nTo those who confess Him: believe and obey!"
+  ],
+  "chorus": "Believe and obey, believe and obey!\nThe Master is calling,—no longer delay!\nThe light of His mercy shines bright on the way\nOf all who confess Him: believe and obey."
+},
+{
+  "id": 403,
+  "number": 403,
+  "title": "Over the thorn and thistle",
+  "author": "",
+  "verses": [
+    "Over the thorn and thistle,\nAlong the stony way,\nFrom the Shepherd's care to the desert bare,\nThere wandered a sheep one day;\nAnd a voice fell sadly from far away:\n\"My sheep, how long wilt thou love to stray?\"",
+    "Over the thorn and thistle,\nAlong the stony way,\nWith feet that bled, the Shepherd sped\nTo where the wanderer lay;\nHe had heard it crying from far away:\n\"Lord, bring me home to Thy flock, I pray!\"",
+    "Over the thorn and thistle,\nAlong the stony way,\nI have sought for thee, now trust to Me,\nI'll bear thee home to-day.\nThe wolf and lion flee far away\nWhen on My shoulder My sheep I lay.\"",
+    "Instead of the thorn and thistle,\nThe myrtle bedecks the way\nWhere the Shepherd feeds and gently leads\nThe sheep He found that day;\nAnd He leadeth others from far away\nTo rest in fields of a cloudless day."
+  ],
+  "chorus": ""
+},
+{
+  "id": 404,
+  "number": 404,
+  "title": "Weary wanderer, stop and listen",
+  "author": "",
+  "verses": [
+    "Weary wanderer, stop and listen,\nHappy news we bring to thee;\nJesus has prepared a banquet;\nCome, and welcome thou shalt be.\nMake no longer vain excuses,\nJesus calls, and calls thee now;\nCome, for everything is ready:\nWeary soul, why waitest thou?",
+    "Are thy sins a heavy burden?\nCome to God, confess them now;\nHe is willing to forgive thee;\nAsk, receive, why waitest thou?",
+    "On the loving arm of Jesus\nWouldst thou lean, and trust Him now?\nLet Him cleanse thee at the fountain;\nCome at once! why waitest thou?",
+    "See the beauteous wedding garment;\nIn His hands He holds it now;\nHaste, oh haste, thee to the banquet;\nEnter in! why waitest thou?"
+  ],
+  "chorus": ""
+},
+{
+  "id": 405,
+  "number": 405,
+  "title": "Come, for all things are ready! 'Tis a banquet",
+  "author": "",
+  "verses": [
+    "Come, for all things are ready! 'Tis a banquet of love;\nHere's a free invitation from the Master above:\nIt is written in crimson, drawn from Calvary's flood,\nFrom the wonderful fountain of the soul-cleansing blood.",
+    "Come, for all things are ready! Heaven's bounty is spread;\nTake the cup of salvation, take the life-giving bread:\nCome, though poor and unworthy; come, though sinful and weak;\n'Tis the hungry and thirsty whom the Master doth seek.",
+    "Come, for all things are ready! here's a robe, snowy white,\nFairer far than the raiment of the angels of light;\nFor the beauty of Jesus will thy covering be;\nOnly ask for this garment, 'twill be given to thee."
+  ],
+  "chorus": "Oh, what fulness in Jesus! Oh, what gladness to know,\nThough our sins be as scarlet, He'll make them as snow."
+},
+{
+  "id": 406,
+  "number": 406,
+  "title": "Though your sins are manifold",
+  "author": "",
+  "verses": [
+    "Though your sins are manifold—\nJesus will not cast you out!\nHe's a Friend, of love untold—\nJesus will not cast you out!\nGod, to save us every one,\nFreely gave His only Son;\nCome, whate'er you may have done\nJesus will not cast you out!",
+    "Though you've spurned Him day by day—\nJesus will not cast you out!\nCome to Him—the Light, the Way—\nJesus will not cast you out!\nHe will cleanse and make you whole;\nWaves of sin may o'er you roll—\nHe will save your deathless soul—\nJesus will not cast you out!",
+    "Grace is freely offered now—\nJesus will not cast you out!\nAt the cross, O wanderer, bow—\nJesus will not cast you out!\nCome, nor turn again to sin!\nCome, He bids you enter in!\nCome, and life eternal win!\nJesus will not cast you out!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 407,
+  "number": 407,
+  "title": "Come, thou weary! Jesus calls thee",
+  "author": "",
+  "verses": [
+    "Come, thou weary! Jesus calls thee\nTo His wounded side;\n\"Come to Me,\" saith He, \"and ever\nSafe abide.\"",
+    "\"Seeking Jesus\"? Jesus seeks thee—\nWants thee as thou art;\nHe is knocking, ever knocking\nAt thy heart.",
+    "If thou let Him, He will save thee—\nMake thee all His own;\nGuide thee; keep thee; take thee, dying,\nTo His throne.",
+    "Wilt thou still refuse His offer?\nWilt thou say Him nay?\nWilt thou let Him, grieved, rejected,\nGo away?",
+    "Dost thou feel thy life is weary?\nIs thy soul distrest?\nTake His offer, wait no longer:\nBe at rest!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 408,
+  "number": 408,
+  "title": "Come to Jesus! come away!",
+  "author": "",
+  "verses": [
+    "Come to Jesus! come away!\nForsake thy sins—oh, why delay?\nHis arms are open night and day;\nHe waits to welcome thee!",
+    "Come to Jesus! all is free;\nHark! how He calls, \"Come unto Me!\nI cast out none, I'll pardon thee.\"\nOh, thou shalt welcome be!",
+    "Come to Jesus! cling to Him;\nHe'll keep thee far from paths of sin;\nThou shalt at last the victory win,\nAnd He will welcome thee.",
+    "Come to Jesus! do not stand;\nThe Father draws—'tis His command;\nAnd none shall pluck thee from His hand,\nNo—that can never be!",
+    "Come to Jesus! —Lord, I come!\nWeary of sin, no more I'd roam,\nBut with my Saviour be at home;\nI know He'll welcome me!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 409,
+  "number": 409,
+  "title": "Look away to Jesus, soul by woe oppressed",
+  "author": "",
+  "verses": [
+    "Look away to Jesus, soul by woe oppressed;\n'Twas for thee He suffered, come to Him and rest.\nAll thy griefs He carried, all thy sins He bore;\nLook away to Jesus; trust Him evermore.",
+    "Look away to Jesus, soldier in the fight;\nWhen the battle thickens, keep thine armour bright;\nThough thy foes be many, though thy strength be small,\nLook away to Jesus; He will conquer all.",
+    "Look away to Jesus, when the skies are fair:\nCalm seas have their dangers; mariner, beware!\nEarthly joys are fleeting, going as they came;\nLook away to Jesus; evermore the same.",
+    "Look away to Jesus, 'mid the toil and heat;\nSoon will come the resting at the Master's feet;\nFor the guests are bidden, and the feast is spread;\nLook away to Jesus, in His footsteps tread.",
+    "When, amid the music of the endless feast,\nSaints will sing His praises, thine shall not be least;\nThen, amid the glories of the crystal sea,\nLook away to Jesus, through eternity."
+  ],
+  "chorus": ""
+},
+{
+  "id": 410,
+  "number": 410,
+  "title": "Oh, come to the Saviour, believe in His name",
+  "author": "",
+  "verses": [
+    "Oh, come to the Saviour, believe in His name,\nAnd ask Him your heart to renew;\nHe waits to be gracious, oh, turn not away,\nFor now there is pardon for you.",
+    "The way of transgression that leads unto death,\nOh, why will you longer pursue?\nHow can you reject the sweet message of love,\nThat offers full pardon to you?",
+    "Be warned of your danger, escape to the cross;\nYour only salvation is there:\nBelieve, and that moment the Spirit of grace\nWill answer your penitent prayer."
+  ],
+  "chorus": "Yes, there is pardon for you, . .\nYes, there is pardon for you; . .\nFor Jesus has died to redeem you,\nAnd offers full pardon to you."
+},
+{
+  "id": 411,
+  "number": 411,
+  "title": "I've a message from the Lord, Hallelujah!",
+  "author": "",
+  "verses": [
+    "I've a message from the Lord, Hallelujah!\nThe message unto you I'll give;\n'Tis recorded in His Word, Hallelujah!\nIt is only that you \"look and live.\"",
+    "I've a message full of love, Hallelujah!\nA message, O my friend, for you;\n'Tis a message from above, Hallelujah!\nJesus said it—and I know 'tis true!",
+    "Life is offered unto thee, Hallelujah!\nEternal life thy soul shall have,\nIf you'll only look to Him, Hallelujah!\nLook to Jesus, who alone can save."
+  ],
+  "chorus": "\"Look and live,\" . . . my brother, live I . . .\nLook to Jesus now and live;\n'Tis recorded in His Word, Hallelujah!\nIt is only that you \"look and live I\""
+},
+{
+  "id": 412,
+  "number": 412,
+  "title": "This loving Saviour stands patiently",
+  "author": "",
+  "verses": [
+    "This loving Saviour stands patiently;\nThough oft rejected, calls again for thee.",
+    "Oh, boundless mercy, free, free to all!\nStay, child of error, heed the tender call.",
+    "Though all unworthy, come now, come home;\nSay while He's waiting, \"Jesus, Lord, I come.\""
+  ],
+  "chorus": "Calling now for thee, prodigal,\nCalling now for thee:\nThou hast wandered far away,\nBut He's calling now for thee."
+},
+{
+  "id": 413,
+  "number": 413,
+  "title": "Come to the Saviour, hear His loving voice",
+  "author": "",
+  "verses": [
+    "Come to the Saviour, hear His loving voice!\nNever will you find a Friend so true;\nNow He is waiting, trust Him and rejoice,\nTenderly He calleth you!",
+    "Blest words of comfort, gently now they fall,\nJesus is the life, the Truth, the Way;\nCome to the fountain, there is room for all,\nJesus bids you come to-day.",
+    "Softly the Spirit whispers to thy heart—\nDo not slight the Saviour's offered grace;\nGladly receive Him, let Him not depart—\nHappy they who seek His face!"
+  ],
+  "chorus": "Oh, what a Saviour standing at the door!\nHaste while He lingers; pardon now implore I\nStill He is waiting, grieve His love no more:\nTenderly He calleth you."
+},
+{
+  "id": 414,
+  "number": 414,
+  "title": "Softly and tenderly Jesus is calling",
+  "author": "",
+  "verses": [
+    "Softly and tenderly Jesus is calling—\nCalling for you and for me;\nPatiently Jesus is waiting and watching—\nWatching for you and for me!",
+    "Why should we tarry when Jesus is pleading—\nPleading for you and for me?\nWhy should we linger and heed not His mercies—\nMercies for you and for me?",
+    "Time is now fleeting, the moments are passing—\nPassing from you and from me;\nShadows are gathering, deathbeds are coming—\nComing for you and for me!",
+    "Oh for the wonderful love He has promised—\nPromised for you and for me!\nThough we have sinned, He has mercy and pardon—\nPardon for you and for me!"
+  ],
+  "chorus": "\"Come home! . . come home! . . .\nYe who are weary—come home!\"\nEarnestly, tenderly Jesus is calling—\nCalling, O sinner, \"come home!\""
+},
+{
+  "id": 415,
+  "number": 415,
+  "title": "Ho! every one that is thirsty in spirit",
+  "author": "",
+  "verses": [
+    "Ho! every one that is thirsty in spirit,\nHo! every one that is weary and sad;\nCome to the fountain, there's fulness in Jesus,\nAll that you're longing for: come and be glad!",
+    "Child of the world, are you tired of your bondage?\nWeary of earth-joys, so false, so untrue?\nThirsting for God and His fulness of blessing?\nList to the promise—a message for you!",
+    "Child of the Kingdom, be filled with the Spirit!\nNothing but fulness thy longing can meet;\n'Tis the enduement for life and for service;\nThine is the promise, so certain, so sweet."
+  ],
+  "chorus": "\"I will pour water on him that is thirsty,\nI will pour floods upon the dry ground:\nOpen your hearts for the gifts I am bringing;\nWhile ye are seeking Me, I will be found.\""
+},
+{
+  "id": 416,
+  "number": 416,
+  "title": "From the cross uplifted high",
+  "author": "",
+  "verses": [
+    "From the cross uplifted high,\nWhere the Saviour deigns to die,\nWhat melodious sounds we hear,\nBursting on the ravished ear!\n\"Love's redeeming work is done—\nCome and welcome! sinner, come!",
+    "\"Spread for thee, the festal board\nSee with richest bounty stored;\nTo thy Father's bosom pressed,\nThou shalt be a child confessed,\nNever from His house to roam;\nCome and welcome! sinner, come!",
+    "\"Soon the days of life shall end—\nLo, I come—your Saviour, Friend!\nSafe your spirit to convey\nTo the realms of endless day,\nUp to My eternal home—\nCome and welcome! sinner, come!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 417,
+  "number": 417,
+  "title": "The whole world was lost in the darkness",
+  "author": "",
+  "verses": [
+    "The whole world was lost in the darkness of sin,\nThe Light of the world is Jesus!\nLike sunshine at noonday His glory shone in,\nThe Light of the world is Jesus!",
+    "No darkness have we who in Jesus abide,\nThe Light of the world is Jesus!\nWe walk in the Light when we follow our Guide,\nThe Light of the world is Jesus!",
+    "Ye dwellers in darkness, with sin-blinded eyes,\nThe Light of the world is Jesus!\nGo, wash at His bidding, and light will arise,\nThe Light of the world is Jesus!",
+    "No need of the sunlight in heaven, we're told,\nThe Light of that world is Jesus!\nThe Lamb is the Light in the City of Gold,\nThe Light of that world is Jesus!"
+  ],
+  "chorus": "Come to the Light, 'tis shining for thee;\nSweetly the Light has dawned upon me;\nOnce I was blind, but now I can see:\nThe Light of the world is Jesus!"
+},
+{
+  "id": 418,
+  "number": 418,
+  "title": "Out on the mountain, sad and forsaken",
+  "author": "",
+  "verses": [
+    "Out on the mountain, sad and forsaken,\nLost in its mazes, no light canst thou see;\nYet in His mercy, full of compassion,\nLo! the Good Shepherd is calling to thee!",
+    "Far on the mountain, why wilt thou wander?\nDarker and darker thy pathway will be;\nTurn from thy roaming, fly from its dangers,\nWhile the Good Shepherd is calling to thee!",
+    "Flee from thy bondage, Jesus will help thee,\nOnly believe Him, and thou shalt be free;\nWonderful mercy, boundless compassion:\nStill the Good Shepherd is calling to thee!"
+  ],
+  "chorus": "Calling to thee, calling to thee;\nJesus is calling, \"Come unto Me!\"\nCalling to thee, calling to thee,\nHear the Good Shepherd calling to thee!"
+},
+{
+  "id": 419,
+  "number": 419,
+  "title": "Oh, hear the joyful message",
+  "author": "",
+  "verses": [
+    "Oh, hear the joyful message,\n'Tis sounding far and wide:\nGood news of full salvation,\nThrough Him, the Crucified;\nGod's Word is truth eternal;\nIts promise all may claim,\nWho look by faith to Jesus,\nAnd call upon His name.",
+    "Ye souls that long in darkness\nThe path of sin have trod,\nBehold the light of mercy!\nBehold the Lamb of God!\nWith all your heart believe Him,\nAnd now the promise claim—\nThat none shall ever perish\nWho call upon His name.",
+    "Ye weary, heavy-laden,\nOppressed with toil and care:\nHe waits to bid you welcome,\nAnd all your burdens bear;\nA precious gift He offers,\nA gift that all may claim,\nWho look to Him believing,\nAnd call upon His name."
+  ],
+  "chorus": "\"Whosoever calleth, whosoever calleth,\nWhosoever calleth on His name shall be saved!\nWhosoever calleth, whosoever calleth,\nWhosoever calleth on the Lord shall be saved\""
+},
+{
+  "id": 420,
+  "number": 420,
+  "title": "Just as thou art, without one trace",
+  "author": "",
+  "verses": [
+    "Just as thou art, without one trace\nOf love, or joy, or inward grace,\nOr meetness for the heavenly place,\nO guilty sinner, come!",
+    "Burdened with guilt, wouldst thou be blest?\nTrust not the world, it gives no rest;\nChrist brings relief to hearts opprest;\nO weary sinner, come!",
+    "Come, leave thy burden at the cross,\nCount all thy gains but empty dross;\nHis grace repays all earthly loss;\nO needy sinner, come!",
+    "Come, hither bring thy boding fears,\nThy aching heart, thy burning tears;\n'Tis Mercy's voice salutes thine ears;\nO trembling sinner, come!",
+    "\"The Spirit and the Bride say, Come!\"\nRejoicing saints re-echo, \"Come!\"\nWho faints, who thirsts, who will, may come:\nThe Saviour bids thee come!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 421,
+  "number": 421,
+  "title": "Wouldst thou, O weary soul, be blest?",
+  "author": "",
+  "verses": [
+    "Wouldst thou, O weary soul, be blest?\nIn Christ the Lord thy Saviour see;\nHis grace alone can give thee rest,\nAnd lo! He calleth, \"Come to Me!\"",
+    "He does not wait for greater worth,\nOr more of holiness in thee;\nHe brings good news to all the earth,\nAnd still He calleth, \"Come to Me!\"",
+    "Hast thou not sinned ten thousand times?\nHis pardoning grace will set thee free;\nCount unbelief the worst of crimes,\nAnd trust thy Saviour's \"Come to Me!\"",
+    "With such light feet the years will fleet,\nLife seem as brief as blest,\nTill I have laid my burden down,\nAnd entered into rest."
+  ],
+  "chorus": "Oh, come to Me! . . . Oh, come to Me I . . .\nThe Saviour calleth, \"Come to Me! . . .\nYe heavy laden, come to Me, . . .\nAnd I will give you rest.\""
+},
+{
+  "id": 422,
+  "number": 422,
+  "title": "Knocking, knocking, who is there?",
+  "author": "",
+  "verses": [
+    "Knocking, knocking, who is there?\nWaiting, waiting, oh, how fair!\n'Tis a Pilgrim, strange and kingly,\nNever such was seen before;\nAh, my soul, for such a wonder,\nWilt thou not undo the door?",
+    "Knocking, knocking! still He's there:\nWaiting, waiting, wondrous fair:\nBut the door is hard to open,\nFor the weeds and ivy-vine,\nWith their dark and clinging tendrils,\nEver round the hinges twine.",
+    "Knocking, knocking—what, still there?\nWaiting, waiting, grand and fair!\nYes, the pierced hand still knocketh,\nAnd beneath the crowned hair\nBeam the patient eyes, so tender,\nOf thy Saviour waiting there."
+  ],
+  "chorus": ""
+},
+{
+  "id": 423,
+  "number": 423,
+  "title": "Why perish with cold and with hunger?",
+  "author": "",
+  "verses": [
+    "Why perish with cold and with hunger?\nThere's plenty for all and to spare\nIn the beautiful home of thy Father,\nAnd a welcome awaiting thee there.",
+    "Come, wanderer, and say to thy Father,\n\"I've sinned against heaven and Thee;\nNot worthy a place with Thy children,\nThy servant I gladly would be.\"",
+    "Thy Father is waiting to greet thee,\nAnd watching for thee to return;\nHis heart is so full of compassion:\nOh, prodigal, wilt thou not come?"
+  ],
+  "chorus": "Come! come! wanderer, come!\nThere's plenty for thee in thy Father's home;\nCome! come! wanderer, come!\nThere's welcome and love in thy Father's home."
+},
+{
+  "id": 424,
+  "number": 424,
+  "title": "Come unto Me! It is the Saviour's voice",
+  "author": "",
+  "verses": [
+    "\"Come unto Me!\" It is the Saviour's voice—\nThe Lord of life, who bids thy heart rejoice;\nO weary heart, with heavy cares opprest,\n\"Come unto Me,\" and I will give you rest.",
+    "Weary with life's long struggle, full of pain,\nO doubting soul, thy Saviour calls again;\nThy doubts shall vanish, and thy sorrows cease;\n\"Come unto Me,\" and I will give you peace.",
+    "O dying man, with guilt and sin dismayed,\nWith conscience wakened, of thy God afraid,\n'Twixt hopes and fears—oh, end the anxious strife!—\n\"Come unto Me,\" and I will give you life.",
+    "Life, rest, and peace, the flowers of deathless bloom,\nThe Saviour gives us,—not beyond the tomb;\nBut here and now: on earth some glimpse is given\nOf joys which wait us through the gates of heaven."
+  ],
+  "chorus": "\"Come unto Me, . . come unto Me, . . .\nCome unto Me; and I will give you rest,\nI will give you rest, . . I will give you rest!\" . ."
+},
+{
+  "id": 425,
+  "number": 425,
+  "title": "O word, of words the sweetest",
+  "author": "",
+  "verses": [
+    "O word, of words the sweetest,\nO word, in which there lie\nAll promise, all fulfilment,\nAnd end of mystery!\nLamenting, or rejoicing,\nWith doubt or terror nigh,\nI hear the \"Come!\" of Jesus,\nAnd to His cross I fly.",
+    "O soul! why shouldst thou wander\nFrom such a loving Friend?\nCling closer, closer to Him,\nStay with Him to the end;\nAlas! I am so helpless,\nSo very full of sin,\nFor I am ever wandering,\nAnd coming back again.",
+    "Oh, each time draw me nearer,\nThat soon the \"Come\" may be\nNaught but a gentle whisper,\nTo one close, close to Thee;\nThen, over sea and mountain,\nFar from or near my home,\nI'll take Thy hand and follow,\nAt that sweet whisper, \"Come!\""
+  ],
+  "chorus": "\"Come! . . . oh, come to Me! . . .\nCome! . . . oh, come to Me!\"\nWeary, heavy-laden,\nCome! oh, come to Me!\""
+},
+{
+  "id": 426,
+  "number": 426,
+  "title": "Oh, turn ye, oh, turn ye, for why will ye die",
+  "author": "",
+  "verses": [
+    "Oh, turn ye, oh, turn ye, for why will ye die,\nWhen God in great mercy is coming so nigh?\nNow Jesus invites you, the Spirit says \"Come!\"\nAnd angels are waiting to welcome you home.",
+    "How vain the delusion, that, while you delay,\nYour hearts may grow better, your chains melt away!\nCome guilty, come wretched, come just as you are,\nAll helpless and dying, to Jesus repair.",
+    "The contrite in heart He will freely receive;\nOh, why will you not the glad message believe?\nIf sin be your burden, why will ye not come?\n'Tis you He makes welcome; He bids you come home."
+  ],
+  "chorus": ""
+},
+{
+  "id": 427,
+  "number": 427,
+  "title": "Look to the Saviour on Calvary's tree",
+  "author": "",
+  "verses": [
+    "Look to the Saviour on Calvary's tree—\nSee how He suffered for you and me;\nHark while He lovingly calls to thee,\n\"Look, and thou shalt live!\"",
+    "Hast thou a sin-burdened soul to save?\nLife everlasting wouldst thou have?\nJesus Himself a ransom gave:\nLook, and thou shalt live!",
+    "Look to the Saviour who rose from the tomb;\nHaste now to Him, while there yet is room;\nHis shining face will dispel thy gloom:\nLook, and thou shalt live!",
+    "Jesus on high lives to intercede,\nHe knows the weary sinner's need;\nSurely thy footsteps He will lead:\nLook, and thou shalt live!"
+  ],
+  "chorus": "Look, and thou shalt live!\nLook, and thou shalt live!\nLook to the cross where He died for thee:\nLook, and thou shalt live 1"
+},
+{
+  "id": 428,
+  "number": 428,
+  "title": "Why do you linger, why do you stay",
+  "author": "",
+  "verses": [
+    "Why do you linger, why do you stay,\nIn the broad road, that most dangerous way—\nWhile right before you, narrow and strait,\nIs the bright pathway to heaven's pearly gate?",
+    "Do you find pleasures lasting and pure—\nIn the gay scenes that the thoughtless allure\nWhile your Redeemer, with love so great,\nPoints to the way that is narrow and strait?",
+    "Come, then, beloved, no longer stay;\nLeave the broad highway, oh, leave it to-day!\nMake your decision—oh, do not wait!\nTake thou the pathway so narrow and strait!"
+  ],
+  "chorus": "Narrow and strait, . . narrow and strait . .\nIs the bright pathway to heaven's pearly gate."
+},
+{
+  "id": 429,
+  "number": 429,
+  "title": "Yet there is room!",
+  "author": "",
+  "verses": [
+    "\"Yet there is room!\" The Lamb's bright hall of song,\nWith its fair glory, beckons thee along.",
+    "Day is declining, and the sun is low;\nThe shadows lengthen, light makes haste to go.",
+    "The bridal hall is filling for the feast;\nPass in! pass in! and be the Bridegroom's guest:",
+    "It fills, it fills, that hall of jubilee!\nMake haste, make haste! 'tis not too full for thee!",
+    "Yet there is room! still open stands the gate—\nThe gate of love; it is not yet too late:",
+    "Pass in! pass in! That banquet is for thee:\nThat cup of everlasting love is free;",
+    "All heaven is there! all joy! Go in, go in!\nThe angels beckon thee the prize to win:",
+    "Louder and sweeter sounds the loving call:\nCome, lingerer, come! enter that festal hall:",
+    "Ere night that gate may close, and seal thy doom:\nThen the last, low, long cry, \"No room, no room!\""
+  ],
+  "chorus": "Room, room, still room!\nOh, enter, enter now 1"
+},
+{
+  "id": 430,
+  "number": 430,
+  "title": "Where will you spend Eternity?",
+  "author": "",
+  "verses": [
+    "Where will you spend Eternity?\nThis question comes to you and me!\nTell me, what shall your answer be—\nWhere will you spend Eternity?",
+    "Many are choosing Christ to-day,\nTurning from all their sins away;\nHeaven shall their blessed portion be—\nWhere will you spend Eternity?",
+    "Leaving the strait and narrow way,\nGoing the downward road to-day,\nWhat shall the final ending be—\nWhere will you spend Eternity?"
+  ],
+  "chorus": "Eternity! Eternity!\nWhere will you spend Eternity?"
+},
+{
+  "id": 431,
+  "number": 431,
+  "title": "Nothing but leaves!",
+  "author": "",
+  "verses": [
+    "Nothing but leaves! The Spirit grieves\nO'er years of wasted life;\nO'er sins indulged while conscience slept,\nO'er vows and promises unkept;\nAnd reaps, from years of strife,\nNothing but leaves! nothing but leaves!",
+    "Nothing but leaves! No gathered sheaves\nOf life's fair ripening grain:\nWe sow our seeds; lo, tares and weeds,\nWords, idle words, for earnest deeds:\nThen reap, with toil and pain,\nNothing but leaves! nothing but leaves!",
+    "Nothing but leaves! Sad memory weaves\nNo veil to hide the past:\nAnd as we trace our weary way,\nAnd count each lost and misspent day,\nWe sadly find at last—\nNothing but leaves! nothing but leaves!",
+    "Ah! who shall thus the Master meet,\nAnd bring but withered leaves?\nAh! who shall at the Saviour's feet,\nBefore the awful Judgment-seat,\nLay down, for golden sheaves,\nNothing but leaves, nothing but leaves?"
+  ],
+  "chorus": ""
+},
+{
+  "id": 432,
+  "number": 432,
+  "title": "At the feast of Belshazzar",
+  "author": "",
+  "verses": [
+    "At the feast of Belshazzar and a thousand of his lords,\nWhile they drank from golden vessels, as the Book of Truth records:\nIn the night, as they revelled in the royal palace hall,\nThey were seized with consternation—'twas the Hand upon the wall!",
+    "See the brave captive, Daniel, as he stood before the throng,\nAnd rebuked the haughty monarch for his mighty deeds of wrong;\nAs he read out the writing—'twas the doom of one and all,\nFor the kingdom now was finished—said the Hand upon the wall!",
+    "See the faith, zeal, and courage, that would dare to do the right,\nWhich the Spirit gave to Daniel—'twas the secret of his might;\nIn his home in Judea, or a captive in the hall,\nHe understood the writing of his God upon the wall!",
+    "So our deeds are recorded—there's a Hand that's writing now:\nSinner, give your heart to Jesus—to His royal mandate bow;\nFor the day is approaching—it must come to one and all,\nWhen the sinner's condemnation will be written on the wall!"
+  ],
+  "chorus": "Tis the hand of God on the wall! . . .\n' Tis the hand of God on the wall! . . .\nShall the record be—\"Found wanting !\"\nOr shall it be—\"Found trusting !\"\nWhile that hand is writing on the wall? . . ."
+},
+{
+  "id": 433,
+  "number": 433,
+  "title": "Time is earnest, passing by",
+  "author": "",
+  "verses": [
+    "Time is earnest, passing by;\nDeath is earnest, drawing nigh;\nSinner, wilt thou trifling be?\nTime and death appeal to thee.",
+    "Life is earnest; when 'tis o'er,\nThou returnest nevermore;\nSoon to meet eternity,\nWilt thou never serious be?",
+    "God is earnest, kneel and pray\nEre thy season pass away;\nEre be set His judgment-throne,\nVengeance ready, mercy gone.",
+    "Oh, be earnest! death is near;\nThou wilt perish lingering here;\nSleep no longer, rise and flee;\nLo, thy Saviour waits for thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 434,
+  "number": 434,
+  "title": "Oh, list to the watchman crying",
+  "author": "",
+  "verses": [
+    "Oh, list to the watchman crying:\nCome, come away!\nThe arrows of death are flying:\nCome, come to-day!",
+    "The Spirit of God is pleading:\nCome, come away!\nThe Saviour is interceding:\nCome, come to-day!",
+    "The mercy of God is calling:\nCome, come away!\nHow sweetly the words are falling\nCome, come to-day!",
+    "The angels of God entreat you:\nCome, come away!\nThe Father Himself will meet you:\nCome, come to-day!"
+  ],
+  "chorus": "Come, come away! Come, come away!\nJesus is gently calling: Come, come to-day!"
+},
+{
+  "id": 435,
+  "number": 435,
+  "title": "Come home, come home!",
+  "author": "",
+  "verses": [
+    "Come home, come home!\nYou are weary at heart,\nFor the way has been dark,\nAnd so lonely and wild:\nO prodigal child!\nCome home; oh, come home!",
+    "Come home, come home!\nFor we watch and we wait;\nAnd we stand at the gate,\nWhile the shadows are piled:\nO prodigal child!\nCome home; oh, come home!",
+    "Come home, come home!\nFrom the sorrow and blame,\nFrom the sin and the shame,\nAnd the tempter that smiled:\nO prodigal child!\nCome home; oh, come home!",
+    "Come home, come home!\nThere is bread and to spare,\nAnd a warm welcome there:\nThen, to friends reconciled,\nO prodigal child!\nCome home; oh, come home!"
+  ],
+  "chorus": "Come . . home! . .\nCome, oh, come home! . ."
+},
+{
+  "id": 436,
+  "number": 436,
+  "title": "Oh, give thy heart to Jesus",
+  "author": "",
+  "verses": [
+    "Oh, give thy heart to Jesus,\nThy weary heart of care;\nNo friend can love so deeply;\nGo, find thy refuge there.",
+    "Oh, trust the heart of Jesus,\nBreathe all thy sorrows there;\nHe loves to hear thy pleadings,\nThy humble, contrite prayer.",
+    "Go, hide thyself in Jesus;\nNo foe can harm thee there;\nHis hand will lift thy burdens,\nAnd all thy sorrows bear.",
+    "Go, lean thy heart on Jesus,\nWho sees each falling tear,\nNo friend so true and tender\nCan soothe thy every fear."
+  ],
+  "chorus": "Oh, give thy heart to Jesus—\nA balm for every care ;\nGo, hide beneath His shadow ;\nNo storm can reach thee there."
+},
+{
+  "id": 437,
+  "number": 437,
+  "title": "Life at best is very brief",
+  "author": "",
+  "verses": [
+    "Life at best is very brief,\nLike the falling of a leaf,\nLike the binding of a sheaf:\nBe in time!",
+    "Fairest flowers soon decay,\nYouth and beauty pass away;\nOh, you have not long to stay:\nBe in time!",
+    "Time is gliding swiftly by,\nDeath and judgment draweth nigh,\nTo the arms of Jesus fly:\nBe in time!",
+    "Sinner, heed the warning voice,\nMake the Lord your final choice,\nThen all heaven will rejoice:\nBe in time!"
+  ],
+  "chorus": "Be in time! . . . Be in time! . .\nWhile the voice of Jesus calls you,\nBe in time 1 . . .\nIf in sin you longer wait,\nYou may find no open gate,\nAnd your cry be just too late:\nBe in time!"
+},
+{
+  "id": 438,
+  "number": 438,
+  "title": "Look not behind thee",
+  "author": "",
+  "verses": [
+    "Look not behind thee; O sinner, beware!\nHaste to the mountain, thy refuge is there;\nTrust not the voices that lure thee to stay;\nJesus is calling thee—then why still delay?",
+    "Look not behind thee; O lost one, beware!\nWhy dost thou linger 'twixt hope and despair?\nDanger and darkness encompass thy way:\nJesus is calling thee—then why still delay?",
+    "Look not behind thee, the tempter is near;\nSpeed to the mountain, thy pathway is clear;\nJesus who loves thee is calling to-day:\nCome to thy Father's house—oh, why still delay?"
+  ],
+  "chorus": "List to the warning! no longer remain !\nFly from the valley, escape from the plain !\nTurn from the voices that lure thee to stay :\nAngels are calling thee—then why still delay?"
+},
+{
+  "id": 439,
+  "number": 439,
+  "title": "Where will you spend eternity",
+  "author": "",
+  "verses": [
+    "Where will you spend eternity—\nThose years that have no end?\nWill it be in that better land?\nWill it be at God's right hand?\nWill it be with the angel band?\nThe angel band?",
+    "Where will you spend eternity—\nThose years that have no end?\nWill it be where the angels sing?\nWill it be with the glorious King?\nWhat a sublime and solemn thing!\nA solemn thing!",
+    "Where will you spend eternity—\nThose years that have no end?\nWill it be where you are debarred\nEver to know and see the Lord?\nEver to have His great reward?\nHis great reward?",
+    "Where will you spend eternity—\nThose years that have no end?\nWill it be on the golden shore,\nSafe with the friends that have gone before,\nSafe and happy for evermore?\nFor evermore?"
+  ],
+  "chorus": "Eternity, eternity—\nWhere will you spend eternity?"
+},
+{
+  "id": 440,
+  "number": 440,
+  "title": "A blessing for you",
+  "author": "",
+  "verses": [
+    "A blessing for you—will you take it?\nChoose ye to-day;\nA word from the heart—will you speak it?\nChoose ye to-day:\nWill you believe, or your Saviour neglect?\nWill you receive, or His mercy reject?",
+    "A death to be feared—will you fear it?\nChoose ye to-day;\nA voice that invites—will you hear it?\nChoose ye to-day:\nStrait is the portal and narrow the way;\nEnter, poor soul, and be saved while you may;",
+    "The cross of your Lord—will you bear it?\nChoose ye to-day:\nThere's life in that cross—will you share it?\nChoose ye to-day:\nSoon will your time of probation be o'er,\nThen will the Spirit entreat you no more,",
+    "The bondage of sin—will you break it?\nChoose ye to-day;\nThe Water of Life—will you take it?\nChoose ye to-day:\nCome to the arms that are open for you,\nHide in the wounds that by faith you may view;"
+  ],
+  "chorus": "Pause, ere you answer, oh, pause and reflect—\nChoose ye to-day."
+},
+  {
+  "id": 441,
+  "number": 441,
+  "title": "In the silent midnight watches",
+  "author": "",
+  "verses": [
+    "In the silent midnight watches,\nList—thy bosom's door!\nHow it knocketh, knocketh, knocketh,\nKnocketh evermore!\nSay not 'tis thy pulse is beating—\n'Tis thy heart of sin;\n'Tis thy Saviour knocks, and crieth,\n\"Rise, and let Me in!\"",
+    "Death comes down with reckless footsteps\nTo the hall and hut;\nThink you death will tarry knocking\nWhen the door is shut?\nJesus waiteth, waiteth, waiteth;\nBut the door is fast:\nGrieved, away thy Saviour goeth,\nDeath breaks in at last.",
+    "Then 'tis time to stand entreating\nChrist to let thee in;\nAt the gate of heaven beating,\nWailing for thy sin!\nNay! alas, thou guilty creature!\nHast thou then forgot?\nJesus waited long to know thee,\nNow He knows thee not!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 442,
+  "number": 442,
+  "title": "Hark, sinner, while God from on high doth entreat thee",
+  "author": "",
+  "verses": [
+    "Hark, sinner, while God from on high doth entreat thee,\nAnd warnings with accents of mercy doth blend;\nGive ear to His voice, lest in judgment He meet thee;\n\"The harvest is passing, the summer will end.\"",
+    "How oft of thy danger and guilt He hath told thee!\nHow oft still the message of mercy doth send!\nHaste, haste, while He waits in His arms to enfold thee!\n\"The harvest is passing, the summer will end.\"",
+    "Despised and rejected, at length He may leave thee:\nWhat anguish and horror thy bosom will rend!\nThen haste thee, O sinner, while He will receive thee!\n\"The harvest is passing, the summer will end.\"",
+    "The Saviour will call thee in judgment before Him;\nOh, bow to His sceptre, and make Him thy Friend;\nNow yield Him thy heart, and make haste to adore Him;\n\"Thy harvest is passing, thy summer will end.\""
+  ],
+  "chorus": "\"The harvest is passing, the summer will end.\"\n\"The harvest is passing, the summer will end.\""
+},
+{
+  "id": 443,
+  "number": 443,
+  "title": "Have you any room for Jesus",
+  "author": "",
+  "verses": [
+    "Have you any room for Jesus,\nHe who bore your load of sin?\nAs He knocks and asks admission,\nSinner, will you let Him in?",
+    "Room for pleasure, room for business;\nBut for Christ the crucified—\nNot a place that He can enter\nIn the heart for which He died?",
+    "Have you any time for Jesus,\nAs in grace He calls again?\nOh, \"to-day\" is \"time accepted,\"\nTo-morrow you may call in vain.",
+    "Room and time now give to Jesus:\nSoon will pass God's day of grace;\nSoon thy heart be cold and silent,\nAnd thy Saviour's pleadings cease."
+  ],
+  "chorus": "Room for Jesus, King of glory!\nHasten now, His word obey!\nSwing the heart's door widely open I\nBid Him enter while you may 1"
+},
+{
+  "id": 444,
+  "number": 444,
+  "title": "O wanderer, come to the Father's home!",
+  "author": "",
+  "verses": [
+    "O wanderer, come to the Father's home!\nWhy wilt thou farther roam?\nThere's joy and rest for the weary breast\nIn the Father's home.",
+    "Why linger away on the mountains cold?\nWhy friendless and hopeless roam?\nThere's bread to spare, and there's room for all,\nIn the Father's home.",
+    "Oh come, and taste of the Father's love!\nReturn, no more to roam,\nFor loved ones wait at the golden gate\nOf the Father's home.",
+    "Then come and rest in your Father's house,\nBeneath its sheltering dome;\nThere's joy and peace that shall never cease\nIn the Father's home."
+  ],
+  "chorus": "Then come to the Father's home;\nNo longer sadly roam;\nThere's joy and rest for the weary breast\nIn the Father's home."
+},
+{
+  "id": 445,
+  "number": 445,
+  "title": "One there is who loves thee, waiting still for thee",
+  "author": "",
+  "verses": [
+    "One there is who loves thee, waiting still for thee;\nCanst thou yet reject Him? none so kind as He!\nDo not grieve Him longer: come and trust Him now!\nHe has waited all thy days: why waitest thou?",
+    "Tenderly He woos thee : do not slight His call;\nThough thy sins are many, He'll forgive them all.\nTurn to Him, repenting: He will cleanse thee now!\nHe is waiting at thy heart: why waitest thou?",
+    "Jesus still is waiting: sinner, why delay?\nTo His arms of mercy rise and haste away!\nOnly come believing, He will save thee now!\nHe is waiting at the door: why waitest thou?"
+  ],
+  "chorus": "One there is who loves thee: oh, receive Him now!\nHe has waited all the day: why waitest thou?"
+},
+{
+  "id": 446,
+  "number": 446,
+  "title": "Tis the Saviour who would claim",
+  "author": "",
+  "verses": [
+    "'Tis the Saviour who would claim\nEntrance to your heart:\nWill you send your Lord away?—\nWill you say—\"Depart!\"?",
+    "No one like the Saviour knocks\nAt the sinner's door;\n'Tis no stranger that implores,—\nHe has knocked before;\nHe has often sought your heart:\nShall He cleanse it now from sin?",
+    "Oh, how can you bid Him wait\nTill another day,\nWhen already Jesus weeps\nAt the long delay?\n'Twas for you that Jesus died,\nAnd 'tis you He longs to win."
+  ],
+  "chorus": "He will all your trials share,\nHe will cleanse you from all sin.\nTis your Saviour, 'tis your Saviour standing there :\nHaste, and let Him in! let Him in ! . .\nLest He turn away, let Him in!"
+},
+{
+  "id": 447,
+  "number": 447,
+  "title": "In the land of strangers",
+  "author": "",
+  "verses": [
+    "In the land of strangers,\nWhither thou art gone,\nHear a far voice calling,\n\"My son! my son!",
+    "\"From the land of hunger,\nFainting, famished, lone,\nCome to love and gladness,\nMy son! my son!",
+    "\"Quit the haunts of riot,\nWasted, woe-begone;\nSick at heart and weary,\nMy son! my son!",
+    "\"See the door still open!\nThou art still my own;\nEyes of love are on thee,\nMy son! my son!",
+    "\"Far off thou hast wandered:\nWilt thou farther roam?\nCome! and all is pardoned,\nMy son! my son!",
+    "\"See the well-spread table,\nUnforgotten one!\nHere is rest and plenty,\nMy son! my son!",
+    "\"Thou art friendless, homeless,\nHopeless, and undone;\nMine is love unchanging,\nMy son! my son!\""
+  ],
+  "chorus": "Welcome, wanderer! welcome! welcome back to home!\nThou hast wandered far away: come home, come home!\""
+},
+{
+  "id": 448,
+  "number": 448,
+  "title": "Only a step to Jesus!",
+  "author": "",
+  "verses": [
+    "Only a step to Jesus!\nThen why not take it now?\nCome, and thy sin confessing,\nTo Him, your Saviour, bow.",
+    "Only a step to Jesus!\nBelieve, and thou shalt live;\nLovingly now He's waiting,\nAnd ready to forgive.",
+    "Only a step to Jesus!\nA step from sin to grace;\nWhat has thy heart decided?\nThe moments fly apace.",
+    "Only a step to Jesus!\nOh, why not come, and say—\n\"Gladly to Thee, my Saviour,\nI give myself away\"?"
+  ],
+  "chorus": "Only a step! only a step!\nCome, He waits for thee;\nCome, and thy sin confessing,\nThou shalt receive a blessing:\nDo not reject the mercy\nHe freely offers thee."
+},
+{
+  "id": 449,
+  "number": 449,
+  "title": "Turn thee, O lost one, careworn and weary",
+  "author": "",
+  "verses": [
+    "Turn thee, O lost one, careworn and weary,\nLo! the Good Shepherd is pleading to-day;\nSeeking to save thee, waiting to cleanse thee:\nHaste to receive Him—no longer delay!",
+    "Still He is waiting: why wilt thou perish?\nThough thou hast wandered so far from the fold—\nYet with His life-blood He has redeemed thee;\nWondrous compassion that cannot be told!",
+    "List to His message, think of His mercy!\nSinless, yet bearing thy sins on the tree;\nPerfect remission, life everlasting,\nThrough His atonement He offers to thee.",
+    "Come in the old way, come in the true way,\nEnter through Jesus, for He is the Door;\nHe is the Shepherd, tenderly calling;\nCome in thy weakness and wander no more."
+  ],
+  "chorus": "Tenderly calling, patiently pleading,\nHear the Good Shepherd calling to thee;\nTenderly pleading, patiently calling,\nLovingly saying, \"Come unto Me!\""
+},
+{
+  "id": 450,
+  "number": 450,
+  "title": "Oh, what will you do with Jesus?",
+  "author": "",
+  "verses": [
+    "Oh, what will you do with Jesus?\nThe call comes low and sweet;\nAnd tenderly He bids you\nYour burdens lay at His feet;\nO soul, so sad and weary,\nThat sweet voice speaks to thee:\nThen what will you do with Jesus?\nOh, what shall the answer be?",
+    "Oh, what will you do with Jesus?\nThe call comes low and clear;\nThe solemn words are sounding\nIn every listening ear;\nImmortal life's in the question,\nAnd joy through eternity:\nThen what will you do with Jesus?\nOh, what shall the answer be?",
+    "Oh, think of the King of Glory—\nFrom heaven to earth come down;\nHis life so pure and holy;\nHis death, His cross, His crown;\nOf His divine compassion,\nHis sacrifice for thee:\nThen what will you do with Jesus?\nOh, what shall the answer be?"
+  ],
+  "chorus": "What shall the answer be? What shall the answer be?\nWhat will you do with Jesus? Oh, what shall the answer be?"
+},
+{
+  "id": 451,
+  "number": 451,
+  "title": "Where hast thou built thine house",
+  "author": "",
+  "verses": [
+    "Where hast thou built thine house,\nThy soul's eternal dwelling?\nUpon the treacherous sands of sin,\n'Mid floods and tempests swelling?",
+    "What wilt thou do when storms\nUpon thy house are beating?\nWhen from beneath, the treacherous sands\nThat held thee are retreating?",
+    "Wait not until the floods,\nWith final shock appalling,\nShall come—and thou canst never save\nThy ruined house from falling."
+  ],
+  "chorus": "Oh, build upon the Rock—the only sure foundation;\nOn Christ alone, the Corner-stone, the Rock of our salvation!"
+},
+{
+  "id": 452,
+  "number": 452,
+  "title": "Almost persuaded now to believe",
+  "author": "",
+  "verses": [
+    "\"Almost persuaded\" now to believe;\n\"Almost persuaded\" Christ to receive;\nSeems now some soul to say,\n\"Go, Spirit, go Thy way,\nSome more convenient day\nOn Thee I'll call.\"",
+    "\"Almost persuaded,\" come, come to-day;\n\"Almost persuaded,\" turn not away;\nJesus invites you here,\nAngels are lingering near,\nPrayers rise from hearts so dear;\nO wanderer, come!",
+    "\"Almost persuaded,\" harvest is past!\n\"Almost persuaded,\" doom comes at last!\n\"Almost\" cannot avail;\n\"Almost\" is but to fail!\nSad, sad, that bitter wail—\n\"Almost—but lost!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 453,
+  "number": 453,
+  "title": "No longer wait, my brother; even now",
+  "author": "",
+  "verses": [
+    "No longer wait, my brother; even now\nGod's Spirit seeks an entrance to your heart;\nCome to the cross, and to the Saviour bow;\nUnbar the door: make haste, lest He depart.",
+    "No longer wait, O sad and troubled soul,\nHis pardoning grace He offers free to all;\nO weary one, that grace will make you whole:\nOh, why not hear the loving Saviour's call?",
+    "No longer wait; the Lord your God hath said,\n\"I will not strive for ever with your heart\";\nOh come, ere yet the spark of life has fled,\nAnd thou hast failed to choose the better part."
+  ],
+  "chorus": "O sinner, come to Christ, the living Way;\nStill He is pleading, why not come to-day?"
+},
+{
+  "id": 454,
+  "number": 454,
+  "title": "If Jesus should call you to-day, dear friend",
+  "author": "",
+  "verses": [
+    "If Jesus should call you to-day, dear friend,\nTo stand at His Judgment-seat,\nAnd you knew that this hour your life would end,\nWould the summons be sad or sweet?",
+    "If Jesus should call you to-day, to-day,\nOh, what would your answer be?\nCould you with rejoicing His voice obey,\nBe glad His dear face to see?",
+    "Oh, would you be ready to lay life down,\nIf Jesus should come to-day?\nWould you know there awaiteth for you a crown\nThat never shall fade away?",
+    "Be ready, be ready! you know not when\nThe summons to you may come.\nWhen you shall be missed from the haunts of men,\nAnd enter your final doom."
+  ],
+  "chorus": "Oh, would . . you be ready . . .\nIf Jesus should call you to-day? . .\nOh, would . . you be ready, . . .\nBe ready His call to obey? . ."
+},
+{
+  "id": 455,
+  "number": 455,
+  "title": "Make room for Jesus! room, sad heart!",
+  "author": "",
+  "verses": [
+    "Make room for Jesus! room, sad heart!\nBeguiled and sick of sin;\nBid every alien guest depart,\nArise, and let Him in!",
+    "Make room for Jesus! room! make room!\nHis hand is at the door;\nHe comes to banish guilt and gloom,\nAnd bless thee more and more.",
+    "Make room for Jesus! soul of mine:\nHe waits response to-day;\nHis smile is peace, His grace divine;\nOh, turn Him not away!",
+    "Make room for Jesus! By and by,\n'Mid saints and seraphim,\nHe'll welcome to His throne on high\nThe soul that welcomed Him."
+  ],
+  "chorus": "Make room, sad heart! make room! make room!\nBid alien guests depart!\nOh, let the Master in, sad heart!\nArise, and let Him in!"
+},
+{
+  "id": 456,
+  "number": 456,
+  "title": "Return, O wanderer, now return!",
+  "author": "",
+  "verses": [
+    "Return, O wanderer, now return!\nAnd seek thy Father's face!\nThose new desires which in thee burn\nWere kindled by His grace.",
+    "Return, O wanderer, now return!\nHe hears thy humble sigh;\nHe sees thy softened spirit mourn\nWhen no one else is nigh.",
+    "Return, O wanderer, now return!\nThy Saviour bids thee live;\nGo to His bleeding feet, and learn\nHow freely He'll forgive.",
+    "Return, O wanderer, now return,\nAnd wipe the falling tear!\nThy Father calls—no longer mourn:\nHis love invites thee near."
+  ],
+  "chorus": "Return! Return!"
+},
+{
+  "id": 457,
+  "number": 457,
+  "title": "Hasten, sinner, to be wise!",
+  "author": "",
+  "verses": [
+    "Hasten, sinner, to be wise!\nStay not for the morrow's sun;\nWisdom, if you still despise,\nHarder is it to be won.",
+    "Hasten, mercy to implore!\nStay not for the morrow's sun;\nLest thy season should be o'er,\nEre this evening's stage be run.",
+    "Hasten, sinner, to return!\nStay not for the morrow's sun,\nLest thy lamp should fail to burn\nEre salvation's work is done.",
+    "Hasten, sinner, to be blest!\nStay not for the morrow's sun,\nLest perdition thee arrest,\nEre the morrow is begun."
+  ],
+  "chorus": ""
+},
+{
+  "id": 458,
+  "number": 458,
+  "title": "Come to Jesus, ye who wander",
+  "author": "",
+  "verses": [
+    "Come to Jesus, ye who wander\nFar from hope, and peace, and rest;\nScorned, neglected, and forsaken,\nSorrowful, and sore distrest.",
+    "Come to Jesus! He hath loved you\nWith a deep, abounding love;\nAnd His heart of tenderest pity\nNeeds no sacrifice to move.",
+    "Come! oh come! the Master waiteth:\n\"Come!\" the longing Bride doth say;\nDo not longer linger:\nHe hath borne our sins away."
+  ],
+  "chorus": "Come to Jesus! Come to Jesus!\nHark! the Spirit whispers, \"Come!\"\nCome to Jesus! Come to Jesus!\nHark! the Spirit whispers, \"Come!\""
+},
+{
+  "id": 459,
+  "number": 459,
+  "title": "O souls in darkness groping",
+  "author": "",
+  "verses": [
+    "O souls in darkness groping,\nAnd longing for the light,\nBelieve ye that the Saviour\nCan give the blind their sight?",
+    "Of old He had compassion,\nThe Lord of life and love,\nAnd He is \"that same Jesus,\"\nEnthroned in light above.",
+    "He claims your faith undoubting;\n\"Believe ye!\" is His word:\nWas ever voice so tender\nBy weary mortal heard?",
+    "And now that Christ is able\nHis promise to fulfil,\nOh, cast yourselves upon Him,\nAnd say, \"I know He will!\""
+  ],
+  "chorus": "Oh, look to Jesus only, with Him is love and might;\nBelieve that He is able to lead you into light."
+},
+{
+  "id": 460,
+  "number": 460,
+  "title": "The Spirit, O sinner, in mercy doth move",
+  "author": "",
+  "verses": [
+    "The Spirit, O sinner, in mercy doth move\nThy heart so long hardened, of sin to reprove;\nResist not the Spirit, nor longer delay;\nGod's gracious entreaties may end with to-day.",
+    "O child of the kingdom, from sin's service cease;\nBe filled with the Spirit, with comfort and peace.\nOh, grieve not the Spirit—thy Teacher is He—\nThat Jesus thy Saviour may glorified be.",
+    "Defiled is the temple, its beauty laid low,\nOn God's holy altar the embers faint glow.\nBy love yet rekindled, a flame may be fanned;\nOh, quench not the Spirit, the Lord is at hand!"
+  ],
+  "chorus": ""
+},
   {
     "id": 473,
     "number": 473,
