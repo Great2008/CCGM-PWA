@@ -5958,33 +5958,794 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
+{
+  "id": 461,
+  "number": 461,
+  "title": "How solemn are the words",
+  "author": "",
+  "verses": [
+    "How solemn are the words,\nAnd yet to faith how plain,\nWhich Jesus uttered while on earth—\n\"Ye must be born again!\"",
+    "\"Ye must be born again!\"\nFor so hath God decreed;\nNo reformation will suffice—\n'Tis life poor sinners need.",
+    "\"Ye must be born again!\"\nAnd life in Christ must have;\nIn vain the soul may elsewhere go—\n'Tis He alone can save.",
+    "\"Ye must be born again!\"\nOr never enter heaven;\n'Tis only blood-washed ones are there—\nThe ransomed and forgiven."
+  ],
+  "chorus": ""
+},
+{
+  "id": 462,
+  "number": 462,
+  "title": "Oh, hear my cry, be gracious now to me",
+  "author": "",
+  "verses": [
+    "Oh, hear my cry, be gracious now to me,\nCome, Great Deliverer, come!\nMy soul, bowed down, is longing now for Thee,\nCome, Great Deliverer, come!",
+    "I have no place, no shelter from the night,\nOne look from Thee would give me life and light,",
+    "My path is lone, and weary are my feet,\nMine eyes look up Thy loving smile to meet,",
+    "Thou wilt not spurn contrition's broken sigh;\nRegard my prayer, and hear my humble cry,"
+  ],
+  "chorus": "I've wandered far away o'er mountains cold,\nI've wandered far away from home;\nOh, take me now, and bring me to Thy fold—\nCome, Great Deliverer, come!"
+},
+{
+  "id": 463,
+  "number": 463,
+  "title": "Afflictions, though they seem severe",
+  "author": "",
+  "verses": [
+    "Afflictions, though they seem severe,\nIn mercy oft are sent;\nThey stopped the prodigal's career,\nAnd caused him to repent.",
+    "\"What have I gained by sin,\" he said,\n\"But hunger, shame, and fear?\nMy father's house abounds in bread,\nWhile I am starving here!\"",
+    "\"I'll go and tell him all I've done,\nFall down before his face;\nUnworthy to be called his son,\nI'll seek a servant's place.\"",
+    "His father saw him coming back;\nHe saw, he ran, he smiled,\nAnd threw his arms around the neck\nOf his rebellious child!",
+    "\"O father, I have sinned—forgive!\"\n\"Enough!\" the father said:\n\"Rejoice, my house; my son's alive,\nFor whom I mourned as dead!\"",
+    "'Tis thus the Lord His love reveals,\nTo call poor sinners home;\nMore than a father's love He feels,\nAnd welcomes all that come."
+  ],
+  "chorus": "\"I'll not pine here for bread,\nI'll not pine here for bread,\" he cries ;\n\"Nor starve in foreign lands :\nMy father's house has large supplies,\nAnd bounteous are his hands.\""
+},
+{
+  "id": 464,
+  "number": 464,
+  "title": "Take me, O my Father, take me!",
+  "author": "",
+  "verses": [
+    "Take me, O my Father, take me!\nTake me, save me, through Thy Son;\nThat which Thou wouldst have me, make me,\nLet Thy will in me be done.",
+    "Fruitless years with grief recalling,\nHumbly I confess my sin;\nAt Thy feet, O Father, falling,\nTo Thy household take me in.",
+    "Freely now to Thee I proffer\nThis repenting heart of mine;\nFreely life and soul I offer,\nGift unworthy love like Thine.",
+    "Once the world's Redeemer, dying,\nBare our sins upon the tree;\nOn that Sacrifice relying,\nNow I look in hope to Thee:",
+    "Father, take me! all forgiving,\nFold me to Thy loving breast;\nIn Thy love for ever living,\nI must be for ever blest!"
+  ],
+  "chorus": "Long from Thee my footsteps straying,\nThorny proved the way I trod;\nWeary come I now, and praying,\nTake me to Thy love, my God!"
+},
+{
+  "id": 465,
+  "number": 465,
+  "title": "Hast thou no room within thy heart",
+  "author": "",
+  "verses": [
+    "Hast thou no room within thy heart,\nWhere Jesus may abide?\nAnd canst thou say to Him, Depart\nWho for thee bled and died?",
+    "No room for Him whose glory light,\nIn lowly manger laid,\nShone forth in heavenly mansions bright,\nBefore the worlds were made!",
+    "I will, O Lord, unbar the door!\nNo longer stand outside;\nBut come within, and evermore\nIn my heart abide.",
+    "Abide with me; through all my days\nThy presence be my light;\nThen shall my mouth show forth Thy praise,\nAnd I shall walk aright.",
+    "When comes at last the Judgment day,\nAnd I Thy face shall see,\nWhat joy supreme to hear Thee say,\n\"Come in! there's room for thee.\""
+  ],
+  "chorus": "Oh yes, there's room within my heart,\nThere's room, O Lord, for Thee;\nCome in, and never more depart:\nCome in; abide with me."
+},
+{
+  "id": 466,
+  "number": 466,
+  "title": "Oh, tender and sweet was the Master's voice",
+  "author": "",
+  "verses": [
+    "Oh, tender and sweet was the Master's voice,\nAs He lovingly called to me:\n\"Come over the line! it is only a step—\nI am waiting, My child, for thee!\"",
+    "\"But my sins are many, my faith is small:\";\nLo! the answer came quick and clear:\n\"Thou needest not trust in thyself at all;\nStep over the line: I am here!\"",
+    "\"But my flesh is weak,\" I tearfully said,\n\"And the way I cannot see;\nI fear if I try I may sadly fail,\nAnd thus may dishonour Thee!\"",
+    "Ah, the world is cold, and I cannot go back;\nPress forward I surely must;\nI will place my hand in His wounded palm,\nStep over the line, and trust."
+  ],
+  "chorus": "\"Over the line!\" Hear the sweet refrain ;\nAngels are chanting the heavenly strain!\n\"Over the line\"—why should I remain,\nWith a step between me and Jesus?"
+},
+{
+  "id": 467,
+  "number": 467,
+  "title": "I come, O blessed Lord, to Thee",
+  "author": "",
+  "verses": [
+    "I come, O blessed Lord, to Thee I come to-day;\nI am no longer satisfied to stay away.",
+    "I will not wait until my life like Thine shall grow;\nI'll come at once—I know I've sinned: I'll tell Thee so.",
+    "It is enough for me to know Thou wilt receive\nAnd cleanse my heart from every sin if I believe.",
+    "Help me that I forget myself in loving Thee;\nAnd let Thine image on my heart reflected be.",
+    "Oh, take me, Saviour crucified, and let me prove\nThat those who most have been forgiven have most of love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 468,
+  "number": 468,
+  "title": "Jesus, I will trust Thee",
+  "author": "",
+  "verses": [
+    "Jesus, I will trust Thee,\nTrust Thee with my soul:\nGuilty, lost, and helpless,\nThou canst make me whole.\nThere is none in heaven\nOr on earth like Thee:\nThou hast died for sinners—\nTherefore, Lord, for me.",
+    "Jesus, I can trust Thee,\nTrust Thy written Word;\nSince Thy voice of mercy\nI have often heard.\nWhen Thy Spirit teacheth,\nTo my taste how sweet!\nOnly may I hearken,\nSitting at Thy feet.",
+    "Jesus, I do trust Thee,\nTrust Thee without doubt;\n\"Whosoever cometh\n\" Thou \"wilt not cast out:\"\nFaith is Thy promise,\nPrecious is Thy blood—\nThese my soul's salvation,\nThou my Saviour God!"
+  ],
+  "chorus": "In Thy love confiding,\nI will seek Thy face,\nWorship and adore Thee\nFor Thy wondrous grace.\nJesus, I will trust Thee,\nTrust Thee with my soul!\nGuilty, lost, and helpless,\nThou canst make me whole."
+},
+{
+  "id": 469,
+  "number": 469,
+  "title": "Like a bird on the deep, far away from its nest",
+  "author": "",
+  "verses": [
+    "Like a bird on the deep, far away from its nest,\nI had wandered, my Saviour, from Thee;\nBut Thy kind, loving voice called me home to Thy breast,\nAnd I knew there was welcome for me!",
+    "I am safe in the Ark; I have folded my wings\nOn the bosom of mercy Divine;\nI am filled with delight by Thy presence so bright,\nAnd the joy that will ever be mine.",
+    "Now in Jesus I rest, and I dread not the storm,\nThough around me the surges may roll;\nI will look to the skies, where the day never dies,\nI will sing of the joy in my soul."
+  ],
+  "chorus": "Welcome for me, Saviour, from Thee !\nA welcome, glad welcome for me!\nNow, like a dove, I rest in Thy love,\nAnd find a sweet refuge in Thee."
+},
+{
+  "id": 470,
+  "number": 470,
+  "title": "Christ is knocking at my sad heart",
+  "author": "",
+  "verses": [
+    "Christ is knocking at my sad heart;\nShall I let Him in?\nPatiently knocking at my sad heart,\nOh, shall I let Him in?\nCold and proud is my heart with sin;\nDark and cheerless is all within:\nChrist is bidding me turn unto Him;\nOh, shall I let Him in?",
+    "Shall I send Him the loving word?\nShall I let Him in?\nMeekly accepting my gracious Lord,\nOh, shall I let Him in?\nHe can infinite love impart;\nHe can pardon this rebel heart:\nShall I bid Him for ever depart,\nOr shall I let Him in?",
+    "Yes, I'll open this proud heart's door;\nI will let Him in!\nGladly I'll welcome Him evermore,\nOh yes, I'll let Him in!\nBlessed Saviour, abide with me;\nCares and trials will lighter be;\nI am safe if I'm only with Thee;\nCome in, O Lord, come in!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 471,
+  "number": 471,
+  "title": "I've wandered far away from God",
+  "author": "",
+  "verses": [
+    "I've wandered far away from God:\nNow I'm coming home;\nThe paths of sin too long I've trod:\nLord, I'm coming home.",
+    "I've wasted many precious years:\nNow I'm coming home;\nI now repent with bitter tears:\nLord, I'm coming home.",
+    "I'm tired of sin and straying, Lord:\nNow I'm coming home;\nI'll trust Thy love, believe Thy word:\nLord, I'm coming home.",
+    "My soul is sick, my heart is sore:\nNow I'm coming home;\nMy strength renew, my hope restore:\nLord, I'm coming home."
+  ],
+  "chorus": "Coming home, coming home, nevermore to roam;\nBy Thy grace I will be Thine: Lord, I'm coming home."
+},
+{
+  "id": 472,
+  "number": 472,
+  "title": "Like wandering sheep o'er mountains cold",
+  "author": "",
+  "verses": [
+    "Like wandering sheep o'er mountains cold,\nSince all have gone astray;\nTo \"Life\" and peace within the fold,\nHow may I find the Way?",
+    "Bewildered oft with doubt and care,\nTo God I fain would go;\nBut while they cry, \"Lo here! lo there!\"\nThe Truth how may I know?",
+    "To Christ—the Way, the Truth, the Life—\nI come, no more to roam;\nHe'll guide me to my \"Father's house,\"\nTo my Eternal home."
+  ],
+  "chorus": "\"I . . . am the Way, . . . the Truth, . . . and the Life ; . . .\nNo man cometh unto the Father but by Me.\nI . . . am the Way, . . . the Truth, . . . and the Life ; . . .\nNo man cometh unto the Father but by Me.\""
+},
+{
+  "id": 473,
+  "number": 473,
+  "title": "Just as I am—without one plea",
+  "author": "",
+  "verses": [
+    "Just as I am—without one plea,\nBut that Thy blood was shed for me,\nAnd that Thou bidd'st me come to Thee,\nO Lamb of God, I come!",
+    "Just as I am—poor, wretched, blind,\nSight, riches, healing of the mind;\nYea, all I need, in Thee to find,\nO Lamb of God, I come!",
+    "Just as I am—Thou wilt receive,\nWilt welcome, pardon, cleanse, relieve:\nBecause Thy promise I believe,\nO Lamb of God, I come!",
+    "Just as I am—Thy love unknown\nHas broken every barrier down:\nNow to be Thine, yea, Thine alone,\nO Lamb of God, I come!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 474,
+  "number": 474,
+  "title": "Once more, my soul, thy Saviour, through the Word",
+  "author": "",
+  "verses": [
+    "Once more, my soul, thy Saviour, through the Word,\nIs offered full and free;\nAnd now, O Lord, I must, I must decide:\nShall I accept of Thee?",
+    "By grace I will Thy mercy now receive,\nThy love my heart hath won:\nOn Thee, O Christ, I will, I will believe,\nAnd trust in Thee alone!",
+    "Thou knowest, Lord, how very weak I am,\nAnd how I fear to stray;\nFor strength to serve I look to Thee alone—\nThe strength Thou must supply!",
+    "And now, O Lord, give all with us to-day\nThe grace to join our song;\nAnd from the heart to gladly with us say—\n\"I will to Christ belong!\"",
+    "To all who came, when Thou wast here below\nAnd said, \"O Lord, wilt Thou?\"\nTo them, \"I will!\" was ever Thy reply—\nWe rest upon it now."
+  ],
+  "chorus": "I will ! . . I will ! . . I will ! God helping me\nI will, O Lord, be Thine !\nThy precious blood was shed to purchase me—\nI will be wholly Thine !"
+},
+{
+  "id": 475,
+  "number": 475,
+  "title": "I hear Thy welcome voice",
+  "author": "",
+  "verses": [
+    "I hear Thy welcome voice\nThat calls me, Lord, to Thee,\nFor cleansing in Thy precious blood\nThat flowed on Calvary.",
+    "Though coming weak and vile,\nThou dost my strength assure;\nThou dost my vileness fully cleanse,\nTill spotless all and pure.",
+    "'Tis Jesus calls me on\nTo perfect faith and love,\nTo perfect hope, and peace, and trust\nFor earth and heaven above.",
+    "'Tis Jesus who confirms\nThe blessed work within,\nBy adding grace to welcomed grace,\nWhere reigned the power of sin.",
+    "And He the witness gives\nTo loyal hearts and free,\nThat every promise is fulfilled,\nIf faith but brings the plea.",
+    "All hail, atoning blood!\nAll hail, redeeming grace!\nAll hail, the Gift of Christ our Lord,\nOur Strength and Righteousness!"
+  ],
+  "chorus": "I am coming, Lord !\nComing now to Thee !\nWash me, cleanse me, in the blood\nThat flowed on Calvary."
+},
+{
+  "id": 476,
+  "number": 476,
+  "title": "Jesus, my Lord, to Thee I cry",
+  "author": "",
+  "verses": [
+    "Jesus, my Lord, to Thee I cry;\nUnless Thou help me, I must die:\nOh, bring Thy free salvation nigh,\nAnd take me as I am!",
+    "Helpless I am, and full of guilt;\nBut yet for me Thy blood was spilt,\nAnd Thou canst make me what Thou wilt,\nAnd take me as I am!",
+    "No preparation can I make,\nMy best resolves I only break,\nYet save me for Thine own name's sake,\nAnd take me as I am!",
+    "Behold me, Saviour, at Thy feet,\nDeal with me as Thou seest meet;\nThy work begin, Thy work complete,\nBut take me as I am!"
+  ],
+  "chorus": "And take me as I am ! And take me as I am !\nMy only plea—Christ died for me ! Oh, take me as I am !"
+},
+{
+  "id": 477,
+  "number": 477,
+  "title": "I am coming to the cross",
+  "author": "",
+  "verses": [
+    "I am coming to the cross;\nI am poor, and weak, and blind;\nI am counting all but dross;\nI shall full salvation find.",
+    "Long my heart has sighed for Thee,\nLong has evil reigned within;\nJesus sweetly speaks to me—\n\"I will cleanse you from all sin.\"",
+    "Here I give my all to Thee,\nFriends, and time, and earthly store,\nSoul and body Thine to be—\nWholly Thine for evermore.",
+    "Jesus comes ! He fills my soul!\nPerfected in Him I am;\nI am every whit made whole;\nGlory, glory to the Lamb!"
+  ],
+  "chorus": "I am trusting, Lord, in Thee,\nBlessed Lamb of Calvary ;\nHumbly at Thy cross I bow :\nSave me, Jesus, save me now."
+},
+{
+  "id": 478,
+  "number": 478,
+  "title": "Lord, at Thy mercy-seat",
+  "author": "",
+  "verses": [
+    "Lord, at Thy mercy-seat\nHumbly I fall,\nPleading Thy promise sweet—\nLord, hear my call:\nNow let Thy work begin;\nOh, make me pure within,\nCleanse me from every sin,\nJesus, my all!",
+    "Tears of repentant grief\nSilently fall;\nHelp Thou mine unbelief,\nHear Thou my call!\nOh, how I pine for Thee!\nThis is all my hope, my plea:\nJesus has died for me—\nJesus, my all!",
+    "Hark ! how the words of love\nTenderly fall;\nEre in the realms above\nHeard is my call!\nNow every doubt has flown,\nBroken my heart of stone;\nLord, I am Thine alone:\nJesus, my all!",
+    "Still at Thy mercy-seat\nHumbly I fall;\nPleading Thy promise sweet,\nHeard is my call:\nFaith wings my soul to Thee;\nThis all my hope shall be—\nJesus has died for me,\nJesus, my all!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 479,
+  "number": 479,
+  "title": "Out in the desert, seeking, seeking",
+  "author": "",
+  "verses": [
+    "Out in the desert, seeking, seeking,\nSinner, 'tis Jesus seeking for thee;\nTenderly calling, calling, calling,\nHither, thou lost one, oh, come unto Me!",
+    "Still He is waiting, waiting, waiting;\nOh, what compassion beams in His eye!\nHear Him repeating, gently, gently,\nCome to thy Saviour, oh, why wilt thou die?",
+    "Lovingly pleading, pleading, pleading,\nMercy, though slighted, bears with thee yet;\nThou canst be happy, happy, happy;\nCome ere the life-star for ever shall set."
+  ],
+  "chorus": "Jesus is calling, Jesus is calling ;\nWhy dost thou linger ? why tarry away ?\nCome to Him quickly, say to Him gladly, \"Lord, I am coming, coming to-day !\""
+},
+{
+  "id": 480,
+  "number": 480,
+  "title": "The mistakes of my life have been many",
+  "author": "",
+  "verses": [
+    "The mistakes of my life have been many,\nThe sins of my heart have been more,\nAnd I scarce can see for weeping,\nBut I'll knock at the open door.",
+    "I am lowest of those who love Him,\nI am weakest of those who pray;\nBut I come as He has bidden,\nAnd He will not say me nay.",
+    "My mistakes His free grace will cover,\nMy sins He will wash away;\nAnd the feet that shrink and falter\nShall walk through the gates of day.",
+    "The mistakes of my life have been many,\nAnd my spirit is sick with sin,\nAnd I scarce can see for weeping,\nBut the Saviour will let me in."
+  ],
+  "chorus": "I know I am weak and sinful,\nIt comes to me more and more ;\nBut when the dear Saviour shall bid me come in,\nI'll enter the open door."
+},
+
   {
-    "id": 473,
-    "number": 473,
-    "title": "Just As I Am",
-    "author": "Charlotte Elliott",
-    "verses": [
-      "Just as I am, without one plea,\nBut that Thy blood was shed for me,\nAnd that Thou bidd'st me come to Thee,\nO Lamb of God, I come, I come.",
-      "Just as I am, and waiting not\nTo rid my soul of one dark blot,\nTo Thee whose blood can cleanse each spot,\nO Lamb of God, I come, I come.",
-      "Just as I am, though tossed about\nWith many a conflict, many a doubt,\nFightings and fears within, without,\nO Lamb of God, I come, I come.",
-      "Just as I am, poor, wretched, blind;\nSight, riches, healing of the mind,\nYea, all I need, in Thee to find,\nO Lamb of God, I come, I come.",
-      "Just as I am, Thou wilt receive,\nWilt welcome, pardon, cleanse, relieve;\nBecause Thy promise I believe,\nO Lamb of God, I come, I come."
-    ],
-    "chorus": ""
-  },
-  {
-    "id": 488,
-    "number": 488,
-    "title": "Pass Me Not O Gentle Saviour",
-    "author": "Fanny J. Crosby",
-    "verses": [
-      "Pass me not, O gentle Saviour,\nHear my humble cry;\nWhile on others Thou art calling,\nDo not pass me by.",
-      "Let me at Thy throne of mercy\nFind a sweet relief;\nKneeling there in deep contrition,\nHelp my unbelief.",
-      "Trusting only in Thy merit,\nWould I seek Thy face;\nHeal my wounded, broken spirit,\nSave me by Thy grace.",
-      "Thou the Spring of all my comfort,\nMore than life to me,\nWhom have I on earth beside Thee?\nWhom in heav'n but Thee?"
-    ],
-    "chorus": "Saviour, Saviour,\nHear my humble cry;\nWhile on others Thou art calling,\nDo not pass me by."
-  },
+  "id": 481,
+  "number": 481,
+  "title": "Lone and weary, sad and dreary",
+  "author": "",
+  "verses": [
+    "Lone and weary, sad and dreary,\nLord, I would Thy call obey;\nThee believing, Christ receiving,\nI would come to Thee to-day.",
+    "Thou, the Holy, Meek, and Lowly,\nJesus, unto Thee I come;\nKeep me ever, let me never\nFrom Thy blessed keeping roam.",
+    "Here abiding, in Thee hiding,\nSeeks my weary soul to rest;\nTill the dawning of the morning,\nWhen I wake among the blest.",
+    "Be Thou near me, keep and cheer me,\nThrough life's dark and stormy way;\nTurn my sadness into gladness,\nTurn my darkness into day."
+  ],
+  "chorus": "I am coming, I am coming,\nComing, Saviour, to be blest;\nI am coming, I am coming,\nComing, Lord, to Thee for rest!"
+},
+{
+  "id": 482,
+  "number": 482,
+  "title": "I stood outside the gate",
+  "author": "",
+  "verses": [
+    "I stood outside the gate,\nA poor, wayfarer child;\nWithin my heart there beat\nA tempest loud and wild;\nA fear oppressed my soul\nThat I might be too late!\nAnd oh, I trembled sore,\nAnd prayed outside the gate,\nAnd prayed outside the gate.",
+    "\"Oh, Mercy!\" loud I cried,\n\"Now give me rest from sin!\"\n\"I will!\" a voice replied;\nAnd Mercy let me in:\nShe bound my bleeding wounds,\nAnd soothed my heart opprest;\nShe washed away my guilt,\nAnd gave me peace and rest.",
+    "In Mercy's guise I knew\nThe Saviour long abused,\nWho often sought my heart,\nAnd wept when I refused.\nOh, what a blest return\nFor all my years of sin!—\nI stood outside the gate,\nAnd Jesus let me in."
+  ],
+  "chorus": ""
+},
+{
+  "id": 483,
+  "number": 483,
+  "title": "What shall I do with Jesus?",
+  "author": "",
+  "verses": [
+    "What shall I do with Jesus?\nI hear His pleading voice;\nHe asks that He may enter,\nAnd make my heart rejoice.\nThe hand that's gently knocking\nBore cruel wounds for me;\nAnd on His brow, so holy,\nThe thorn-marks yet I see.",
+    "What shall I do with Jesus—\nThe Lamb of Calvary?\nHis wonderful salvation\nHe freely offers me:\nHis precious blood for cleansing,\nThe comfort of His love;\nThe glory of His blessing,\nAnd life with Him above.",
+    "What shall I do with Jesus,\nThe King upon His throne?\nHe claims my full allegiance,\nRedeemed me for His own.\nOh, deeply solemn question!\nLord, help me now decide,\nAnd take Thee for my Saviour—\nMy Master, Friend, and Guide."
+  ],
+  "chorus": "What shall I do with Jesus?\nFor time is gliding by;\nWhat shall I do with Jesus?\nEternity is nigh!"
+},
+{
+  "id": 484,
+  "number": 484,
+  "title": "I was a wandering sheep",
+  "author": "",
+  "verses": [
+    "I was a wandering sheep,\nI did not love the fold;\nI did not love my Shepherd's voice,\nI would not be controlled:\nI was a wayward child,\nI did not love my home,\nI did not love my Father's voice,\nI loved afar to roam.",
+    "The Shepherd sought His sheep,\nThe Father sought His child;\nThey followed me o'er vale and hill,\nO'er deserts waste and wild:\nThey found me nigh to death,\nFamished, and faint, and lone;\nThey bound me with the bands of love,\nThey saved the wandering one.",
+    "Jesus my Shepherd is,\n'Twas He that loved my soul;\n'Twas He that washed me in His blood,\n'Twas He that made me whole;\n'Twas He that sought the lost,\nThat found the wandering sheep;\n'Twas He that brought me to the fold,\n'Tis He that still doth keep.",
+    "I was a wandering sheep,\nI would not be controlled;\nBut now I love my Saviour's voice,\nI love, I love the fold.\nI was a wayward child,\nI once preferred to roam;\nBut now I love my Father's voice—\nI love, I love His home."
+  ],
+  "chorus": ""
+},
+{
+  "id": 485,
+  "number": 485,
+  "title": "Lord, I hear of showers of blessing",
+  "author": "",
+  "verses": [
+    "Lord, I hear of showers of blessing\nThou art scattering full and free—\nShowers the thirsty land refreshing;\nLet some droppings fall on me—\nEven me!",
+    "Pass me not, O gracious Father!\nSinful though my heart may be:\nThou might'st leave me, but the rather\nLet Thy mercy fall on me—Even me!",
+    "Pass me not, O tender Saviour,\nLet me love and cling to Thee;\nI am longing for Thy favour;\nWhilst Thou'rt calling, oh, call me—Even me!",
+    "Pass me not, O mighty Spirit!\nThou canst make the blind to see:\nWitnesses of Jesus' merit,\nSpeak the word of power to me—Even me!",
+    "Love of God, so pure and changeless;\nBlood of Christ, so rich and free;\nGrace of God, so strong and boundless;\nMagnify them all in me—Even me!",
+    "Pass me not; Thy lost one bringing,\nBind my heart, O Lord, to Thee;\nWhile the streams of life are springing,\nBlessing others, oh, bless me—Even me!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 486,
+  "number": 486,
+  "title": "Depth of mercy! can there be",
+  "author": "",
+  "verses": [
+    "Depth of mercy! can there be\nMercy still reserved for me?\nCan my God His wrath forbear?—\nMe, the chief of sinners, spare?",
+    "I have long withstood His grace,\nLong provoked Him to His face;\nWould not hearken to His calls,\nGrieved Him by a thousand falls.",
+    "Whence to me this waste of love?\nAsk my Advocate above!\nSee the cause in Jesus' face,\nNow before the throne of grace.",
+    "There for me the Saviour stands,\nShows His wounds, and spreads His hands;\nGod is love, I know, I feel;\nJesus weeps, and loves me still.",
+    "If I rightly read Thy heart,\nIf Thou all compassion art,\nBow Thine ear, in mercy bow,\nPardon and accept me now!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 487,
+  "number": 487,
+  "title": "We are coming home to Jesus",
+  "author": "",
+  "verses": [
+    "We are coming home to Jesus,\nWe have heard His welcome voice;\nWe are trusting in His goodness,\nIn His mercy we rejoice.",
+    "We are coming home to Jesus,\nFor He died that we might live;\nHe is willing to receive us,\nHe is waiting to forgive.",
+    "We are coming home to Jesus,\nBy the cross, our only way;\nThere He finished our redemption,\nAnd we can no more delay."
+  ],
+  "chorus": "We are coming . . home, we are coming . . home,\nWe are coming from the darkness to the light; . . .\nWe are coming . . home, we are coming . . home,\nWe are coming . . home to-night."
+},
+{
+  "id": 488,
+  "number": 488,
+  "title": "Pass me not, O gentle Saviour",
+  "author": "",
+  "verses": [
+    "Pass me not, O gentle Saviour,\nHear my humble cry;\nWhile on others Thou art calling,\nDo not pass me by.",
+    "Let me at a throne of mercy\nFind a sweet relief;\nKneeling there in deep contrition,\nHelp my unbelief.",
+    "Trusting only in Thy merit,\nWould I seek Thy face;\nHeal my wounded, broken spirit,\nSave me by Thy grace.",
+    "Thou the spring of all my comfort,\nMore than life to me;\nWhom have I on earth beside Thee?\nWhom in heaven but Thee?"
+  ],
+  "chorus": "Saviour, Saviour, hear my humble cry;\nAnd while others Thou art calling, do not pass me by!"
+},
+{
+  "id": 489,
+  "number": 489,
+  "title": "Weary of earth, and laden with my sin",
+  "author": "",
+  "verses": [
+    "Weary of earth, and laden with my sin,\nI look at heaven, and long to enter in;\nBut there no evil thing may find a home,\nAnd yet I hear a voice that bids me, \"Come!\"",
+    "So vile I am, how dare I hope to stand\nIn the pure glory of that holy land?\nBefore the whiteness of that throne appear?\nYet there are hands stretched out to draw me near.",
+    "The while I fain would tread the heavenly way,\nSeems evil ever with me day by day;\nYet on mine ears the gracious tidings fall:\n\"Repent, confess, and thou art loosed from all.\"",
+    "It is the voice of Jesus that I hear,\nHis are the hands outstretched to draw me near,\nAnd His the blood that can for all atone,\nAnd set me faultless there before the Throne.",
+    "Yea, Thou wilt answer for me, righteous Lord;\nThine all the merits, mine the great reward;\nThine the sharp thorns, and mine the golden crown;\nMine the life won, and Thine the life laid down.",
+    "Naught can I bring Thee, Lord, for all I owe,\nYet let my full heart what it can bestow;\nMyself my gift, let my devotion prove,\nForgiven greatly, how I greatly love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 490,
+  "number": 490,
+  "title": "The gospel of Thy grace",
+  "author": "",
+  "verses": [
+    "The gospel of Thy grace\nMy stubborn heart has won;\nFor God so loved the world,\nHe gave His only Son,\nThat Whosoever will believe,\nShall everlasting life receive!",
+    "\"The serpent\" \"lifted up\"\nCould life and healing give,\nSo Jesus on the cross\nBids me to look and live;\nFor \"Whosoever will believe,\nShall everlasting life receive!\"",
+    "\"The soul that sinneth dies:\"\nMy awful doom I heard;\nI was for ever lost,\nBut for Thy gracious word,\nThat \"Whosoever will believe,\nShall everlasting life receive!\"",
+    "\"Not to condemn the world\"\nThe \"Man of Sorrows\" came;\nBut that the world might have\nSalvation through His name;\nFor \"Whosoever will believe,\nShall everlasting life receive!\"",
+    "\"Lord, help my unbelief!\"\nGive me the peace of faith,\nTo rest with childlike trust\nOn what Thy gospel saith,\nThat \"Whosoever will believe,\nShall everlasting life receive!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 491,
+  "number": 491,
+  "title": "Heav'nly Father, bless me now",
+  "author": "",
+  "verses": [
+    "Heavenly Father, bless me now,\nAt the cross of Christ I bow;\nTake my guilt and grief away,\nHear and heal me now, I pray.",
+    "Now, O Lord, this very hour,\nSend Thy grace and show Thy power;\nWhile I rest upon Thy word,\nCome and bless me now, O Lord!",
+    "Now, just now, for Jesus' sake,\nLift the clouds, the fetters break;\nWhile I look, and as I cry,\nTouch and cleanse me ere I die.",
+    "Never did I so adore\nJesus Christ, Thy Son, before;\nNow the time! and this the place!\nGracious Father, show Thy grace."
+  ],
+  "chorus": "Bless me now! bless me now!\nHeavenly Father, bless me now!"
+},
+{
+  "id": 492,
+  "number": 492,
+  "title": "Jesus Christ is passing by",
+  "author": "",
+  "verses": [
+    "Jesus Christ is passing by,\nSinner, lift to Him thine eye;\nAs the precious moments flee,\nCry, \"Be merciful to me!\"",
+    "Jesus Christ is passing by,\nWill He always be so nigh?\nNow is the accepted day,\nSeek for healing while you may.",
+    "Lo! He stands and calls to thee,\n\"What wilt thou then have of Me?\"\nRise, and tell Him all thy need;\nRise—He calleth thee indeed.",
+    "\"Lord, I would Thy mercy see;\nLord, reveal Thy love to me;\nLet it penetrate my soul,\nAll my heart and life control.\"",
+    "Oh, how sweet! the touch of power\nComes,—it is salvation's hour;\nJesus gives from guilt release,\n\"Faith hath saved thee, go in peace!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 493,
+  "number": 493,
+  "title": "Father, I stretch my hands to Thee",
+  "author": "",
+  "verses": [
+    "Father, I stretch my hands to Thee;\nNo other help I know:\nIf Thou withdraw Thyself from me,\nAh, whither shall I go?",
+    "What did Thine only Son endure,\nBefore I drew my breath;\nWhat pain, what labour, to secure\nMy soul from endless death!",
+    "O Jesus, could I this believe,\nI now should feel Thy power;\nAnd all my wants Thou wouldst relieve\nIn this accepted hour.",
+    "Author of faith, to Thee I lift\nMy weary, longing eyes:\nOh, let me now receive that gift;\nMy soul without it dies."
+  ],
+  "chorus": "I do believe, I do believe\nThat Jesus died for me;\nAnd through His blood, His precious blood,\nI shall from sin be free."
+},
+{
+  "id": 494,
+  "number": 494,
+  "title": "O Jesus, Thou art standing",
+  "author": "",
+  "verses": [
+    "O Jesus, Thou art standing\nOutside the fast-closed door,\nIn lowly patience waiting\nTo pass the threshold o'er.",
+    "Oh, love that passeth knowledge,\nSo patiently to wait!\nOh, sin that hath no equal,\nSo fast to bar the gate.",
+    "O Jesus, Thou art pleading\nIn accents meek and low:\n\"I died for you, My children,\nAnd will ye treat Me so?\"",
+    "O Lord, with shame and sorrow\nWe open now the door:\nDear Saviour, enter, enter,\nAnd leave us nevermore!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 495,
+  "number": 495,
+  "title": "O Jesus, Saviour, hear my call",
+  "author": "",
+  "verses": [
+    "O Jesus, Saviour, hear my call,\nWhile at Thy feet I humbly fall:\nTo Thee, my Hope, my Life, my all,\nO blessed Lord, I come!",
+    "I have no merit of my own,\nThou only canst for sin atone;\nAnd looking up to Thee alone,\nO blessed Lord, I come!",
+    "Thy precious name salvation brings,\nTo Thee my weary spirit clings;\nAnd now, to rest beneath Thy wings,\nO blessed Lord, I come!",
+    "Oh, take this wandering heart of mine,\nAnd seal it, Lord, for ever Thine;\nThat I may know Thy love Divine,\nO blessed Lord, I come!"
+  ],
+  "chorus": "I come—and this my only plea,\nThat Thou didst give Thyself for me;\nAnd casting all my care on Thee,\nO blessed Lord, I come."
+},
+{
+  "id": 496,
+  "number": 496,
+  "title": "Oh, what shall I do to be saved",
+  "author": "",
+  "verses": [
+    "Oh, what shall I do to be saved\nFrom the sorrows that burden my soul?\nLike the waves in the storm\nWhen the winds are at war,\nChilling floods of distress o'er me roll.",
+    "Oh, what shall I do to be saved,\nWhen the pleasures of youth are all fled:\nAnd the friends I have loved\nFrom the earth are removed,\nAnd I weep o'er the graves of the dead?",
+    "Oh, what shall I do to be saved,\nWhen sickness my strength shall subdue,\nOr the world in a day,\nLike a cloud, rolls away,\nAnd eternity opens to view?",
+    "O Lord, look in mercy on me,\nCome, come, and speak peace to my soul!\nUnto whom shall I flee,\nBlessed Lord, but to Thee?\nThou canst make my poor broken heart whole!"
+  ],
+  "chorus": "What shall I do? what shall I do?\nOh, what shall I do to be saved?\nTo Jesus I'll go and be saved!"
+},
+{
+  "id": 497,
+  "number": 497,
+  "title": "O my Saviour, hear me",
+  "author": "",
+  "verses": [
+    "O my Saviour, hear me,\nDraw me close to Thee;\nThou hast paid my ransom,\nThou hast died for me;\nNow by simple faith I claim\nPardon through Thy gracious name;\nThou, my Ark of safety,\nLet me fly to Thee.",
+    "O my Saviour, bless me,\nBless me while I pray;\nGrant Thy grace to help me,\nTake my fear away;\nI believe Thy promise, Lord;\nI will trust Thy holy Word;\nThou, my soul's Redeemer,\nBless me while I pray.",
+    "O my Saviour, love me,\nMake me all Thine own;\nLeave me not to wander\nIn this world alone:\nBless my way with light divine,\nLet Thy glory round me shine;\nThou, my Rock, my Refuge,\nMake me all Thine own.",
+    "O my Saviour, guard me,\nKeep me evermore!\nBless me, love me, guide me,\nTill my work is o'er;\nMay I then, with glad surprise,\nChant Thy praise beyond the skies;\nThere with Thee, my Saviour,\nDwell for evermore."
+  ],
+  "chorus": ""
+},
+{
+  "id": 498,
+  "number": 498,
+  "title": "Out of my bondage, sorrow, and night",
+  "author": "",
+  "verses": [
+    "Out of my bondage, sorrow, and night,\nJesus, I come! Jesus, I come!\nInto Thy freedom, gladness, and light,\nJesus, I come to Thee!\nOut of my sickness into Thy health,\nOut of my want and into Thy wealth,\nOut of my sin and into Thyself,\nJesus, I come to Thee!",
+    "Out of my shameful failure and loss,\nJesus, I come! Jesus, I come!\nInto the glorious gain of Thy cross,\nJesus, I come to Thee!\nOut of earth's sorrows into Thy balm,\nOut of life's storm and into Thy calm,\nOut of distress to jubilant psalm,\nJesus, I come to Thee!",
+    "Out of unrest and arrogant pride,\nJesus, I come! Jesus, I come!\nInto Thy blessed will to abide,\nJesus, I come to Thee!\nOut of myself to dwell in Thy love,\nOut of despair into raptures above,\nUpward for aye on wings like a dove,\nJesus, I come to Thee!",
+    "Out of the fear and dread of the tomb,\nJesus, I come! Jesus, I come!\nInto the joy and light of Thy home,\nJesus, I come to Thee!\nOut of the depths of ruin untold,\nInto the peace of Thy sheltering fold,\nEver Thy glorious face to behold,\nJesus, I come to Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 499,
+  "number": 499,
+  "title": "I was wandering, sad, and weary",
+  "author": "",
+  "verses": [
+    "I was wandering, sad, and weary,\nWhen the Saviour came unto me;\nFor the paths of sin were dreary,\nAnd the world had ceased to woo me:\nAnd I thought I heard Him say,\nAs He came along His way:\n\"Wandering souls, O do come near Me;\nMy sheep should never fear Me:\nI am the Shepherd true, I am the Shepherd true!\"",
+    "At first I would not hearken,\nBut put off till the morrow,\nTill life began to darken,\nAnd I grew sick with sorrow:\nThen I thought I heard Him say,\nAs He came along His way:\n\"Wandering souls, O do come near Me;\nMy sheep should never fear Me:\nI am the Shepherd true, I am the Shepherd true!\"",
+    "At last I stopped to listen—\nHis voice could ne'er deceive me—\nI saw His kind eye glisten,\nSo anxious to relieve me:\nThen I knew I heard Him say,\nAs He came along His way:\n\"Wandering souls, O do come near Me;\nMy sheep should never fear Me:\nI am the Shepherd true, I am the Shepherd true!\"",
+    "I thought His love would weaken\nAs more and more He knew me,\nBut it burneth like a beacon,\nAnd its light and heat go through me;\nAnd I ever hear Him say,\nAs He goes along His way:\n\"Wandering souls, O do come near Me;\nMy sheep should never fear Me:\nI am the Shepherd true, I am the Shepherd true!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 500,
+  "number": 500,
+  "title": "One is our Master, the blessed Redeemer",
+  "author": "",
+  "verses": [
+    "One is our Master, the blessed Redeemer,\nStrong is the bond that unites us in Him;\nOh may the love His own Spirit hath kindled\nBurn with a light that will never grow dim.",
+    "One is our Master; with gladness we'll serve Him,\n\"Doing the will\" of the Lord \"from the heart,\"\nKnowing His strength is made perfect in weakness—\nAll that is needful His grace will impart.",
+    "One is our Master, the highest and noblest,\nYet in His tenderness always \"the same\";\nBe it our honour to follow His banner,\nBlessing for ever be unto His name.",
+    "One is our Master; and happy those servants,\nWatching and ready whene'er He may come;\nChanged in His image, from \"glory to glory,\"\nJoyful reward in His kingdom and home."
+  ],
+  "chorus": "Brethren in Jesus, let us be faithful,\nFaithful to Him who is guiding our ways;\nTrue in allegiance and loving obedience,\nTill in His glory hosannas we raise."
+},
+{
+  "id": 501,
+  "number": 501,
+  "title": "Jesus, Thy name I love",
+  "author": "",
+  "verses": [
+    "Jesus, Thy name I love,\nAll other names above,\nJesus, my Lord!\nOh, Thou art all to me!\nNothing to earth I see,\nNothing I covet thee,\nJesus, my Lord!",
+    "Thou, blessed Son of God,\nHast bought me with Thy blood,\nJesus, my Lord!\nOh, how great is Thy love,\nAll other loves above,\nLove that I daily prove,\nJesus, my Lord!",
+    "When unto Thee I flee,\nThou my support wilt be,\nJesus, my Lord!\nDirect my wandering feet,\nMy every want complete,\nTill at Thy mercy-seat,\nJesus, my Lord!",
+    "Soon will my work be o'er;\nThen I shall sin no more,\nJesus, my Lord!\nThen on Thy glorious face,\nSaved by Thy wondrous grace,\nI'll gaze through endless days,\nJesus, my Lord!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 502,
+  "number": 502,
+  "title": "Sun of my soul, Thou Saviour dear",
+  "author": "",
+  "verses": [
+    "Sun of my soul, Thou Saviour dear,\nIt is not night if Thou be near;\nOh, may no earth-born cloud arise\nTo hide Thee from Thy servant's eyes!",
+    "When the soft dews of kindly sleep\nMy wearied eyelids gently steep,\nBe my last thought, how sweet to rest\nFor ever on my Saviour's breast!",
+    "Abide with me from morn till eve,\nFor without Thee I cannot live;\nAbide with me when night is nigh,\nFor without Thee I dare not die.",
+    "If some poor wandering child of Thine\nHave spurned to-day the voice divine,\nNow, Lord, the gracious work begin;\nLet him no more lie down in sin.",
+    "Come near and bless us when we wake,\nEre through the world our way we take;\nTill in the ocean of Thy love\nWe lose ourselves in heaven above."
+  ],
+  "chorus": ""
+},
+{
+  "id": 503,
+  "number": 503,
+  "title": "Blessed assurance, Jesus is mine",
+  "author": "",
+  "verses": [
+    "Blessed assurance, Jesus is mine!\nOh, what a foretaste of glory divine!\nHeir of salvation, purchase of God,\nBorn of His Spirit, washed in His blood.",
+    "Perfect submission, perfect delight,\nVisions of rapture now burst on my sight;\nAngels descending, bring from above\nEchoes of mercy, whispers of love.",
+    "Perfect submission, all is at rest,\nI in my Saviour am happy and blest;\nWatching and waiting, looking above,\nFilled with His goodness, lost in His love."
+  ],
+  "chorus": "This is my story, this is my song,\nPraising my Saviour all the day long;\nThis is my story, this is my song,\nPraising my Saviour all the day long."
+},
+{
+  "id": 504,
+  "number": 504,
+  "title": "My hope is built on nothing less",
+  "author": "",
+  "verses": [
+    "My hope is built on nothing less\nThan Jesus' blood and righteousness;\nI dare not trust the sweetest frame,\nBut wholly lean on Jesus' name.",
+    "When darkness veils His lovely face,\nI rest on His unchanging grace;\nIn every high and stormy gale,\nMy anchor holds within the veil.",
+    "His oath, His covenant, His blood,\nSupport me in the whelming flood;\nWhen all around my soul gives way,\nHe then is all my hope and stay.",
+    "When He shall come with trumpet sound,\nOh, may I then in Him be found;\nDressed in His righteousness alone,\nFaultless to stand before the throne."
+  ],
+  "chorus": "On Christ, the solid Rock, I stand;\nAll other ground is sinking sand,\nAll other ground is sinking sand."
+},
+{
+  "id": 505,
+  "number": 505,
+  "title": "I've found a Friend; oh, such a Friend!",
+  "author": "",
+  "verses": [
+    "I've found a Friend; oh, such a Friend!\nHe loved me ere I knew Him;\nHe drew me with the cords of love,\nAnd thus He bound me to Him.\nAnd round my heart still closely twine\nThose ties which naught can sever,\nFor I am His, and He is mine,\nFor ever and for ever.",
+    "I've found a Friend; oh, such a Friend!\nHe bled, He died to save me;\nAnd not alone the gift of life,\nBut His own self He gave me.\nNaught that I have my own I call,\nI hold it for the Giver;\nMy heart, my strength, my life, my all,\nAre His, and His for ever.",
+    "I've found a Friend; oh, such a Friend!\nAll power to Him is given,\nTo guard me on my onward course,\nAnd bring me safe to heaven.\nTh' eternal glories gleam afar,\nTo nerve my faint endeavour:\nSo now to watch, to work, to war,\nAnd then to rest for ever."
+  ],
+  "chorus": ""
+},
+{
+  "id": 506,
+  "number": 506,
+  "title": "How sweet the name of Jesus sounds",
+  "author": "",
+  "verses": [
+    "How sweet the name of Jesus sounds\nIn a believer's ear!\nIt soothes his sorrows, heals his wounds,\nAnd drives away his fear.",
+    "It makes the wounded spirit whole,\nAnd calms the troubled breast;\n'Tis manna to the hungry soul,\nAnd to the weary rest.",
+    "Dear Name! the rock on which I build,\nMy shield and hiding-place;\nMy never-failing treasury, filled\nWith boundless stores of grace.",
+    "Jesus, my Shepherd, Husband, Friend,\nMy Prophet, Priest, and King,\nMy Lord, my Life, my Way, my End,\nAccept the praise I bring.",
+    "Weak is the effort of my heart,\nAnd cold my warmest thought;\nBut when I see Thee as Thou art,\nI'll praise Thee as I ought."
+  ],
+  "chorus": ""
+},
+{
+  "id": 507,
+  "number": 507,
+  "title": "Safe in the arms of Jesus",
+  "author": "",
+  "verses": [
+    "Safe in the arms of Jesus,\nSafe on His gentle breast,\nThere by His love o'ershaded,\nSweetly my soul shall rest.\nHark! 'tis the voice of angels,\nBorne in a song to me,\nOver the fields of glory,\nOver the jasper sea.",
+    "Safe in the arms of Jesus,\nSafe from corroding care,\nSafe from the world's temptations,\nSin cannot harm me there.\nFree from the blight of sorrow,\nFree from my doubts and fears;\nOnly a few more trials,\nOnly a few more tears!",
+    "Jesus, my heart's dear Refuge,\nJesus has died for me;\nFirm on the Rock of Ages\nEver my trust shall be.\nHere let me wait with patience,\nWait till the night is o'er;\nWait till I see the morning\nBreak on the golden shore."
+  ],
+  "chorus": "Safe in the arms of Jesus,\nSafe on His gentle breast,\nThere by His love o'ershaded,\nSweetly my soul shall rest."
+},
+{
+  "id": 508,
+  "number": 508,
+  "title": "Fade, fade, each earthly joy",
+  "author": "",
+  "verses": [
+    "Fade, fade, each earthly joy;\nJesus is mine!\nBreak every tender tie;\nJesus is mine!\nDark is the wilderness,\nEarth has no resting-place,\nJesus alone can bless;\nJesus is mine!",
+    "Tempt not my soul away;\nJesus is mine!\nHere would I ever stay;\nJesus is mine!\nPerishing things of clay,\nBorn but for one brief day,\nPass from my heart away;\nJesus is mine!",
+    "Farewell, ye dreams of night;\nJesus is mine!\nLost in this dawning bright;\nJesus is mine!\nAll that my soul has tried\nLeft but a dismal void;\nJesus has satisfied;\nJesus is mine!",
+    "Farewell, mortality;\nJesus is mine!\nWelcome, eternity;\nJesus is mine!\nWelcome, O loved and blest,\nWelcome, sweet scenes of rest,\nWelcome, my Saviour's breast;\nJesus is mine!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 509,
+  "number": 509,
+  "title": "Thou hidden Source of calm repose",
+  "author": "",
+  "verses": [
+    "Thou hidden Source of calm repose,\nThou all-sufficient Love Divine,\nMy help and refuge from my foes,\nSecure I am, if Thou art mine:\nAnd lo! from sin, and grief, and shame,\nI hide me, Jesus, in Thy name.",
+    "Thy mighty name salvation is,\nAnd keeps my happy soul above;\nComfort it brings, and power, and peace,\nAnd joy, and everlasting love;\nTo me, with Thy dear name, are given\nPardon, and holiness, and heaven.",
+    "Jesus, my all in all Thou art;\nMy rest in toil, my ease in pain;\nThe healing of my broken heart;\nIn war my peace, in loss my gain;\nMy smile in tears, my darkest dight,\nMy hope in death, my endless light."
+  ],
+  "chorus": ""
+},
+{
+  "id": 510,
+  "number": 510,
+  "title": "O Saviour, precious Saviour",
+  "author": "",
+  "verses": [
+    "O Saviour, precious Saviour,\nWhom yet unseen we love,\nO Name of might and favour,\nAll other names above!\nWe worship Thee, we bless Thee,\nTo Thee alone we sing;\nWe praise Thee, and confess Thee\nOur holy Lord and King!",
+    "O Bringer of salvation,\nWho wondrously hast wrought,\nThyself the revelation\nOf love beyond our thought;\nWe worship Thee, we bless Thee,\nTo Thee alone we sing;\nWe praise Thee, and confess Thee\nOur gracious Lord and King!",
+    "In Thee all fulness dwelleth,\nAll grace and power divine;\nThe glory that excelleth,\nO Son of God, is Thine;\nWe worship Thee, we bless Thee,\nTo Thee alone we sing;\nWe praise Thee, and confess Thee\nOur glorious Lord and King!",
+    "Oh, grant the consummation\nOf this our song above,\nIn endless adoration,\nAnd everlasting love;\nThen shall we praise and bless Thee,\nWhere perfect praises ring,\nAnd evermore confess Thee\nOur Saviour, Lord, and King!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 511,
+  "number": 511,
+  "title": "More love to Thee, O Christ",
+  "author": "",
+  "verses": [
+    "More love to Thee, O Christ,\nMore love to Thee!\nHear Thou the prayer I make\nOn bended knee;\nThis is my earnest plea:\nMore love, O Christ, to Thee,\nMore love to Thee, more love to Thee!",
+    "Once earthly joy I craved,\nSought peace and rest;\nNow Thee alone I seek,\nGive what is best;\nThis all my prayer shall be:\nMore love, O Christ, to Thee,\nMore love to Thee, more love to Thee!",
+    "Let sorrow do its work,\nSend grief and pain;\nSweet are Thy messengers,\nSweet their refrain,\nWhen they can sing with me:\nMore love, O Christ, to Thee,\nMore love to Thee, more love to Thee!",
+    "Then shall my latest breath\nWhisper Thy praise;\nThis be the parting cry\nMy heart shall raise;\nThis still its plea shall be:\nMore love, O Christ, to Thee,\nMore love to Thee, more love to Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 512,
+  "number": 512,
+  "title": "I need Thee every hour",
+  "author": "",
+  "verses": [
+    "I need Thee every hour,\nMost gracious Lord;\nNo tender voice like Thine\nCan peace afford.",
+    "I need Thee every hour,\nStay Thou near by;\nTemptations lose their power\nWhen Thou art nigh.",
+    "I need Thee every hour,\nIn joy or pain;\nCome quickly and abide,\nOr life is vain.",
+    "I need Thee every hour,\nTeach me Thy will;\nAnd Thy rich promises\nIn me fulfil.",
+    "I need Thee every hour,\nMost Holy One;\nOh, make me Thine indeed,\nThou blessed Son!"
+  ],
+  "chorus": "I need Thee, oh, I need Thee;\nEvery hour I need Thee!\nOh, bless me now, my Saviour,\nI come to Thee!"
+},
+{
+  "id": 513,
+  "number": 513,
+  "title": "Nearer, my God, to Thee",
+  "author": "",
+  "verses": [
+    "Nearer, my God, to Thee,\nNearer to Thee!\nE'en though it be a cross\nThat raiseth me;\nStill all my song shall be,\nNearer, my God, to Thee,\nNearer to Thee!",
+    "Though like the wanderer,\nThe sun gone down,\nDarkness be over me,\nMy rest a stone;\nYet in my dreams I'd be\nNearer, my God, to Thee,\nNearer to Thee!",
+    "There let the way appear\nSteps unto heaven;\nAll that Thou send'st to me\nIn mercy given;\nAngels to beckon me\nNearer, my God, to Thee,\nNearer to Thee!",
+    "Then, with my waking thoughts\nBright with Thy praise,\nOut of my stony griefs\nBethel I'll raise;\nSo by my woes to be\nNearer, my God, to Thee,\nNearer to Thee!",
+    "Or if on joyful wing\nCleaving the sky,\nSun, moon, and stars forgot,\nUpward I fly,\nStill all my song shall be,\nNearer, my God, to Thee,\nNearer to Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 514,
+  "number": 514,
+  "title": "Saviour, more than life to me",
+  "author": "",
+  "verses": [
+    "Saviour, more than life to me,\nI am clinging close to Thee;\nLet Thy precious blood applied\nKeep me ever near Thy side.",
+    "Through this changing world below,\nLead me wheresoe'er I go;\nTrusting Thee, I cannot stray,\nKeep me in the narrow way.",
+    "Let me love Thee more and more,\nTill this fleeting life is o'er;\nTill my soul is safe with Thee,\nIn the home prepared for me."
+  ],
+  "chorus": "Every day, every hour,\nLet me feel Thy cleansing power;\nMay Thy tender love to me\nBind me closer, Lord, to Thee!"
+},
+{
+  "id": 515,
+  "number": 515,
+  "title": "Jesus, keep me near the cross",
+  "author": "",
+  "verses": [
+    "Jesus, keep me near the cross;\nThere a precious fountain,\nFree to all, a healing stream,\nFlows from Calvary's mountain.",
+    "Near the cross, a trembling soul,\nLove and mercy found me;\nThere the Bright and Morning Star\nShed its beams around me.",
+    "Near the cross! O Lamb of God,\nBring its scenes before me;\nHelp me walk from day to day\nWith its shadow o'er me.",
+    "Near the cross I'll watch and wait,\nHoping, trusting ever,\nTill I reach the golden strand\nJust beyond the river."
+  ],
+  "chorus": "In the cross, in the cross,\nBe my glory ever;\nTill my raptured soul shall find\nRest beyond the river."
+},
+{
+  "id": 516,
+  "number": 516,
+  "title": "Rock of Ages, cleft for me",
+  "author": "",
+  "verses": [
+    "Rock of Ages, cleft for me,\nLet me hide myself in Thee;\nLet the water and the blood,\nFrom Thy riven side which flowed,\nBe of sin the double cure,\nCleanse me from its guilt and pure.",
+    "Not the labours of my hands\nCan fulfil Thy law's demands;\nCould my zeal no respite know,\nCould my tears for ever flow,\nAll for sin could not atone;\nThou must save, and Thou alone.",
+    "Nothing in my hand I bring,\nSimply to Thy cross I cling;\nNaked, come to Thee for dress;\nHelpless, look to Thee for grace;\nVile, to the fountain fly;\nWash me, Saviour, or I die.",
+    "While I draw this fleeting breath,\nWhen my eyestrings break in death,\nWhen I soar to worlds unknown,\nSee Thee on Thy judgment-throne,\nRock of Ages, cleft for me,\nLet me hide myself in Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 517,
+  "number": 517,
+  "title": "I am Thine, O Lord, I have heard Thy voice",
+  "author": "",
+  "verses": [
+    "I am Thine, O Lord, I have heard Thy voice,\nAnd it told Thy love to me;\nBut I long to rise in the arms of faith,\nAnd be closer drawn to Thee.",
+    "Consecrate me now to Thy service, Lord,\nBy the power of grace divine;\nLet my soul look up with a steadfast hope,\nAnd my will be lost in Thine.",
+    "Oh, the pure delight of a single hour\nThat before Thy throne I spend,\nWhen I kneel in prayer, and with Thee, my God,\nI commune as friend with friend!",
+    "There are depths of love that I cannot know\nTill I cross the narrow sea;\nThere are heights of joy that I may not reach\nTill I rest in peace with Thee."
+  ],
+  "chorus": "Draw me nearer, nearer, blessed Lord,\nTo the cross where Thou hast died;\nDraw me nearer, nearer, nearer, blessed Lord,\nTo Thy precious, bleeding side."
+},
+{
+  "id": 518,
+  "number": 518,
+  "title": "Abide with me: fast falls the eventide",
+  "author": "",
+  "verses": [
+    "Abide with me: fast falls the eventide;\nThe darkness deepens; Lord, with me abide:\nWhen other helpers fail, and comforts flee,\nHelp of the helpless, oh, abide with me!",
+    "Swift to its close ebbs out life's little day;\nEarth's joys grow dim, its glories pass away;\nChange and decay in all around I see;\nO Thou who changest not, abide with me!",
+    "I need Thy presence every passing hour;\nWhat but Thy grace can foil the tempter's power?\nWho like Thyself my guide and stay can be?\nThrough cloud and sunshine, oh, abide with me!",
+    "I fear no foe, with Thee at hand to bless;\nIlls have no weight, and tears no bitterness:\nWhere is death's sting? where, grave, thy victory?\nI triumph still, if Thou abide with me.",
+    "Hold Thou Thy cross before my closing eyes;\nShine through the gloom, and point me to the skies;\nHeaven's morning breaks, and earth's vain shadows flee;\nIn life, in death, O Lord, abide with me!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 519,
+  "number": 519,
+  "title": "My faith looks up to Thee",
+  "author": "",
+  "verses": [
+    "My faith looks up to Thee,\nThou Lamb of Calvary,\nSaviour divine!\nNow hear me while I pray,\nTake all my guilt away,\nOh, let me from this day\nBe wholly Thine!",
+    "May Thy rich grace impart\nStrength to my fainting heart,\nMy zeal inspire;\nAs Thou hast died for me,\nOh, may my love to Thee\nPure, warm, and changeless be,\nA living fire!",
+    "While life's dark maze I tread,\nAnd griefs around me spread,\nBe Thou my Guide;\nBid darkness turn to day,\nWipe sorrow's tears away,\nNor let me ever stray\nFrom Thee aside.",
+    "When ends life's transient dream,\nWhen death's cold, sullen stream\nShall o'er me roll,\nBlest Saviour, then, in love,\nFear and distrust remove;\nOh, bear me safe above,\nA ransomed soul!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 520,
+  "number": 520,
+  "title": "Nearer, still nearer, close to Thy heart",
+  "author": "",
+  "verses": [
+    "Nearer, still nearer, close to Thy heart,\nDraw me, my Saviour, so precious Thou art;\nFold me, oh, fold me close to Thy breast,\nShelter me safe in that Haven of rest,\nShelter me safe in that Haven of rest.",
+    "Nearer, still nearer, nothing I bring,\nOnly as helpless to Jesus I cling;\nBeing my ransom, Thy blood is my plea,\nCleanse me and keep me for ever with Thee,\nCleanse me and keep me for ever with Thee.",
+    "Nearer, still nearer, Lord, to be Thine;\nAll the vain pleasures of earth I resign;\nAll its ambition, its objects of pride,\nOnly I want Thee, the Crucified,\nOnly I want Thee, the Crucified.",
+    "Nearer, still nearer, while life shall last,\nTill all its sorrows and conflicts are past;\nThen through the ages of glory to be,\nNearer, my Saviour, still nearer to Thee,\nNearer, my Saviour, still nearer to Thee."
+  ],
+  "chorus": ""
+},
   {
     "id": 542,
     "number": 542,
