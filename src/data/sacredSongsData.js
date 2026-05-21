@@ -4635,8 +4635,8 @@ const SACRED_SONGS = [
     "chorus": "Beautiful words! wonderful words! Wonderful words of Life!"
   },
   {
-    "id": "358",
-    "number": "358",
+    "id": 358,
+    "number": 358,
     "title": "Jesus knocks",
     "author": "",
     "verses": [
@@ -4648,8 +4648,8 @@ const SACRED_SONGS = [
     "chorus": "Open wide the door! Open wide the door! He can save, and only He: Open wide the door!"
   },
   {
-    "id": "359",
-    "number": "359",
+    "id": 359,
+    "number": 359,
     "title": "Oh, what a Saviour",
     "author": "",
     "verses": [
@@ -4661,8 +4661,8 @@ const SACRED_SONGS = [
     "chorus": "Verily, verily, I say unto you; Verily, verily, message ever new! He that believeth on the Son—'tis true! Hath everlasting life!"
   },
   {
-    "id": "360",
-    "number": "360",
+    "id": 360,
+    "number": 360,
     "title": "O wanderer from thy Father's house",
     "author": "",
     "verses": [
