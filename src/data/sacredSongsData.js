@@ -3117,16 +3117,527 @@ const SACRED_SONGS = [
   ],
   "chorus": "His praises I will sing !\nHe is my Lord and King !\nAnd now with all my ransomed powers\nHis praises I will sing !"
 },
-
+  {
+    "id": 241,
+    "number": 241,
+    "title": "My Saviour's Praises I Will Sing",
+    "author": "",
+    "verses": [
+      "MY Saviour's praises I will sing,\nAnd all His love express;\nWhose mercies each returning day,\nProclaim His faithfulness.",
+      "Redeemed by His almighty power,\nMy Saviour and my King;\nMy confidence in Him I place,\nTo Him my soul would cling.",
+      "On Thee alone, my Saviour, God,\nMy steadfast hopes depend;\nAnd to Thy holy will my soul\nSubmissively would bend.",
+      "Oh, grant Thy Holy Spirit's grace,\nAnd aid my feeble powers,\nThat gladly I may follow Thee\nThrough all my future hours."
+    ],
+    "chorus": "Every day will I bless Thee!\nEvery day will I bless Thee!\nAnd I will praise, will praise\nThy name for ever and ever!"
+  },
   {
     "id": 242,
     "number": 242,
-    "title": "Love Divine All Loves Excelling",
-    "author": "Charles Wesley",
+    "title": "Love Divine, All Loves Excelling",
+    "author": "",
     "verses": [
-      "Love divine, all loves excelling,\nJoy of heaven, to earth come down;\nFix in us Thy humble dwelling,\nAll Thy faithful mercies crown!\nJesus, Thou art all compassion,\nPure, unbounded love Thou art;\nVisit us with Thy salvation,\nEnter every trembling heart.",
-      "Come, almighty to deliver,\nLet us all Thy grace receive;\nSuddenly return, and never,\nNever more Thy temples leave.\nThee we would be always blessing,\nServe Thee as Thy hosts above,\nPray, and praise Thee without ceasing,\nGlory in Thy perfect love.",
-      "Finish then Thy new creation,\nPure and spotless let us be;\nLet us see Thy great salvation\nPerfectly restored in Thee:\nChanged from glory into glory,\nTill in heaven we take our place,\nTill we cast our crowns before Thee,\nLost in wonder, love, and praise!"
+      "LOVE divine, all loves excelling,\nJoy of heaven, to earth come down;\nFix in us Thy humble dwelling,\nAll Thy faithful mercies crown.\nJesus, Thou art all compassion,\nPure unbounded love Thou art;\nVisit us with Thy salvation,\nEnter every longing heart!",
+      "Breathe, oh, breathe Thy loving Spirit\nInto every troubled breast!\nLet us all in Thee inherit,\nLet us find Thy promised rest.\nCome, Almighty to deliver!\nLet us all Thy grace receive;\nSuddenly return, and never,\nNever more Thy temples leave.",
+      "Finish, then, Thy new creation,\nPure and spotless may we be;\nLet us see our whole salvation\nPerfectly secured by Thee:\nChanged from glory into glory,\nTill in heaven we take our place;\nTill we cast our crowns before Thee,\nLost in wonder, love, and praise!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 243,
+    "number": 243,
+    "title": "Oh for a Thousand Tongues to Sing",
+    "author": "",
+    "verses": [
+      "OH for a thousand tongues to sing\nMy great Redeemer's praise;\nThe glories of my God and King,\nThe triumphs of His grace.",
+      "My gracious Master and my God,\nAssist me to proclaim—\nTo spread thro' all the earth abroad—\nThe honours of Thy name.",
+      "Jesus, the Name that charms our fears,\nThat bids our sorrows cease;\n'Tis music in the sinner's ears,\n'Tis life, and health, and peace.",
+      "He breaks the power of cancelled sin,\nHe sets the prisoner free;\nHis blood can make the foulest clean,\nHis blood avails for me."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 244,
+    "number": 244,
+    "title": "I to the Hills Will Lift Mine Eyes",
+    "author": "",
+    "verses": [
+      "I TO the hills will lift mine eyes,\nFrom whence doth come mine aid;\nMy safety cometh from the Lord,\nWho heaven and earth hath made.",
+      "Thy foot He'll not let slide, nor will\nHe slumber that thee keeps:\nBehold, He that keeps Israel,\nHe slumbers not nor sleeps.",
+      "The Lord thee keeps, the Lord thy shade\nOn thy right hand doth stay:\nThe moon by night thee shall not smite,\nNor yet the sun by day.",
+      "The Lord shall keep thy soul; He shall\nPreserve thee from all ill:\nHenceforth thy going out and in\nGod keep for ever will."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 245,
+    "number": 245,
+    "title": "Come, Let Us Join Our Cheerful Songs",
+    "author": "",
+    "verses": [
+      "COME, let us join our cheerful songs\nWith angels round the throne;\nTen thousand thousand are their tongues,\nBut all their joys are one.",
+      "\"Worthy the Lamb that died,\" they cry,\n\"To be exalted thus\";\n\"Worthy the Lamb,\" our lips reply,\n\"For He was slain for us.\"",
+      "Jesus is worthy to receive\nHonour and power divine;\nAnd blessings more than we can give,\nBe, Lord, for ever Thine.",
+      "Let all that dwell above the sky,\nAnd air, and earth, and seas,\nConspire to lift Thy glories high,\nAnd speak Thine endless praise.",
+      "The whole creation join in one,\nTo bless the sacred name\nOf Him that sits upon the throne,\nAnd to adore the Lamb."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 246,
+    "number": 246,
+    "title": "My God, I Thank Thee",
+    "author": "",
+    "verses": [
+      "MY God, I thank Thee, who hast made\nThe earth so bright,\nSo full of splendour and of joy,\nBeauty and light;\nSo many glorious things are here,\nNoble and right.",
+      "I thank Thee, too, that Thou hast made\nJoy to abound;\nSo many gentle thoughts and deeds\nCircling us round;\nThat in the darkest spot of earth\nSome love is found.",
+      "I thank Thee more that all my joy\nIs touched with pain;\nThat shadows fall on brightest hours,\nThat thorns remain;\nSo that earth's bliss may be my guide,\nAnd not my chain.",
+      "For Thou who knowest, Lord, how soon\nOur weak heart clings,\nHast given us joys, tender and true,\nYet all with wings,\nSo that we see, gleaming on high,\nDiviner things.",
+      "I thank Thee, Lord, that Thou hast kept\nThe best in store;\nI have enough, yet not too much,\nTo long for more;\nA yearning for a deeper peace\nNot known before.",
+      "I thank Thee, Lord, that here our souls,\nThough amply blest,\nCan never find, although they seek,\nA perfect rest—\nNor ever shall, until they lean\nOn Jesus' breast."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 247,
+    "number": 247,
+    "title": "Oh, Serve the Lord with Gladness",
+    "author": "",
+    "verses": [
+      "\"OH, serve the Lord with gladness,\"\nAnd come before His throne;\nHe is the great Creator,\nAnd He is God alone;\nThe heavens declare His glory,\nThe earth His power displays;\nWhile millions without number\nTo Him glad anthems raise.",
+      "\"Oh, serve the Lord with gladness,\"\nAnd glad hosannas bring\nTo Him, the Sovereign Ruler,\nThe universal King;\nFor ever through the ages\nHis truth unchanging stands;\nLet all the nations fear Him,\nAnd reverence His commands.",
+      "\"Oh, serve the Lord with gladness,\"\nHis love to all proclaim;\nExalt Him in the highest,\nAnd spread abroad His fame;\nAll majesty, dominion,\nAll power and glory, be\nTo Him who reigns in triumph,\nThrough all eternity."
+    ],
+    "chorus": "“Oh, serve the Lord with gladness,”\nAnd come before His throne!\nHe is our great Redeemer,\nAnd He is God alone."
+  },
+  {
+    "id": 248,
+    "number": 248,
+    "title": "Songs of Praise the Angels Sang",
+    "author": "",
+    "verses": [
+      "SONGS of praise the angels sang,\nHeaven with hallelujahs rang,\nWhen Jehovah's work begun,\nWhen He spake, and it was done.",
+      "Songs of praise awoke the morn,\nWhen the Prince of Peace was born;\nSongs of praise arose, when He\nCaptive led captivity.",
+      "Heaven and earth must pass away,\nSongs of praise shall crown that day;\nGod will make new heavens and earth,\nSongs of praise shall hail their birth.",
+      "And will man alone be dumb,\nTill that glorious Kingdom come?\nNo:—the Church delights to raise\nPsalms, and hymns, and songs of praise.",
+      "Saints below, with heart and voice,\nStill in songs of praise rejoice;\nLearning here, by faith and love,\nSongs of praise to sing above.",
+      "Borne upon their latest breath,\nSongs of praise shall conquer death;\nThen, amidst eternal joy,\nSongs of praise their powers employ."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 249,
+    "number": 249,
+    "title": "Come, Sound His Praise Abroad",
+    "author": "",
+    "verses": [
+      "COME, sound His praise abroad,\nAnd hymns of glory sing!\nJehovah is the sovereign God,\nThe universal King!",
+      "He formed the deeps unknown;\nHe gave the seas their bound:\nThe watery worlds are all His own,\nAnd all the solid ground.",
+      "Come, worship at His throne,\nCome, bow before the Lord:\nWe are His work, and not our own,\nHe formed us by His word.",
+      "To-day attend His voice,\nNor dare provoke His rod;\nCome, like the people of His choice,\nAnd own your gracious God."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 250,
+    "number": 250,
+    "title": "My Life Flows On in Endless Song",
+    "author": "",
+    "verses": [
+      "MY life flows on in endless song;\nAbove earth's lamentation\nI hear the sweet though far-off hymn\nThat hails a new creation:\nThrough all the tumult and the strife\nI hear the music ringing;\nIt finds an echo in my soul—\nHow can I keep from singing?",
+      "What though my joys and comforts die!\nThe Lord my Saviour liveth;\nWhat though the darkness gather round!\nSongs in the night He giveth:\nNo storm can shake my inmost calm\nWhile to that refuge clinging;\nSince Christ is Lord of heaven and earth,\nHow can I keep from singing?",
+      "I lift mine eyes; the cloud grows thin;\nI see the blue above it;\nAnd day by day this pathway smooths\nSince first I learned to love it:\nThe peace of Christ makes fresh my heart,\nA fountain ever springing;\nAll things are mine since I am His—\nHow can I keep from singing?"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 251,
+    "number": 251,
+    "title": "Awake, My Soul, in Joyful Lays",
+    "author": "",
+    "verses": [
+      "AWAKE, my soul, in joyful lays,\nAnd sing thy great Redeemer's praise;\nHe justly claims a song from me:\nHis loving-kindness, oh, how free!",
+      "He saw me ruined by the Fall,\nYet loved me, notwithstanding all;\nHe saved me from my lost estate:\nHis loving-kindness, oh, how great!",
+      "Though numerous hosts of mighty foes,\nThough earth and hell my way oppose,\nHe safely leads my soul along:\nHis loving-kindness, oh, how strong!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 252,
+    "number": 252,
+    "title": "Before Jehovah's Awful Throne",
+    "author": "",
+    "verses": [
+      "BEFORE Jehovah's awful throne,\nYe nations, bow with sacred joy:\nKnow that the Lord is God alone,\nHe can create, and He destroy.",
+      "His sovereign power, without our aid,\nMade us of clay, and formed us men;\nAnd when like wandering sheep we strayed,\nHe brought us to His fold again.",
+      "We'll crowd Thy gates with thankful songs,\nHigh as the heavens our voices raise;\nAnd earth, with her ten thousand tongues,\nShall fill Thy courts with sounding praise.",
+      "Wide as the world is Thy command,\nVast as eternity Thy love;\nFirm as a rock Thy truth must stand,\nWhen rolling years shall cease to move."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 253,
+    "number": 253,
+    "title": "I Love Thy Kingdom, Lord",
+    "author": "",
+    "verses": [
+      "I LOVE Thy kingdom, Lord,\nThe house of Thine abode,\nThe Church our blest Redeemer saved\nWith His own precious blood.",
+      "I love Thy Church, O God!\nHer walls before Thee stand,\nDear as the apple of Thine eye,\nAnd graven on Thy hand.",
+      "For her my tears shall fall,\nFor her my prayers ascend;\nTo her my cares and toils be given,\nTill toils and cares shall end.",
+      "Beyond my highest joy\nI prize her heavenly ways,\nHer sweet communion, solemn vows,\nHer hymns of love and praise.",
+      "Sure as Thy truth shall last,\nTo Zion shall be given\nThe brightest glories earth can yield,\nAnd brighter bliss of heaven."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 254,
+    "number": 254,
+    "title": "Awake, and Sing the Song",
+    "author": "",
+    "verses": [
+      "AWAKE, and sing the song\nOf Moses and the Lamb;\nWake every heart and every tongue\nTo praise the Saviour's name.",
+      "Sing of His dying love;\nSing of His risen power;\nSing how He intercedes above\nFor those whose sins He bore.",
+      "Ye pilgrims on the road\nTo Zion's city, sing!\nRejoice ye in the Lamb of God—\nIn Christ, th' eternal King!",
+      "There shall each raptured tongue\nHis endless praise proclaim;\nAnd sweeter voices tune the song\nOf Moses and the Lamb."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 255,
+    "number": 255,
+    "title": "In Thy Name, O Lord, Assembling",
+    "author": "",
+    "verses": [
+      "IN Thy name, O Lord, assembling,\nWe Thy people now draw near;\nTeach us to rejoice with trembling,\nSpeak, and let Thy servants hear,\nHear with meekness,\nHear Thy Word with godly fear.",
+      "While our days on earth are lengthened,\nMay we give them, Lord, to Thee;\nCheered by hope, and daily strengthened,\nMay we run, nor weary be;\nTill Thy glory,\nWithout clouds in heaven we see.",
+      "Then in worship purer, sweeter,\nThee Thy people shall adore,\nTasting of enjoyment greater\nFar than thought conceived before;\nFull enjoyment,\nFull, unmixed, and evermore."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 256,
+    "number": 256,
+    "title": "Glory Be to the Father",
+    "author": "",
+    "verses": [
+      "GLORY be to the Father, and to the Son, and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be, world without end. Amen."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 257,
+    "number": 257,
+    "title": "Oh, Tell Me the Story That Never Grows Old",
+    "author": "",
+    "verses": [
+      "OH, tell me the story that never grows old,\nThe story of One whom the prophets foretold;\nThe Horn of salvation, the Sceptre, the Star,\nThe Light in the darkness they saw from afar.",
+      "Oh, tell me the story that never grows old,\nThe story the angel at Bethlehem told;\nThe Babe in the manger, of lowliest birth,\nThe highest archangel excelling in worth.",
+      "Oh, tell me the story that never grows old,\nThe story the Gospels repeat manifold;\nThe love and compassion in Jesus we trace,\nThe power and patience, the glory and grace.",
+      "Oh, tell me the story that never grows old,\nThe story the ages to come will unfold;\nThe kindness of God in redeeming the lost;\nThe death of our Saviour in paying the cost."
+    ],
+    "chorus": "It never grows old, it never grows old;\nThe story of Jesus will never grow old."
+  },
+  {
+    "id": 258,
+    "number": 258,
+    "title": "Father of Mercies! in Thy Word",
+    "author": "",
+    "verses": [
+      "FATHER of mercies! in Thy Word\nWhat endless glory shines!\nFor ever be Thy name adored\nFor these celestial lines.",
+      "Here may the wretched sons of want\nExhaustless riches find;\nRiches above what earth can grant,\nAnd lasting as the mind.",
+      "Here the Redeemer's welcome voice\nSpreads heavenly peace around;\nAnd life and everlasting joys\nAttend the blissful sound.",
+      "Oh, may these heavenly pages be\nMy ever dear delight!\nAnd still new beauties may I see,\nAnd still increasing light.",
+      "Divine Instructor, gracious Lord!\nBe Thou for ever near;\nTeach me to love Thy sacred Word,\nAnd view my Saviour there."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 259,
+    "number": 259,
+    "title": "Great God, with Wonder and with Praise",
+    "author": "",
+    "verses": [
+      "GREAT God, with wonder and with praise\nOn all Thy works I look!\nBut still Thy wisdom, power, and grace,\nShine brightest in Thy book.",
+      "The stars that in their courses roll\nHave much instruction given;\nBut Thy good Word informs my soul\nHow I may rise to heaven.",
+      "Here are my choicest treasures hid,\nHere my best comfort lies;\nHere my desires are satisfied,\nAnd hence my hopes arise.",
+      "Then may I love my Bible more,\nAnd take a fresh delight\nBy day to read these wonders o'er\nAnd meditate by night."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 260,
+    "number": 260,
+    "title": "Lord, I Have Made Thy Word My Choice",
+    "author": "",
+    "verses": [
+      "LORD, I have made Thy Word my choice,\nMy lasting heritage;\nThere shall my noblest powers rejoice,\nMy warmest thoughts engage.",
+      "I'll read the histories of Thy love,\nAnd keep Thy laws in sight;\nWhile through the promises I rove\nWith ever fresh delight.",
+      "'Tis a broad land of wealth unknown,\nWhere springs of life arise,\nSeeds of immortal bliss are sown,\nAnd hidden glory lies.",
+      "The best relief that mourners have,\nIt makes our sorrows blest;\nOur fairest hope beyond the grave,\nAnd our eternal rest."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 261,
+    "number": 261,
+    "title": "A glory gilds the sacred page",
+    "author": "",
+    "verses": [
+      "A GLORY gilds the sacred page,\nMajestic, like the sun:\nIt gives a light to every age;\nIt gives, but borrows none.",
+      "The hand that gave it still supplies\nThe gracious light and heat:\nIts truths upon the nations rise;\nThey rise, but never set.",
+      "Let everlasting thanks be Thine\nFor such a bright display,\nAs makes a world of darkness shine\nWith beams of heavenly day.",
+      "My soul rejoices to pursue\nThe steps of Him I love,\nTill glory breaks upon my view\nIn brighter worlds above!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 262,
+    "number": 262,
+    "title": "An open Bible for the world",
+    "author": "",
+    "verses": [
+      "AN open Bible for the world—\nMay this our glorious motto be!\nOn every breeze its flag unfurled\nShall scatter blessings rich and free.",
+      "Where'er it goes its golden light,\nStreaming as from an unveiled sun,\nShall dissipate the clouds of night,\nUndo the work that sin has done.",
+      "It shows to men the Father's face,\nAll-radiant with forgiving love;\nAnd to the lost of Adam's race\nProclaims sweet mercy from above.",
+      "It offers rest to weary hearts;\nIt comforts those who sit in tears;\nTo all who faint, it strength imparts,\nAnd gilds with hope th' eternal years."
+    ],
+    "chorus": "Blest Word of God! send forth thy light\nO'er every land and every sea,\nTill all who wander in the night\nAre led to God and heaven by thee."
+  },
+  {
+    "id": 263,
+    "number": 263,
+    "title": "Cling to the Bible",
+    "author": "",
+    "verses": [
+      "CLING to the Bible, though all else be taken;\nLose not its precepts so precious and pure;\nSouls that are sleeping its tidings awaken:\nLife from the dead in its promises sure.",
+      "Cling to the Bible! this jewel and treasure\nBrings life eternal, and saves fallen man;\nSurely its value no mortal can measure:\nSeek for its blessing, O soul, while you can!",
+      "Lamp for the feet that in by-ways have wandered,\nGuide for the youth that would otherwise fall;\nHope for the sinner whose life has been squandered,\nStaff for the aged, and best book of all."
+    ],
+    "chorus": "Cling to the Bible! Cling to the Bible!\nCling to the Bible—Our Lamp and our Guide!"
+  },
+  {
+    "id": 264,
+    "number": 264,
+    "title": "Oh, wonderful, wonderful Word of the Lord",
+    "author": "",
+    "verses": [
+      "OH, wonderful, wonderful Word of the Lord!\nTrue wisdom its pages unfold;\nAnd though we may read them a thousand times o'er,\nThey never, no, never grow old.\nEach line hath a treasure, each promise a pearl,\nThat all if they will may secure;\nAnd we know that when time and the world pass away,\nGod's Word shall for ever endure.",
+      "Oh, wonderful, wonderful Word of the Lord!\nThe lamp that our Father above\nSo kindly has lighted to teach us the way\nThat leads to the arms of His love!\nIts warnings, its counsels, are faithful and just;\nIts judgments are perfect and pure;\nAnd we know that when time and the world pass away,\nGod's Word shall for ever endure.",
+      "Oh, wonderful, wonderful Word of the Lord!\nOur only salvation is there;\nIt carries conviction down deep in the heart,\nAnd shows us ourselves as we are;\nIt tells of a Saviour, and points to the cross,\nWhere pardon we now may secure;\nFor we know that when time and the world pass away,\nGod's Word shall for ever endure.",
+      "Oh, wonderful, wonderful Word of the Lord!\nThe hope of our friends in the past;\nIts truth where so firmly they anchored their trust,\nThrough ages eternal shall last.\nOh, wonderful, wonderful Word of the Lord!\nUnchanging, abiding, and sure;\nFor we know that when time and the world pass away,\nGod's Word shall for ever endure."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 265,
+    "number": 265,
+    "title": "Now let my soul, eternal King",
+    "author": "",
+    "verses": [
+      "NOW let my soul, eternal King,\nTo Thee its grateful tribute bring;\nMy knee with humble homage bow,\nMy tongue perform its solemn vow.",
+      "All nature sings Thy boundless love,\nIn worlds below and worlds above;\nBut in Thy blessed Word I trace\nDiviner wonders of Thy grace.",
+      "Here Jesus bids my sorrows cease,\nAnd gives my labouring conscience peace;\nHere lifts my grateful passions high,\nAnd points to mansions in the sky.",
+      "For love like this, oh, let my song\nThrough endless years Thy praise prolong!\nLet distant climes Thy name adore,\nTill time and nature are no more."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 266,
+    "number": 266,
+    "title": "Thanks for Thy Word, O blessed Redeemer",
+    "author": "",
+    "verses": [
+      "THANKS for Thy Word, O blessed Redeemer!\nOpen our eyes its beauty to see;\nGrant us Thy grace to study it wisely,\nClose every heart to all but Thee.",
+      "Thanks for Thy Word of precept and promise,\nLamp to our feet and light to our way,\nPoints us afar where pleasures immortal\nBloom in Thine own bright realm of day.",
+      "Blessed are they who keep its commandments,\nThey shall abide for ever with Thee;\nClose by the clear and beautiful river,\nSharing the fruits of life's fair tree."
+    ],
+    "chorus": "Thanks for the Bible, offering so freely\nPardon and peace to all who believe;\nHelp us, O Lord, its counsel to follow,\nMeekly by faith its truth receive."
+  },
+  {
+    "id": 267,
+    "number": 267,
+    "title": "Thy Word is a lamp to my feet, O Lord",
+    "author": "",
+    "verses": [
+      "Thy Word is a lamp to my feet, O Lord,\nThy Word is a light to my way;\nIt shines in my soul like a star by night,\nAnd comforts and cheers me by day.",
+      "Thy Word is a lamp to my feet, O Lord,\nAnd, trusting in Thee as my all,\nWhatever of evil may cross my path,\nI never, no, never can fall.",
+      "Thy Word is a lamp to my feet, O Lord;\nAnd oh, when Thy glory I see,\nFor all the rich blessings its truth has brought,\nThe praise will I give unto Thee."
+    ],
+    "chorus": "Wonderful, wonderful Word,\nMy treasure, my hope, and my stay;\nEach promise recorded delights my soul,\nAnd brightens each step of my way."
+  },
+  {
+    "id": 268,
+    "number": 268,
+    "title": "The heavens declare Thy glory, Lord",
+    "author": "",
+    "verses": [
+      "THE heavens declare Thy glory, Lord!\nIn every star Thy wisdom shines;\nBut when our eyes behold Thy Word,\nWe read Thy name in fairer lines.",
+      "The radiant sun, the changing light,\nAnd nights and days Thy power confess;\nBut the blest volume Thou hast writ\nReveals Thy justice and Thy grace.",
+      "Sun, moon, and stars convey Thy praise\nRound the whole earth, and never stand;\nSo, when Thy truth began its race,\nIt touched and glanced on every land.",
+      "Nor shall Thy spreading Gospel rest,\nTill through the world Thy truth has run;\nTill Christ has all the nations blest\nThat see the light or feel the sun."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 269,
+    "number": 269,
+    "title": "There is a stream, whose gentle flow",
+    "author": "",
+    "verses": [
+      "THERE is a stream, whose gentle flow\nSupplies the city of our God;\nLife, love, and joy, still gliding through,\nAnd watering our divine abode.",
+      "That sacred stream—Thy holy Word—\nSupports our faith, our fear controls;\nSweet peace Thy promises afford,\nAnd give new strength to fainting souls.",
+      "Loud may the troubled ocean roar:\nIn sacred peace our souls abide;\nWhile every nation, every shore,\nTrembles, and dreads the swelling tide."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 270,
+    "number": 270,
+    "title": "O day of rest and gladness",
+    "author": "",
+    "verses": [
+      "O DAY of rest and gladness,\nO day of joy and light;\nO balm of care and sadness,\nMost beautiful, most bright!\nOn thee the high and lowly\nBefore th' eternal throne\nSing \"Holy, Holy, Holy,\"\nTo God the Three in One!",
+      "On Thee at the creation\nThe light first had its birth;\nOn thee for our salvation\nChrist rose from depths of earth:\nOn thee our Lord victorious\nThe Spirit sent from heaven;\nAnd thus on thee most glorious\nA triple light was given.",
+      "Thou art a cooling fountain\nIn life's dry, dreary sand;\nFrom thee, like Pisgah's mountain,\nWe view our promised land;\nA day of sweet refection,\nA day of holy love,\nA day of resurrection\nFrom earth to things above.",
+      "To-day on weary nations\nThe heavenly manna falls;\nTo holy convocations\nThe silver trumpet calls,\nWhere gospel-light is glowing\nWith pure and radiant beams,\nAnd living water flowing\nWith soul-refreshing streams.",
+      "New graces ever gaining\nFrom this our day of rest,\nWe reach the rest remaining\nTo spirits of the blest.\nTo Holy Ghost be praises,\nTo Father and to Son;\nThe Church her voice upraises\nTo Thee, blest Three in One."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 271,
+    "number": 271,
+    "title": "How pleased and blest was I",
+    "author": "",
+    "verses": [
+      "HOW pleased and blest was I\nTo hear the people cry:\n\"Come, let us seek our God to-day!\"\nYes, with a cheerful zeal\nWe haste to Zion's hill,\nAnd there our vows and honours pay.",
+      "Zion, thrice happy place,\nAdorned with wondrous grace,\nAnd walls of strength embrace thee round;\nIn thee our tribes appear,\nTo pray and praise and hear\nThe sacred Gospel's joyful sound.",
+      "There David's greater Son\nHas fixed His royal throne—\nHe sits for grace and judgment there;\nHe bids the saint be glad,\nHe makes the sinner sad,\nAnd humble souls rejoice with fear.",
+      "May peace attend thy gate,\nAnd joy within thee wait\nTo bless the soul of every guest:\nThe man that seeks thy peace,\nAnd wishes thine increase,\nA thousand blessings on him rest.",
+      "My tongue repeats her vows,\n\"Peace to this sacred house!\"\nFor there my friends and kindred dwell;\nAnd since my glorious God\nMakes thee His blest abode,\nMy soul shall ever love thee well."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 272,
+    "number": 272,
+    "title": "This is the day the Lord hath made",
+    "author": "",
+    "verses": [
+      "THIS is the day the Lord hath made,\nHe calls the hours His own;\nLet heaven rejoice, let earth be glad,\nAnd praise surround the throne.",
+      "To-day He rose and left the dead,\nAnd Satan's empire fell:\nTo-day the saints His triumph spread,\nAnd all His wonders tell.",
+      "Hosanna to th' anointed King,\nTo David's holy Son!\nHelp us, O Lord! descend and bring\nSalvation from Thy throne.",
+      "Blest be the Lord who comes to men\nWith messages of grace;\nWho comes in God His Father's name\nTo save our sinful race.",
+      "Hosanna, in the highest strains\nThe Church on earth can raise;\nThe highest heavens in which He reigns\nShall give Him nobler praise."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 273,
+    "number": 273,
+    "title": "The dawn of God's dear Sabbath",
+    "author": "",
+    "verses": [
+      "THE dawn of God's dear Sabbath\nBreaks o'er the earth again,\nAs some sweet summer morning\nAfter a night of pain:\nIt comes as cooling showers\nTo some exhausted land,\nAs shade of clustered palm trees\n'Mid weary wastes of sand.",
+      "O day, when earthly sorrow\nIs merged in heavenly joy,\nAnd trial changed to blessing\nThat foes may not destroy;\nWhen want is turned to fulness,\nAnd weariness to rest;\nAnd pain to wondrous rapture,\nUpon the Saviour's breast.",
+      "Lord, we would bring for offering,\nThough marred with earthly soil,\nA week of earnest labour,\nOf steady, faithful toil;\nFair fruits of self-denial,\nOf strong, deep love to Thee,\nFostered by Thine own Spirit\nIn our humility.",
+      "And we would bring our burden\nOf sinful thought and deed,\nIn Thy pure presence kneeling,\nFrom bondage to be freed;\nOur hearts' most bitter sorrow\nFor all Thy work undone,—\nSo many talents wasted,\nSo few bright laurels won!",
+      "So be it, Lord, for ever:\nOh, may we evermore,\nIn Jesus' holy presence,\nHis blessed name adore:\nUpon His peaceful Sabbath,\nWithin His temple walls,\nType of the stainless worship\nIn Zion's golden halls;",
+      "So that in joy and gladness\nWe reach that home at last;\nWhen life's short week of sorrow,\nAnd sin, and strife is past;\nWhen angel-hands have gathered\nThe fair ripe fruit for Thee,\nO Father, Lord, Redeemer,\nMost Holy Trinity."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 274,
+    "number": 274,
+    "title": "Lord of the Sabbath! hear our vows",
+    "author": "",
+    "verses": [
+      "LORD of the Sabbath! hear our vows\nOn this Thy day, in this Thy house;\nAnd own, as grateful sacrifice,\nThe songs which from the desert rise.",
+      "Thine earthly Sabbaths, Lord, we love;\nBut there's a nobler rest above:\nTo that our labouring souls aspire,\nWith ardent pangs of strong desire.",
+      "No more fatigue, no more distress,\nNor sin, nor hell, shall reach the place;\nNo groans to mingle with the songs\nWhich warble from immortal tongues.",
+      "No rude alarms of raging foes,\nNo cares to break the long repose:\nNo midnight shade, no clouded sun,\nBut sacred, high, eternal noon.",
+      "O long-expected day, begin!\nDawn on these realms of woe and sin;\nFain would we leave this weary road,\nAnd sleep in death to rest with God."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 275,
+    "number": 275,
+    "title": "Sweet is the work, my God, my King",
+    "author": "",
+    "verses": [
+      "SWEET is the work, my God, my King,\nTo praise Thy name, give thanks and sing,\nTo show Thy love by morning light,\nAnd talk of all Thy truth at night.",
+      "Sweet is the day of sacred rest,\nNo mortal cares can seize my breast;\nOh may my heart in tune be found,\nLike David's harp of solemn sound.",
+      "My heart shall triumph in the Lord,\nAnd bless His works, and bless His Word;\nThy works of grace, how bright they shine!\nHow deep Thy counsels, how divine!",
+      "Lord, I shall share a glorious part\nWhen grace hath well refined my heart,\nAnd fresh supplies of joy are shed,\nLike holy oil, to cheer my head.",
+      "Sin, my worst enemy before,\nShall vex my eyes and ears no more;\nMy inward foes shall all be slain,\nNor Satan break my peace again.",
+      "Then shall I see, and hear, and know\nAll I desired or wished below,\nAnd every power find sweet employ\nIn that eternal world of joy."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 276,
+    "number": 276,
+    "title": "Another six days' work is done",
+    "author": "",
+    "verses": [
+      "ANOTHER six days' work is done,\nAnother Sabbath is begun;\nReturn, my soul, enjoy the rest;\nImprove the day thy God has blest.",
+      "Come, bless the Lord, whose love assigns\nSo sweet a rest to wearied minds,\nProvides an antepast of heaven,\nAnd gives this day the food of seven.",
+      "Oh that our thoughts and thanks may rise\nAs grateful incense to the skies,\nAnd draw from heaven that sweet repose\nWhich none but he that feels it knows.",
+      "This heavenly calm within the breast\nIs the dear pledge of glorious rest,\nWhich for the Church of God remains;\nThe end of cares, the end of pains.",
+      "In holy duties let the day,\nIn holy pleasures, pass away:\nHow sweet a Sabbath thus to spend,\nIn hope of one that ne'er shall end!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 277,
+    "number": 277,
+    "title": "Till He come",
+    "author": "",
+    "verses": [
+      "\"TILL He come!\" Oh, let the words\nLinger on the trembling chords;\nLet the \"little while\" between\nIn their golden light be seen:\nLet us think how heaven and home\nLie beyond that \"Till He come!\"",
+      "When the weary ones we love\nEnter on their rest above—\nSeems the earth so poor and vast?—\nAll our life-joy overcast?\nHush! be every murmur dumb:\nIt is only \"Till He come!\"",
+      "Clouds and conflicts round us press;\nWould we have one sorrow less?\nAll the sharpness of the cross,\nAll that tells the world is loss—\nDeath, and darkness, and the tomb—\nOnly whisper \"Till He come!\"",
+      "See, the feast of love is spread,\nDrink the wine and break the bread—\nSweet memorials—till the Lord\nCall us round His heavenly board;\nSome from earth, from glory some,\nSevered only \"Till He come!\""
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 278,
+    "number": 278,
+    "title": "Jesus! of Thee we ne'er would tire",
+    "author": "",
+    "verses": [
+      "JESUS! of Thee we ne'er would tire;\nThe new and living food\nCan satisfy our hearts' desire,\nAnd life is in Thy blood.",
+      "If such the happy midnight song\nOur prisoned spirits raise,\nWhat are the joys that cause ere long\nEternal bursts of praise?",
+      "To look within and see no stain,\nAbroad no curse to trace;\nTo shed no tears, to feel no pain,\nBut see Thee face to face.",
+      "To find each hope of glory gained,\nFulfilled each precious word;\nAnd fully all to have attained\nThe image of our Lord."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 279,
+    "number": 279,
+    "title": "Come ye yourselves apart and rest awhile",
+    "author": "",
+    "verses": [
+      "COME ye yourselves apart and rest awhile,\nWeary, I know it, of the press and throng;\nWipe from your brow the sweat and dust of toil,\nAnd in My quiet strength again be strong.",
+      "Come ye aside from all the world holds dear,\nFor converse which the world has never known;\nAlone with Me and with My Father here,\nWith Me and with My Father not alone.",
+      "Come, tell Me all that ye have said and done,\nYour victories and failures, hopes and fears;\nI know how hardly souls are wooed and won;\nMy choicest wreaths are always wet with tears.",
+      "Come ye and rest: the journey is too great,\nAnd ye will faint beside the way, and sink:\nThe bread of life is here for you to eat,\nAnd here for you the wine of love to drink.",
+      "Then, fresh from converse with your Lord, return\nAnd work till daylight softens into even:\nThe brief hours are not lost in which ye learn\nMore of your Master and His rest in heaven."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 280,
+    "number": 280,
+    "title": "Come, Thou everlasting Spirit",
+    "author": "",
+    "verses": [
+      "COME, Thou everlasting Spirit,\nBring to every thankful mind\nAll the Saviour's dying merit,\nAll His sufferings for mankind:\nTrue Recorder of His passion,\nNow the living faith impart;\nNow reveal His great salvation\nUnto every faithful heart.",
+      "Come, Thou witness of His dying;\nCome, Remembrancer Divine;\nLet us feel Thy power applying\nChrist to every soul, and mine;\nLet us groan Thine inward groaning;\nLook on Him we pierced, and grieve;\nAll partake the grace atoning—\nAll the sprinkled blood receive.",
+      "Yes, in me, in me He dwelleth;\nI in Him, and He in me!\nAnd my empty soul He filleth,\nHere and through eternity.\nThus I wait for His returning,\nSinging all the way to heaven;\nSuch the joyous song of morning,\nSuch the banquet song of even."
     ],
     "chorus": ""
   },
