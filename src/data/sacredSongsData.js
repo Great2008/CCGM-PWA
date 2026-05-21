@@ -2895,19 +2895,163 @@ const SACRED_SONGS = [
 ], 
   "chorus": ""
 },
-  {
-    "id": 235,
-    "number": 235,
-    "title": "My Faith Looks Up To Thee",
-    "author": "Ray Palmer",
-    "verses": [
-      "My faith looks up to Thee,\nThou Lamb of Calvary,\nSaviour divine!\nNow hear me while I pray,\nTake all my guilt away,\nO let me from this day\nBe wholly Thine!",
-      "May Thy rich grace impart\nStrength to my fainting heart,\nMy zeal inspire!\nAs Thou hast died for me,\nO may my love to Thee\nPure, warm, and changeless be,\nA living fire!",
-      "While life's dark maze I tread,\nAnd griefs around me spread,\nBe Thou my guide;\nBid darkness turn to day,\nWipe sorrow's tears away,\nNor let me ever stray\nFrom Thee aside.",
-      "When ends life's transient dream,\nWhen death's cold, sullen stream\nShall o'er me roll;\nBlest Saviour, then in love,\nFear and distrust remove;\nO bear me safe above,\nA ransomed soul!"
-    ],
-    "chorus": ""
-  },
+{
+  "id": 224,
+  "number": 224,
+  "title": "Rejoice and Be Glad! the Redeemer Has Come",
+  "author": "",
+  "verses": [
+    "Rejoice and be glad! the Redeemer has come!\nGo look on His cradle, His cross, and His tomb.",
+    "Rejoice and be glad! it is sunshine at last!\nThe clouds have departed, the shadows are past.",
+    "Rejoice and be glad! for the blood hath been shed;\nRedemption is finished, the price hath been paid.",
+    "Rejoice and be glad! now the pardon is free!\nThe Just for the unjust has died on the tree.",
+    "Rejoice and be glad! for the Lamb that was slain.\nO'er death is triumphant, and liveth again.",
+    "Rejoice and be glad! for our King is on high;\nHe pleadeth for us on His throne in the sky.",
+    "Rejoice and be glad! for He cometh again;\nHe cometh in glory, the Lamb that was slain."
+  ],
+  "chorus": "Sound His praises! tell the story of Him who was slain!\nSound His praises! tell with gladness, He liveth again!\n\nSound His praises! tell the story of Him who was slain!\nSound His praises! tell with gladness, He cometh again!"
+},
+{
+  "id": 225,
+  "number": 225,
+  "title": "Oh, Sing of My Redeemer",
+  "author": "",
+  "verses": [
+    "Oh, sing of my Redeemer,\nMy Saviour, Lord, and King;\nA song of praise and glory\nLet all with rapture sing.",
+    "Oh, sing of my Redeemer,\nAnd spread abroad His name;\nHis mercy, free and boundless,\nLet heaven and earth proclaim.",
+    "Oh, sing of my Redeemer!\nHis praise my theme shall be;\nHe took my sins upon Him,\nAnd bore them on the tree.",
+    "Oh, sing of my Redeemer!\nOn Him alone I call;\nMy everlasting portion,\nMy Hope, my Life, my All."
+  ],
+  "chorus": "Oh, sing . . . of my Redeemer, . . .\nWho gave . . . Himself for me ; . . .\nUpon . . . the cross He suffered, . . .\nFrom sin . . . to set me free."
+},
+{
+  "id": 226,
+  "number": 226,
+  "title": "O Saviour, Precious Saviour",
+  "author": "",
+  "verses": [
+    "O SAVIOUR, precious Saviour,\nWhom, yet unseen, we love;\nO Name of might and favour,\nAll other names above:\nWe worship Thee! we bless Thee!\nTo Thee alone we sing!\nWe praise Thee and confess Thee,\nOur Saviour, Lord, and King!",
+    "O bringer of salvation,\nWho wondrously hast wrought\nThyself the revelation\nOf love beyond our thought:",
+    "In Thee all fulness dwelleth,\nAll grace and power divine;\nThe glory that excelleth,\nO Son of God, is Thine!",
+    "Oh, grant the consummation\nOf this our song, above,\nIn endless adoration,\nAnd everlasting love."
+  ],
+  "chorus": ""
+},
+{
+  "id": 227,
+  "number": 227,
+  "title": "Jesus, Lover of My Soul",
+  "author": "",
+  "verses": [
+    "JESUS, Lover of my soul,\nLet me to Thy bosom fly,\nWhile the nearer waters roll,\nWhile the tempest still is high;\nHide me, O my Saviour, hide,\nTill the storm of life is past;\nSafe into the haven guide,\nOh, receive my soul at last!",
+    "Other refuge have I none,\nHangs my helpless soul on Thee;\nLeave, oh, leave me not alone,\nStill support and comfort me:\nAll my trust on Thee is stayed,\nAll my help from Thee I bring;\nCover my defenceless head\nWith the shadow of Thy wing.",
+    "Thou, O Christ, art all I want;\nMore than all in Thee I find:\nRaise the fallen, cheer the faint,\nHeal the sick, and lead the blind:\nJust and holy is Thy name,\nI am all unrighteousness;\nVile, and full of sin I am,\nThou art full of truth and grace.",
+    "Plenteous grace with Thee is found—\nGrace to cover all my sin:\nLet the healing streams abound;\nMake me, keep me pure within:\nThou of life the Fountain art,\nFreely let me take of Thee;\nSpring Thou up within my heart,\nRise to all eternity."
+  ],
+  "chorus": ""
+},
+{
+  "id": 228,
+  "number": 228,
+  "title": "The Church's One Foundation",
+  "author": "",
+  "verses": [
+    "THE church's one foundation\nIs Jesus Christ her Lord;\nShe is His new creation\nBy water and the Word:\nFrom Heaven He came and sought her\nTo be His holy bride;\nWith His own blood He bought her,\nAnd for her life He died.",
+    "Elect from every nation,\nYet one o'er all the earth;\nHer charter of salvation—\nOne Lord, one faith, one birth;\nOne holy Name she blesses,\nPartakes one holy food;\nAnd to one hope she presses,\nWith every grace endued.",
+    "Though with a scornful wonder\nMen see her sore opprest,\nBy schisms rent asunder,\nBy heresies distrest:\nYet saints their watch are keeping,\nTheir cry goes up, \"How long?\"\nAnd soon the night of weeping\nShall be the morn of song.",
+    "'Mid toil and tribulation,\nAnd tumults of her war,\nShe waits the consummation\nOf peace for evermore;\nTill with the vision glorious\nHer longing eyes are blest,\nAnd the great church victorious,\nShall be the church at rest.",
+    "Yet she on earth hath union\nWith God the Three in One,\nAnd mystic sweet communion\nWith those whose rest is won:\nOh, happy ones and holy!\nLord, give us grace, that we,\nLike them, the meek and lowly,\nOn high may dwell with Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 229,
+  "number": 229,
+  "title": "Great is the Lord",
+  "author": "",
+  "verses": [
+    "GREAT is the Lord, who ruleth over all:\nWake, wake, and sing! wake, wake, and sing! wake, wake, and sing!\nDown at His feet in adoration fall—\nPraise and magnify our King!\nO ye redeemed above, strike, strike your harps of love!\nHail the Blessed One! hail the Mighty One!\nSweetly His wonders tell, loudly His glory swell—\nPraise and magnify our King!",
+    "Great is the Lord, who spake and it was done:\nHonour and strength, dominion He has won.",
+    "Great is the Lord! oh, come with holy mirth;\nCome and rejoice, ye nations of the earth.",
+    "Great is the Lord, and holy is His name!\nAngels and men, His wondrous works proclaim."
+  ],
+  "chorus": ""
+},
+{
+  "id": 230,
+  "number": 230,
+  "title": "Come, Every Joyful Heart",
+  "author": "",
+  "verses": [
+    "COME, every joyful heart,\nThat loves the Saviour's name,\nYour noblest powers exert\nTo celebrate His fame;\nTell all above and all below,\nThe debt of love to Him you owe.",
+    "He left His starry crown,\nAnd laid His robes aside;\nOn wings of love came down,\nAnd wept, and bled, and died:\nWhat He endured no tongue can tell,\nTo save our souls from death and hell.",
+    "From the dark grave He rose—\nThe mansion of the dead;\nAnd thence His mighty foes\nIn glorious triumph led:\nUp through the sky the Conqueror rode,\nAnd reigns on high, the Saviour God.",
+    "From thence He'll quickly come—\nHis chariot will not stay—\nAnd bear our spirits home\nTo realms of endless day;\nThere shall we see His lovely face,\nAnd ever be in His embrace."
+  ],
+  "chorus": ""
+},
+{
+  "id": 231,
+  "number": 231,
+  "title": "Hark, Hark! My Soul!",
+  "author": "",
+  "verses": [
+    "HARK, hark! my soul! angelic songs are swelling\nO'er earth's green fields and ocean's wave-beat shore;\nHow sweet the truth those blessed strains are telling\nOf that new life when sin shall be no more.",
+    "Far, far away, like bells at evening pealing,\nThe voice of Jesus sounds o'er land and sea;\nAnd laden souls, by thousands meekly stealing,\nKind Shepherd, turn their weary steps to Thee.",
+    "Onward we go, for still we hear them singing,\n\"Come, weary souls! for Jesus bids you come\";\nAnd through the dark, its echoes sweetly ringing,\nThe music of the Gospel leads us home."
+  ],
+  "chorus": "Angels, sing on! your faithful watches keeping ;\nSing us sweet fragments of the songs above ;\nTill morning's joy shall end the night of weeping,\nAnd life's long shadows break in cloudless love."
+},
+{
+  "id": 232,
+  "number": 232,
+  "title": "Wake Thou My Harp",
+  "author": "",
+  "verses": [
+    "WAKE Thou my harp, O Mighty Love,\nThat first the boundless realm above!\nSweep Thou my strings, for I would sing\nRedeeming grace through Christ my King.",
+    "Thou great First Cause of mortal good,\nWhose throne through endless years has stood,\nInstruct my feeble voice to sing\nRedeeming grace through Christ my King.",
+    "The spark has kindled to a flame;\nMy soul, rejoicing in Thy name,\nBids all within me join and sing\nRedeeming grace through Christ my King.",
+    "And when my spirit flees away\nFrom all that cheers life's fleeting day,\nWith saints around Thy throne I'll sing\nRedeeming grace through Christ my King."
+  ],
+  "chorus": "Redeeming grace, redeeming grace,\nThat gives my soul a resting-place ;\nI'll sing, while time rolls on apace,\nRedeeming grace, redeeming grace."
+},
+{
+  "id": 233,
+  "number": 233,
+  "title": "God is Love",
+  "author": "",
+  "verses": [
+    "\"GOD is Love!\"—His Word proclaims it,\nDay by day the truth we prove;\nHeaven and earth with joy are telling,\nEver telling,\n\"God is Love!\"",
+    "\"God is Love!\"—oh, tell it gladly,\nHow the Saviour from above\nCame to seek and save the lost ones,\nShowing thus the Father's love.",
+    "\"God is Love!\"—oh, boundless mercy—\nMay we all its fulness prove!\nTelling those who sit in darkness,\n\"God is Light, and God is Love!\""
+  ],
+  "chorus": "Hallelujah! tell the story,\nSung by angel choirs above ;\nSounding forth the mighty chorus—\n\"God is Light, and God is Love!\""
+},
+{
+  "id": 234,
+  "number": 234,
+  "title": "Let Us Sing Again the Praise of the Saviour",
+  "author": "",
+  "verses": [
+    "LET us sing again the praise of the Saviour,\nHow He died that we might know the Father's love;\nLet us tell to all the world His compassion,\nHow He ever lives to plead for us above.",
+    "Let us praise Him for the words full of comfort,\nThat He left for us recorded long ago;\nHe is near to every one that believeth,\nAnd His mercy to the faithful He will show.",
+    "Let us praise Him for the soul-cheering promise\nOf the mansions that our eyes shall yet behold;\nWhen we gather with the blest in His kingdom,\nWhere the riches of His grace can ne'er be told."
+  ],
+  "chorus": "Let us tell . . . the wondrous story,\nHow He died . . . upon the tree ;\nUnto Him be all the praise and the glory ;\nHe hath suffered that from sin we might be free. . . ."
+},
+{
+  "id": 235,
+  "number": 235,
+  "title": "My Faith Looks Up to Thee",
+  "author": "",
+  "verses": [
+    "MY faith looks up to Thee,\nThou Lamb of Calvary,\nSaviour divine:\nNow hear me while I pray,\nTake all my guilt away,\nOh, let me from this day\nBe wholly Thine.",
+    "May Thy rich grace impart\nStrength to my fainting heart,\nMy zeal inspire;\nAs Thou hast died for me,\nOh, may my love to Thee\nPure, warm, and changeless be—\nA living fire.",
+    "While life's dark maze I tread,\nAnd griefs around me spread,\nBe Thou my Guide:\nBid darkness turn to day,\nWipe sorrow's tears away;\nNor let me ever stray\nFrom Thee aside.",
+    "When ends life's transient dream—\nWhen death's cold, sullen stream\nShall o'er me roll—\nBlest Saviour, then in love,\nFear and distrust remove;\nOh, bear me safe above—\nA ransomed soul."
+  ],
+  "chorus": ""
+},
   {
     "id": 237,
     "number": 237,
