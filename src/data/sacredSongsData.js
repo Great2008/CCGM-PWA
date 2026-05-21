@@ -4412,6 +4412,267 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
+  {
+    "id": "341",
+    "number": "341",
+    "title": "While we pray, and while we plead",
+    "author": "",
+    "verses": [
+      "While we pray, and while we plead, While you see your soul's deep need, While your Father calls you home, Will you not, my brother, come?",
+      "You have wandered far away, Do not risk another day; Do not turn from God your face, But to-day accept His grace.",
+      "In the world you've failed to find Aught of peace for troubled mind; Come to Christ, on Him believe, Peace and joy you shall receive.",
+      "Come to Christ, confession make; Come to Christ and pardon take; Trust in Him from day to day, He will keep you all the way."
+    ],
+    "chorus": "Why not now? Why not now? Why not come to Jesus now? Why not now? Why not now? Why not come to Jesus now?"
+  },
+  {
+    "id": "342",
+    "number": "342",
+    "title": "Out of Christ, and yet so near",
+    "author": "",
+    "verses": [
+      "Out of Christ, and yet so near, That Thy heart His voice can hear, Pleading still—O 'Come to Me! I have given My life for thee.' Out of Christ, a slave to sin—Rise, and let the Saviour in! If thou bid Him longer wait, Soon for thee 'twill be too late.",
+      "Out of Christ, a wanderer yet—What if now thy sun should set? And in darkness leave thy soul To the tempter's dread control.",
+      "Yield to Him thy broken heart, He will take thee as thou art; Now His offered grace receive, And no more the Spirit grieve."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "343",
+    "number": "343",
+    "title": "There are angels hovering round",
+    "author": "",
+    "verses": [
+      "There are angels hovering round, There are angels hovering round, There are angels, angels hovering round.",
+      "To carry the tidings home.",
+      "To the new Jerusalem.",
+      "Poor sinners are coming home.",
+      "And Jesus bids them come.",
+      "And children too may come.",
+      "All heaven is full of joy.",
+      "For Jesus loves to save.",
+      "Come, children, trust Him now."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "344",
+    "number": "344",
+    "title": "Hark! there comes a whisper",
+    "author": "",
+    "verses": [
+      "Hark! there comes a whisper, Stealing on thine ear; 'Tis the Saviour calling, Soft, soft and clear. “Give thy heart to Me, Once I died for thee”; Hark! hark! thy Saviour calls: Come, sinner, come.",
+      "With that voice so gentle, Dost thou hear Him say?—'Tell Me all thy sorrows; Come, come away!'",
+      "Wouldst thou find a Refuge For thy soul oppressed? Jesus kindly answers, 'I am thy rest.'",
+      "At the cross of Jesus Let thy burden fall; While He gently whispers, 'I'll bear it all.'"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "345",
+    "number": "345",
+    "title": "Sinner, how thy heart is troubled",
+    "author": "",
+    "verses": [
+      "Sinner, how thy heart is troubled! God is coming very near; Do not hide thy deep emotion, Do not check that failing tear. Oh, be saved, His grace is free! Oh, be saved, He died for thee!",
+      "Jesus now is bending o'er thee, Jesus lowly, meek, and mild: To the Friend who died to save thee, Wilt thou not be reconciled?",
+      "Art thou waiting till the morrow? Thou may'st never see its light; Come at once! accept His mercy: He is waiting—come to-night!",
+      "With a lowly, contrite spirit, Kneeling at the Saviour's feet, Thou canst feel, this very moment, Pardon—precious, pure, and sweet!",
+      "Let the angels bear the tidings Upward to the courts of heaven! Let them sing, with holy rapture, O'er another soul forgiven!"
+    ],
+    "chorus": "Oh, be saved, His grace is free! Oh, be saved, He died for thee!"
+  },
+  {
+    "id": "346",
+    "number": "346",
+    "title": "Not far from the Kingdom",
+    "author": "",
+    "verses": [
+      "Not far, not far from the Kingdom, Yet in the shadow of sin; How many are coming and going!—How few there are entering in!",
+      "Where voices whisper and wait; Too timid to enter in boldly, So linger still outside the gate.",
+      "Away in the dark and the danger Far out in the night and the cold; There Jesus is waiting to lead you So tenderly into His fold.",
+      "Not far, not far from the Kingdom, 'Tis only a little space; But oh, you may still be for ever Shut out from yon heavenly place!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "347",
+    "number": "347",
+    "title": "O come, sinner, come",
+    "author": "",
+    "verses": [
+      "O come, sinner, come! 'tis mercy's call; Here at Jesus' feet! O come, and, repenting, lay thy all Down at Jesus' feet!",
+      "Oh come, and, believing, seek thy rest Here at Jesus' feet! Thy heart, with its heavy weight oppressed, Lay at Jesus' feet!",
+      "Oh come, where thy faith can make thee whole, Here at Jesus' feet! Oh come, and thy weary, troubled soul Lay at Jesus' feet!",
+      "Oh come! bless the Lord, there's room for thee, Here at Jesus' feet! Thy burden of guilt, whate'er it be, Lay at Jesus' feet!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "348",
+    "number": "348",
+    "title": "Why waitest thou, O burdened soul",
+    "author": "",
+    "verses": [
+      "Why waitest thou, O burdened soul, When Jesus now will make thee whole? Give up thy all to His control— The Life, the Truth, the Way.",
+      "Why waitest thou? why not believe? His offered grace with joy receive; How can you still the Spirit grieve? Thou hast no time to stay.",
+      "Why waitest thou? the days are few, And there is work for thee to do; Forsake the wrong, the right pursue; Arise! no more delay."
+    ],
+    "chorus": "He is calling thee, gently calling thee; Oh, come and give Him now thy heart—He is calling thee to-day."
+  },
+  {
+    "id": "349",
+    "number": "349",
+    "title": "Come with thy broken heart",
+    "author": "",
+    "verses": [
+      "Come, oh come, with thy broken heart, Weary and worn with care; Come and kneel at the open door, Jesus is waiting there:",
+      "Firmly cling to the blessed cross, There shall thy refuge be; Wash thee now in the crimson fount, Flowing so pure for thee:",
+      "Come and taste of the precious feast, Feast of eternal love; Think of joys that for ever bloom, Bright in the life above:"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": "350",
+    "number": "350",
+    "title": "I have a Saviour",
+    "author": "",
+    "verses": [
+      "I have a Saviour, He's pleading in glory, A dear loving Saviour, though earth-friends be few; And now He is watching in tenderness o'er me: And oh, that my Saviour were your Saviour too!",
+      "I have a Father: to me He has given A hope for eternity, blessed and true; And soon He will call me to meet Him in heaven, But oh, may He lead you to go with me too!",
+      "I have a robe: 'tis resplendent in whiteness, Awaiting in glory my wondering view; Oh, when I receive it all shining in brightness, Dear friend, could I see you receiving one too!",
+      "I have a peace: it is calm as a river— A peace that the friends of this world never knew; My Saviour alone is its Author and Giver, And oh, could I know it was given to you!",
+      "When Jesus has found you, tell others the story, That my loving Saviour is your Saviour too; Then pray that your Saviour may bring them to glory, And prayer will be answered, 'twas answered for you!"
+    ],
+    "chorus": "For you I am praying, for you I am praying, For you I am praying, I'm praying for you."
+  },
+  {
+    "id": "351",
+    "number": "351",
+    "title": "Why do you wait, dear brother?",
+    "author": "",
+    "verses": [
+      "Why do you wait, dear brother? Oh, why do you tarry so long? Your Saviour is waiting to give you A place in His sanctified throng.",
+      "What do you hope, dear brother, To gain by a further delay? There's no one to save you but Jesus; There's no other way but His way.",
+      "Do you not feel, dear brother, His Spirit now striving within? Oh, why not accept His salvation, And throw off thy burden of sin?",
+      "Why do you wait, dear brother? The harvest is passing away; Your Saviour is longing to bless you: There's danger and death in delay."
+    ],
+    "chorus": "Why not? Why not? Why not come to Him now?"
+  },
+  {
+    "id": "352",
+    "number": "352",
+    "title": "Come with thy sins to the fountain",
+    "author": "",
+    "verses": [
+      "Come with thy sins to the fountain, Come with thy burden of grief; Bury them deep in its waters—There thou wilt find a relief.",
+      "Come as thou art to the fountain—Jesus is waiting for thee; What though thy sins be like crimson?—White as the snow they shall be!",
+      "These are the words of the Saviour: They who repent and believe, They who are willing to trust Him, Life at His hands shall receive.",
+      "Come and be healed at the fountain—List to the peace-speaking voice; Over a sinner returning, Now let the angels rejoice!"
+    ],
+    "chorus": "Haste thou away! why wilt thou stay? Risk not thy soul on a moment's delay; Jesus is waiting to save thee, Mercy is pleading to-day!"
+  },
+  {
+    "id": "353",
+    "number": "353",
+    "title": "The gospel story must be told",
+    "author": "",
+    "verses": [
+      "Oh, the precious gospel story, How it tells of love to all! How the Saviour in compassion Died to save us from the Fall; How He came to seek the lost ones, And to bring them to His fold: Let us hasten to proclaim it, For the story must be told.",
+      "Oh, the blessed gospel story Of His meek and lowly birth, And the welcome of the angels When they sang good-will to earth;—Of the cross on which He suffered, As by prophets seen of old,—Of His death and resurrection, Let the story now be told.",
+      "Oh, the wondrous gospel story! There is life in every word; There is hope and consolation Where the message sweet is heard; Let us tell it to the weary, And its beauties all unfold; 'Tis the only guide to heaven, And the story must be told."
+    ],
+    "chorus": "The story must be told, The story must be told; That Jesus died for sinners lost, The story must be told."
+  },
+  {
+    "id": "354",
+    "number": "354",
+    "title": "Jesus the water of life has given",
+    "author": "",
+    "verses": [
+      "Jesus the water of life has given, Freely, freely, freely; Come to that fountain, oh, drink and live, Flowing for every sinner.",
+      "Jesus has promised a home in heaven, Freely, freely, freely; Treasures unfailing will there be given Freely to those that love Him.",
+      "Jesus has promised a robe of white, Freely, freely, freely; Kingdoms of glory, and crowns of light, Freely to those that love Him.",
+      "Jesus has promised eternal day, Freely, freely, freely; Pleasures that never shall pass away, Freely to those that love Him."
+    ],
+    "chorus": "The Spirit and the Bride say, Come; freely, freely, freely; And he that is thirsty, let him come, and drink of the water of life."
+  },
+  {
+    "id": "355",
+    "number": "355",
+    "title": "Come, sing the gospel's joyful sound",
+    "author": "",
+    "verses": [
+      "Come, sing the gospel's joyful sound, Salvation full and free; Proclaim to all the world around The year of jubilee!",
+      "Ye mourning souls, aloud rejoice; Ye blind, your Saviour see! Ye prisoners, sing with thankful voice The Lord hath made you free!",
+      "With rapture swell the song again, Of Jesus' dying love; 'Tis peace on earth, good-will to men, And praise to God above!"
+    ],
+    "chorus": "Salvation! Salvation! The grace of God doth bring; Salvation! Salvation! Through Christ our Lord and King."
+  },
+  {
+    "id": "356",
+    "number": "356",
+    "title": "The Gospel bells are ringing",
+    "author": "",
+    "verses": [
+      "The Gospel bells are ringing, Over land, from sea to sea; Blessed news of free salvation Do they offer you and me.",
+      "The Gospel bells invite us To a feast prepared for all; Do not slight the invitation, Nor reject the gracious call.",
+      "The Gospel bells give warning, As they sound from day to day, Of the fate which doth await them Who for ever will delay.",
+      "The Gospel bells are joyful, As they echo far and wide, Bearing notes of perfect pardon, Through a Saviour crucified."
+    ],
+    "chorus": "Gospel bells, how they ring Over land, from sea to sea; Gospel bells freely bring Blessed news to you and me."
+  },
+  {
+    "id": "357",
+    "number": "357",
+    "title": "Wonderful words of Life",
+    "author": "",
+    "verses": [
+      "Sing them over again to me, Wonderful words of Life! Let me more of their beauty see, Wonderful words of Life! Words of life and beauty, Teach me faith and duty!",
+      "Christ, the blessed One, gives to all Wonderful words of Life! Sinner, list to the loving call, Wonderful words of Life! All so freely given, Wooing us to heaven!",
+      "Sweetly echo the gospel call! Wonderful words of Life! Offer pardon and peace to all! Wonderful words of Life! Jesus, only Saviour, Sanctify for ever!"
+    ],
+    "chorus": "Beautiful words! wonderful words! Wonderful words of Life!"
+  },
+  {
+    "id": "358",
+    "number": "358",
+    "title": "Jesus knocks",
+    "author": "",
+    "verses": [
+      "Jesus knocks: He calls to thee, 'Weary one, oh come to Me!' He can save, and only He: Open wide the door!",
+      "Jesus knocks: He comes to save—'Twas for thee His life He gave; He hath triumphed o'er the grave: Open wide the door!",
+      "Jesus knocks, is knocking still; Yield to Him at once thy will; He with joy thy heart can fill: Open wide the door!",
+      "Jesus knocks, the moments fly; While salvation yet is nigh, Ere the Saviour passeth by, Open wide the door!"
+    ],
+    "chorus": "Open wide the door! Open wide the door! He can save, and only He: Open wide the door!"
+  },
+  {
+    "id": "359",
+    "number": "359",
+    "title": "Oh, what a Saviour",
+    "author": "",
+    "verses": [
+      "Oh, what a Saviour—that He died for me! From condemnation He hath made me free; 'He that believeth on the Son,' saith He, 'Hath everlasting life.'",
+      "All my iniquities on Him were laid, All my indebtedness by Him was paid; All who believe on Him, the Lord hath said, 'Have everlasting life.'",
+      "Though poor and needy, I can trust my Lord; Though weak and sinful, I believe His word; Oh, glad message! every child of God 'Hath everlasting life!'",
+      "Though all unworthy, yet I will not doubt; For Him that cometh He will not cast out: 'He that believeth,' oh, the good news shout! 'Hath everlasting life!'"
+    ],
+    "chorus": "Verily, verily, I say unto you; Verily, verily, message ever new! He that believeth on the Son—'tis true! Hath everlasting life!"
+  },
+  {
+    "id": "360",
+    "number": "360",
+    "title": "O wanderer from thy Father's house",
+    "author": "",
+    "verses": [
+      "O wanderer from thy Father's house, Why wilt thou longer roam? Return! oh, hear the gentle voice That bids thee now come home.",
+      "To Jesus come—oh, trust His word, And on His name believe; Forsake thy sins, and thro' His blood Eternal life receive.",
+      "The gracious Saviour calls thee now To feast upon His love; And of the living water drink, And all His mercy prove.",
+      "The Church, His bride, invites thee now, To own her risen Lord; For, 'Whosoever will may come,' Is God's eternal word."
+    ],
+    "chorus": "The Spirit and the bride say, Come! And let him that heareth say, Come! And let him that is athirst come, And whosoever will, let him take the water of life freely."
+  },
    {
     "id": 414,
     "number": 414,
