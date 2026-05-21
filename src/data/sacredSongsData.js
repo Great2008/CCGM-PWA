@@ -3642,32 +3642,487 @@ const SACRED_SONGS = [
     "chorus": ""
   },
   {
-    "id": 297,
-    "number": 297,
-    "title": "Abide With Me",
-    "author": "Henry F. Lyte",
+    "id": 281,
+    "number": 281,
+    "title": "Come, for the feast is spread",
+    "author": "",
     "verses": [
-      "Abide with me; fast falls the eventide;\nThe darkness deepens; Lord, with me abide!\nWhen other helpers fail and comforts flee,\nHelp of the helpless, O abide with me.",
-      "Swift to its close ebbs out life's little day;\nEarth's joys grow dim, its glories pass away;\nChange and decay in all around I see;\nO Thou who changest not, abide with me.",
-      "I need Thy presence every passing hour;\nWhat but Thy grace can foil the tempter's power?\nWho like Thyself my guide and stay can be?\nThrough cloud and sunshine, Lord, abide with me.",
-      "I fear no foe with Thee at hand to bless;\nIlls have no weight, and tears no bitterness.\nWhere is death's sting? Where, grave, thy victory?\nI triumph still, if Thou abide with me.",
-      "Hold Thou Thy cross before my closing eyes;\nShine through the gloom and point me to the skies;\nHeav'n's morning breaks, and earth's vain shadows flee;\nIn life, in death, O Lord, abide with me."
+      "Come, for the feast is spread;\nHark to the call!\nCome to the Living Bread,\nBroken for all;\nCome to His \"house of wine,\"\nLow on His breast recline;\nAll that He hath is thine;\nCome, sinner, come.",
+      "Come where the fountain flows\nRiver of life—\nHealing for all thy woes,\nDoubting, and strife;\nMillions have been supplied,\nNo one was e'er denied;\nCome to the crimson tide,\nCome, sinner, come.",
+      "Come to the throne of grace,\nBoldly draw near;\nHe who would win the race\nMust tarry here;\nWhate'er thy want may be\nHere is the grace for thee,\nJesus thy only plea:\nCome, Christian, come.",
+      "Come to the Better Land,\nPilgrim, make haste!\nEarth is a foreign strand—\nWilderness waste!\nHere are the harps of gold,\nHere are the joys untold—\nCrowns for the young and old:\nCome, pilgrim, come.",
+      "Jesus, we come to Thee,\nOh, take us in!\nSet Thou our spirits free;\nCleanse us from sin!\nThen, in yon land of light,\nClothed in our robes of white,\nResting not day nor night,\nThee will we sing."
     ],
     "chorus": ""
   },
   {
-    "id": 306,
-    "number": 306,
-    "title": "There Shall Be Showers Of Blessing",
-    "author": "Daniel W. Whittle",
+    "id": 282,
+    "number": 282,
+    "title": "Thou art coming, O my Saviour",
+    "author": "",
     "verses": [
-      "There shall be showers of blessing:\nThis is the promise of love;\nThere shall be seasons refreshing,\nSent from the Saviour above.",
-      "There shall be showers of blessing—\nPrecious reviving again;\nOver the hills and the valleys\nSound of abundance of rain.",
-      "There shall be showers of blessing;\nSend them upon us, O Lord;\nGrant to us now a refreshing,\nCome, and now honour Thy Word.",
-      "There shall be showers of blessing:\nO that today they might fall,\nNow as to God we're confessing,\nNow as on Jesus we call!"
+      "Thou art coming, O my Saviour,\nThou art coming, O my King!\nEvery tongue Thy name confessing,\nWell may we rejoice and sing!\nThou art coming! Rays of glory\nThro' the vail Thy death has rent\nGladden now our pilgrim pathway,\nGlory from Thy presence sent.",
+      "Thou art coming! Not a shadow,\nNot a mist, and not a tear,\nNot a sin, and not a sorrow,\nOn that sunrise grand and clear:\nThou art coming! Jesus, Saviour,\nNothing else seems worth a thought;\nOh, how marvellous the glory\nAnd the bliss Thy pain hath bought.",
+      "Thou art coming! We are waiting\nWith a \"hope\" that cannot fail,\nAsking not the day or hour,\nAnchored safe within the vail.\nThou art coming! At Thy table\nWe are witnesses for this,\nAs we meet Thee in communion,\nEarnest of our coming bliss."
     ],
-    "chorus": "Showers of blessing,\nShowers of blessing we need;\nMercy-drops round us are falling,\nBut for the showers we plead."
+    "chorus": "Thou art coming! Thou art coming,\nWe shall meet Thee on Thy way!\nThou art coming! we shall see Thee,\nAnd be like Thee on that day!\nThou art coming! Thou art coming!\nJesus, our beloved Lord!\nOh, the joy to see Thee reigning,\nWorshipped, glorified, adored!"
   },
+  {
+    "id": 283,
+    "number": 283,
+    "title": "We adore Thee, O Lord",
+    "author": "",
+    "verses": [
+      "WE adore Thee, O Lord, for the wonderful grace\nThat has kept and preserved us till now;\nWe hallow Thy goodness, Thy infinite love,\nWhile our hearts in Thy presence we bow.",
+      "Though unworthy to eat of Thy life-giving bread,\nOr to gather the crumbs as they fall;\nWe come through Thy merit and take of the feast,\nIn Thy mercy provided for all.",
+      "May our strength be renewed and our souls be impressed\nWith the scenes that by faith we behold;\nAnd show forth the death of the Lord till He come,\nAnd we rest in Thy glory untold."
+    ],
+    "chorus": "In accordance to-day with Thy blessed command,\nWe commune at Thy Table with Thee,\nRecalling the words that to us Thou hast said,\n\"Do this in remembrance of Me.\""
+  },
+  {
+    "id": 284,
+    "number": 284,
+    "title": "Sit down beneath His shadow",
+    "author": "",
+    "verses": [
+      "Sit down beneath His shadow,\nAnd rest with great delight;\nThe faith that now beholds Him\nIs pledge of future sight.",
+      "Our Master's love remember,\nExceeding great and free;\nLift up thy heart in gladness,\nFor He remembers thee.",
+      "Bring every weary burden,\nThy sin, thy fear, thy grief;\nHe calls the heavy laden,\nAnd gives them kind relief.",
+      "A little while, though parted,\nRemember, wait, and love;\nUntil He comes in glory,\nUntil we meet above:",
+      "Till in the Father's Kingdom\nThe heavenly feast is spread;\nAnd we behold His beauty,\nWhose blood for us was shed!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 285,
+    "number": 285,
+    "title": "Jesus, Thou joy of loving hearts",
+    "author": "",
+    "verses": [
+      "Jesus, Thou joy of loving hearts,\nThou Fount of life, Thou Light of men,\nFrom the best bliss that earth imparts,\nWe turn unfilled to Thee again.",
+      "Thy truth unchanged hath ever stood;\nThou savest those that on Thee call;\nTo them that seek Thee, Thou art good,\nTo them that find Thee, all in all.",
+      "We taste Thee, O Thou living Bread,\nAnd long to feast upon Thee still;\nWe drink of Thee, the Fountain Head,\nAnd thirst our souls from Thee to fill.",
+      "Our restless spirits yearn for Thee\nWhere'er our changeful lot is cast;\nGlad, when Thy gracious smile we see;\nBlest, when our faith can hold Thee fast.",
+      "O Jesus, ever with us stay;\nMake all our moments calm and bright;\nChase the dark night of sin away;\nShed o'er the world Thy holy light."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 286,
+    "number": 286,
+    "title": "Saviour, breathe an evening blessing",
+    "author": "",
+    "verses": [
+      "Saviour, breathe an evening blessing,\nEre repose our spirits seal;\nSin and want we come confessing;\nThou canst save, and Thou canst heal.",
+      "Though destruction walk around us,\nThough the arrow past us fly;\nAngel guards from Thee surround us:\nWe are safe if Thou art nigh.",
+      "Though the night be dark and dreary,\nDarkness cannot hide from Thee;\nThou art He who, never weary,\nWatchest where Thy people be.",
+      "Should swift death this night o'ertake us,\nAnd our couch become our tomb,\nMay the morn in heaven awake us,\nClad in light and deathless bloom!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 287,
+    "number": 287,
+    "title": "Lord, dismiss us with Thy blessing",
+    "author": "",
+    "verses": [
+      "Lord, dismiss us with Thy blessing,\nFill our hearts with joy and peace;\nLet us each, Thy love possessing,\nTriumph in redeeming grace.",
+      "Thanks we give, and adoration,\nFor Thy gospel's joyful sound;\nMay the fruits of Thy salvation\nIn our hearts and lives abound.\nEver faithful, ever faithful\nTo the truth may we be found.",
+      "So, whene'er the signal's given\nUs from earth to call away,\nBorne on angels' wings to heaven,\nGlad the summons to obey,\nMay we ever, may we ever,\nReign with Christ in endless day."
+    ],
+    "chorus": "Oh, refresh us, oh, refresh us,\nTravelling through this wilderness."
+  },
+  {
+    "id": 288,
+    "number": 288,
+    "title": "Father, in high heaven dwelling",
+    "author": "",
+    "verses": [
+      "Father, in high heaven dwelling,\nMay our evening song be telling\nOf Thy mercy large and free:\nThrough the day Thy love has fed us,\nThrough the day Thy care has led us,\nWith divinest charity.",
+      "This day's sins, oh pardon, Saviour,\nEvil thoughts, perverse behaviour,\nEnvy, pride, and vanity:\nFrom the world, the flesh, deliver—\nSave us now, and save us ever,\nO Thou Lamb of Calvary!",
+      "From enticements of the devil,\nFrom the might of spirits evil,\nBe our shield and panoply:\nLet Thy power this night defend us,\nAnd a heavenly peace attend us,\nAnd angelic company.",
+      "Whilst the night-dews are distilling,\nHoly Ghost, each heart be filling\nWith Thine own serenity:\nSoftly let the eyes be closing,\nLoving souls on Thee reposing,\nEver blessed Trinity!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 289,
+    "number": 289,
+    "title": "Silently the shades of evening",
+    "author": "",
+    "verses": [
+      "Silently the shades of evening\nGather round my lonely door;\nSilently they bring before me\nFaces I shall see no more.",
+      "Oh, not lost, but gone before us!\nLet them never be forgot:\nSweet their memory to the lonely;\nIn our hearts they perish not.",
+      "How such holy memories cluster,\nLike the stars when storms are past;\nPointing up to that far heaven,\nWhere we hope to meet at last."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 290,
+    "number": 290,
+    "title": "At evening time may there be light",
+    "author": "",
+    "verses": [
+      "At evening time may there be light,\nWhile life's brief day is closing;\nThen shall I fear no gathering night,\nIn Jesus' love reposing.",
+      "At evening time may there be light,\nThe light of life eternal;\nThe radiance of those mansions bright,\nIn climes for ever vernal.",
+      "At evening time there shall be light,\nEarth's day of storm is dying;\nSorrow and sadness take their flight,\nThere shall be no more sighing.",
+      "At evening time there shall be light,\nThe twilight skies adorning;\nBut oh, how fair the radiance bright\nOf that swift-speeding morning."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 291,
+    "number": 291,
+    "title": "Saviour, again to Thy dear name we raise",
+    "author": "",
+    "verses": [
+      "Saviour, again to Thy dear name we raise\nWith one accord our parting hymn of praise;\nWe rise to bless Thee ere our worship cease;\nAnd now, departing, wait Thy word of peace.",
+      "Grant us Thy peace upon our homeward way;\nWith Thee began, with Thee shall end the day;\nGuard Thou the lips from sin, the hearts from shame,\nThat in this house have called upon Thy name.",
+      "Grant us Thy peace, Lord, through the coming night;\nTurn Thou for us its darkness into light;\nFrom harm and danger keep Thy children free,\nFor dark and light are both alike to Thee.",
+      "Grant us Thy peace throughout our earthly life,\nOur balm in sorrow, and our stay in strife;\nThen, when Thy voice shall bid our conflict cease,\nCall us, O Lord, to Thine eternal peace."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 292,
+    "number": 292,
+    "title": "Day is dying in the west",
+    "author": "",
+    "verses": [
+      "Day is dying in the west,\nHeaven is touching earth with rest;\nWait and worship while the night\nSets her evening lamps alight\nThrough all the sky.",
+      "Lord of life, beneath the dome\nOf the universe, Thy home,\nGather us, who seek Thy face,\nTo the fold of Thy embrace,\nFor Thou art nigh.",
+      "While the deepening shadows fall,\nHeart of Love, enfolding all,\nThrough the glory and the grace\nOf the stars that veil Thy face,\nOur hearts ascend.",
+      "When for ever from our sight\nPass the stars, the day, the night,\nLord of angels, on our eyes\nLet eternal morning rise,\nAnd shadows end."
+    ],
+    "chorus": "Holy, holy, holy, Lord God of hosts !\nHeaven and earth are full of Thee !\nHeaven and earth are praising Thee, O Lord most high!"
+  },
+  {
+    "id": 293,
+    "number": 293,
+    "title": "Once more at rest, my peaceful thoughts are blending",
+    "author": "",
+    "verses": [
+      "Once more at rest, my peaceful thoughts are blending;\nOnce more, O Lord, Thy loving smile I see;\nFor softly now the twilight shades descending\nHave closed, and left my heart alone with Thee.\nStill, still I hear Thy words of consolation\nThat gave me hope when I was sorely tried;\nAnd since that hour of hallowed meditation,\nThy counsel, Lord, has been my only guide.",
+      "Once more at rest, my cares awhile forsaking,\nI thank Thee, Lord, for victories I have won;\nFor strength and grace, when earthly ties were breaking,\nTo trust in Thee, and say, \"Thy will be done.\"",
+      "Once more at rest, I view the silent river,\nWhose placid waves Thy love will bear me o'er;\nThere, home at last, my raptured soul for ever\nWill fold her wings, where sorrow comes no more."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 294,
+    "number": 294,
+    "title": "Stealing from the world away",
+    "author": "",
+    "verses": [
+      "Stealing from the world away,\nWe are come to seek Thy face;\nKindly meet us, Lord, we pray;\nGrant us Thy reviving grace.",
+      "Yonder stars that gild the sky\nShine with but a borrowed light;\nWe, unless Thy light be nigh,\nWander wrapt in gloomy night.",
+      "Sun of Righteousness, dispel\nAll our darkness, doubts, and fears;\nMay Thy light within us dwell\nTill eternal day appears!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 295,
+    "number": 295,
+    "title": "The Lord bless thee, and keep thee",
+    "author": "",
+    "verses": [
+      "\"The Lord bless thee, and keep thee:\nThe Lord make His face shine upon thee,\nAnd be gracious unto thee,\nAnd be gracious unto thee:\nThe Lord lift up His countenance,\nHis countenance upon thee,\nAnd give thee peace.\""
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 296,
+    "number": 296,
+    "title": "Now the day is over",
+    "author": "",
+    "verses": [
+      "Now the day is over,\nNight is drawing nigh,\nShadows of the evening\nSteal across the sky.",
+      "Jesus, give the weary\nCalm and sweet repose;\nWith Thy tenderest blessing\nMay our eyelids close.",
+      "Through the long night-watches\nMay Thine angels spread\nTheir white wings above us,\nWatching round each bed.",
+      "When the morning wakens,\nThen may I arise\nPure, and fresh, and sinless\nIn Thy holy eyes.",
+      "Glory to the Father,\nGlory to the Son,\nAnd to Thee, blest Spirit,\nWhilst all ages run."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 297,
+    "number": 297,
+    "title": "Abide with me",
+    "author": "",
+    "verses": [
+      "Abide with me: fast falls the eventide;\nThe darkness deepens; Lord, with me abide:\nWhen other helpers fail, and comforts flee,\nHelp of the helpless, oh, abide with me!",
+      "Swift to its close ebbs out life's little day;\nEarth's joys grow dim, its glories pass away;\nChange and decay in all around I see;\nO Thou, who changest not, abide with me!",
+      "Come not in terrors, as the King of kings;\nBut kind and good, with healing in Thy wings;\nTears for all woes, a heart for every plea;\nCome, Friend of sinners, thus abide with me.",
+      "I need Thy presence every passing hour;\nWhat but Thy grace can foil the tempter's power?\nWho like Thyself my guide and stay can be?\nThrough cloud and sunshine, oh, abide with me!",
+      "I fear no foe, with Thee at hand to bless:\nIlls have no weight, and tears no bitterness:\nWhere is death's sting? where, grave, thy victory?\nI triumph still, if Thou abide with me.",
+      "Be Thou Thyself before my closing eyes;\nShine through the gloom, and point me to the skies;\nHeaven's morning breaks, and earth's vain shadows flee;\nIn life, in death, O Lord, abide with me!"
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 298,
+    "number": 298,
+    "title": "God be with you till we meet again",
+    "author": "",
+    "verses": [
+      "God be with you till we meet again!—\nBy His counsels guide, uphold you,\nWith His sheep securely fold you;\nGod be with you till we meet again!",
+      "God be with you till we meet again!—\n'Neath His wings securely hide you,\nDaily manna still provide you;\nGod be with you till we meet again!",
+      "God be with you till we meet again!—\nWhen life's perils thick confound you,\nPut His loving arms around you;\nGod be with you till we meet again!",
+      "God be with you till we meet again!—\nKeep love's banner floating o'er you,\nSmite death's threatening wave before you;\nGod be with you till we meet again!"
+    ],
+    "chorus": "Till we meet ! . . . Till we meet ! . . .\nTill we meet at Jesus' feet ; . . .\nTill we meet ! . . . Till we meet ! . . .\nGod be with you till we meet again !"
+  },
+  {
+    "id": 299,
+    "number": 299,
+    "title": "Jesus, Saviour, on Thy breast",
+    "author": "",
+    "verses": [
+      "Jesus, Saviour, on Thy breast\nI would lay me down to rest;\nWhile mine eyelids gently close,\nThou wilt grant me calm repose.\nMay Thine angels vigil keep\nWhile I lay me down to sleep.",
+      "Lord, this wayward heart forgive,\nTeach me more like Thee to live;\nEvery evil thought subdue;\nMay Thy grace my strength renew.",
+      "When the day of life is past,\nAnd the twilight comes at last,\nWhen I cross the narrow sea,\nI shall still abide in Thee."
+    ],
+    "chorus": ""
+  },
+  {
+    "id": 300,
+    "number": 300,
+    "title": "Lord, keep us safe this night",
+    "author": "",
+    "verses": [
+      "Lord, keep us safe this night,\nSecure from all our fears;\nMay angels guard us while we sleep,\nTill morning light appears. Amen."
+    ],
+    "chorus": ""
+  },
+  {
+  "id": 301,
+  "number": 301,
+  "title": "Glory to Thee, my God, this night",
+  "author": "",
+  "verses": [
+    "Glory to Thee, my God, this night,\nFor all the blessings of the light;\nKeep me, oh, keep me, King of kings,\nBeneath Thine own almighty wings.",
+    "Forgive me, Lord, for Thy dear Son,\nThe ill that I this day have done;\nThat with the world, myself, and Thee,\nI, ere I sleep, at peace may be.",
+    "Teach me to live, that I may dread\nThe grave as little as my bed;\nTeach me to die, that so I may\nRise glorious at the Judgment Day.",
+    "Oh, let my soul on Thee repose,\nAnd may sweet sleep mine eyelids close;\nSleep, that shall me more vigorous make\nTo serve my God when I awake."
+  ],
+  "chorus": ""
+},
+{
+  "id": 302,
+  "number": 302,
+  "title": "Sun of my soul, Thou Saviour dear",
+  "author": "",
+  "verses": [
+    "Sun of my soul, Thou Saviour dear,\nIt is not night if Thou be near;\nOh, may no earth-born cloud arise,\nTo hide Thee from Thy servant's eyes!",
+    "When the soft dews of kindly sleep\nMy wearied eyelids gently steep,\nBe my last thought—How sweet to rest\nFor ever on my Saviour's breast!",
+    "Abide with me from morn till eve,\nFor without Thee I cannot live;\nAbide with me when night is nigh,\nFor without Thee I dare not die.",
+    "If some poor wandering child of Thine\nHave spurned to-day the voice Divine,\nNow, Lord, the gracious work begin;\nLet him no more lie down in sin.",
+    "Come near and bless us when we wake,\nEre through the world our way we take;\nTill, in the ocean of Thy love,\nWe lose ourselves in heaven above."
+  ],
+  "chorus": ""
+},
+{
+  "id": 303,
+  "number": 303,
+  "title": "'Tis the blessed hour of prayer",
+  "author": "",
+  "verses": [
+    "'Tis the blessed hour of prayer, when our hearts lowly bend,\nAnd we gather to Jesus, our Saviour and Friend;\nIf we come to Him in faith, His protection to share,\nWhat a balm for the weary! Oh, how sweet to be there!",
+    "'Tis the blessed hour of prayer, when the Saviour draws near,\nWith tender compassion His people to hear;\nWhen He tells us we may cast at His feet every care,\nWhat a balm for the weary! Oh, how sweet to be there!",
+    "'Tis the blessed hour of prayer, when the tempted and tried,\nTo the Saviour who loves them their sorrows confide:\nWith a sympathising heart He removes every care;\nWhat a balm for the weary! Oh, how sweet to be there!",
+    "At the blessed hour of prayer, if we firmly believe\nThat the blessing we ask for we'll surely receive,\nIn the fulness of delight we shall lose every care;\nWhat a balm for the weary! Oh, how sweet to be there!"
+  ],
+  "chorus": "Blessed hour of prayer!\nBlessed hour of prayer!\nWhat a balm for the weary!\nOh, how sweet to be there!"
+},
+{
+  "id": 304,
+  "number": 304,
+  "title": "Let us sing of the wonderful mercy of God",
+  "author": "",
+  "verses": [
+    "Let us sing of the wonderful mercy of God,\nOf His constant protection and care;\nLet our fervent devotions like incense arise,\nWhen we gather before Him in prayer.",
+    "Let us sing of the wonderful gift of His grace,\nThat to us He has tenderly shown;\nIn the blessed communion with Jesus His Son,\nThat has brought us so near to His throne.",
+    "Let us pray that His blessing may follow us still,\nThat His light on our pathway may shine;\nAnd at last that our spirits made perfect in Him\nMay inherit His kingdom divine."
+  ],
+  "chorus": "Let us praise and adore Him for all He hath done,\nLet us tell of His goodness and care;\nLet our fervent devotions like incense arise,\nWhen we gather before Him in prayer."
+},
+{
+  "id": 305,
+  "number": 305,
+  "title": "Pray on, pray on, believing ones",
+  "author": "",
+  "verses": [
+    "Pray on, pray on, believing ones,\nGod's promised word is sure,\nThat they shall overcome by faith\nWho to the end endure;",
+    "His eye foresees our greatest good,\nWhile we at best are weak;\nAnd thus in wisdom He withholds\nThe boon that oft we seek:\nAnd yet His all-sufficient grace\nHe bids us freely share,\nAnd in a way we little know\nThe Lord will answer prayer.",
+    "With anxious thoughts for those we love\nHow oft our hearts are filled!\nBut soon the clouds are rolled away,\nThe troubled waves are stilled:\nThen murmur not, but trust in Him\nWho knows our every care—\nAnd better far than we can ask,\nThe Lord will answer prayer."
+  ],
+  "chorus": "Pray on, pray on; oh, weary not,\nThe cross with patience bear;\nAnd though its burdens weigh us down,\nThe Lord will answer prayer."
+},
+{
+  "id": 306,
+  "number": 306,
+  "title": "There shall be showers of blessing",
+  "author": "",
+  "verses": [
+    "\"There shall be showers of blessing\":\nThis is the promise of love;\nThere shall be seasons refreshing,\nSent from the Saviour above.",
+    "\"There shall be showers of blessing\"—\nPrecious reviving again;\nOver the hills and the valleys,\nSound of abundance of rain.",
+    "\"There shall be showers of blessing\":\nSend them upon us, O Lord!\nGrant to us now a refreshing;\nCome, and now honour Thy Word.",
+    "\"There shall be showers of blessing\":\nOh that to-day they might fall,\nNow as to God we're confessing,\nNow as on Jesus we call!"
+  ],
+  "chorus": "Showers of blessing,\nShowers of blessing we need;\nMercy-drops round us are falling,\nBut for the showers we plead."
+},
+{
+  "id": 307,
+  "number": 307,
+  "title": "God is here, and that to bless us",
+  "author": "",
+  "verses": [
+    "God is here, and that to bless us\nWith the Spirit's quickening power;\nSee, the cloud already bending\nWaits to drop the grateful shower.",
+    "God is here! we feel His presence\nIn this consecrated place;\nBut we need the soul refreshing\nOf His free, unbounded grace.",
+    "God is here! oh, then believing,\nBring to Him our one desire,\nThat His love may now be kindled,\nTill its flame each heart inspire.",
+    "Saviour, grant the prayer we offer\nWhile in simple faith we bow;\nFrom the windows of Thy mercy\nPour us out a blessing now."
+  ],
+  "chorus": "Let it come, O Lord, we pray Thee!\nLet the shower of blessing fall!\nWe are waiting, we are waiting;\nOh revive the hearts of all!"
+},
+{
+  "id": 308,
+  "number": 308,
+  "title": "Oh, welcome, hour of prayer",
+  "author": "",
+  "verses": [
+    "Oh, welcome, hour of prayer!\nSo full of peace and rest!\nHere we may cast our every care\nUpon the Saviour's breast;\nWe leave the world without,\nTo sit at Jesus' feet;\nHis love can banish every doubt,\nAnd make our joys complete.",
+    "We see each other's face,\nAnd take each other's hand;\nWe sing our hymns of saving grace,\nAnd of the Better Land;\nAnd while we feast with Him\nWho is the Truth, the Light,\nMay we again our lamps retrim,\nTo shine forth in the night.",
+    "Thrice welcome, precious hour,\nOf faith, and hope, and love,\nWhen we may feel the Spirit's power\nDescending from above!\nHe dries the falling tears\nThat will, unbidden, start;\nHe scatters all our anxious fears,\nAnd fills each waiting heart.",
+    "O Thou that hearest prayer!\nHow sad this life would be—\nHow hard each heavy cross to bear,\nCould we not come to Thee!\nWhen faith seems lost in fear,\nAnd hopes are dimmed by care,\nIn Thee we find refreshing cheer,\nThou blessed hour of prayer!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 309,
+  "number": 309,
+  "title": "Revive Thy work, O Lord",
+  "author": "",
+  "verses": [
+    "Revive Thy work, O Lord!\nNow to Thy saints appear!\nOh, speak with power to every soul,\nAnd let Thy people hear!",
+    "Revive Thy work, O Lord!\nExalt Thy precious name!\nAnd may Thy love in every heart\nBe kindled to a flame!",
+    "Revive Thy work, O Lord!\nAnd bless to all Thy word!\nAnd may its pure and sacred truth\nIn living faith be heard!",
+    "Revive Thy work, O Lord!\nGive pentecostal showers!\nBe Thine the glory, Thine alone!\nThe blessing, Lord, be ours!"
+  ],
+  "chorus": "Revive Thy work, O Lord!\nWhile here to Thee we bow;\nDescend, O gracious Lord, descend!\nOh come, and bless us now!"
+},
+{
+  "id": 310,
+  "number": 310,
+  "title": "Faith is a living power from heaven",
+  "author": "",
+  "verses": [
+    "Faith is a living power from heaven\nWhich grasps the promise God has given;\nSecurely fixed on Christ alone,\nA trust that cannot be o'erthrown.",
+    "Faith finds in Christ whate'er we need\nTo save and strengthen, guide and feed;\nStrong in His grace, it joys to share\nHis cross, in hope His crown to wear.",
+    "Faith to the conscience whispers peace,\nAnd bids the mourner's sighing cease;\nBy faith the children's right we claim,\nAnd call upon our Father's name.",
+    "Such faith in us, O God, implant,\nAnd to our prayers Thy favour grant,\nIn Jesus Christ, Thy saving Son,\nWho is our fount of health alone."
+  ],
+  "chorus": ""
+},
+{
+  "id": 311,
+  "number": 311,
+  "title": "What various hindrances we meet",
+  "author": "",
+  "verses": [
+    "What various hindrances we meet\nIn coming to the mercy-seat!\nYet who, that knows the worth of prayer,\nBut wishes to be often there!",
+    "Prayer makes the darkened clouds withdraw,\nPrayer climbs the ladder Jacob saw,\nGives exercise to faith and love,\nBrings every blessing from above.",
+    "Restraining prayer, we cease to fight;\nPrayer makes the Christian's armour bright;\nAnd Satan trembles when he sees\nThe weakest saint upon his knees."
+  ],
+  "chorus": ""
+},
+{
+  "id": 312,
+  "number": 312,
+  "title": "Once more, O Lord, we pray",
+  "author": "",
+  "verses": [
+    "Once more, O Lord, we pray!\nPut Thy strong armour on;\nStrike down the shield of Satan's power,\nLet victory be won!",
+    "Lord Jesus, come to-day!\nLet souls before Thee bow;\nBe this Thine hour of triumph, Lord;\nOh, send salvation now!",
+    "Lord Jesus, come and reign!\nLet error's empire fall;\nWe long to see Thy glory shine,\nAnd crown Thee Lord of all!"
+  ],
+  "chorus": "Once more, O Lord, once more\nThy blessing we implore;\nIn Thy great name let victory sweep\nThrough Zion's gates once more."
+},
+{
+  "id": 313,
+  "number": 313,
+  "title": "O Thou that hearest prayer",
+  "author": "",
+  "verses": [
+    "O Thou that hearest prayer!\nAttend our humble cry;\nAnd let Thy servants share\nThy blessing from on high:\nWe plead the promise of Thy Word;\nGrant us Thy Holy Spirit, Lord!",
+    "If earthly parents hear\nTheir children when they cry;\nIf they, with love sincere,\nTheir children's wants supply:\nMuch more wilt Thou Thy love display,\nAnd answer when Thy children pray.",
+    "Our heavenly Father Thou;\nWe—children of Thy grace;\nOh, let Thy Spirit now\nDescend and fill the place:\nThat all may feel the heavenly flame,\nAnd all unite to praise Thy name."
+  ],
+  "chorus": ""
+},
+{
+  "id": 314,
+  "number": 314,
+  "title": "My God, is any hour so sweet",
+  "author": "",
+  "verses": [
+    "My God, is any hour so sweet,\nFrom blush of morn to evening star,\nAs that which calls me to Thy feet—\nThe hour of prayer?",
+    "Then is my strength by Thee renewed;\nThen are my sins by Thee forgiven;\nThen dost Thou cheer my solitude,\nWith hopes of heaven.",
+    "No words can tell what sweet relief\nHere for my every want I find:\nWhat strength for warfare, balm for grief,\nWhat peace of mind!",
+    "Hushed is each doubt, gone every fear;\nMy spirit seems in heaven to stay;\nAnd e'en the penitential tear\nIs wiped away.",
+    "Lord, till I reach yon blissful shore,\nNo privilege so dear shall be\nAs thus my inmost soul to pour\nIn prayer to Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 315,
+  "number": 315,
+  "title": "For the tempted, Lord, we pray",
+  "author": "",
+  "verses": [
+    "For the tempted, Lord, we pray;\nFor the souls that go astray;\nWeak and weary, tempest-tost,\nStars all hid, and compass lost;\nSailors on the dangerous seas—\nGod of love, we pray for these.",
+    "For the tempted, Lord, we pray;\nThou didst make them, Thine are they;\nWhen alluring forms are nigh,\nWhen a thousand voices cry,\nLoud and clear above them all\nLet them hear Thy tender call.",
+    "For the tempted, Lord, we pray;\nFor the souls that go astray,\nBeaten back by storm and sleet,\nScorned by all they chance to meet;\nOn them let Thy mercy shine,\nStill remember they are Thine.",
+    "For the tempted, Lord, we pray;\nDust and ashes—such are they!\nHear them while they make their moan;\nThou canst save, and Thou alone:\nSee, their feet are on the sands;\nChrist of Calvary, hold their hands."
+  ],
+  "chorus": ""
+},
+{
+  "id": 316,
+  "number": 316,
+  "title": "Sweet the moments, rich in blessing",
+  "author": "",
+  "verses": [
+    "Sweet the moments, rich in blessing,\nWhich before the cross we spend;\nLife, and health, and peace possessing,\nFrom the sinner's dying Friend.",
+    "Truly blessed is this station,\nLow before His cross to lie,\nWhile we see Divine compassion\nBeaming in His gracious eye.",
+    "Love and grief our hearts dividing,\nWith our tears His feet we bathe,\nConstant still in faith abiding,\nLife deriving from His death.",
+    "For Thy sorrows we adore Thee,\nFor the pains that wrought our peace,\nGracious Saviour, we implore Thee\nIn our souls Thy love increase."
+  ],
+  "chorus": ""
+},
+{
+  "id": 317,
+  "number": 317,
+  "title": "Father, before Thy throne",
+  "author": "",
+  "verses": [
+    "Father, before Thy throne\nMy soul would bow;\nNe'er have I asked in vain,\nOh, hear me now:\nHear Thou the prayer I make,\nAnswer for Jesus' sake;\nBid faith and love awake\nWithin my heart.",
+    "Father, this heart of mine,\nWhich now I bring,\nLies down before Thy feet,\nA guilty thing;\nKindle its altar fire,\nThen hope and zeal inspire;\nWake Thou its silent lyre\nIn praise to Thee.",
+    "Thou art our dwelling-place\nIn every age;\nIn Thy sweet love we trace\nOur heritage—\nOur refuge from the storm,\nOur shelter safe and warm;\nHelp us our vows perform,\nFather Divine."
+  ],
+  "chorus": ""
+},
+{
+  "id": 318,
+  "number": 318,
+  "title": "Sweet hour of prayer",
+  "author": "",
+  "verses": [
+    "Sweet hour of prayer! sweet hour of prayer!\nThat calls me from a world of care,\nAnd bids me at my Father's throne\nMake all my wants and wishes known.\nIn seasons of distress and grief,\nMy soul has often found relief,\nAnd oft escaped the tempter's snare,\nBy thy return, sweet hour of prayer!",
+    "Sweet hour of prayer! sweet hour of prayer!\nThy wings shall my petition bear\nTo Him whose truth and faithfulness\nEngage the waiting soul to bless;\nAnd since He bids me seek His face,\nBelieve His word, and trust His grace,\nI'll cast on Him my every care,\nAnd wait for thee, sweet hour of prayer!",
+    "Sweet hour of prayer! sweet hour of prayer!\nMay I thy consolation share,\nTill, from Mount Pisgah's lofty height,\nI view my home and take my flight.\nThis robe of flesh I'll drop, and rise\nTo seize the everlasting prize;\nAnd shout, while passing through the air,\n\"Farewell, farewell, sweet hour of prayer!\""
+  ],
+  "chorus": ""
+},
   {
     "id": 319,
     "number": 319,
@@ -3680,6 +4135,18 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
+  {
+  "id": 320,
+  "number": 320,
+  "title": "'Tis the hallowed hour of prayer",
+  "author": "",
+  "verses": [
+    "'Tis the hallowed hour of prayer,\nAnd we trustingly bring\nAll our doubtings and our fears\nTo our Saviour and King;\nFor we know that He delights\nA glad welcome to give,\nAnd the blessings that we ask for\nWe shall fully receive.",
+    "'Tis the precious hour of prayer,\nAnd we humbly entreat:\nFather, breathe the Spirit now,\nAs we bow at Thy feet;\nTouch our lips with power of song;\nFill our souls with Thy love,\nAnd bestow the benediction\nOf Thy peace from above.",
+    "'Tis the sacred hour of prayer,\nCalm as heaven above;\nSoul to soul is breathing here\nThe communion of love;\nEvery heart is sweetly filled\nWith a peace most profound;\nOh, the place is like to heaven\nWhere such true joys abound."
+  ],
+  "chorus": "Precious hour of prayer!\nHallowed hour of prayer!\nSacred season of communion,\nIt is sweet to be there!"
+},
    {
     "id": 414,
     "number": 414,
