@@ -7512,7 +7512,258 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
-  
+  {
+  "id": 582,
+  "number": 582,
+  "title": "More holiness give me, more strivings within",
+  "author": "Philip P. Bliss",
+  "verses": [
+    "More holiness give me, more strivings within ;\nMore patience in suffering, more sorrow for sin ;\nMore faith in my Saviour, more sense of His care ;\nMore joy in His service, more purpose in prayer.",
+    "2 More gratitude give me, more trust in the Lord ;\nMore zeal for His glory, more hope in His Word ;\nMore tears for His sorrows, more pain at His grief;\nMore meekness in trial, more praise for relief.",
+    "3 More purity give me, more strength to o'ercome ;\nMore freedom from earth-stains, more longings for home ;\nMore fit for the kingdom, more used would I be;\nMore blessed and holy, more, Saviour, like Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 583,
+  "number": 583,
+  "title": "Oh for a closer walk with God",
+  "author": "William Cowper",
+  "verses": [
+    "Oh for a closer walk with God,\nA calm and heavenly frame ;\nA light to shine upon the road\nThat leads me to the Lamb !",
+    "2 Where is the blessedness I knew\nWhen first I saw the Lord ?\nWhere is the soul-refreshing view\nOf Jesus and His word ?",
+    "3 What peaceful hours I once enjoyed \nHow sweet their memory still !\nBut they have left an aching void\nThe world can never fill.",
+    "4 The dearest idol I have known,\nWhate'er that idol be,\nHelp me to tear it from Thy throne,\nAnd worship only Thee.",
+    "5 So shall my walk be close with God,\nCalm and serene my frame ;\nSo purer light shall mark the road\nThat leads me to the Lamb."
+  ],
+  "chorus": ""
+},
+{
+  "id": 584,
+  "number": 584,
+  "title": "Come, let us to the Lord our God",
+  "author": "John Morrison",
+  "verses": [
+    "Come, let us to the Lord our God\nWith contrite hearts return ;\nOur God is gracious, nor will leave\nThe desolate to mourn.",
+    "2 His voice commands the tempest forth,\nAnd stills the stormy wave ;\nAnd though His arm be strong to smite,\n'Tis also strong to save.",
+    "3 Long hath the night of sorrow reigned ;\nThe dawn shall bring us light ;\nGod shall appear, and we shall rise\nWith gladness in His sight.",
+    "4 Our hearts, if God we seek to know,\nShall know Him and rejoice ;\nHis coming like the morn shall be,\nLike morning songs His voice.",
+    "5 As dew upon the tender herb,\nDiffusing fragrance round ;\nAs showers that usher in the spring,\nAnd cheer the thirsty ground :",
+    "6 So shall His presence bless our souls,\nAnd shed a joyful light ;\nThat hallowed morn shall chase away\nThe sorrows of the night."
+  ],
+  "chorus": ""
+},
+{
+  "id": 585,
+  "number": 585,
+  "title": "Jesus Christ, grow Thou in me",
+  "author": "Johann C. Lavater (trans. Elizabeth L. Smith)",
+  "verses": [
+    "Jesus Christ, grow Thou in me,\nAnd all things else recede !\nMy heart be daily nearer Thee,\nFrom sin be daily freed.",
+    "2 Each day let Thy supporting might\nMy weakness still embrace;\nMy darkness vanish in Thy light,\nThy life my death efface.",
+    "3 In Thy bright beams which on me fall\nFade every evil thought ;\nThat I am nothing, Thou art all,\nI would be daily taught.",
+    "4 More of Thy glory let me see,\nThou Holy, Wise, and True !\nI would Thy living image be,\nIn joy and sorrow too.",
+    "5 Fill me with gladness from above,\nHold me by strength Divine :",
+    "6 Make this poor self grow less and less,\nBe Thou my life and aim ;\nOh, make me daily through Thy grace\nMore meet to bear Thy name !"
+  ],
+  "chorus": "Lord, let the glow of Thy great love\nThrough my whole being shine."
+},
+{
+  "id": 586,
+  "number": 586,
+  "title": "Oh, suffer me to come to Thee",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Oh, suffer me to come to Thee,\nJesus, the Son ;\nOh, may my heart from evil part\nTo Thee be won.",
+    "2 Thy blessing give ; help me to live,\nJesus, for Thee ;\nNor let me stray from Thee away,\nBut strengthen me.",
+    "3 Safe in the arms that guard from harms,\nJesus, my Guide,\nProtect me still, keep me from ill,\nClose to Thy side.",
+    "4 So strong Thou art, control my heart,\nJesus, most kind ;\nOh, make me true, my soul renew,\nTo Thee it bind.",
+    "5 When ends my life from care and strife,\nJesus, with Thee,\nIn heavenly peace, where sin doth cease,\nAt home I'll be."
+  ],
+  "chorus": ""
+},
+{
+  "id": 587,
+  "number": 587,
+  "title": "Search me, O God, my actions try",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Search me, O God, my actions try,\nAnd let my life appear\nAs seen by Thine all-searching eye :\nTo mine my ways make clear.",
+    "2 Search all my sense, and know my heart,\nWho only canst make known ;\nAnd let the deep, the hidden part\nTo me be fully shown.",
+    "3 Throw light into the darkened cells,\nWhere passion reigns within ;\nQuicken my conscience till it feels\nThe loathsomeness of sin.",
+    "4 Search all my thoughts, the secret springs,\nThe motives that control ;\nThe chambers where polluted things\nHold empire o'er the soul.",
+    "5 Search, till Thy fiery glance has cast\nIts holy light through all,\nAnd I by grace am brought at last\nBefore Thy face to fall.",
+    "6 Thus prostrate I shall learn of Thee\nWhat now I feebly prove —\nThat God alone in Christ can be\nUnutterable love !"
+  ],
+  "chorus": ""
+},
+{
+  "id": 588,
+  "number": 588,
+  "title": "Holy Father ! hear my cry",
+  "author": "Horatius Bonar",
+  "verses": [
+    "Holy Father ! hear my cry ;\nHoly Saviour ! bend Thine ear ;\nHoly Spirit ! come Thou nigh ;\n—\nFather, Saviour, Spirit, hear !",
+    "2 Father, save me from my sin ;\nSaviour, I Thy mercy crave ;\nGracious Spirit, make me clean;\n—\nFather, Son, and Spirit, save !",
+    "3 Father, let me taste Thy love ;\nSaviour, fill my soul with peace ;\nSpirit, come, my heart to move :\nFather, Son, and Spirit bless !",
+    "4 Father, Son, and Spirit, Thou\nOne Jehovah, shed abroad\nAll Thy grace within me now\n—\nBe my Father and my God !"
+  ],
+  "chorus": ""
+},
+{
+  "id": 589,
+  "number": 589,
+  "title": "My Saviour, Thou hast offered rest",
+  "author": "Anonymous",
+  "verses": [
+    "My Saviour, Thou hast offered rest :\nOh, give it, then, to me !—\nThe rest of ceasing from myself,\nTo find my all in Thee.",
+    "2 This cruel self, oh, how it strives\nAnd works within my breast,\nTo come between Thee and my soul\nAnd keep me back from rest !",
+    "3 How many subtle forms it takes\nOf seeming verity,\nAs if it were not safe to rest,\nAnd venture all on Thee.",
+    "4 O Lord, I seek a holy rest,\nA victory over sin !\nI seek that Thou alone shouldst reign\nO'er all without, within.",
+    "5 In Thy strong hand I lay me down\n—\nSo shall the work be done :\nFor who can work so wondrously\nAs the Almighty One ?",
+    "6 Work on, then, Lord, till on my soul\nEternal light shall break ;\nAnd, in Thy likeness perfected,\nI \" satisfied \" shall wake."
+  ],
+  "chorus": ""
+},
+{
+  "id": 590,
+  "number": 590,
+  "title": "I have given up all for Jesus",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "I have given up all for Jesus —\nThis vain world is naught to me ;\nAll its pleasures are forgotten\nIn remembering Calvary.",
+    "2 When the voice of Jesus calls me,\nAnd the angels whisper low,\nI will lean upon my Saviour\nThrough the valley as I go :\nI will claim His precious promise,\nWorth to me the world of gold :—\n\" Fear no evil, I'll be with thee\nWhen the pearly gates unfold.\"",
+    "3 Just beyond the waves of Jordan,\nJust beyond its chilling tide,\nBlooms the Tree of Life immortal,\nAnd the living waters glide :\nIn that happy land of spirits\nAre there stores of bliss untold,\nAnd the angels are awaiting\nWhere the pearly gates unfold."
+  ],
+  "chorus": "Though my friends despise, forsake me,\nAnd on me the world looks cold,\nI've a Friend that will stand by me\nWhen the pearly gates unfold.\nLife's morn will soon be waning,\nAnd its evening bells be tolled,\nBut my heart will know no sadness\nWhen the pearly gates unfold."
+},
+{
+  "id": 591,
+  "number": 591,
+  "title": "My glorious Victor, Prince Divine",
+  "author": "Jean Sophia Pigott",
+  "verses": [
+    "My glorious Victor, Prince Divine,\nClasp these surrendered hands in Thine ;\nAt length my will is all Thine own,\nGlad vassal of a Saviour's throne.",
+    "2 My Master, lead me to Thy door;\nPierce this now willing ear once more ;\nThy bonds are freedom ; let me stay\nWith Thee, to toil, endure, obey.",
+    "3 Yes, ear and hand, and thought and will,\nUse all in Thy dear slavery still !\nSelf's weary liberties I cast\nBeneath Thy feet; there keep them fast.",
+    "4 Tread them still down; and then I know,\nThese hands shall with Thy gifts o'erflow ;\nAnd pierced ears shall hear the tone\nWhich tells me Thou and I are one."
+  ],
+  "chorus": ""
+},
+{
+  "id": 592,
+  "number": 592,
+  "title": "\"Not my own !\" but saved by Jesus",
+  "author": "Daniel W. Whittle",
+  "verses": [
+    "\" Not my own !\" but saved by Jesus,\nWho redeemed me by His blood :\nGladly I accept the message,\nI belong to Christ the Lord !",
+    "2 \"Not my own !\" to Christ, my Saviour,\nI, believing, trust my soul ;\nEverything to Him committed,\nWhile eternal ages roll.",
+    "3 \"Not my own !\" my time, my talent,\nFreely all to Christ I bring,\nTo be used in joyful service\nFor the glory of my King.",
+    "4 \"Not my own !\" The Lord accepts me.\nOne among the ransomed throng,\nWho in heaven shall see His glory,\nAnd to Jesus Christ belong."
+  ],
+  "chorus": "\" Not my own !\" . . Oh, \" not my own !\" . .\nJesus, I . . belong to Thee ! . .\nAll I have, and all I hope for,\nThine for all eternity !"
+},
+{
+  "id": 593,
+  "number": 593,
+  "title": "Once it was the blessing, now it is the Lord",
+  "author": "Albert B. Simpson",
+  "verses": [
+    "Once it was the blessing, now it is the Lord;\nOnce it was the feeling, now it is His Word;\nOnce His gifts I wanted, now the Giver own ;\nOnce I sought for healing, now Himself alone.",
+    "2 Once 'twas painful trying, now 'tis perfect trust ;\nOnce a half salvation, now the uttermost ;\nOnce 'twas ceaseless holding, now He holds me fast ;\nOnce 'twas constant drifting, now my anchor's cast.",
+    "3 Once 'twas busy planning, now 'tis trustful prayer;\nOnce 'twas anxious caring, now He has the care;\nOnce 'twas what I wanted, now what Jesus says ;\nOnce 'twas constant asking, now 'tis ceaseless praise.",
+    "4 Once it was my working, His it hence shall be ;\nOnce I tried to use Him, now He uses me ;\nOnce the power I wanted, now the Mighty One ;\nOnce for self I laboured, now for Him alone.",
+    "5 Once I hoped in Jesus, now I know He's mine ;\nOnce my lamps were dying, now they brightly shine ;\nOnce for death I waited, now His coming hail ;\nAnd my hopes are anchored safe within the veil."
+  ],
+  "chorus": "All in all for ever, Jesus will I sing ;\nEverything in Jesus, and Jesus everything."
+},
+{
+  "id": 594,
+  "number": 594,
+  "title": "I am glad I have heard of the Saviour's great mercy",
+  "author": "Daniel W. Whittle",
+  "verses": [
+    "I am glad I have heard of the Saviour's great mercy !\nAnd that now I am singing His redemption's new song ;\nAnd e'er since, by His grace, unto Him I surrendered,\nIn my heart has been ringing — \" I believe ! I belong ! \"",
+    "2 Once the slave of my sin, then my soul lay in darkness,\nKept a prisoner by Satan in his dungeon so strong ;\nBut the Lord, by His power, set me free from my bondage,\nAnd He gave me this watchword — \" I believe ! I belong ! \"",
+    "3 I believe for a full and a perfect salvation ;\nI belong to my Saviour with a love deep and strong ;\nAnd though oft sorely tempted to change my allegiance,\nStill my faith gives the answer — \" I believe ! I belong ! \"",
+    "4 But I look for the time when, my journey safe ended,\nI shall join in the chorus of the heavenly throng :\nOh, what rapture 'twill be on the throne to behold Him,\nTo eternity singing — \" I believe ! I belong ! \""
+  ],
+  "chorus": "Tell it out ! tell it out ! Christ the theme of my story !\nSing, ye mountains and hills ! breezes, waft it along !\nPraise the Lord ! He provideth a perfect salvation ;\nSo we'll take as our watchword — \" I believe ! I belong ! '"
+},
+{
+  "id": 595,
+  "number": 595,
+  "title": "Thy will, O Lord, not mine",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Thy will, O Lord, not mine,\nTeach me to say ;\nNot my will, Lord, but Thine,\nI would obey ;\nThen shall I know the joy,\nAnd Thy name glorify,\nWhen I, on earth, shall try\nTo follow Thee.",
+    "2 My weakness, Lord, I own,\nFrom day to day ;\nI listen for Thy voice\nTo lead the way ;\nOh, wilt Thou send the light\nTo make my pathway bright,\nAnd show me what is right,\nThe only way.",
+    "3 I cannot see just where\nThe Spirit leads,\nBut know that Christ is there,\nWho intercedes;\nOh, help me now to rest\nOn Jesus' loving breast,\nTill He shall manifest\nHis love in me !"
+  ],
+  "chorus": ""
+},
+{
+  "id": 596,
+  "number": 596,
+  "title": "Anywhere, my Saviour, lead my willing feet",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Anywhere, my Saviour, lead my willing feet,\nOnly let me clasp Thy hand, feel Thy presence sweet ;\nThorns may pierce and snares beset, I will follow Thee\nAnywhere, my Saviour, if Thou leadest me.",
+    "2 Anywhere, my Saviour, only on me smile ;\nStrengthen, guard, and comfort me, let not sin beguile ;\nDark and toilsome though my way, I will never fear,\nAnywhere, my Saviour, if Thy presence cheer.",
+    "3 Anywhere, my Saviour: only this I pray,\nKeep me in the narrow path, never let me stray ;\nSin may plead with siren voice, help me answer, Nay,\nKept by Thee, my Saviour, I will hold my way."
+  ],
+  "chorus": "Anywhere, my blessed Saviour,\nI will follow Thee, I will follow Thee ;\nAnywhere, my blessed Saviour,\nIf Thou leadest me. . . ."
+},
+{
+  "id": 597,
+  "number": 597,
+  "title": "Jesus, I my cross have taken",
+  "author": "Henry F. Lyte",
+  "verses": [
+    "Jesus, I my cross have taken,\nAll to leave and follow Thee ;\nNaked, poor, despised, forsaken,\nThou, from hence, my all shalt be.\nPerish every fond ambition, \nAll I've sought, or hoped, or known,\nYet how rich is my condition !\nGod and heaven are still my own.",
+    "2 Let the world despise and leave me,\nThey have left my Saviour too ;\nHuman hearts and looks deceive me ;\nThou art not, like them, untrue.\nAnd while Thou shalt smile upon me,\nGod of wisdom, love, and might,\nFoes may hate, and friends may scorn me;\nShow Thy face, and all is bright.",
+    "3 Man may trouble and distress me,\n'Twill but drive me to Thy breast ;\nLife with trials hard may press me,\nHaven will bring me sweeter rest.\nOh, 'tis not in grief to harm me,\nWhile Thy love is left to me :\nOh, 'twere not in joy to charm me,\nWere that joy unblest by Thee !"
+  ],
+  "chorus": ""
+},
+{
+  "id": 598,
+  "number": 598,
+  "title": "It may not be on the mountain's height",
+  "author": "Mary Brown",
+  "verses": [
+    "It may not be on the mountain's height,\nOr over the stormy sea ;\nIt may not be at the battle's front\nMy Lord will have need of me ;\nBut if by a still small voice He calls\nTo paths which I do not know,\nI'll answer, O Lord, with my hand in Thine,\nI'll go where Thou wouldst I should go.",
+    "2 Perhaps to-day there are loving words\nWhich Jesus would have me speak ;\nThere may be now in the paths of sin\nSome wanderer whom I should seek ;\nO Saviour, if Thou wilt be my guide,\nThough dark and rugged the way,\nMy voice shall echo Thy message sweet —\nI'll say what Thou wouldst I should say.",
+    "3 There must be still some lowly place\nFor me in the harvest wide,\nWhere I may labour through life's short day\nFor Jesus the crucified :\nSo, trusting my all to Thy tender care,\nAnd knowing Thou lovest me,\nI'll do Thy will with a heart sincere —\nI'll be what Thou wouldst I should be."
+  ],
+  "chorus": "I'll go where Thou wouldst I should go, dear Lord,\nOver mountain, or plain, or sea ;\nI'll say what Thou wouldst I should say, dear Lord,\nI'll be what Thou wouldst I should be."
+},
+{
+  "id": 599,
+  "number": 599,
+  "title": "O blessed life ! the heart at rest",
+  "author": "William Tidd Matson",
+  "verses": [
+    "O blessed life ! the heart at rest, \nWhen all without tumultuous seems,\nThat trusts a higher will, and deems\nThat higher will, not mine, the best.",
+    "2 O blessed life ! the mind that sees \nWhatever change the years may bring ;\nA mercy still in everything,\nAnd shining through all mysteries.",
+    "3 O blessed life ! the soul that soars, \nWhen sense of mortal sight is dim,\nBeyond the sense—beyond to Him\nWhose love unlocks the heavenly doors.",
+    "4 O blessed life ! heart, mind, and soul,\nFrom self-born aims and wishes free ;\nIn all—at one with Deity,\nAnd loyal to the Lord's control."
+  ],
+  "chorus": "O life ! how blessed, how divine ! \nHigh life, the earnest of a higher ! \nSaviour, fulfil my deep desire,\nAnd let this blessed life be mine."
+},
+{
+  "id": 600,
+  "number": 600,
+  "title": "Search me, O Lord ! and try this heart of mine",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Search me, O Lord ! and try this heart of mine ;\nSearch me, and prove if I indeed am Thine ;\nTest by Thy word, that never changed can be,\nMy strength of hope and living faith in Thee.",
+    "2 Search me, O Lord ! subdue each vain desire,\nAnd in my soul a deeper love inspire;\nHide Thou my life, that I, supremely blest,\nBeneath Thy wings in perfect peace may rest.",
+    "3 Search me, O Lord ! and from the dross of sin,\nRefine as gold, and keep me pure within ;\nSearch Thou my thoughts, whose springs Thine eyes can see :\nFrom secret faults, O Saviour, cleanse Thou me !",
+    "4 Search me, O Lord ! let faith thro' grace divine\nThyself reflect in every act of mine,\nTill at Thy call my waiting soul shall rise,\nCaught up with joy to meet Thee in the skies."
+  ],
+  "chorus": ""
+},
   {
     "id": 601,
     "number": 601,
@@ -7527,6 +7778,7 @@ const SACRED_SONGS = [
     ],
     "chorus": "I surrender all, I surrender all;\nAll to Thee, my blessed Saviour,\nI surrender all."
   },
+  
   {
     "id": 616,
     "number": 616,
