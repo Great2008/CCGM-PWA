@@ -6746,19 +6746,759 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
+{
+  "id": 521,
+  "number": 521,
+  "title": "In the shadow of the Highest",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "In the shadow of the Highest\nMy defence shall ever be,\nFor His eye, that never sleepeth,\nStill is watching over me.",
+    "In the shadow of the Highest\nI am safe from dread alarms,\nFor beneath me and around me\nAre His everlasting arms.",
+    "In the shadow of the Highest,\nThere no evil can befall—\nHe's my Hope, my Shield, and Buckler,\nMy Deliverer and my All."
+  ],
+  "chorus": "I am dwelling in the shadow . . .\nOf the mighty King of kings ; . . .\nWith His feathers I am covered, . . .\nAnd I rest . . . beneath His wings. . . ."
+},
+{
+  "id": 522,
+  "number": 522,
+  "title": "All the way my Saviour leads me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "All the way my Saviour leads me;\nWhat have I to ask beside?\nCan I doubt His tender mercy,\nWho through life has been my Guide?\nHeavenly peace, divinest comfort,\nHere by faith in Him to dwell!\nFor I know, whate'er befall me,\nJesus doeth all things well.",
+    "All the way my Saviour leads me,\nCheers each winding path I tread,\nGives me grace for every trial,\nFeeds me with the living bread.\nThough my weary steps may falter,\nAnd my soul athirst may be,\nGushing from the Rock before me,\nLo! a spring of joy I see.",
+    "All the way my Saviour leads me;\nOh, the fulness of His love!\nPerfect rest to me is promised\nIn my Father's house above.\nWhen my spirit, clothed immortal,\nWings its flight to realms of day,\nThis my song through endless ages—\n\"Jesus led me all the way!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 523,
+  "number": 523,
+  "title": "Lead me now and lead me ever",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Lead me now and lead me ever,\nLest my feet should turn aside\nFrom the path of love and duty,\nFrom the Cross where Thou hast died.",
+    "Thou the great and only centre\nOf my love and highest praise,\nLet my soul, revolving round Thee,\nCatch Thy pure, celestial rays.",
+    "Keep me, Lord, for well Thou knowest\nHow I need Thy grace divine,\nFrom the thoughts that oft beguile me,\nStill to shield this heart of mine."
+  ],
+  "chorus": "Lead me now and lead me ever,\nTill beyond the crystal sea,\nThrough the bright and shining portals,\nI shall come and dwell with Thee."
+},
+{
+  "id": 524,
+  "number": 524,
+  "title": "Guide me, O Thou great Jehovah",
+  "author": "William Williams",
+  "verses": [
+    "Guide me, O Thou great Jehovah,\nPilgrim through this barren land;\nI am weak, but Thou art mighty;\nHold me with Thy powerful hand;\nBread of heaven, Bread of heaven,\nFeed me till I want no more.",
+    "Open now the crystal fountain,\nWhence the healing waters flow;\nLet the fiery, cloudy pillar\nLead me all my journey through;\nStrong Deliverer, strong Deliverer,\nBe Thou still my strength and shield.",
+    "When I tread the verge of Jordan,\nBid my anxious fears subside;\nDeath of deaths, and hell's destruction,\nLand me safe on Canaan's side;\nSongs of praises, songs of praises\nI will ever give to Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 525,
+  "number": 525,
+  "title": "Thou art my Rock, O blessed Redeemer",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Thou art my Rock, O blessed Redeemer,\nThou art my Shield from every foe;\nSafe in Thy care my soul abideth,\nOnly Thy path I long to know.",
+    "When by the storms of trial shaken,\nWhen by the waves of grief opprest,\nInto the haven of Thy mercy\nGather me, Lord, and give me rest.",
+    "Though in a world of sin and shadow,\nTempted and tried, my path may be;\nThou wilt not leave my soul to wander,\nThou wilt direct my steps to Thee.",
+    "When I have passed the gloomy river,\nWhen I have reached the golden shore,\nI shall be safe, O blessed Redeemer,\nNear to Thy heart for evermore."
+  ],
+  "chorus": "Hide me ! hide me ! . . .\nHide me, O my Saviour, hide me ! . . .\nSafe in Thy love let me abide, . . .\nHold me, oh, hold me near Thy side !"
+},
+{
+  "id": 526,
+  "number": 526,
+  "title": "How firm a foundation, ye saints of the Lord",
+  "author": "George Keith",
+  "verses": [
+    "How firm a foundation, ye saints of the Lord,\nIs laid for your faith in His excellent Word!\nWhat more can He say than to you He hath said,\nYou who unto Jesus for refuge have fled?",
+    "\"Fear not, I am with thee, oh, be not dismayed!\nI, I am thy God, and will still give thee aid;\nI'll strengthen thee, help thee, and cause thee to stand,\nUpheld by My righteous, omnipotent hand.\"",
+    "\"When through the deep waters I call thee to go,\nThe rivers of sorrow shall not overflow;\nFor I will be with thee, thy troubles to bless,\nAnd sanctify to thee thy deepest distress.\"",
+    "\"When through fiery trials thy pathway shall lie,\nMy grace, all-sufficient, shall be thy supply;\nThe flame shall not hurt thee; I only design\nThy dross to consume, and thy gold to refine.\"",
+    "\"The soul that on Jesus hath leaned for repose,\nI will not, I will not desert to his foes;\nThat soul, though all hell should endeavor to shake,\nI'll never, no, never, no, never forsake!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 527,
+  "number": 527,
+  "title": "Thou art, O Lord, my Hiding-Place",
+  "author": "Thomas Raffles",
+  "verses": [
+    "Thou art, O Lord, my Hiding-Place,\nIn Thee I put my trust;\nEncouraged by Thy holy Word,\nA feeble child of dust.",
+    "I have no argument beside,\nI urge no other plea;\nAnd 'tis enough my Saviour died,\nMy Saviour died for me!",
+    "When storms of fierce temptation beat,\nAnd furious foes assail,\nMy refuge is the mercy-seat,\nMy hope within the veil.",
+    "From strife of tongues and bitter words\nMy spirit flies to Thee;\nAnd safe beneath Thy sheltering wings\nMy resting-place shall be."
+  ],
+  "chorus": ""
+},
+{
+  "id": 528,
+  "number": 528,
+  "title": "Like a shepherd, tender, true",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Like a shepherd, tender, true,\nInto pastures green and new,\nWith His flock He gently goes,\nWhere the quiet water flows.",
+    "In the dark and stormy day,\nWhen they wander far away,\nHe will seek them in the cold,\nAnd conduct them to the fold.",
+    "They who love His tender care\nIn His goodness always share;\nHe will guard them night and day,\nLest they wander from the way."
+  ],
+  "chorus": "Leader ! Leader ! . . .\nLead us, O Saviour, lead us ! . . .\nKeep us near Thy precious side, . . .\nUnder Thy wings securely hide !"
+},
+{
+  "id": 529,
+  "number": 529,
+  "title": "Down in the valley with my Saviour I would go",
+  "author": "William O. Cushing",
+  "verses": [
+    "Down in the valley with my Saviour I would go,\nWhere the flowers are blooming and the sweet waters flow;\nEverywhere He leads me I would follow, follow on,\nWalking in His footsteps till the crown of life is won.",
+    "Down in the valley with my Saviour I would go,\nWhere the storms are sweeping and the dark waters flow;\nWith His hand to guide me, I will never, never fear,\nKnowing that my Saviour is for ever, ever near.",
+    "How I love to follow Him where'er He leads my way!\nOn the sunny mountain or in valleys dark and grey;\nTill He bids me gather with the ransomed and the blest,\nWhere the weary worker finds a sweet, eternal rest."
+  ],
+  "chorus": "Follow ! follow ! I would follow Jesus ! . . .\nAnywhere, everywhere, I would follow on ! . . .\nFollow ! follow ! I would follow Jesus ! . . .\nAnywhere He leads me, I would follow on !"
+},
+{
+  "id": 530,
+  "number": 530,
+  "title": "With my Saviour ever near to guide me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "With my Saviour ever near to guide me,\nI am safe, whatever may betide me;\nFrom the storm and tempest He will hide me\nIn the hollow of His hand!",
+    "In His arms of love He doth enfold me;\nWords of peace His voice divine hath told me;\nI am safe, for God Himself doth hold me\nIn the hollow of His hand!",
+    "He will guard my soul, and leave me never;\nFrom His love no power on earth shall sever;\nAnd I know He'll keep me now and ever\nIn the hollow of His hand!"
+  ],
+  "chorus": "In the hollow . . . of His hand ! . . .\nIn the hollow . . . of His hand ! . . .\nI am safe whatever may betide me,\nIn the hollow of His hand !"
+},
+{
+  "id": 531,
+  "number": 531,
+  "title": "In the shadow of the Rock",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "In the shadow of the Rock\nLet me rest,\nWhen the tempest and the shock\nBeat my breast;\nHere my weary soul is safe,\nSafe from harm,\nFor the shadow of the Rock\nIs a calm.",
+    "In the shadow of the Rock\nLet me stay,\nThrough the dangers and the toil\nOf the day;\nI am safe from every foe,\nSafe from fear,\nFor the shadow of the Rock\nIs so near.",
+    "In the shadow of the Rock\nI'll abide,\nTill I cross the silent lake,\nEventide;\nThen with everlasting joy\nI shall sing,\nOf the shadow of the Rock,\nAnd my King."
+  ],
+  "chorus": ""
+},
+{
+  "id": 532,
+  "number": 532,
+  "title": "Take Thou my hand, and lead me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Take Thou my hand, and lead me,\nChoose Thou my way;\nTake Thou my hand, and keep me\nLest I should stray;\nTake Thou my hand, and guide me,\nSaviour divine,\nTill in the home of glory\nI shall be Thine.",
+    "Take Thou my hand, and hold me,\nWhen storms are high;\nTake Thou my hand, and cheer me\nWhen death is nigh;\nTake Thou my hand, and bring me\nOver the sea,\nInto the blessed haven\nSafe, safe with Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 533,
+  "number": 533,
+  "title": "Tenderly guide us, O Shepherd of love",
+  "author": "Sophia T. Griswold",
+  "verses": [
+    "Tenderly guide us, O Shepherd of love,\nTo the green pastures and waters above,\nGuarding us ever by night and by day,\nNever from Thee would we stray.",
+    "What though the heavens with clouds be o'ercast!\nFearful the tempest, and bitter the blast!\nStill with the light of Thy Word on the way,\nNever from Thee would we stray.",
+    "Over our weakness Thy strength has been cast;\nKeep us in meekness, Thine own till the last;\nThen, safely folded, with joy we shall say,\nNever from Thee would we stray."
+  ],
+  "chorus": "Never ! . . . never ! . . .\nNever ! oh, never ! for Thou art the way. . . .\nNever ! . . . never ! . . .\nNever from Thee would we stray."
+},
+{
+  "id": 534,
+  "number": 534,
+  "title": "Leave me not, for I am lonely",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Leave me not, for I am lonely,\nAnd the shadows gather round;\nBe Thou near me, for Thou only\nCanst in mercy, Lord, be found;\nOh, sustain me, keep me ever,\nIn Thy path of love divine,\nAnd let nothing from Thee sever\nThis wayward heart of mine.",
+    "Leave me not, for storms are sweeping\nO'er my frail and trembling bark;\nI am placing in Thy keeping\nEvery hope, when all is dark;\nThou canst hold me, Thou canst guide me,\nThou canst keep me by Thy power;\nHide me, O my Saviour, hide me,\nIn the dark and trying hour.",
+    "Leave me not, but still preserve me,\nTill my work on earth is done;\nLet Thy grace and mercy serve me,\nTill the victory is won;\nThen with joy and adoration,\nOn the bright and golden shore,\nI will sing Thy great salvation,\nAnd adore Thee evermore."
+  ],
+  "chorus": ""
+},
+{
+  "id": 535,
+  "number": 535,
+  "title": "In the secret of His presence He will hide me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "In the secret of His presence He will hide me,\nFrom the burden of a weary world of care;\nOvershadowed by His mercy, calmly resting,\nMy Redeemer will protect me there.",
+    "In the secret of His presence He will hide me,\nAnd the brightness of His glory He will show:\nWhile He covers me with light as with a garment,\nOh, the rapture that my heart will know!",
+    "In the secret of His presence He will hide me,\nIn the secret of His blessed, boundless love;\nThere communing and abiding with my Saviour,\nWhat a foretaste of the joys above!"
+  ],
+  "chorus": "He will hide . . . me, . . . safely hide . . . me, . . .\nWhere no sorrow nor temptation can betide me ;\nHe will hide . . . me, . . . safely hide . . . me ; . . .\nIn the secret of His presence He will hide me."
+},
+{
+  "id": 536,
+  "number": 536,
+  "title": "Thou art my hiding-place, O Lord",
+  "author": "Thomas Raffles",
+  "verses": [
+    "Thou art my hiding-place, O Lord!\nIn Thee I put my trust;\nEncouraged by Thy holy Word,\nA feeble child of dust:\nI have no argument beside,\nI urge no other plea;\nAnd 'tis enough my Saviour died,\nMy Saviour died for me!",
+    "When storms of fierce temptation beat,\nAnd furious foes assail,\nMy refuge is the mercy-seat,\nMy hope within the veil:\nFrom strife of tongues and bitter words\nMy spirit flies to Thee;\nAnd safe beneath Thy sheltering wings\nMy resting-place shall be.",
+    "When ended is life's transient dream,\nAnd death's cold waves I view,\nDo Thou, across the silent stream,\nConduct me safely through;\nThen, with the ransomed around Thy throne,\nFrom sin and sorrow free,\nI will adore Thy grace alone,\nThrough all eternity."
+  ],
+  "chorus": ""
+},
+{
+  "id": 537,
+  "number": 537,
+  "title": "Saviour, lead me, lest I stray",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Saviour, lead me, lest I stray,\nGently lead me all the way;\nI am safe when by Thy side,\nLet me in Thy love abide.",
+    "Thou the Shepherd, I the sheep,\nThou my soul wilt safely keep;\nIn the hollow of Thy hand\nHold me till I reach the land.",
+    "Saviour, lead me, till at last,\nAll my days of trial past,\nWith the saints around Thy throne\nI shall know as I am known."
+  ],
+  "chorus": "Lead me, lead me, . . .\nSaviour, lead me all the way ; . . .\nI am safe when by Thy side, . . .\nLet me in Thy love abide."
+},
+{
+  "id": 538,
+  "number": 538,
+  "title": "Lead us, Heavenly Father, lead us",
+  "author": "James Edmeston",
+  "verses": [
+    "Lead us, Heavenly Father, lead us\nO'er the world's tempestuous sea;\nGuard us, guide us, keep us, feed us,\nFor we have no help but Thee;\nYet possessing every blessing,\nIf our God our Father be.",
+    "Saviour, breathe forgiveness o'er us,\nAll our weakness Thou dost know;\nThou didst tread this earth before us,\nThou didst feel its keenest woe;\nLone and dreary, faint and weary,\nThrough the desert Thou didst go.",
+    "Spirit of our God, descending,\nFill our hearts with heavenly joy;\nLove with every passion blending,\nNoistures which no storms destroy;\nThus provided, gently guided,\nNothing can our peace annoy."
+  ],
+  "chorus": ""
+},
+{
+  "id": 539,
+  "number": 539,
+  "title": "The Lord's our Rock, in Him we hide",
+  "author": "Vernon J. Charlesworth",
+  "verses": [
+    "The Lord's our Rock, in Him we hide,\nA Shelter in the time of storm;\nSecure whatever may betide,\nA Shelter in the time of storm.",
+    "A shade by day, defense by night,\nA Shelter in the time of storm;\nNo fears alarm, no foes affright,\nA Shelter in the time of storm.",
+    "The raging storms may round us beat,\nA Shelter in the time of storm;\nWe find in Him a safe retreat,\nA Shelter in the time of storm.",
+    "O Rock divine, O Refuge dear,\nA Shelter in the time of storm;\nBe Thou our Helper, ever near,\nA Shelter in the time of storm."
+  ],
+  "chorus": "Oh, Jesus is a Rock in a weary land,\nA weary land, a weary land;\nOh, Jesus is a Rock in a weary land,\nA Shelter in the time of storm."
+},
+{
+  "id": 540,
+  "number": 540,
+  "title": "A wonderful Saviour is Jesus, my Lord",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "A wonderful Saviour is Jesus, my Lord,\nA wonderful Saviour to me,\nHe hideth my soul in the cleft of the rock,\nWhere rivers of pleasure I see.",
+    "A wonderful Saviour is Jesus, my Lord,\nHe taketh my burden away,\nHe holdeth me up, and I shall not be moved,\nHe giveth me strength as my day.",
+    "With numberless blessings each moment He crowns,\nAnd filled with a fulness divine,\nI sing in my rapture, O glory to God\nFor such a Redeemer as mine!",
+    "When clothed in His brightness, transported I rise\nTo meet Him in clouds of the sky,\nHis perfect salvation, His wonderful love,\nI'll shout with the millions on high."
+  ],
+  "chorus": "He hideth my soul in the cleft of the rock\nThat shadows a dry, thirsty land ;\nHe hideth my life in the depths of His love,\nAnd covers me there with His hand, . . .\nAnd covers me there with His hand."
+},
   {
-    "id": 542,
-    "number": 542,
-    "title": "He Leadeth Me",
-    "author": "Joseph H. Gilmore",
-    "verses": [
-      "He leadeth me! O blessed thought!\nO words with heavenly comfort fraught!\nWhate'er I do, where'er I be,\nStill 'tis God's hand that leadeth me.",
-      "Sometimes mid scenes of deepest gloom,\nSometimes where Eden's bowers bloom,\nBy waters still, o'er troubled sea,\nStill 'tis His hand that leadeth me.",
-      "Lord, I would clasp Thy hand in mine,\nNor ever murmur nor repine,\nContent, whatever lot I see,\nSince 'tis Thy hand that leadeth me.",
-      "And when my task on earth is done,\nWhen by Thy grace the victory's won,\nE'en death's cold wave I will not flee,\nSince God through Jordan leadeth me."
-    ],
-    "chorus": "He leadeth me, He leadeth me,\nBy His own hand He leadeth me;\nHis faithful follower I would be,\nFor by His hand He leadeth me."
-  },
+  "id": 541,
+  "number": 541,
+  "title": "Under His wings I am safely abiding",
+  "author": "William O. Cushing",
+  "verses": [
+    "Under His wings I am safely abiding,\nThough the night deepens and tempests are wild,\nStill I can trust Him; I know He will keep me,\nHe has redeemed me, and I am His child.",
+    "Under His wings, what a refuge in sorrow!\nHow the heart yearningly turns to His rest!\nOften when earth has no balm for my healing,\nThere I find comfort, and there I am blessed.",
+    "Under His wings, oh, what precious enjoyment!\nThere will I hide till life's trials are o'er;\nSheltered, protected, no evil can harm me,\nResting in Jesus, I'm safe evermore."
+  ],
+  "chorus": "Under His wings, under His wings,\nWho from His love can sever?\nUnder His wings my soul shall abide,\nSafely abide forever."
+},
+{
+  "id": 542,
+  "number": 542,
+  "title": "He leadeth me! O blessed thought",
+  "author": "Joseph H. Gilmore",
+  "verses": [
+    "He leadeth me! O blessed thought!\nO words with heavenly comfort fraught!\nWhate'er I do, where'er I be,\nStill 'tis God's hand that leadeth me.",
+    "Sometimes 'mid scenes of deepest gloom,\nSometimes where Eden's bowers bloom,\nBy waters calm, o'er troubled sea—\nStill 'tis God's hand that leadeth me.",
+    "Lord, I would clasp Thy hand in mine,\nNor ever murmur, nor repine;\nContent, whatever lot I see,\nSince 'tis my God that leadeth me.",
+    "And when my task on earth is done,\nWhen, by Thy grace, the victory's won,\nE'en death's cold wave I will not flee,\nSince Thou through Jordan leadest me."
+  ],
+  "chorus": "He leadeth me! He leadeth me!\nBy His own hand He leadeth me;\nHis faithful follower I would be,\nFor by His hand He leadeth me."
+},
+{
+  "id": 543,
+  "number": 543,
+  "title": "Precious promise God hath given",
+  "author": "Nathaniel Niles",
+  "verses": [
+    "Precious promise God hath given\nTo the weary passerby,\nAll the way from earth to Heaven;\n\"I will guide thee with mine eye.\"",
+    "When temptations almost win thee,\nAnd thy trusted watchers fly,\nLet this promise ring within thee:\n\"I will guide thee with mine eye.\"",
+    "When thy secret hopes have perished\nIn the grave of years gone by,\nLet this promise still be cherished:\n\"I will guide thee with mine eye.\"",
+    "When the shades of life are falling,\nAnd the hour has come to die,\nHear thy trusted leader calling:\n\"I will guide thee with mine eye.\""
+  ],
+  "chorus": "I will guide thee, I will guide thee,\nI will guide thee with mine eye;\nAll the way from earth to Heaven,\nI will guide thee with mine eye."
+},
+{
+  "id": 544,
+  "number": 544,
+  "title": "Where my Saviour's hand is guiding",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Where my Saviour's hand is guiding,\nAnd for all my wants providing—\nIn His precious love confiding,\nI'll go with Him all the way.",
+    "Though my path be dark and dreary,\nAnd my steps be faint and weary—\nWith His loving voice to cheer me,\nI'll go with Him all the way.",
+    "Though the ills of earth may wound me,\nAnd the storms of life confound me—\nWith His loving arms around me,\nI'll go with Him all the way.",
+    "When the ties of earth shall sever,\nAnd He calls me home for ever—\nTo the loved beyond the river,\nI'll go with Him all the way."
+  ],
+  "chorus": "Where my Saviour leads I'll follow,\nWhere my Saviour leads I'll follow,\nWhere my Saviour leads I'll follow—\nI will follow all the way."
+},
+{
+  "id": 545,
+  "number": 545,
+  "title": "O soul, tossed on the billows",
+  "author": "Words Arranged",
+  "verses": [
+    "O soul, tossed on the billows,\nAfar from friendly land,\nLook up to Him who holds thee\nIn \"the hollow of His hand.\"",
+    "Though raging winds may drive thee\nA wreck upon the strand,\nStill cling to Him who holds thee\nIn \"the hollow of His hand.\"",
+    "When the quiet of the harbor\nIs reached at His command,\nGive thanks to Him who held thee\nIn \"the hollow of His hand.\""
+  ],
+  "chorus": "In the hollow of His hand! In the hollow of His hand!—\nOh, how safe are all who trust Him,\nIn the hollow of His hand!"
+},
+{
+  "id": 546,
+  "number": 546,
+  "title": "Lead to the shadow of the Rock of Refuge",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Lead to the shadow of the Rock of Refuge\nMy weary feet;\nGive me the water from the life-stream flowing\nClear, pure and sweet.",
+    "Lead to the shadow of the Rock Eternal\nMy heart oppressed;\nThere in the secret of Thy holy presence,\nCalm shall I rest.",
+    "Lead to the shadow of the Rock of Ages;\nOh, keep Thou me.\nSafe from the arrows of the world's temptations,\nClose, close to Thee!"
+  ],
+  "chorus": "There from the billows and the tempest hiding,\nUnder the shelter of Thy love abiding,\nSafe in the shadow of the Rock of Ages,\nJoy shall be mine!"
+},
+{
+  "id": 547,
+  "number": 547,
+  "title": "When the storms of life are raging",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "When the storms of life are raging,\nTempests wild on sea and land,\nI will seek a place of refuge\nIn the shadow of God's hand.",
+    "Tho' He may send some affliction,\n'Twill but make me long for home;\nFor in love and not in anger,\nAll His chastenings will come.",
+    "Enemies may strive to injure,\nSatan all his arts employ;\nHe will turn what seems to harm me\nInto everlasting joy.",
+    "So, while here the cross I'm bearing,\nMeeting storms and billows wild,\nJesus for my soul is caring,\nNaught can harm His Father's child."
+  ],
+  "chorus": "He will hide me, He will hide me,\nWhere no harm can e'er betide me;\nHe will hide me, safely hide me,\nIn the shadow of His hand."
+},
+{
+  "id": 548,
+  "number": 548,
+  "title": "Thou knowest, Lord, Thou knowest all about me",
+  "author": "Anna Shipton",
+  "verses": [
+    "Thou knowest, Lord, Thou knowest all about me,\nAnd all the winding way my feet have trod;\nAnd now Thou know'st I cannot go without Thee,\nTo guide me onward through the swelling flood.",
+    "Thou know'st my way—how lone, how dark, how cheerless,\nIf Thy dear hand I fail in all to see:\nBright with Thy smile of love, my heart is fearless,\nWhen in my weakness I can lean on Thee.",
+    "Thou know'st my thoughts—how foolish, vain, and fleeting,\nMy heart's desires, my wishes and my fears;\nEach secret grief, each silent sorrow meeting,\nMy bitter sighings, and my falling tears.",
+    "Thou know'st my name—Thou on Thy hand hast graven,\nIn characters of love, my humble name;\nAnd Thou wilt bring me to the peaceful haven,\nWhere I shall praise Thy goodness and Thy fame."
+  ],
+  "chorus": ""
+},
+{
+  "id": 549,
+  "number": 549,
+  "title": "Saviour, hold me close to Thee",
+  "author": "Eliza Edmunds Hewitt",
+  "verses": [
+    "Saviour, hold me close to Thee,\nKept by the power of God;\nOnly this my trust shall be,\nKept by the power of God.",
+    "Kept from every evil thing,\nKept by the power of God;\nUnderneath His sheltering wing,\nKept by the power of God.",
+    "Kept till earthly perils past,\nKept by the power of God;\nWe shall overcome at last,\nKept by the power of God.",
+    "Kept to sing His praise above,\nKept by the power of God;\nWondrous mercy, wondrous love,\nKept by the power of God."
+  ],
+  "chorus": "Sweetly kept in perfect peace,\nWhen from fears He gives release;\nKept through faith till time shall cease,\nKept by the power of God."
+},
+{
+  "id": 550,
+  "number": 550,
+  "title": "Hold Thou my hand! so weak I am, and helpless",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Hold Thou my hand! so weak I am, and helpless,\nI dare not take one step without Thy aid;\nHold Thou my hand! for then, O loving Saviour,\nNo dread of ill shall make my soul afraid.",
+    "Hold Thou my hand! and closer, closer draw me\nTo Thy dear self—my hope, my joy, my all;\nHold Thou my hand, lest haply I should wander,\nAnd, missing Thee, my trembling feet should fall.",
+    "Hold Thou my hand! the way is dark before me\nWithout the sunlight of Thy face Divine;\nBut when by faith I catch its radiant glory,\nWhat heights of joy, what rapturous songs are mine!",
+    "Hold Thou my hand! that when I reach the margin\nOf that lone river Thou didst cross for me,\nA heavenly light may flash along its waters,\nAnd every wave a path of glory be."
+  ],
+  "chorus": ""
+},
+{
+  "id": 551,
+  "number": 551,
+  "title": "Firm as a rock, that in the mighty ocean",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "FIRM as a rock, that in the mighty ocean\nHurls back the waves, and with majestic form,\nGrand and sublime, amid their wild commotion\nHeeds not the tempest nor the raging storm.",
+    "2 Firm as a rock, that in the thirsty desert\nVeils like a cloud the noontide's burning ray,\nWhile with delight the worn and weary traveller\nTurns to its shadow from his lonely way.",
+    "3 Firm as a rock, though surges dash around us!\nFirm as a rock, though trials dark may fall!\nYet shall we cling to Him, the Rock of Ages,\nJesus, the Holy One, our All in All!",
+    "4 Firm as a rock, when earthly scenes are waning!\nFirm as a rock, when Jordan's billows roll!\nFirm as a rock, we'll rest upon His promise!\nJesus, the Refuge of the weary soul!"
+  ],
+  "chorus": "Firm as a rock! no power shall cleave asunder,\nThough lightnings flash and thunders loudly roar;\nSo will we trust in Him, our great Redeemer—\nJesus, our hiding-place, for evermore!"
+},
+{
+  "id": 552,
+  "number": 552,
+  "title": "Lord Jesus, Thou dost keep Thy child",
+  "author": "Jean Sophia Pigott",
+  "verses": [
+    "LORD Jesus, Thou dost keep Thy child\nThrough sunshine or through tempests wild;\nJesus, I trust in Thee!\nThine is such wondrous power to save,\nThine is the mighty love that gave\nIts all on Calvary.",
+    "2 O glorious Saviour! Thee I praise;\nTo Thee my new glad song I raise,\nAnd tell of what Thou art.\nThy grace is boundless in its store;\nThy face of love shines evermore:\nThou givest me Thy heart.",
+    "3 Upon Thy promises I stand,\nTrusting in Thee: Thine own right hand\nDoth keep and comfort me!\nMy soul doth triumph in Thy Word;\nThine, Thine be all the praise, dear Lord,\nAs Thine the victory.",
+    "4 Love perfecteth what it begins:\nThy power doth save me from my sins—\nThy grace upholdeth me.\nThis life of trust—how glad, how sweet!\nMy need and Thy great fulness meet,\nAnd I have all in Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 553,
+  "number": 553,
+  "title": "O Love divine, how sweet Thou art!",
+  "author": "Charles Wesley",
+  "verses": [
+    "O LOVE divine, how sweet Thou art!\nWhen shall I find my willing heart\nAll taken up by Thee?\nI thirst, I faint, I die to prove\nThe greatness of redeeming love,\nThe love of Christ to me!",
+    "2 Stronger His love than death or hell;\nIts riches are unsearchable:\nThe first-born sons of light\nDesire in vain its depths to see;\nThey cannot reach the mystery,\nThe length, and breadth, and height.",
+    "3 God only knows the love of God;\nOh, that it now were shed abroad\nIn this poor stony heart:\nFor love I sigh, for love I pine:\nThis only portion, Lord, be mine,\nBe mine this better part.",
+    "4 Oh, that I could for ever sit\nWith Mary at the Master's feet;\nBe this my happy choice:\nMy only care, delight, and bliss,\nMy joy, my heaven on earth, be this,\nTo hear the Bridegroom's voice."
+  ],
+  "chorus": ""
+},
+{
+  "id": 554,
+  "number": 554,
+  "title": "He feedeth His flock like a Shepherd",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "HE feedeth His flock like a Shepherd,\nWhere pastures are blooming and fair;\nHe gathers the lambs in His bosom,\nAnd shelters them tenderly there.",
+    "2 He feedeth His flock like a Shepherd;\nAnd when in the desert they roam,\nHe patiently follows their footsteps,\nAnd leadeth them tenderly home.",
+    "3 He feedeth His flock like a Shepherd;\nThe weakest His kindness may claim;\nHe never will leave nor forsake them\nWho trust in His excellent name."
+  ],
+  "chorus": "He feedeth His flock, His flock like a Shepherd,\nAnd gathers the lambs, the lambs in His bosom;\nHe feedeth His flock, His flock like a Shepherd,\nAnd gathers the lambs, the lambs in His bosom."
+},
+{
+  "id": 555,
+  "number": 555,
+  "title": "When storms around are sweeping",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "WHEN storms around are sweeping,\nWhen lone my watch I'm keeping,\n'Mid fires of evil falling,\n'Mid tempters' voices calling,\nRemember me, O Mighty One!\nRemember me, O Mighty One!",
+    "2 When walking on life's ocean,\nControl its raging motion;\nWhen from its dangers shrinking,\nWhen in its dread deeps sinking,\nRemember me, O Mighty One!",
+    "3 When weight of sin presses,\nWhen dark despair distresses,\nAll through the life that's mortal,\nAnd when I pass death's portal,\nRemember me, O Mighty One!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 556,
+  "number": 556,
+  "title": "Jesus, Saviour, pilot me",
+  "author": "Edward Hopper",
+  "verses": [
+    "JESUS, Saviour, pilot me,\nOver life's tempestuous sea;\nUnknown waves before me roll,\nHiding rock and treacherous shoal;\nChart and compass come from Thee:\nJesus, Saviour, pilot me!",
+    "2 As a mother stills her child,\nThou canst hush the ocean wild;\nBoisterous waves obey Thy will\nWhen Thou say'st to them \"Be still!\"\nWondrous Sovereign of the sea,\nJesus, Saviour, pilot me!",
+    "3 When at last I near the shore,\nAnd the fearful breakers roar\n'Twixt me and the peaceful rest—\nThen, while leaning on Thy breast,\nMay I hear Thee say to me,\n\"Fear not! I will pilot thee!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 557,
+  "number": 557,
+  "title": "In Thy cleft, O Rock of Ages, hide Thou me!",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "IN Thy cleft, O Rock of Ages, hide Thou me!\nWhen the fitful tempest rages, hide Thou me!\nWhere no mortal arm can sever\nFrom my heart Thy love for ever,\nHide me, O Thou Rock of Ages,\nSafe in Thee!",
+    "2 From the snare of sinful pleasure, hide Thou me!\nThou, my soul's eternal Treasure, hide Thou me!\nWhen the world its power is wielding,\nAnd my heart is almost yielding,\nHide me, O Thou Rock of Ages,\nSafe in Thee!",
+    "3 In the lonely night of sorrow, hide Thou me!\nTill in glory dawns the morrow, hide Thou me!\nWhen I'm nearing Jordan's billow,\nLet Thy bosom be my pillow;\nHide me, O Thou Rock of Ages,\nSafe in Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 558,
+  "number": 558,
+  "title": "My soul at last a rest hath found",
+  "author": "Marietta Bronson",
+  "verses": [
+    "MY soul at last a rest hath found,\nA rest that will not fail;\nA sure and certain anchorage ground\nIn Christ within the vail.",
+    "2 I'll hide me in this refuge strong,\nFrom every stormy blast;\nAnd sit and sing until the waves\nOf wrath are overpast.",
+    "3 Ye comfortless and tempest-tost,\nBy sins and woes opprest:\nYe tempted, troubled, ruined, lost,\nCome find in Christ your rest!",
+    "4 Ye thirsty, from this smitten Rock\nLife's crystal waters spring;\nThere hide from every stormy shock,\nAnd rest, and drink, and sing!"
+  ],
+  "chorus": "O Rock of Ages, cleft for me,\nIn Thee my soul securely hide!\nMy tower of strength, I fly to Thee,\nAnd safely there abide."
+},
+{
+  "id": 559,
+  "number": 559,
+  "title": "The Lord is my Refuge, my Strength and Shield",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "THE Lord is my Refuge, my Strength and Shield,\nAnd this of a truth I know;\nHis tender protection is o'er me still,\nMy comfort where'er I go.",
+    "2 The Lord is my Refuge, my Strength, and Shield,\nAll glory to Him I'll give;\nAnd sing of His mercy by night and day,\nFor only in Him I live.",
+    "3 The Lord is my Refuge, my Strength, and Shield,\nMy Saviour, my Friend, and Guide!\nHe makes me a child and an heir of grace:\nOh, what can I ask beside?"
+  ],
+  "chorus": "Though bright with the joys that no tongue can tell,\nEternity's years may be;\nOh, never, no, never, can I forget\nHis wonderful love to me!"
+},
+{
+  "id": 560,
+  "number": 560,
+  "title": "Blessed is he that is trusting the Lord",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "BLESSED is he that is trusting the Lord,\nFor the help that he daily needs;\nHe shall inherit the promised reward,\nIf he follow where Jesus leads.",
+    "2 Blessed is he that is trusting the Lord,\nWho doth follow the heavenly way;\nKeeping with patience and hope the path,\nAll his steps shall be guarded each day.",
+    "3 Blessed is he whom the Father will aid,\nAnd the Saviour will e'er befriend;\nHe shall not fear, and shall not be dismayed,\nFor the Lord will his soul defend.",
+    "4 Blessed is he who will keep in the way\nThat will upward and onward lead;\nWalking by faith in His love every day,\nWho supplieth his daily need."
+  ],
+  "chorus": "Trust in the Lord with all thine heart,\nAnd in all thy ways acknowledge Him,\nAnd He shall direct thy paths;\nTrust in the Lord with all thine heart,\nAnd in all thy ways acknowledge Him,\nAnd He shall direct thy paths."
+},
+{
+  "id": 561,
+  "number": 561,
+  "title": "Give to the winds thy fears",
+  "author": "Paul Gerhardt",
+  "verses": [
+    "Give to the winds thy fears;\nHope, and be undismayed:\nGod hears thy sighs, and counts thy tears;\nGod shall lift up thy head,\nThrough waves, and clouds, and storms,\nHe gently clears thy way ;\nWait thou His time; so shall the night\nSoon end in joyous day.",
+    "2 He everywhere hath sway,\nAnd all things serve His might;\nHis every act pure blessing is,\nHis path unsullied light.\nWhen He makes bare His arm,\nWhat shall His work withstand ?\nWhen He His people's cause defends,\nWho, who shall stay His hand ?",
+    "3 Leave to His sovereign sway\nTo choose and to command ;\nWith wonder filled thou then shalt own\nHow wise, how strong His hand.\nThou comprehend'st Him not;\nYet earth and heaven tell,\nGod sits as Sovereign on His throne—\nHe ruleth all things well.",
+    "4 Thou seest our weakness, Lord,\nOur hearts are known to Thee :\nOh, lift Thou up the sinking hand,\nConfirm the feeble knee !\nLet us, in life and death,\nThy steadfast truth declare ;\nAnd publish, with our latest breath,\nThy love and guardian care."
+  ],
+  "chorus": ""
+},
+{
+  "id": 562,
+  "number": 562,
+  "title": "The Lord's my Shepherd, I'll not want",
+  "author": "Francis Rous",
+  "verses": [
+    "The Lord's my Shepherd, I'll not want :\nHe makes me down to lie\nIn pastures green ; He leadeth me\nThe quiet waters by.",
+    "2 My soul He doth restore again;\nAnd me to walk doth make\nWithin the paths of righteousness,\nEv'n for His own name's sake.",
+    "3 Yea, though I walk in death's dark vale,\nYet will I fear none ill;\nFor Thou art with me ; and Thy rod\nAnd staff me comfort still.",
+    "4 My table Thou hast furnished\nIn presence of my foes ;\nMy head Thou dost with oil anoint,\nAnd my cup overflows.",
+    "5 Goodness and mercy all my life\nShall surely follow me;\nAnd in God's house for evermore\nMy dwelling-place shall be."
+  ],
+  "chorus": ""
+},
+{
+  "id": 563,
+  "number": 563,
+  "title": "Trust God as a child of His love",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Trust God as a child of His love,\nTrust in Him to guide you with His eye ;\nTrust God for the blessings of life,\nFor these He will supply.",
+    "2 Trust God when the tempter is near,\nTrust in Him for grace to turn aside ;\nTrust God 'mid the billows of life.\nA refuge to provide.",
+    "3 Trust God at the coming of grief,\nTrust in Him to soothe its bitter pain;\nTrust God 'mid the burdens of life,\nTo strengthen and sustain.",
+    "4 Trust God as you journey along,\nTrust in Him for grace to win the prize;\nTrust God till you answer the call\nTo meet Him in the skies."
+  ],
+  "chorus": "Trust God, as He has told you, and look to Him from day to day ;\nPut your trust in God, as the Guardian of your way."
+},
+{
+  "id": 564,
+  "number": 564,
+  "title": "I know not what awaits me",
+  "author": "Mary G. Brainard",
+  "verses": [
+    "I know not what awaits me;\nGod kindly veils mine eyes,\nAnd o'er each step of my onward way\nHe makes new scenes to rise;\nAnd every joy He sends me comes\nA sweet and glad surprise.",
+    "2 One step I see before me;\n'Tis all I need to see:\nThe light of heaven more brightly shines,\nWhen earth's illusions flee;\nAnd sweetly thro' the silence comes\nHis loving, \" Follow Me.\"",
+    "3 Oh, blissful lack of wisdom !\n'Tis blessed not to know;\nHe holds me with His own right hand,\nAnd will not let me go;\nAnd lulls my troubled soul to rest\nIn Him who loves me so.",
+    "4 So on I go—not knowing,\nI would not if I might;\nI'd rather walk in the dark with God\nThan go alone in the light;\nI'd rather walk by faith with Him\nThan go alone by sight."
+  ],
+  "chorus": "Where He may lead I'll follow,\nMy trust in Him repose :\nAnd every hour in perfect peace\nI'll sing, \" He knows ! He knows ! \""
+},
+{
+  "id": 565,
+  "number": 565,
+  "title": "I am sailing afar on the ocean of life",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "I am sailing afar on the ocean of life,\nIn my bark that is slender and frail;\nBut I know not a fear with my Pilot to steer,\nAnd in safety I meet every gale.",
+    "2 I am tossed on the waves, to the deeps I am borne,\nBut my Pilot is strong at the helm;\nIn His love I abide, in His promise confide,\nAnd the wild waters never o'er-whelm.",
+    "3 When the harbour appears, and my voyage is done,\nAnd the storms never come to me more;\nOh, what joy it will be all my loved ones to see,\nWhen we meet on eternity's shore."
+  ],
+  "chorus": "Jesus is my Pilot,\nThe Pilot of my soul;\nI will ever trust Him,\nThough surging billows roll."
+},
+{
+  "id": 566,
+  "number": 566,
+  "title": "Amid the trials that I meet",
+  "author": "E. S. Oakley",
+  "verses": [
+    "Amid the trials that I meet,\nAmid the thorns that pierce my feet,\nOne thought remains supremely sweet—\nThou thinkest, Lord, of me !",
+    "2 The cares of life come thronging fast,\nUpon my soul their shadows cast;\nTheir gloom reminds my heart at last—\nThou thinkest, Lord, of me !",
+    "3 Let shadows come, let shadows go,\nLet life be bright, or dark with woe,\nI am content ; for this I know—\nThou thinkest, Lord, of me !"
+  ],
+  "chorus": "Thou thinkest, Lord, of me ! . .\nThou thinkest, Lord, of me ! . .\nWhat need I fear when Thou art near,\nAnd thinkest, Lord, of me ?"
+},
+{
+  "id": 567,
+  "number": 567,
+  "title": "Jesus, my Shepherd and Saviour divine",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Jesus, my Shepherd and Saviour divine,\nTrusting in Thee, trusting in Thee;\nOh, what a foretaste of glory is mine\nWhile I am trusting in Thee !",
+    "2 What though around me the billows may roll ?\nTrusting in Thee, trusting in Thee;\nFirm on the Rock I have anchored my soul;\nLord, I am trusting in Thee !",
+    "3 What if the shadows encompass my way?\nTrusting in Thee, trusting in Thee;\nLord, Thou hast promised Thy strength as my day,\nWhile I am trusting in Thee.",
+    "4 Jesus, my Shepherd, Redeemer, and Friend,\nTrusting in Thee, trusting in Thee;\nThou wilt deliver, and Thou wilt defend,\nWhile I am trusting in Thee."
+  ],
+  "chorus": "Trust - ing, . trust - ing, .\nJesus, my Saviour, in Thee ; . .\nOh, what a foretaste of glory is mine,\nWhile I am trusting in Thee !"
+},
+{
+  "id": 568,
+  "number": 568,
+  "title": "Precious thought—my Father knoweth!",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Precious thought—my Father knoweth !\nIn His love I rest;\nFor whate'er my Father doeth\nMust be always best ;\nWell I know the heart that planneth\nNaught but good for me;\nJoy and sorrow interwoven,\nLove in all I see.",
+    "2 Precious thought—my Father knoweth !\nCareth for His child;\nBids me nestle closer to Him,\nWhen the storms beat wild;\nThough my earthly hopes are shattered,\nAnd the teardrops fall,\nYet He is Himself my solace,\nYea, my \" all in all.\"",
+    "3 Oh to trust Him then more fully !\nJust to simply move\nIn the conscious calm enjoyment\nOf the Father's love ;\nKnowing that life's chequered path-way\nLeadeth to His rest;\nSatisfied the way He taketh\nMust be always best."
+  ],
+  "chorus": ""
+},
+{
+  "id": 569,
+  "number": 569,
+  "title": "Lord Jesus, I long to be perfectly whole",
+  "author": "James Nicholson",
+  "verses": [
+    "Lord Jesus, I long to be perfectly whole,\nI want Thee for ever to live in my soul;\nBreak down every idol, cast out every foe—\nNow wash me, and I shall be whiter than snow.",
+    "2 Lord Jesus, let nothing unholy remain,\nApply Thine own blood and extract every stain;\nTo get this blest cleansing I all things forego—\nNow wash me, and I shall be whiter than snow.",
+    "3 Lord Jesus, look down from Thy throne in the skies,\nAnd help me to make a complete sacrifice;\nI give up myself and whatever I know—\nNow wash me, and I shall be whiter than snow.",
+    "4 Lord Jesus, for this I most humbly entreat;\nI wait, blessed Lord, at Thy crucified feet;\nBy faith, for my cleansing, I see Thy blood flow—\nNow wash me, and I shall be whiter than snow.",
+    "5 Lord Jesus, Thou seest I patiently wait;\nCome now, and with me a new heart create;\nTo those who have sought Thee, Thou never saidst No—\nNow wash me, and I shall be whiter than snow."
+  ],
+  "chorus": "Whiter than snow, yes, whiter than snow,\nNow wash me, and I shall be whiter than snow."
+},
+{
+  "id": 570,
+  "number": 570,
+  "title": "Saviour, more than life to me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Saviour, more than life to me,\nI am clinging, clinging close to Thee;\nLet Thy precious blood, applied,\nKeep me ever, ever near Thy side.",
+    "2 Through this changing world below.\nLead me gently, gently as I go;\nTrusting Thee, I cannot stray,\nI can never, never lose my way.",
+    "3 Let me love Thee more and more,\nTill this fleeting, fleeting life is o'er;\nTill my soul is lost in love,\nIn a brighter, brighter world above."
+  ],
+  "chorus": "Every day, . . every hour, . .\nLet me feel Thy cleansing power;\nMay Thy tender love to me\nBind me closer, closer, Lord, to Thee."
+},
+{
+  "id": 571,
+  "number": 571,
+  "title": "More about Jesus would I know",
+  "author": "Eliza E. Hewitt",
+  "verses": [
+    "More about Jesus would I know,\nMore of His grace to others show;\nMore of His saving fulness see,\nMore of His love—who died for me.",
+    "2 More about Jesus let me learn,\nMore of His holy will discern;\nSpirit of God, my teacher be,\nShowing the things of Christ to me.",
+    "3 More about Jesus ; in His Word\nHolding communion with my Lord;\nHearing His voice in every line,\nMaking each faithful saying mine.",
+    "4 More about Jesus, on His throne,\nRiches in glory all His own;\nMore of His kingdom's sure increase;\nMore of His coming—Prince of Peace."
+  ],
+  "chorus": "More, more about Jesus,\nMore, more about Jesus;\nMore of His saving fulness see,\nMore of His love who died for me."
+},
+{
+  "id": 572,
+  "number": 572,
+  "title": "Fountain of purity opened for sin",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Fountain of purity opened for sin,\nHere may the penitent wash and be clean;\nJesus, Thou blessed Redeemer from woe,\nWash me, and I shall be whiter than snow.",
+    "2 Though I have laboured again and again,\nAll my self-cleansing is utterly vain;\nJesus, Redeemer from sorrow and woe,\nWash me, and I shall be whiter than snow.",
+    "3 Cleanse Thou the thoughts of my heart, I implore;\nHelp me Thy light to reflect more and more;\nDaily in loving obedience to grow,\nWash me, and I shall be whiter than snow.",
+    "4 Whiter than snow ! nothing farther I need;\nChrist is the Fountain: this only I plead;\nJesus, my Saviour, to Thee will I go—\nWash me, and I shall be whiter than snow."
+  ],
+  "chorus": "Whiter than snow, . . . whiter than snow ; . . .\nWash me, Redeem - - er, and I shall be whiter than snow."
+},
+{
+  "id": 573,
+  "number": 573,
+  "title": "Show me Thy face—one transient gleam",
+  "author": "Anonymous",
+  "verses": [
+    "Show me Thy face—one transient gleam\nOf loveliness Divine,\nAnd I shall never think or dream\nOf other love save Thine:\nAll lesser light will darken quite,\nAll lower glories wane,\nThe beautiful of earth will scarce\nSeem beautiful again.",
+    "2 Show me Thy face—my faith and love\nShall henceforth fixed be;\nAnd nothing here have power to move\nMy soul's serenity.\nMy life shall seem a trance, a dream,\nAnd all I feel and see,\nIllusive, visionary—Thou\nThe one reality !",
+    "3 Show me Thy face—I shall forget\nThe weary days of yore,\nThe fretting ghosts of vain regret\nShall haunt my soul no more.\nAll doubts and fears for future years\nIn quiet rest subside,\nAnd naught but blest content and calm\nWithin my breast reside.",
+    "4 Show me Thy face—the heaviest cross\nWill then seem light to bear,\nThere will be gain in every loss,\nAnd peace with every care.\nWith such light feet the years will fleet,\nLife seem as brief as blest,\nTill I have laid my burden down,\nAnd entered into rest."
+  ],
+  "chorus": ""
+},
+{
+  "id": 574,
+  "number": 574,
+  "title": "Thou my everlasting Portion",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Thou my everlasting Portion,\nMore than friend or life to me,\nAll along my pilgrim journey,\nSaviour, let me walk with Thee.",
+    "2 Not for ease or worldly pleasure,\nNot for fame my prayer shall be;\nGladly will I toil and suffer,\nOnly let me walk with Thee.",
+    "3 Lead me through the vale of shadows,\nBear me o'er life's fitful sea;\nThen the gate of life eternal\nMay I enter, Lord, with Thee."
+  ],
+  "chorus": "Close to Thee, close to Thee,\nClose to Thee, close to Thee,\nAll along my pilgrim journey,\nSaviour, let me walk with Thee."
+},
+{
+  "id": 575,
+  "number": 575,
+  "title": "Soul of mine, in earthly temple",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Soul of mine, in earthly temple\nWhy not here content abide ?\nWhy art thou for ever pleading ?\nWhy art thou not satisfied ?",
+    "2 Soul of mine, my heart is clinging\nTo the earth's fair pomp and pride;\nAh, why dost thou thus reprove me ?\nWhy art thou not satisfied ?",
+    "3 Soul of mine, must I surrender,\nSee myself as crucified,\nTurn from all of earth's ambition,\nThat thou may'st be satisfied ?",
+    "4 Soul of mine, continue pleading;\nSin rebuke, and folly chide:\nI accept the cross of Jesus,\nThat thou may'st be satisfied."
+  ],
+  "chorus": "I . . . shall be satisfied,\nI . . . shall be satisfied,\nWhen I awake in His likeness."
+},
+{
+  "id": 576,
+  "number": 576,
+  "title": "I want the adorning Divine",
+  "author": "Charlotte Elliott",
+  "verses": [
+    "I want the adorning Divine,\nThou only, my God, canst bestow;\nI want in those beautiful garments to shine,\nWhich distinguish Thy household below.\nI want every moment to feel\nThat Thy Spirit resides in my heart,\nThat His power is present to cleanse and to heal,\nAnd newness of life to impart.",
+    "2 I want, oh, I want to attain\nSome likeness, my Saviour, to Thee !\nThat longed-for resemblance once more to regain—\nThy comeliness put upon me !\nI want to be marked for Thine own,\nThy seal on my forehead to wear;\nTo receive that \" new name \" on the mystic white stone,\nWhich none but Thyself can declare.",
+    "3 I want as a traveller to haste\nStraight onward, nor pause on my way;\nNor forethought, nor anxious contrivance to waste\nOn the tent only pitched for a day.\nI want, and this sums up my prayer,\nTo glorify Thee till I die;\nThen calmly to yield up my soul to Thy care,\nAnd breathe out, in faith, my last sigh."
+  ],
+  "chorus": ""
+},
+{
+  "id": 577,
+  "number": 577,
+  "title": "I need Thee every hour",
+  "author": "Annie S. Hawks",
+  "verses": [
+    "I need Thee every hour,\nMost gracious Lord;\nNo tender voice like Thine\nCan peace afford.",
+    "2 I need Thee every hour,\nStay Thou near by;\nTemptations lose their power\nWhen Thou art nigh.",
+    "3 I need Thee every hour,\nIn joy or pain;\nCome quickly and abide,\nOr life is vain.",
+    "4 I need Thee every hour;\nTeach me Thy will;\nAnd Thy rich promises\nIn me fulfil.",
+    "5 I need Thee every hour,\nMost Holy One:\nOh, make me Thine indeed,\nThou blessed Son."
+  ],
+  "chorus": "I need Thee, oh, I need Thee;\nEvery hour I need Thee ;\nOh, bless me now, my Saviour !\nI come to Thee."
+},
+{
+  "id": 578,
+  "number": 578,
+  "title": "I would have the Saviour with me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "I would have the Saviour with me,\nFor I dare not walk alone;\nI would feel His presence near me,\nAnd His arm around me thrown.",
+    "2 I would have the Saviour with me,\nFor my faith, at best, is weak;\nHe can whisper words of comfort\nThat no other voice can speak.",
+    "3 I would have the Saviour with me\nIn the onward march of life,\nThrough the tempest and the sunshine,\nThrough the battle and the strife.",
+    "4 I would have the Saviour with me,\nThat His eye the way may guide,\nTill I reach the vale of Jordan,\nTill I cross the rolling tide."
+  ],
+  "chorus": "Then my soul . . . shall fear no ill, . . .\nWhile He leads ... me where He will, . . .\nI will go . . . without a murmur,\nAnd His footsteps follow still."
+},
+{
+  "id": 579,
+  "number": 579,
+  "title": "Thou whose hand thus far hath led me",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Thou whose hand thus far hath led me,\nWheresoe'er my path may be ;\nLord, I pray that Thou wilt ever\nDraw, and keep me near to Thee.",
+    "2 When the way is dark and cheerless,\nWhen no ray of light I see,\nMay Thine arms of love and mercy\nDraw me ever near to Thee.",
+    "3 Thou in whom my soul is trusting,\nHope of life and joy to me;\nWhile on earth a pilgrim stranger,\nDraw me ever near to Thee."
+  ],
+  "chorus": "Near to Thee, O Lord, to Thee—\nDraw me ever near to Thee."
+},
+{
+  "id": 580,
+  "number": 580,
+  "title": "Nearer, blessed Jesus, to Thy wounded side",
+  "author": "Fanny J. Crosby",
+  "verses": [
+    "Nearer, blessed Jesus, to Thy wounded side;\nNearer to Thy heart of love, would my soul abide;\nThere alone is safety, there alone is rest,\nWhen beset with danger, when with guilt opprest.",
+    "2 Purer, Saviour, purer, may I ever be,\nFree from every earthly stain, more, O Lord, like Thee;\nListening 'mid the tempest for Thy \" Peace, be still ! \";\nTrusting when in darkness, resting in Thy will.",
+    "3 Watching, ever watching, even unto prayer;\nLeaving all with Jesus, yielding every care;\nTrusting, fully trusting, every promise sweet;\nLearning life's great lesson at Thy precious feet.",
+    "4 Waiting, only waiting, till the hour shall come,\nWhen with joy I'll meet Him there, in the heavenly home;\nOh for that glad morning, when my Lord again,\n\" Glorified in all His saints,\" comes with them to reign !"
+  ],
+  "chorus": ""
+},
   {
     "id": 581,
     "number": 581,
