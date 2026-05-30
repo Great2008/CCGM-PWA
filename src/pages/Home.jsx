@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useHomepageContent, useSermonsContent, useEventsContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
-import DailyVerseBanner from '../components/DailyVerseBanner'
 import AppDownloadBanner from '../components/AppDownloadBanner'
 import SEO from '../components/SEO'
 
@@ -298,8 +297,7 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Daily Verse floating banner */}
-      <DailyVerseBanner />
+      {/* Daily Verse floating banner is now rendered globally in App.jsx */}
     </>
   )
 }

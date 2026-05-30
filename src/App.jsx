@@ -32,6 +32,7 @@ import NotFound    from './pages/NotFound'
 import Verify       from './pages/Verify'
 import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
+import DailyVerseBanner from './components/DailyVerseBanner'
 
 function AppInner() {
   const { user } = useAuth()
@@ -69,6 +70,7 @@ function AppInner() {
       <Footer />
       <PushPrompt user={user} />
       <SuspensionNotice />
+      <DailyVerseBanner />
       <Analytics />
     </>
   )

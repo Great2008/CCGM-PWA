@@ -58,6 +58,161 @@ function renderBlocks(text, baseStyle = {}) {
   ))
 }
 
+// ─── Formatting Guide ──────────────────────────────────────────────────────────
+function FormatGuide() {
+  const [open, setOpen] = useState(false)
+
+  const TOKENS = [
+    {
+      syntax: '## Section Heading',
+      description: 'Major section — e.g. Day 1 — Sunday',
+      render: (
+        <h3 style={{fontFamily:'var(--font-display)',color:'var(--brand-deep)',fontSize:'1.05rem',margin:'4px 0',borderBottom:'2px solid var(--brand-pale)',paddingBottom:3}}>
+          Section Heading
+        </h3>
+      ),
+    },
+    {
+      syntax: '# Sub-heading',
+      description: 'Minor heading within a section',
+      render: (
+        <h4 style={{color:'var(--brand-light)',fontSize:'0.95rem',margin:'4px 0',fontWeight:700}}>
+          Sub-heading
+        </h4>
+      ),
+    },
+    {
+      syntax: 'Plain paragraph text',
+      description: 'Regular body text — just write normally',
+      render: (
+        <p style={{lineHeight:1.9,color:'var(--text-dark)',margin:'4px 0',fontSize:'0.9rem'}}>
+          Plain paragraph text
+        </p>
+      ),
+    },
+    {
+      syntax: '(blank line)',
+      description: 'A blank line starts a new paragraph',
+      render: (
+        <span style={{color:'var(--text-light)',fontSize:'0.82rem',fontStyle:'italic'}}>→ paragraph break</span>
+      ),
+    },
+  ]
+
+  const EXAMPLE = `## Day 1 — Sunday\n\nGod rested on the seventh day and made it holy.\nThis rest was not from weariness but as a gift.\n\n# Key Thought\n\nThe Sabbath is a sign of the covenant between\nGod and His people throughout all generations.`
+
+  return (
+    <div style={{gridColumn:'1/-1',marginBottom:4}}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{
+          display:'flex', alignItems:'center', gap:8,
+          background:'#f0fdf4', border:'1.5px solid #bbf7d0',
+          borderRadius:10, padding:'9px 16px', cursor:'pointer',
+          fontFamily:'var(--font-body)', fontSize:'0.83rem',
+          fontWeight:700, color:'var(--brand-deep)',
+          width:'100%', textAlign:'left',
+          transition:'background 0.15s',
+        }}
+      >
+        <span style={{fontSize:'1rem'}}>📐</span>
+        <span style={{flex:1}}>Formatting Guide — how text is rendered on the lesson page</span>
+        <span style={{color:'var(--text-light)',fontSize:'0.78rem'}}>{open ? '▲ Hide' : '▼ Show'}</span>
+      </button>
+
+      {open && (
+        <div style={{
+          background:'#f8fafb', border:'1.5px solid #d1fae5',
+          borderTop:'none', borderRadius:'0 0 10px 10px',
+          padding:'18px 20px', display:'flex', flexDirection:'column', gap:20,
+        }}>
+
+          {/* Token table */}
+          <div>
+            <div style={{fontWeight:700,color:'var(--brand-deep)',fontSize:'0.82rem',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>
+              Format tokens
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {TOKENS.map((t, i) => (
+                <div key={i} style={{
+                  display:'grid', gridTemplateColumns:'200px 1fr 1fr',
+                  gap:12, alignItems:'center',
+                  background:'white', borderRadius:8,
+                  padding:'10px 14px', border:'1px solid #e8f5e9',
+                }}>
+                  {/* Syntax */}
+                  <code style={{
+                    fontFamily:'monospace', fontSize:'0.83rem',
+                    background:'#f0fdf4', padding:'3px 8px',
+                    borderRadius:5, color:'#166534', whiteSpace:'nowrap',
+                  }}>
+                    {t.syntax}
+                  </code>
+                  {/* Description */}
+                  <span style={{fontSize:'0.8rem',color:'var(--text-mid)'}}>
+                    {t.description}
+                  </span>
+                  {/* Live render */}
+                  <div style={{borderLeft:'2px solid #d1fae5',paddingLeft:12}}>
+                    {t.render}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Full example */}
+          <div>
+            <div style={{fontWeight:700,color:'var(--brand-deep)',fontSize:'0.82rem',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>
+              Example — how it looks when typed vs. rendered
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+              {/* Raw input */}
+              <div>
+                <div style={{fontSize:'0.72rem',fontWeight:700,color:'var(--text-light)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:6}}>
+                  What you type
+                </div>
+                <pre style={{
+                  background:'#1e293b', color:'#94d3a2',
+                  borderRadius:8, padding:'14px 16px',
+                  fontSize:'0.8rem', lineHeight:1.7,
+                  margin:0, overflowX:'auto', fontFamily:'monospace',
+                  whiteSpace:'pre-wrap',
+                }}>
+                  {EXAMPLE}
+                </pre>
+              </div>
+              {/* Rendered output */}
+              <div>
+                <div style={{fontSize:'0.72rem',fontWeight:700,color:'var(--text-light)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:6}}>
+                  How it appears to members
+                </div>
+                <div style={{
+                  background:'white', border:'1px solid #e8f5e9',
+                  borderRadius:8, padding:'14px 16px', minHeight:100,
+                }}>
+                  {renderBlocks(EXAMPLE)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Discussion questions note */}
+          <div style={{
+            background:'#fffbf0', border:'1.5px solid #fcd34d',
+            borderRadius:8, padding:'10px 14px',
+            fontSize:'0.8rem', color:'#92400e', lineHeight:1.7,
+          }}>
+            <strong>Discussion Questions & Key Points</strong> — write one item per line. Numbering is added automatically; you don't need to number them yourself.<br/>
+            <span style={{color:'var(--text-mid)'}}>Example: <code style={{fontFamily:'monospace',background:'#fef3c7',padding:'1px 6px',borderRadius:4}}>What does this teach us about rest?</code></span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function AdminSabbath() {
   const { showToast, logAction } = useAdmin()
   const [items, setItems]   = useState([])
@@ -202,6 +357,7 @@ export default function AdminSabbath() {
               <label>Summary / Introduction</label>
               <textarea {...F('summary')} rows={3} placeholder="Brief overview shown as highlighted intro text..." style={{resize:'vertical'}} />
             </div>
+            <FormatGuide />
             <div className="form-group" style={{gridColumn:'1/-1'}}>
               <label>
                 Lesson Content

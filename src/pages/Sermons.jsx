@@ -5,10 +5,54 @@ import SEO from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 
+const FONT_SIZE_KEY = 'ccg-sermons-fontsize'
+
+// ─── Text formatter (mirrors SabbathSchool parseBlocks / ReadingContent) ───────
+const parseBlocks = (text) => {
+  if (!text) return []
+  const lines = text.split('\n')
+  const blocks = []
+  let paraLines = []
+  const flushPara = () => {
+    const joined = paraLines.join(' ').trim()
+    if (joined) blocks.push(joined)
+    paraLines = []
+  }
+  lines.forEach(line => {
+    const trimmed = line.trim()
+    if (/^##/.test(trimmed) && trimmed.length > 2)                          { flushPara(); blocks.push(trimmed) }
+    else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) { flushPara(); blocks.push(trimmed) }
+    else if (trimmed === '')                                                  { flushPara() }
+    else                                                                      { paraLines.push(trimmed) }
+  })
+  flushPara()
+  return blocks.filter(Boolean)
+}
+
+function ReadingContent({ blocks, fontSize }) {
+  return (
+    <div style={{ lineHeight: 1.9, color: 'var(--text-dark)', fontSize: fontSize + 'px' }}>
+      {blocks.map((para, i) =>
+        /^##/.test(para) ? (
+          <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: (fontSize + 4) + 'px', margin: '32px 0 14px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 6 }}>
+            {para.replace(/^##\s*/, '')}
+          </h3>
+        ) : /^#/.test(para) ? (
+          <h4 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-light)', fontSize: (fontSize + 2) + 'px', margin: '22px 0 10px', fontWeight: 700 }}>
+            {para.replace(/^#\s*/, '')}
+          </h4>
+        ) : (
+          <p key={i} style={{ marginBottom: 20 }}>{para}</p>
+        )
+      )}
+    </div>
+  )
+}
+
 // ─── Sermon Notes Hook ─────────────────────────────────────────────────────────
 function useSermonNotes(sermonId) {
   const { user } = useAuth()
-  const [note,    setNote]    = useState(null)   // user's own note for this sermon
+  const [note,    setNote]    = useState(null)
   const [loading, setLoading] = useState(false)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
@@ -62,7 +106,7 @@ function useSermonNotes(sermonId) {
   return { note, loading, saving, saved, save, remove, refetch: fetch }
 }
 
-// ─── Public Notes for a sermon ─────────────────────────────────────────────────
+// ─── Public Notes ──────────────────────────────────────────────────────────────
 function usePublicNotes(sermonId) {
   const [notes,   setNotes]   = useState([])
   const [loading, setLoading] = useState(false)
@@ -82,7 +126,7 @@ function usePublicNotes(sermonId) {
   return { notes, loading }
 }
 
-// ─── All Notes page (My Notes) ─────────────────────────────────────────────────
+// ─── My Notes Modal ────────────────────────────────────────────────────────────
 function MyNotesModal({ onClose }) {
   const { user } = useAuth()
   const [notes,    setNotes]    = useState([])
@@ -109,7 +153,6 @@ function MyNotesModal({ onClose }) {
       <div style={{ background:'white', borderRadius:'20px 20px 0 0', width:'100%', maxWidth:680, maxHeight:'88vh', display:'flex', flexDirection:'column', overflow:'hidden' }}
         onClick={e => e.stopPropagation()}>
 
-        {/* Header */}
         <div style={{ padding:'20px 24px 16px', borderBottom:'1px solid #f0fdf4', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div>
             <h3 style={{ margin:0, fontFamily:'var(--font-display)', color:'var(--brand-deep)', fontSize:'1.15rem' }}>📓 My Sermon Notes</h3>
@@ -118,7 +161,6 @@ function MyNotesModal({ onClose }) {
           <button onClick={onClose} style={{ background:'none', border:'none', fontSize:'1.3rem', cursor:'pointer', color:'#94a3b8' }}>✕</button>
         </div>
 
-        {/* Notes list */}
         <div style={{ flex:1, overflowY:'auto', padding:'12px 0' }}>
           {loading && <div style={{ padding:40, textAlign:'center', color:'var(--text-light)' }}>Loading...</div>}
           {!loading && notes.length === 0 && (
@@ -168,22 +210,19 @@ function SermonNotesPanel({ sermon, onClose }) {
   const { notes: publicNotes, loading: pubLoading } = usePublicNotes(sermon.id)
   const [content,    setContent]  = useState('')
   const [isPublic,   setIsPublic] = useState(false)
-  const [tab,        setTab]      = useState('write') // 'write' | 'community'
+  const [tab,        setTab]      = useState('write')
   const [showDelete, setShowDelete] = useState(false)
   const autoSaveTimer = useRef(null)
   const textareaRef   = useRef(null)
 
-  // Load existing note
   useEffect(() => {
     if (note) { setContent(note.content || ''); setIsPublic(note.is_public || false) }
   }, [note])
 
-  // Focus textarea on open
   useEffect(() => {
     if (tab === 'write') setTimeout(() => textareaRef.current?.focus(), 100)
   }, [tab])
 
-  // Auto-save after 2s of no typing
   const handleChange = val => {
     setContent(val)
     clearTimeout(autoSaveTimer.current)
@@ -216,8 +255,6 @@ function SermonNotesPanel({ sermon, onClose }) {
 
   return (
     <div style={{ display:'flex', flexDirection:'column', height:'100%' }}>
-
-      {/* Header */}
       <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'18px 20px' }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:12 }}>
           <div style={{ flex:1, minWidth:0, paddingRight:12 }}>
@@ -227,8 +264,6 @@ function SermonNotesPanel({ sermon, onClose }) {
           </div>
           <button onClick={onClose} style={{ background:'rgba(255,255,255,0.15)', border:'none', borderRadius:8, width:34, height:34, cursor:'pointer', color:'white', fontSize:'1rem', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>✕</button>
         </div>
-
-        {/* Tabs */}
         <div style={{ display:'flex', gap:6, background:'rgba(0,0,0,0.2)', borderRadius:30, padding:4 }}>
           {['write','community'].map(t => (
             <button key={t} onClick={() => setTab(t)} style={{ flex:1, padding:'7px 0', borderRadius:26, border:'none', background:tab===t?'white':'transparent', color:tab===t?'var(--brand-deep)':'rgba(255,255,255,0.8)', fontWeight:700, cursor:'pointer', fontFamily:'var(--font-body)', fontSize:'0.8rem', transition:'all 0.2s' }}>
@@ -238,7 +273,6 @@ function SermonNotesPanel({ sermon, onClose }) {
         </div>
       </div>
 
-      {/* Write tab */}
       {tab === 'write' && (
         <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
           {loading ? (
@@ -252,11 +286,7 @@ function SermonNotesPanel({ sermon, onClose }) {
                 placeholder={'Write your notes here...\n\nCapture key points, scriptures, personal reflections or action steps.\n\nYour notes auto-save as you type.'}
                 style={{ flex:1, padding:'18px 20px', border:'none', outline:'none', resize:'none', fontFamily:'Georgia, serif', fontSize:'0.95rem', lineHeight:1.85, color:'var(--text-dark)', background:'#fafef9' }}
               />
-
-              {/* Bottom bar */}
               <div style={{ padding:'12px 16px', borderTop:'1px solid #f0fdf4', display:'flex', flexDirection:'column', gap:10, background:'white' }}>
-
-                {/* Public toggle */}
                 <label style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer', padding:'8px 12px', borderRadius:10, background:isPublic?'#f0fdf4':'#f8fafc', border:`1.5px solid ${isPublic?'#86efac':'#e2e8f0'}`, transition:'all 0.2s' }}>
                   <div onClick={() => { setIsPublic(p => !p); if(content.trim()) save(content, !isPublic, sermon.title) }}
                     style={{ width:40, height:22, borderRadius:11, background:isPublic?'#16a34a':'#cbd5e1', position:'relative', transition:'background 0.2s', flexShrink:0, cursor:'pointer' }}>
@@ -271,8 +301,6 @@ function SermonNotesPanel({ sermon, onClose }) {
                     </div>
                   </div>
                 </label>
-
-                {/* Actions row */}
                 <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                   <div style={{ fontSize:'0.72rem', color:'var(--text-light)', flex:1 }}>
                     {wordCount > 0 && `${wordCount} word${wordCount!==1?'s':''} · `}
@@ -288,8 +316,6 @@ function SermonNotesPanel({ sermon, onClose }) {
                   </button>
                 </div>
               </div>
-
-              {/* Delete confirm */}
               {showDelete && (
                 <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:10, padding:24 }}>
                   <div style={{ background:'white', borderRadius:16, padding:28, maxWidth:320, width:'100%', textAlign:'center' }}>
@@ -308,7 +334,6 @@ function SermonNotesPanel({ sermon, onClose }) {
         </div>
       )}
 
-      {/* Community tab */}
       {tab === 'community' && (
         <div style={{ flex:1, overflowY:'auto', background:'#f8faf8' }}>
           {pubLoading && <div style={{ padding:40, textAlign:'center', color:'var(--text-light)' }}>Loading community notes...</div>}
@@ -337,16 +362,34 @@ function SermonNotesPanel({ sermon, onClose }) {
       )}
     </div>
   )
+
+  function fmtDate(iso) {
+    try { return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) }
+    catch { return '' }
+  }
 }
 
 // ─── Main Sermons Page ─────────────────────────────────────────────────────────
 export default function Sermons() {
-  const { user }                            = useAuth()
-  const { data: sermons, loading }          = useSermonsContent()
-  const [search,     setSearch]             = useState('')
-  const [filter,     setFilter]             = useState('All')
-  const [notesSermon, setNotesSermon]       = useState(null)   // sermon with notes panel open
-  const [showMyNotes, setShowMyNotes]       = useState(false)
+  const { user }                      = useAuth()
+  const { data: sermons, loading }    = useSermonsContent()
+  const [search,       setSearch]     = useState('')
+  const [filter,       setFilter]     = useState('All')
+  const [selected,     setSelected]   = useState(null)
+  const [showList,     setShowList]   = useState(false)
+  const [notesSermon,  setNotesSermon]= useState(null)
+  const [showMyNotes,  setShowMyNotes]= useState(false)
+  const [fontSize, setFontSize] = useState(() => {
+    try { return parseInt(localStorage.getItem(FONT_SIZE_KEY)) || 17 } catch { return 17 }
+  })
+
+  const changeFontSize = (delta) => {
+    setFontSize(prev => {
+      const next = Math.min(26, Math.max(13, prev + delta))
+      try { localStorage.setItem(FONT_SIZE_KEY, next) } catch {}
+      return next
+    })
+  }
 
   const series = ['All', ...new Set(sermons.map(s => s.series).filter(Boolean))]
 
@@ -358,6 +401,17 @@ export default function Sermons() {
     return matchSearch && matchFilter
   })
 
+  // Auto-select first sermon on load
+  useEffect(() => {
+    if (!selected && filtered.length > 0) setSelected(filtered[0])
+  }, [sermons]) // eslint-disable-line
+
+  const selectSermon = (s) => {
+    setSelected(s)
+    setShowList(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <>
       <SEO
@@ -366,83 +420,265 @@ export default function Sermons() {
         path="/sermons"
       />
 
-      <div style={{ background: 'linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%)', padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center' }}>
-        <span className="section-label" style={{ color: 'var(--green-light)' }}>Messages & Teachings</span>
-        <h1 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(2rem, 5vw, 3.2rem)', marginBottom: 16 }}>
-          Sermons & Messages
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.8)', maxWidth: 520, margin: '0 auto 24px', lineHeight: 1.8 }}>
-          Grow in faith through the preached Word. Stream, download, or share our messages.
-        </p>
-        {user && (
-          <button onClick={() => setShowMyNotes(true)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'10px 24px', borderRadius:30, border:'1.5px solid rgba(255,255,255,0.4)', background:'rgba(255,255,255,0.12)', color:'white', cursor:'pointer', fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.88rem', backdropFilter:'blur(4px)', transition:'all 0.2s' }}>
-            📓 My Sermon Notes
-          </button>
-        )}
-      </div>
+      <div style={{ overflowX: 'hidden', width: '100%' }}>
+        <style>{`
+          @media (max-width: 768px) {
+            .sm-desktop-sidebar { display: none !important; }
+            .sm-mobile-bar      { display: flex !important; }
+            .sm-content-wrap    { display: block !important; }
+            .sm-outer           { padding: 0 0 60px 0 !important; max-width: 100% !important; }
+            .sm-card            { border-radius: 0 !important; border-left: none !important; border-right: none !important; box-shadow: none !important; }
+            .sm-hero            { padding-left: 16px !important; padding-right: 16px !important; }
+            .sm-mobile-bar      { left: 0 !important; right: 0 !important; width: 100% !important; box-sizing: border-box !important; }
+          }
+          @media (min-width: 769px) {
+            .sm-mobile-bar   { display: none !important; }
+            .sm-content-wrap { display: grid !important; grid-template-columns: 270px 1fr; gap: 28px; }
+            .sm-desktop-sidebar { display: block !important; }
+          }
+          .sm-sermon-item:hover { background: var(--brand-pale) !important; }
+        `}</style>
 
-      <section style={{ background: 'var(--cream)', padding: '60px 5%' }}>
-        <div className="container">
-
-          {loading && (
-            <div style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text-light)' }}>
-              <div style={{ fontSize: '3rem', marginBottom: 16, animation: 'pulse 1.5s infinite' }}>🎙</div>
-              <p>Loading sermons...</p>
-            </div>
-          )}
-
-          {!loading && sermons.length > 0 && (
-            <>
-              <div style={{ display: 'flex', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
-                <input
-                  type="text"
-                  placeholder="🔍  Search sermons or pastor..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  style={{ flex: '1 1 280px', padding: '12px 18px', borderRadius: 40, border: '1.5px solid #ddd', fontSize: '0.95rem', fontFamily: 'var(--font-body)', outline: 'none' }}
-                />
-                {series.length > 1 && (
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    {series.map(s => (
-                      <button key={s} onClick={() => setFilter(s)} style={{ padding: '10px 20px', borderRadius: 30, border: '1.5px solid', borderColor: filter === s ? 'var(--brand-mid)' : '#ddd', background: filter === s ? 'var(--brand-mid)' : 'white', color: filter === s ? 'white' : 'var(--text-mid)', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s' }}>{s}</button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {filtered.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: 24 }}>
-                  {filtered.map(sermon => (
-                    <SermonCard
-                      key={sermon.id}
-                      sermon={sermon}
-                      user={user}
-                      onOpenNotes={() => setNotesSermon(sermon)}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-light)' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: 16 }}>🔍</div>
-                  <p>No sermons found matching your search.</p>
-                </div>
-              )}
-            </>
-          )}
-
-          {!loading && sermons.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '80px 20px', background: 'var(--white, white)', borderRadius: 20, boxShadow: 'var(--shadow-sm)' }}>
-              <div style={{ fontSize: '4rem', marginBottom: 20 }}>🎙</div>
-              <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.5rem', marginBottom: 12 }}>No Sermons Posted Yet</h3>
-              <p style={{ color: 'var(--text-mid)', maxWidth: 400, margin: '0 auto', lineHeight: 1.8 }}>
-                Our sermon library is being set up. Check back soon.
-              </p>
-            </div>
+        {/* Hero */}
+        <div className="sm-hero" style={{ background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)', padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center' }}>
+          <span className="section-label">Messages & Teachings</span>
+          <h1 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(2rem, 5vw, 3.2rem)', marginBottom: 16 }}>
+            Sermons & Messages
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.8)', maxWidth: 520, margin: '0 auto 24px', lineHeight: 1.8 }}>
+            Grow in faith through the preached Word. Stream, download, or share our messages.
+          </p>
+          {user && (
+            <button onClick={() => setShowMyNotes(true)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'10px 24px', borderRadius:30, border:'1.5px solid rgba(255,255,255,0.4)', background:'rgba(255,255,255,0.12)', color:'white', cursor:'pointer', fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.88rem', backdropFilter:'blur(4px)', transition:'all 0.2s' }}>
+              📓 My Sermon Notes
+            </button>
           )}
         </div>
-      </section>
 
-      {/* Notes panel — slides up from bottom */}
+        {/* ── MOBILE STICKY TOP BAR ── */}
+        <div className="sm-mobile-bar" style={{
+          display: 'none', position: 'sticky', top: 0, zIndex: 100,
+          background: 'var(--brand-deep)', padding: '10px 14px',
+          alignItems: 'center', gap: 10,
+          boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
+        }}>
+          <button onClick={() => setShowList(true)} style={{
+            display: 'flex', alignItems: 'center', gap: 8, flex: 1,
+            background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: 10, padding: '10px 14px', cursor: 'pointer', color: 'white',
+            fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 600, textAlign: 'left',
+          }}>
+            <span>🎙</span>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {selected ? selected.title : 'Pick a sermon'}
+            </span>
+            <span style={{ opacity: 0.55, fontSize: '0.7rem' }}>▼</span>
+          </button>
+          <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
+            <button onClick={() => changeFontSize(-1)} style={{ width: 38, height: 38, borderRadius: 9, border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 900, fontSize: '0.85rem' }}>T−</button>
+            <button onClick={() => changeFontSize(1)}  style={{ width: 38, height: 38, borderRadius: 9, border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 900, fontSize: '0.85rem' }}>T+</button>
+          </div>
+        </div>
+
+        {/* ── MOBILE SERMON LIST SHEET ── */}
+        {showList && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 500, background: 'rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column' }}
+            onClick={() => setShowList(false)}>
+            <div style={{ marginTop: 'auto', background: 'var(--white, white)', borderRadius: '20px 20px 0 0', maxHeight: '82vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+              onClick={e => e.stopPropagation()}>
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+                <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1fae5' }} />
+              </div>
+              <div style={{ padding: '8px 18px 14px', borderBottom: '1px solid #f0fdf4' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)', fontSize: '1rem', marginBottom: 10 }}>All Sermons</div>
+                <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search sermons..."
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', boxSizing: 'border-box' }} />
+                {series.length > 2 && (
+                  <select value={filter} onChange={e => setFilter(e.target.value)}
+                    style={{ width: '100%', marginTop: 8, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.92rem', background: 'var(--white, white)' }}>
+                    {series.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                )}
+              </div>
+              <div style={{ overflowY: 'auto', flex: 1 }}>
+                {filtered.length === 0 && (
+                  <div style={{ padding: 32, textAlign: 'center', color: 'var(--text-light)' }}>No sermons found</div>
+                )}
+                {filtered.map(s => {
+                  const isSel = selected?.id === s.id
+                  return (
+                    <div key={s.id} className="sm-sermon-item" onClick={() => selectSermon(s)}
+                      style={{ padding: '16px 20px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSel ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `4px solid ${isSel ? 'var(--brand-light)' : 'transparent'}` }}>
+                      <div style={{ fontWeight: isSel ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.95rem', lineHeight: 1.4 }}>{s.title}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: 4 }}>{s.date}</div>
+                      {s.pastor && <div style={{ fontSize: '0.78rem', color: 'var(--brand-light)', marginTop: 3, fontWeight: 600 }}>🎙 {s.pastor}</div>}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── MAIN LAYOUT ── */}
+        <div className="sm-outer" style={{ maxWidth: 1140, margin: '0 auto', padding: '32px 4% 80px' }}>
+          <div className="sm-content-wrap" style={{ display: 'block' }}>
+
+            {/* Desktop Sidebar */}
+            <div className="sm-desktop-sidebar" style={{ display: 'none' }}>
+              <div style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden', position: 'sticky', top: 24 }}>
+                <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0fdf4' }}>
+                  <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search sermons..."
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', boxSizing: 'border-box' }} />
+                  {series.length > 2 && (
+                    <select value={filter} onChange={e => setFilter(e.target.value)}
+                      style={{ width: '100%', marginTop: 8, padding: '9px 12px', borderRadius: 9, border: '1.5px solid #d1fae5', fontFamily: 'var(--font-body)', fontSize: '0.85rem', background: 'var(--white, white)' }}>
+                      {series.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  )}
+                </div>
+                <div style={{ maxHeight: 540, overflowY: 'auto' }}>
+                  {filtered.map(s => {
+                    const isSel = selected?.id === s.id
+                    return (
+                      <div key={s.id} className="sm-sermon-item" onClick={() => selectSermon(s)}
+                        style={{ padding: '13px 16px', cursor: 'pointer', borderBottom: '1px solid #f8faf8', background: isSel ? 'var(--brand-pale)' : 'var(--white, white)', borderLeft: `3px solid ${isSel ? 'var(--brand-light)' : 'transparent'}`, transition: 'all 0.15s' }}>
+                        <div style={{ fontWeight: isSel ? 700 : 500, color: 'var(--brand-deep)', fontSize: '0.85rem', lineHeight: 1.4 }}>{s.title}</div>
+                        <div style={{ fontSize: '0.74rem', color: 'var(--text-light)', marginTop: 3 }}>{s.date}</div>
+                        {s.pastor && <div style={{ fontSize: '0.71rem', color: 'var(--brand-light)', marginTop: 2, fontWeight: 600 }}>🎙 {s.pastor}</div>}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Content Panel */}
+            <div>
+              {loading && (
+                <div style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text-light)' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: 16, animation: 'pulse 1.5s infinite' }}>🎙</div>
+                  <p>Loading sermons...</p>
+                </div>
+              )}
+
+              {!loading && sermons.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '80px 20px', background: 'var(--white, white)', borderRadius: 20, boxShadow: 'var(--shadow-sm)' }}>
+                  <div style={{ fontSize: '4rem', marginBottom: 20 }}>🎙</div>
+                  <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.5rem', marginBottom: 12 }}>No Sermons Posted Yet</h3>
+                  <p style={{ color: 'var(--text-mid)', maxWidth: 400, margin: '0 auto', lineHeight: 1.8 }}>
+                    Our sermon library is being set up. Check back soon.
+                  </p>
+                </div>
+              )}
+
+              {!loading && !selected && sermons.length > 0 && (
+                <div style={{ background: 'var(--white, white)', borderRadius: 16, padding: 48, textAlign: 'center', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: 12 }}>🎙</div>
+                  <div style={{ color: 'var(--text-light)' }}>Select a sermon to read</div>
+                </div>
+              )}
+
+              {!loading && selected && (
+                <div className="sm-card" style={{ background: 'var(--white, white)', borderRadius: 16, boxShadow: 'var(--shadow-sm)', border: '1.5px solid #d1fae5', overflow: 'hidden' }}>
+
+                  {/* Sermon Header */}
+                  <div style={{ background: 'linear-gradient(135deg, var(--brand-deep), var(--brand-mid))', padding: 'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
+                    {selected.series && (
+                      <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 8 }}>
+                        {selected.series}
+                      </div>
+                    )}
+                    <h2 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(1.3rem,4.5vw,2rem)', margin: '0 0 14px', lineHeight: 1.25 }}>
+                      {selected.title}
+                    </h2>
+                    {selected.scripture && (
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--gold)', color: 'var(--brand-deep)', padding: '7px 18px', borderRadius: 30, fontSize: 'clamp(0.78rem,2vw,0.88rem)', fontWeight: 800, marginBottom: 14 }}>
+                        📜 {selected.scripture}
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 16, alignItems: 'center' }}>
+                      {selected.date    && <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.82rem' }}>📅 {selected.date}</span>}
+                      {selected.pastor  && <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.82rem' }}>🎙 {selected.pastor}</span>}
+                      {selected.duration && <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.82rem' }}>⏱ {selected.duration}</span>}
+                      {selected.views   && <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.82rem' }}>👁 {Number(selected.views).toLocaleString()} views</span>}
+                      <button
+                        onClick={async () => {
+                          const msg = `🎙 "${selected.title}"${selected.pastor ? ` — ${selected.pastor}` : ''}\n\nListen on CCG World:\nhttps://ccgm-pwa.vercel.app/sermons`
+                          if (navigator.share) {
+                            try { await navigator.share({ text: msg }) } catch(_) {}
+                          } else {
+                            try { await navigator.clipboard.writeText(msg) } catch(_) {}
+                          }
+                        }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                        🔗 Share
+                      </button>
+                      {user && (
+                        <button onClick={() => setNotesSermon(selected)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                          📓 Notes
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Desktop T-/T+ */}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 14, gap: 5 }}>
+                      <button onClick={() => changeFontSize(-1)} style={{ padding: '5px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.12)', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 900, fontSize: '0.82rem' }}>T−</button>
+                      <button onClick={() => changeFontSize(1)}  style={{ padding: '5px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.12)', color: 'white', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 900, fontSize: '0.82rem' }}>T+</button>
+                    </div>
+                  </div>
+
+                  {/* Media & Content body */}
+                  <div style={{ padding: 'clamp(20px,5vw,36px)' }}>
+
+                    {/* Watch / Audio buttons */}
+                    {(selected.videoUrl || selected.audioUrl) && (
+                      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 28 }}>
+                        {selected.videoUrl && (
+                          <a href={selected.videoUrl} target="_blank" rel="noreferrer" className="btn btn-green" style={{ padding: '10px 24px', fontSize: '0.88rem' }}>
+                            ▶ Watch Sermon
+                          </a>
+                        )}
+                        {selected.audioUrl && (
+                          <a href={selected.audioUrl} className="btn btn-outline-green" style={{ padding: '10px 24px', fontSize: '0.88rem' }}>
+                            🎧 Listen
+                          </a>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Thumbnail */}
+                    {selected.thumbnail && !selected.videoUrl && (
+                      <div style={{ borderRadius: 12, overflow: 'hidden', marginBottom: 24 }}>
+                        <img src={selected.thumbnail} alt={selected.title} style={{ width: '100%', maxHeight: 340, objectFit: 'cover' }} />
+                      </div>
+                    )}
+
+                    {/* Description / body */}
+                    {selected.description && (
+                      <div style={{ background: 'var(--brand-pale)', borderLeft: '4px solid var(--brand-light)', borderRadius: '0 10px 10px 0', padding: '16px 20px', marginBottom: 28, fontStyle: 'italic', color: 'var(--brand-deep)', lineHeight: 1.8, fontSize: fontSize + 'px' }}>
+                        {selected.description}
+                      </div>
+                    )}
+
+                    {selected.body ? (
+                      <ReadingContent blocks={parseBlocks(selected.body)} fontSize={fontSize} />
+                    ) : !selected.description && (
+                      <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: 12 }}>🎙</div>
+                        <p>No notes available for this sermon.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Notes panel */}
       {notesSermon && (
         <div style={{ position:'fixed', inset:0, zIndex:500, background:'rgba(0,0,0,0.55)' }}
           onClick={() => setNotesSermon(null)}>
@@ -453,89 +689,9 @@ export default function Sermons() {
         </div>
       )}
 
-      {/* My Notes modal */}
       {showMyNotes && <MyNotesModal onClose={() => setShowMyNotes(false)} />}
 
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
     </>
-  )
-}
-
-// ─── Sermon Card ───────────────────────────────────────────────────────────────
-function SermonCard({ sermon, user, onOpenNotes }) {
-  return (
-    <div className="card">
-      {sermon.thumbnail ? (
-        <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
-          <img src={sermon.thumbnail} alt={sermon.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
-            onMouseEnter={e => e.target.style.transform = 'scale(1.07)'}
-            onMouseLeave={e => e.target.style.transform = 'scale(1)'} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,38,18,0.7) 0%, transparent 60%)', display: 'flex', alignItems: 'flex-end', padding: 14 }}>
-            {sermon.duration && (
-              <span style={{ background: 'rgba(255,255,255,0.9)', color: 'var(--brand-deep)', padding: '3px 12px', borderRadius: 20, fontSize: '0.72rem', fontWeight: 700 }}>
-                ⏱ {sermon.duration}
-              </span>
-            )}
-          </div>
-          {sermon.series && (
-            <div style={{ position: 'absolute', top: 12, left: 12 }}>
-              <span className="tag">{sermon.series}</span>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div style={{ height: 120, background: 'linear-gradient(135deg, var(--brand-deep), var(--brand-mid))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: '3rem' }}>🎙</span>
-        </div>
-      )}
-
-      <div style={{ padding: '22px 24px' }}>
-        <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginBottom: 8 }}>
-          {sermon.date}{sermon.views ? ` · 👁 ${Number(sermon.views).toLocaleString()} views` : ''}
-        </div>
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--brand-deep)', marginBottom: 8, lineHeight: 1.35 }}>
-          {sermon.title}
-        </h3>
-        {(sermon.scripture || sermon.pastor) && (
-          <p style={{ fontSize: '0.82rem', color: 'var(--brand-mid)', fontWeight: 700, marginBottom: 10 }}>
-            {sermon.scripture && `📖 ${sermon.scripture}`}{sermon.scripture && sermon.pastor && ' — '}{sermon.pastor}
-          </p>
-        )}
-        {sermon.description && (
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-mid)', lineHeight: 1.65, marginBottom: 18 }}>
-            {sermon.description}
-          </p>
-        )}
-
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-          {sermon.videoUrl && (
-            <a href={sermon.videoUrl} target="_blank" rel="noreferrer" className="btn btn-green" style={{ padding: '9px 20px', fontSize: '0.8rem' }}>
-              ▶ Watch
-            </a>
-          )}
-          {sermon.audioUrl && (
-            <a href={sermon.audioUrl} className="btn btn-outline-green" style={{ padding: '9px 20px', fontSize: '0.8rem' }}>
-              🎧 Audio
-            </a>
-          )}
-
-          {/* Notes button */}
-          {user && (
-            <button onClick={onOpenNotes} style={{ padding: '9px 16px', borderRadius: 30, border: '1.5px solid var(--brand-pale)', background: 'var(--brand-pale)', color: 'var(--brand-deep)', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.background='var(--brand-mid)'; e.currentTarget.style.color='white' }}
-              onMouseLeave={e => { e.currentTarget.style.background='var(--brand-pale)'; e.currentTarget.style.color='var(--brand-deep)' }}>
-              📓 Notes
-            </button>
-          )}
-
-          <ShareButtonLight
-            title={sermon.title}
-            text={sermon.description || `${sermon.title}${sermon.pastor ? ` — ${sermon.pastor}` : ''}`}
-            url={sermon.videoUrl || sermon.audioUrl || window.location.href}
-          />
-        </div>
-      </div>
-    </div>
   )
 }
