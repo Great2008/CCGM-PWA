@@ -362,11 +362,6 @@ function SermonNotesPanel({ sermon, onClose }) {
       )}
     </div>
   )
-
-  function fmtDate(iso) {
-    try { return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) }
-    catch { return '' }
-  }
 }
 
 // ─── Main Sermons Page ─────────────────────────────────────────────────────────
