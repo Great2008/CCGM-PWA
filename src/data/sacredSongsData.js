@@ -7899,6 +7899,73 @@ const SACRED_SONGS = [
   ],
   "chorus": ""
 },
+{
+  "id": 611,
+  "number": 611,
+  "title": "When the Heart, Made Pure",
+  "author": "",
+  "verses": [
+    "When the heart, made pure, is the temple of the Lord, And we feel His presence there, Oh, the joy that comes when we gather in His name, At the hallowed hour of prayer.",
+    "There are floods of light from His glory that descend, When we think our prospect dim, There are heights of love that His children may attain, By a closer walk with Him.",
+    "He will cheer us on when we follow where He leads, And our hearts with gladness fill; For we know by faith that His everlasting arms Are beneath and round us still.",
+    "Let us grow in grace and a knowledge of the truth, Let us dwell in perfect peace; Till we all clasp hands in the palace of the King, Where our joy shall never cease."
+  ],
+  "chorus": "He is precious unto all that believe Him, He is precious unto all that receive Him, Oh, the blessings we may claim, when we gather in His name! For the Lord will answer prayer."
+},
+{
+  "id": 612,
+  "number": 612,
+  "title": "Thrice-Blessed Spirit! Giver of Salvation",
+  "author": "",
+  "verses": [
+    "Thrice-Blessed Spirit! Giver of salvation, Purchased by Jesus on the cross of shame; Dwell in our hearts; transform them with Thy beauty—Fairest adorning of our Saviour's name.",
+    "Thy sevenfold grace bestow upon us freely: Love, deep and full, to God and all mankind; Joy in the Lord, 'mid every earthly sorrow; Peace, calm and sweet, that guardeth heart and mind.",
+    "Make us long-suffering 'mid earth's provocations; Gentleness give us, when enduring wrong; Goodness impart, that we e'en foes may succour, Faithfulness grant, to change our toil to song.",
+    "Meekness bestow, with humble self-abasement, And Self-control, through Thy controlling might; And as we list to every call of duty, May we do all as in Thy searching sight.",
+    "Then with the gift of holiness within us; We not less human, but made more divine; Our lives replete with heaven's supernal beauty, Ever declare—That beauty, Lord, is Thine."
+  ],
+  "chorus": ""
+},
+{
+  "id": 613,
+  "number": 613,
+  "title": "My Saviour, Oh, What Glories Shine",
+  "author": "",
+  "verses": [
+    "My Saviour, oh, what glories shine Through all Thy life of love divine! What wondrous grace and sympathy—All this for me! all this for me!",
+    "Thy vigils 'neath the lowly shade, Despised, rejected, scorned, betrayed; Thy sorrow in Gethsemane—All this for me! all this for me!",
+    "The thorns that pierced Thy sacred brow, The blood that saves so fully now; Oh, wondrous cross of Calvary!—All this for me! all this for me!",
+    "The riches of Thy peace and love, The treasures of Thy home above, Grace everlasting, full and free—All this for me! all this for me!"
+  ],
+  "chorus": "O blessed Saviour, may I be A living sacrifice to Thee; Both now and in eternity, Yes, all for Thee! yes, all for Thee!"
+},
+{
+  "id": 614,
+  "number": 614,
+  "title": "When I Came to Jesus, Then My Heart Was Sad",
+  "author": "",
+  "verses": [
+    "When I came to Jesus, then my heart was sad; But when He received me, then He made me glad. Freely He forgave me, met my spirit's need; Then He bade me follow whither He would lead.",
+    "Oft in hours of trial I have gone astray, Into worldly bypaths from the narrow way; But my Saviour sought me, brought me to His side; Then again I followed Christ, the Crucified.",
+    "But I would not wander, gracious Lord, from Thee; I would follow wholly, with true loyalty; Every sin forsaking from my inmost soul; Every thought surrendered to Thy grand control.",
+    "Teach me by Thy Spirit, and Thy Holy Word, How I best may suffer, and obey Thee, Lord; And however painful to obey may be, Love can make it gladsome, aye to follow Thee."
+  ],
+  "chorus": "I will follow Jesus, follow all the day; Walking in His footsteps closely all the way."
+},
+{
+  "id": 615,
+  "number": 615,
+  "title": "Dying with Jesus, by Death Reckoned Mine",
+  "author": "",
+  "verses": [
+    "Dying with Jesus, by death reckoned mine; Living with Jesus a new life divine; Looking to Jesus till glory doth shine—Moment by moment, O Lord, I am Thine.",
+    "Never a battle with wrong for the right, Never a contest that He doth not fight; Lifting above us His banner so white—Moment by moment I'm kept in His sight.",
+    "Never a trial that He is not there, Never a burden that He doth not bear, Never a sorrow that He doth not share—Moment by moment I'm under His care.",
+    "Never a heartache, and never a groan, Never a teardrop, and never a moan, Never a danger—but there on the throne Moment by moment He thinks of His own.",
+    "Never a weakness that He doth not feel, Never a sickness that He cannot heal; Moment by moment, in woe or in weal, Jesus, my Saviour, abides with me still."
+  ],
+  "chorus": "Moment by moment I'm kept in His love, Moment by moment I've life from above; Looking to Jesus till glory doth shine; Moment by moment, O Lord, I am Thine."
+},
   {
     "id": 616,
     "number": 616,
@@ -7913,6 +7980,7 @@ const SACRED_SONGS = [
     ],
     "chorus": ""
   },
+  
   {
     "id": 627,
     "number": 627,
