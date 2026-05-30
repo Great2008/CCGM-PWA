@@ -7778,7 +7778,127 @@ const SACRED_SONGS = [
     ],
     "chorus": "I surrender all, I surrender all;\nAll to Thee, my blessed Saviour,\nI surrender all."
   },
-  
+  {
+  "id": 602,
+  "number": 602,
+  "title": "True-hearted, Whole-hearted, Faithful and Loyal",
+  "author": "",
+  "verses": [
+    "True-hearted, whole-hearted, faithful and loyal, King of our lives by Thy grace we will be! Under the standard exalted and royal, Strong in Thy strength we will battle for Thee.",
+    "True-hearted, whole-hearted, fullest allegiance Yielding henceforth to our glorious King; Valiant endeavour and loving obedience, Freely and joyously now would we bring.",
+    "True-hearted, whole-hearted, Saviour all-glorious! Take Thy great power, and reign there alone, Over our wills and affections victorious, Freely surrendered and wholly Thine own."
+  ],
+  "chorus": "Peal out the watchword! silence it never! Song of our spirits rejoicing and free; Peal out the watchword! loyal for ever, King of our lives, by Thy grace we will be!"
+},
+{
+  "id": 603,
+  "number": 603,
+  "title": "I Am Thine Own; O Christ! Henceforth Entirely Thine",
+  "author": "",
+  "verses": [
+    "I am Thine own; O Christ! henceforth entirely Thine; And life from this glad hour, new life, is mine.",
+    "No earthly joy can lure my quiet soul from Thee; This deep delight, so pure, is heaven to me.",
+    "My joyful song of praise in sweet lyric I sing; To Thee the note I raise, my King! my King!",
+    "I cannot tell the art by which such bliss is given; I know Thou hast my heart, and I have heaven.",
+    "O peace—O holy rest, O balmy breath of love! O heart, divinest, best—Thy depth I prove!",
+    "I ask this gift of Thee—a life all lily-fair, And fragrant as the place where seraphs are."
+  ],
+  "chorus": ""
+},
+{
+  "id": 604,
+  "number": 604,
+  "title": "I Love Thee, Lord; Yet 'Tis No Love of Mine",
+  "author": "",
+  "verses": [
+    "I love Thee, Lord; yet 'tis no love of mine That goeth forth to that great heart of Thine: 'Tis Thine own love which Thou hast given me Returning back, O loving Lord, to Thee. Oh! help me, Lord, to take, by grace divine, Yet more and more of that great love of Thine; That day by day my heart may give to Thee A deeper love and growing constantly.",
+    "The earth absorbs the soft, refreshing rain, And sends it back in flowers and fruits again; So I receive Thy love so rich and free, And send it back in joy and praise to Thee.",
+    "The moon receives the sun's bright, golden light, And gives it forth to cheer the darksome night; So I receive the rays of love divine, And with them cheer this weary world of Thine.",
+    "'Tis by Thy love that I can love and bless The foes who seek to blast my happiness; Can e'en rejoice, when bearing wrong and shame, Thou deem'st me meet to suffer for Thy name.",
+    "Naught but Thy love can satisfy my heart, Constrain my will from self and sin to part; In love so great Thou giv'st Thyself to me; For Thou art Love—to all eternity."
+  ],
+  "chorus": ""
+},
+{
+  "id": 605,
+  "number": 605,
+  "title": "Arise and Follow Me",
+  "author": "",
+  "verses": [
+    "Arise and follow Me! Alas, my Lord, I hear Thy word, But Thee Thyself I can but dimly see; Help me to rise and follow Thee.",
+    "Arise and follow Me! But I am bound to earth's cold ground By many a tie: Come, Lord, and set me free, Then I shall rise and follow Thee.",
+    "Arise and follow Me! The way is rough, but 'tis enough That through my life Thou wilt my Leader be; And I will boldly follow Thee.",
+    "Arise and follow Me! In mist and gloom, through tears and tomb, Up golden streets and by the crystal sea, I shall for ever follow Thee."
+  ],
+  "chorus": ""
+},
+{
+  "id": 606,
+  "number": 606,
+  "title": "Jesus, I Have Promised",
+  "author": "",
+  "verses": [
+    "Jesus, I have promised To serve Thee to the end; Be Thou for ever near me, My Master and my Friend! I shall not fear the battle, If Thou art by my side; Nor wander from the pathway, If Thou wilt be my Guide.",
+    "Oh, let me feel Thee near me, The world is ever near; I see the sights that dazzle, The tempting sounds I hear: My foes are ever near me, Around me and within; But, Jesus, draw Thou nearer, And shield my soul from sin.",
+    "Oh, let me hear Thee speaking, In accents clear and still, Above the storms of passion, The murmurs of self-will. Oh speak, to reassure me, To hasten or control; Oh speak, and make me listen, Thou Guardian of my soul!",
+    "O Jesus, Thou hast promised To all who follow Thee, That where Thou art in glory There shall Thy servant be! And, Jesus, I have promised To serve Thee to the end; Oh, give me grace to follow My Master and my Friend!",
+    "Oh, let me see Thy footmarks, And in them plant mine own; My hope to follow duly Is in Thy strength alone. Oh, guide me, call me, draw me, Uphold me to the end; And then in heaven receive me, My Saviour and my Friend!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 607,
+  "number": 607,
+  "title": "I Am Thine, O Lord, I Have Heard Thy Voice",
+  "author": "",
+  "verses": [
+    "I am Thine, O Lord, I have heard Thy voice, And it told Thy love to me; But I long to rise in the arms of faith, And be closer drawn to Thee.",
+    "Consecrate me now to Thy service, Lord, By the power of grace divine; Let my soul look up with a steadfast hope, And my will be lost in Thine.",
+    "Oh, the pure delight of a single hour That before Thy throne I spend, When I kneel in prayer, and with Thee, my God, I commune as friend with friend.",
+    "There are depths of love that I cannot know Till I cross the narrow sea; There are heights of joy that I may not reach Till I rest in peace with Thee."
+  ],
+  "chorus": "Draw me nearer, nearer, blessed Lord, To the cross where Thou hast died; Draw me nearer, nearer, nearer, blessed Lord, To Thy precious, bleeding side."
+},
+{
+  "id": 608,
+  "number": 608,
+  "title": "Take Time to Be Holy",
+  "author": "",
+  "verses": [
+    "Take time to be holy, speak oft with thy Lord; Abide in Him always, and feed on His Word. Make friends of God's children; help those who are weak; Forgetting in nothing His blessing to seek.",
+    "Take time to be holy, the world rushes on; Spend much time in secret with Jesus alone. By looking to Jesus, like Him thou shalt be; Thy friends in thy conduct His likeness shall see.",
+    "Take time to be holy, let Him be thy Guide; And run not before Him, whatever betide; In joy or in sorrow still follow thy Lord, And, looking to Jesus, still trust in His Word.",
+    "Take time to be holy, be calm in thy soul; Each thought and each temper beneath His control: Thus led by His Spirit to fountains of love, Thou soon shalt be fitted for service above."
+  ],
+  "chorus": ""
+},
+{
+  "id": 609,
+  "number": 609,
+  "title": "My Heart Is Resting, O My God",
+  "author": "",
+  "verses": [
+    "My heart is resting, O my God, I will give thanks and sing: My heart is at the secret source Of every precious thing.",
+    "Now the frail vessel Thou hast made, No hand but Thine shall fill— The waters of the earth have failed, And I am thirsty still.",
+    "I thirst for springs of heavenly life, And here all day they rise; I seek the treasure of Thy love, And close at hand it lies.",
+    "And a 'new song' is in my mouth, To long-loved music set— Glory to Thee for all the grace I have not tasted yet!",
+    "A prayer reposing on His truth, Who hath made all things mine, That draws my captive will to Him, And makes it one with Thine."
+  ],
+  "chorus": ""
+},
+{
+  "id": 610,
+  "number": 610,
+  "title": "Must Jesus Bear the Cross Alone",
+  "author": "",
+  "verses": [
+    "Must Jesus bear the cross alone, And all the world go free? No, there's a cross for every one, And there's a cross for me.",
+    "The consecrated cross I'll bear, Till death shall set me free: And then go home my crown to wear, For there's a crown for me.",
+    "Upon the crystal pavement, down At Jesus' pierced feet, With joy I'll cast my golden crown, And His dear name repeat.",
+    "O precious cross! O glorious crown! O resurrection day! Ye angels, from the stars come down, And bear my soul away."
+  ],
+  "chorus": ""
+},
   {
     "id": 616,
     "number": 616,
