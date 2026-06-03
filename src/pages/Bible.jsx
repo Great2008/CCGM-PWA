@@ -293,7 +293,7 @@ export default function Bible() {
             </div>
           </div>
           <div className="bible-tabs" style={{ display: 'flex', gap: 4 }}>
-            {[['read','📖','Read'],['search','🔍','Search'],['popular','⭐','Popular'],['prayer','🙏','Prayer']].map(([t,icon,label]) => (
+            {[['read','📖','Read'],['search','🔍','Search'],['popular','⭐','Popular'],['prayer','🙏','Mood']].map(([t,icon,label]) => (
               <button key={t} onClick={() => setTab(t)} style={{
                 padding: '10px 22px', borderRadius: '10px 10px 0 0', border: 'none', cursor: 'pointer',
                 background: tab === t ? 'var(--cream)' : 'rgba(255,255,255,0.15)',
