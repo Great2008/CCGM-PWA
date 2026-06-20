@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
+import { parseBlocks, ReadingContent, FormattedText } from '../lib/textFormat'
+import { exportSabbathLessonPDF } from '../lib/exportPdf'
 
 const CACHE_KEY = 'ccg-sabbath-current'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
@@ -75,48 +77,7 @@ function thisWeekLesson(lessons) {
   )[0]
 }
 
-const parseBlocks = (text) => {
-  if (!text) return []
-  const lines = text.split('\n')
-  const blocks = []
-  let paraLines = []
-  const flushPara = () => {
-    const joined = paraLines.join(' ').trim()
-    if (joined) blocks.push(joined)
-    paraLines = []
-  }
-  lines.forEach(line => {
-    const trimmed = line.trim()
-    if (/^##/.test(trimmed) && trimmed.length > 2) { flushPara(); blocks.push(trimmed) }
-    else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) { flushPara(); blocks.push(trimmed) }
-    else if (trimmed === '') { flushPara() }
-    else { paraLines.push(trimmed) }
-  })
-  flushPara()
-  return blocks.filter(Boolean)
-}
 
-function ReadingContent({ blocks, fontSize }) {
-  return (
-    <div style={{ lineHeight: 1.9, color: 'var(--text-dark)', fontSize: fontSize + 'px' }}>
-      {blocks.map((para, i) =>
-        /^##/.test(para) ? (
-          <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: (fontSize + 4) + 'px', margin: '32px 0 14px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 6 }}>
-            {para.replace(/^##\s*/, '')}
-          </h3>
-        ) : /^#/.test(para) ? (
-          <h4 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-light)', fontSize: (fontSize + 2) + 'px', margin: '22px 0 10px', fontWeight: 700 }}>
-            {para.replace(/^#\s*/, '')}
-          </h4>
-        ) : (
-          <p key={i} style={{ marginBottom: 20 }}>{para}</p>
-        )
-      )}
-    </div>
-  )
-}
-
-export default function SabbathSchool() {
   const [lessons, setLessons]     = useState([])
   const [selected, setSelected]   = useState(null)
   const [loading, setLoading]     = useState(true)
@@ -439,6 +400,11 @@ export default function SabbathSchool() {
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                       🔗 Share
                     </button>
+                    <button
+                      onClick={() => exportSabbathLessonPDF(selected)}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                      ⬇️ Export PDF
+                    </button>
                   </div>
 
                   {/* Tabs row + desktop T-/T+ */}
@@ -474,7 +440,7 @@ export default function SabbathSchool() {
                     <div>
                       {selected.summary && (
                         <div style={{ background: 'var(--brand-pale)', borderLeft: '4px solid var(--brand-light)', borderRadius: '0 10px 10px 0', padding: '16px 20px', marginBottom: 28, fontStyle: 'italic', color: 'var(--brand-deep)', lineHeight: 1.8, fontSize: fontSize + 'px' }}>
-                          {selected.summary}
+                          <FormattedText text={selected.summary} />
                         </div>
                       )}
                       {selected.body ? (
@@ -495,7 +461,7 @@ export default function SabbathSchool() {
                             {selected.discussion_questions.split('\n').filter(Boolean).map((q, i) => (
                               <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
                                 <span style={{ color: 'var(--gold)', fontWeight: 900, flexShrink: 0 }}>{i + 1}.</span>
-                                <span>{q.replace(/^\d+\.\s*/, '')}</span>
+                                <span><FormattedText text={q.replace(/^\d+\.\s*/, '')} /></span>
                               </div>
                             ))}
                           </div>
@@ -530,7 +496,7 @@ export default function SabbathSchool() {
                             {selected.analysis_points.split('\n').filter(Boolean).map((pt, i) => (
                               <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', background: 'var(--brand-pale)', borderRadius: 12, padding: '14px 18px' }}>
                                 <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--brand-light)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.78rem', fontWeight: 900, flexShrink: 0 }}>{i + 1}</span>
-                                <span style={{ color: 'var(--brand-deep)', fontSize: fontSize + 'px', lineHeight: 1.7 }}>{pt.replace(/^\d+\.\s*/, '')}</span>
+                                <span style={{ color: 'var(--brand-deep)', fontSize: fontSize + 'px', lineHeight: 1.7 }}><FormattedText text={pt.replace(/^\d+\.\s*/, '')} /></span>
                               </div>
                             ))}
                           </div>
@@ -572,7 +538,7 @@ export default function SabbathSchool() {
                             )}
                             {selected.divine_message_notes && (
                               <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: 10, padding: '12px 16px', fontSize: fontSize + 'px', color: 'var(--text-mid)', lineHeight: 1.8, fontStyle: 'italic' }}>
-                                {selected.divine_message_notes}
+                                <FormattedText text={selected.divine_message_notes} />
                               </div>
                             )}
                           </div>
@@ -609,7 +575,7 @@ export default function SabbathSchool() {
                             )}
                             {selected.evening_notes && (
                               <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 10, padding: '12px 16px', fontSize: fontSize + 'px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, fontStyle: 'italic' }}>
-                                {selected.evening_notes}
+                                <FormattedText text={selected.evening_notes} />
                               </div>
                             )}
                           </div>

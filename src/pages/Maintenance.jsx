@@ -1,27 +1,20 @@
 /**
- * Home2.jsx — CCG World Maintenance Page
+ * Maintenance.jsx — CCG World Maintenance Page
  *
- * HOW TO USE:
- *   Going into maintenance:
- *     1. Rename Home.jsx  → HomeMain.jsx
- *     2. Rename Home2.jsx → Home.jsx
- *
- *   Coming back online:
- *     1. Rename Home.jsx  → Home2.jsx
- *     2. Rename HomeMain.jsx → Home.jsx
+ * Shown automatically (by App.jsx) whenever an admin turns on
+ * Maintenance Mode from /admin → Maintenance Mode. No navbar/footer are
+ * rendered around it. The /admin panel is a separate app (see main.jsx)
+ * so it is never affected by this page and always stays reachable to
+ * turn maintenance back off.
  */
-
 import { useEffect, useState } from 'react'
 import SEO from '../components/SEO'
-
-const LAUNCH = new Date(Date.now() + 2 * 60 * 60 * 1000) // default: 2 hrs from now
-// ↑ Change this to your actual expected back-online time, e.g.:
-// const LAUNCH = new Date('2026-05-20T10:00:00+01:00')
 
 function useCountdown(target) {
   const [timeLeft, setTimeLeft] = useState({})
 
   useEffect(() => {
+    if (!target) { setTimeLeft(null); return }
     const calc = () => {
       const diff = target - Date.now()
       if (diff <= 0) return setTimeLeft({ d: 0, h: 0, m: 0, s: 0 })
@@ -47,8 +40,13 @@ const UPDATES = [
   { icon: '📖', text: 'Bible & content updates' },
 ]
 
-export default function Home2() {
-  const { d, h, m, s } = useCountdown(LAUNCH)
+const DEFAULT_MESSAGE = "CCG World is currently down for scheduled maintenance. We'll be back in just a moment"
+
+export default function Maintenance({ message, eta }) {
+  const target = eta ? new Date(eta) : null
+  const validTarget = target && !isNaN(target.getTime()) ? target : null
+  const countdown = useCountdown(validTarget)
+
   const [dots, setDots]     = useState(1)
   const [visible, setVisible] = useState(false)
 
@@ -61,6 +59,8 @@ export default function Home2() {
     const t = setInterval(() => setDots(d => d === 3 ? 1 : d + 1), 600)
     return () => clearInterval(t)
   }, [])
+
+  const bodyMessage = (message || '').trim() || DEFAULT_MESSAGE
 
   return (
     <>
@@ -156,55 +156,56 @@ export default function Home2() {
             margin: '0 0 36px',
             lineHeight: 1.75,
           }}>
-            CCG World is currently down for scheduled maintenance.
-            We'll be back in just a moment{'.'.repeat(dots)}
+            {bodyMessage}{'.'.repeat(dots)}
           </p>
 
-          {/* Countdown */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 'clamp(8px,2vw,16px)',
-            width: '100%',
-            marginBottom: 36,
-          }}>
-            {[
-              { val: d, label: 'Days' },
-              { val: h, label: 'Hours' },
-              { val: m, label: 'Mins' },
-              { val: s, label: 'Secs' },
-            ].map(({ val, label }) => (
-              <div key={label} style={{
-                background: 'rgba(0,0,0,0.18)',
-                borderRadius: 16,
-                padding: 'clamp(12px,3vw,20px) 8px',
-                textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.15)',
-                backdropFilter: 'blur(8px)',
-              }}>
-                <div style={{
-                  color: '#fcd34d',
-                  fontSize: 'clamp(1.6rem,6vw,2.8rem)',
-                  fontWeight: 900,
-                  lineHeight: 1,
-                  fontVariantNumeric: 'tabular-nums',
+          {/* Countdown — only shown when an admin has set an expected back-online time */}
+          {countdown && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: 'clamp(8px,2vw,16px)',
+              width: '100%',
+              marginBottom: 36,
+            }}>
+              {[
+                { val: countdown.d, label: 'Days' },
+                { val: countdown.h, label: 'Hours' },
+                { val: countdown.m, label: 'Mins' },
+                { val: countdown.s, label: 'Secs' },
+              ].map(({ val, label }) => (
+                <div key={label} style={{
+                  background: 'rgba(0,0,0,0.18)',
+                  borderRadius: 16,
+                  padding: 'clamp(12px,3vw,20px) 8px',
+                  textAlign: 'center',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  backdropFilter: 'blur(8px)',
                 }}>
-                  {String(val ?? 0).padStart(2, '0')}
+                  <div style={{
+                    color: '#fcd34d',
+                    fontSize: 'clamp(1.6rem,6vw,2.8rem)',
+                    fontWeight: 900,
+                    lineHeight: 1,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}>
+                    {String(val ?? 0).padStart(2, '0')}
+                  </div>
+                  <div style={{
+                    color: 'rgba(255,255,255,0.65)',
+                    fontSize: 'clamp(0.62rem,2vw,0.75rem)',
+                    fontWeight: 600,
+                    marginTop: 6,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    fontFamily: 'Arial, sans-serif',
+                  }}>
+                    {label}
+                  </div>
                 </div>
-                <div style={{
-                  color: 'rgba(255,255,255,0.65)',
-                  fontSize: 'clamp(0.62rem,2vw,0.75rem)',
-                  fontWeight: 600,
-                  marginTop: 6,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  fontFamily: 'Arial, sans-serif',
-                }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* What we're working on */}
           <div style={{

@@ -4,50 +4,10 @@ import { ShareButtonLight } from '../components/ShareButton'
 import SEO from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import { parseBlocks, ReadingContent, FormattedText } from '../lib/textFormat'
+import { exportSermonPDF } from '../lib/exportPdf'
 
 const FONT_SIZE_KEY = 'ccg-sermons-fontsize'
-
-// ─── Text formatter (mirrors SabbathSchool parseBlocks / ReadingContent) ───────
-const parseBlocks = (text) => {
-  if (!text) return []
-  const lines = text.split('\n')
-  const blocks = []
-  let paraLines = []
-  const flushPara = () => {
-    const joined = paraLines.join(' ').trim()
-    if (joined) blocks.push(joined)
-    paraLines = []
-  }
-  lines.forEach(line => {
-    const trimmed = line.trim()
-    if (/^##/.test(trimmed) && trimmed.length > 2)                          { flushPara(); blocks.push(trimmed) }
-    else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) { flushPara(); blocks.push(trimmed) }
-    else if (trimmed === '')                                                  { flushPara() }
-    else                                                                      { paraLines.push(trimmed) }
-  })
-  flushPara()
-  return blocks.filter(Boolean)
-}
-
-function ReadingContent({ blocks, fontSize }) {
-  return (
-    <div style={{ lineHeight: 1.9, color: 'var(--text-dark)', fontSize: fontSize + 'px' }}>
-      {blocks.map((para, i) =>
-        /^##/.test(para) ? (
-          <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: (fontSize + 4) + 'px', margin: '32px 0 14px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 6 }}>
-            {para.replace(/^##\s*/, '')}
-          </h3>
-        ) : /^#/.test(para) ? (
-          <h4 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-light)', fontSize: (fontSize + 2) + 'px', margin: '22px 0 10px', fontWeight: 700 }}>
-            {para.replace(/^#\s*/, '')}
-          </h4>
-        ) : (
-          <p key={i} style={{ marginBottom: 20 }}>{para}</p>
-        )
-      )}
-    </div>
-  )
-}
 
 // ─── Sermon Notes Hook ─────────────────────────────────────────────────────────
 function useSermonNotes(sermonId) {
@@ -615,6 +575,10 @@ export default function Sermons() {
                           📓 Notes
                         </button>
                       )}
+                      <button onClick={() => exportSermonPDF(selected)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                        ⬇️ Export PDF
+                      </button>
                     </div>
 
                     {/* Desktop T-/T+ */}
@@ -653,7 +617,7 @@ export default function Sermons() {
                     {/* Description / body */}
                     {selected.description && (
                       <div style={{ background: 'var(--brand-pale)', borderLeft: '4px solid var(--brand-light)', borderRadius: '0 10px 10px 0', padding: '16px 20px', marginBottom: 28, fontStyle: 'italic', color: 'var(--brand-deep)', lineHeight: 1.8, fontSize: fontSize + 'px' }}>
-                        {selected.description}
+                        <FormattedText text={selected.description} />
                       </div>
                     )}
 

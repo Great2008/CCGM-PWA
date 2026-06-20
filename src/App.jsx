@@ -33,9 +33,26 @@ import Verify       from './pages/Verify'
 import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
 import DailyVerseBanner from './components/DailyVerseBanner'
+import Maintenance from './pages/Maintenance'
+import useMaintenanceMode from './hooks/useMaintenanceMode'
 
 function AppInner() {
   const { user } = useAuth()
+  const { enabled, message, eta } = useMaintenanceMode()
+
+  // While maintenance mode is on, show ONLY the maintenance page —
+  // no Navbar/Footer/routes. /admin is a separate app (see main.jsx)
+  // and is never affected, so it always stays reachable to switch
+  // this back off.
+  if (enabled) {
+    return (
+      <>
+        <Maintenance message={message} eta={eta} />
+        <Analytics />
+      </>
+    )
+  }
+
   return (
     <>
       <Navbar />

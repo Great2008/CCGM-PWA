@@ -3,6 +3,7 @@ import { useAdmin } from '../AdminApp'
 import { getAll, insert, update, remove } from '../supabase'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
+import { parseBlocks, renderInline } from '../../lib/textFormat'
 
 const EMPTY = {
   title: '', preacher: '', date: '', series: '', scripture: '',
@@ -11,39 +12,15 @@ const EMPTY = {
 }
 
 // ─── Formatting Guide ──────────────────────────────────────────────────────────
-function parseBlocks(text) {
-  if (!text) return []
-  const lines = text.split('\n')
-  const blocks = []
-  let paraLines = []
-  const flushPara = () => {
-    const joined = paraLines.join(' ').trim()
-    if (joined) blocks.push(joined)
-    paraLines = []
-  }
-  lines.forEach(line => {
-    const trimmed = line.trim()
-    if (/^##/.test(trimmed) && trimmed.length > 2) {
-      flushPara(); blocks.push(trimmed)
-    } else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) {
-      flushPara(); blocks.push(trimmed)
-    } else if (trimmed === '') {
-      flushPara()
-    } else {
-      paraLines.push(trimmed)
-    }
-  })
-  flushPara()
-  return blocks.filter(Boolean)
-}
-
+// Live-preview renderer — mirrors the public Sermons page exactly
+// (## heading, # sub-heading, **bold**, *italic*) using the shared parser.
 function renderBlocks(text, baseStyle = {}) {
   return parseBlocks(text).map((para, i) => (
     /^##/.test(para)
-      ? <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.1rem', margin: '20px 0 8px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 4 }}>{para.replace(/^##\s*/, '')}</h3>
+      ? <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.1rem', margin: '20px 0 8px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 4 }}>{renderInline(para.replace(/^##\s*/, ''))}</h3>
       : /^#/.test(para)
-      ? <h4 key={i} style={{ color: 'var(--brand-light)', fontSize: '1rem', margin: '16px 0 6px', fontWeight: 700 }}>{para.replace(/^#\s*/, '')}</h4>
-      : <p key={i} style={{ lineHeight: 1.9, color: 'var(--text-dark)', marginBottom: 14, ...baseStyle }}>{para}</p>
+      ? <h4 key={i} style={{ color: 'var(--brand-light)', fontSize: '1rem', margin: '16px 0 6px', fontWeight: 700 }}>{renderInline(para.replace(/^#\s*/, ''))}</h4>
+      : <p key={i} style={{ lineHeight: 1.9, color: 'var(--text-dark)', marginBottom: 14, ...baseStyle }}>{renderInline(para)}</p>
   ))
 }
 
@@ -79,6 +56,24 @@ function FormatGuide() {
       ),
     },
     {
+      syntax: '**bold text**',
+      description: 'Wrap words in double asterisks to make them bold',
+      render: (
+        <p style={{ lineHeight: 1.9, color: 'var(--text-dark)', margin: '4px 0', fontSize: '0.9rem' }}>
+          This is <strong>bold text</strong> in a sentence
+        </p>
+      ),
+    },
+    {
+      syntax: '*italic text*',
+      description: 'Wrap words in single asterisks to make them italic',
+      render: (
+        <p style={{ lineHeight: 1.9, color: 'var(--text-dark)', margin: '4px 0', fontSize: '0.9rem' }}>
+          This is <em>italic text</em> in a sentence
+        </p>
+      ),
+    },
+    {
       syntax: '(blank line)',
       description: 'A blank line starts a new paragraph',
       render: (
@@ -87,7 +82,7 @@ function FormatGuide() {
     },
   ]
 
-  const EXAMPLE = `## Point 1 — The Call\n\nGod's call to Abraham was both sudden and specific.\nHe was asked to leave everything familiar behind.\n\n# Key Verse\n\nFaith is the substance of things hoped for,\nthe evidence of things not seen.`
+  const EXAMPLE = `## Point 1 — The Call\n\nGod's call to Abraham was both **sudden and specific**.\nHe was asked to leave everything familiar behind.\n\n# Key Verse\n\n*Faith is the substance of things hoped for,*\nthe evidence of things not seen.`
 
   return (
     <div style={{ gridColumn: '1/-1', marginBottom: 4 }}>
@@ -390,7 +385,7 @@ export default function AdminSermons() {
               <label>
                 Sermon Notes / Full Content
                 <span style={{ fontWeight: 400, fontSize: '0.75rem', color: 'var(--text-light)', marginLeft: 8 }}>
-                  Use ## for section headings, # for subheadings, blank line between paragraphs
+                  Use ## for section headings, # for subheadings, **bold**, *italic*, blank line between paragraphs
                 </span>
               </label>
               <textarea {...F('body')} rows={16}

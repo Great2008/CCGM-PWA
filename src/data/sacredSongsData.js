@@ -8084,20 +8084,6 @@ const SACRED_SONGS = [
     "chorus": "Rescue the perishing,\nCare for the dying;\nJesus is merciful,\nJesus will save."
   },
   {
-    "id": 844,
-    "number": 844,
-    "title": "I Need Thee Every Hour",
-    "author": "Annie S. Hawks",
-    "verses": [
-      "I need Thee every hour,\nMost gracious Lord;\nNo tender voice like Thine\nCan peace afford.",
-      "I need Thee every hour,\nStay Thou nearby;\nTemptations lose their power\nWhen Thou art nigh.",
-      "I need Thee every hour,\nIn joy or pain;\nCome quickly and abide,\nOr life is vain.",
-      "I need Thee every hour,\nTeach me Thy will;\nAnd Thy rich promises\nIn me fulfil.",
-      "I need Thee every hour,\nMost Holy One;\nO make me Thine indeed,\nThou blessed Son."
-    ],
-    "chorus": "I need Thee, O I need Thee;\nEvery hour I need Thee;\nO bless me now, my Saviour,\nI come to Thee."
-  },
-  {
     "id": 875,
     "number": 875,
     "title": "I Will Sing The Wondrous Story",
