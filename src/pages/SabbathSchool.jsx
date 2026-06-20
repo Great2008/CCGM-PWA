@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
 import { parseBlocks, ReadingContent, FormattedText } from '../lib/textFormat'
-import { exportSabbathLessonPDF } from '../lib/exportPdf'
+import { exportSabbathLessonPDF, PDF_FONT_OPTIONS } from '../lib/exportPdf'
 
 const CACHE_KEY = 'ccg-sabbath-current'
 const FONT_SIZE_KEY = 'ccg-sabbath-fontsize'
+const PDF_FONT_KEY = 'ccg-sabbath-pdffont'
 
 function saveCache(lesson) {
   try {
@@ -89,6 +90,15 @@ export default function SabbathSchool() {
   const [fontSize, setFontSize]   = useState(() => {
     try { return parseInt(localStorage.getItem(FONT_SIZE_KEY)) || 17 } catch { return 17 }
   })
+  const [pdfFont, setPdfFont]     = useState(() => {
+    try { return localStorage.getItem(PDF_FONT_KEY) || 'helvetica' } catch { return 'helvetica' }
+  })
+  const [exportingPdf, setExportingPdf] = useState(false)
+
+  const changePdfFont = (value) => {
+    setPdfFont(value)
+    try { localStorage.setItem(PDF_FONT_KEY, value) } catch {}
+  }
 
   // Auto-scroll the sidebar list to highlight the active lesson
   useEffect(() => {
@@ -401,10 +411,24 @@ export default function SabbathSchool() {
                       🔗 Share
                     </button>
                     <button
-                      onClick={() => exportSabbathLessonPDF(selected)}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
-                      ⬇️ Export PDF
+                      onClick={async () => {
+                        setExportingPdf(true)
+                        try { await exportSabbathLessonPDF(selected, { fontFamily: pdfFont }) }
+                        finally { setExportingPdf(false) }
+                      }}
+                      disabled={exportingPdf}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', cursor: exportingPdf ? 'default' : 'pointer', fontFamily: 'var(--font-body)', opacity: exportingPdf ? 0.7 : 1 }}>
+                      {exportingPdf ? '⏳ Generating…' : '⬇️ Export PDF'}
                     </button>
+                    <select
+                      value={pdfFont}
+                      onChange={e => changePdfFont(e.target.value)}
+                      title="PDF font"
+                      style={{ padding: '5px 10px', borderRadius: 20, border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 700, fontSize: '0.78rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}>
+                      {PDF_FONT_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value} style={{ color: 'black' }}>{opt.label}</option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Tabs row + desktop T-/T+ */}

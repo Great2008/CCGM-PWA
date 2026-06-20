@@ -4,6 +4,18 @@
  * using the jsPDF dependency already in package.json. Understands the
  * same "## heading / # sub-heading / **bold** / *italic*" syntax as
  * textFormat.js, so the PDF matches what's on screen.
+ *
+ * Supports a font selector. jsPDF only ships Helvetica/Times/Courier
+ * without embedding, so the other choices are embedded as real TTF data,
+ * loaded on demand via dynamic import (each is its own bundle chunk, so
+ * picking the default font costs nothing extra):
+ *   - "Times New Roman" → Liberation Serif (open-license, metric-identical
+ *     substitute — same project LibreOffice uses for Times New Roman)
+ *   - "Cambria"          → Caladea (open-license, metric-identical
+ *     substitute for Cambria)
+ *   - "Georgia"          → DejaVu Serif (closest available open-license
+ *     approximation — not a precise metric match, but the same warm,
+ *     readable serif family)
  */
 import jsPDF from 'jspdf'
 import { parseBlocks, parseInline } from './textFormat'
@@ -28,11 +40,49 @@ function slugify(str) {
     .slice(0, 60) || 'document'
 }
 
+// ── Font selector ──────────────────────────────────────────────────────────
+// Options shown in the UI dropdown. `value` is what's passed to the export
+// functions and persisted in localStorage by the page components.
+export const PDF_FONT_OPTIONS = [
+  { value: 'helvetica',        label: 'Helvetica (Classic, fastest)' },
+  { value: 'times-new-roman',  label: 'Times New Roman' },
+  { value: 'cambria',          label: 'Cambria' },
+  { value: 'georgia',          label: 'Georgia' },
+]
+
+const FONT_REGISTRY = {
+  helvetica:       { family: 'helvetica', builtin: true },
+  'times-new-roman': { family: 'LiberationSerif', builtin: false, fileBase: 'LiberationSerif', loader: () => import('./fonts/timesNewRomanFont.js') },
+  cambria:         { family: 'Caladea', builtin: false, fileBase: 'Caladea', loader: () => import('./fonts/cambriaFont.js') },
+  georgia:         { family: 'DejaVuSerif', builtin: false, fileBase: 'DejaVuSerif', loader: () => import('./fonts/georgiaFont.js') },
+}
+
+// Registers the chosen font's 4 styles (normal/bold/italic/bolditalic) into
+// this jsPDF document's virtual file system, and returns the family name to
+// pass to setFont(). No-op (and no network/bundle cost) for "helvetica".
+async function registerFont(doc, fontKey) {
+  const entry = FONT_REGISTRY[fontKey] || FONT_REGISTRY.helvetica
+  if (entry.builtin) return entry.family
+  const mod = await entry.loader()
+  ;[
+    ['normal', 'normal'],
+    ['bold', 'bold'],
+    ['italic', 'italic'],
+    ['bolditalic', 'bolditalic'],
+  ].forEach(([dataKey, jspdfStyle]) => {
+    const fileName = `${entry.fileBase}-${dataKey}.ttf`
+    doc.addFileToVFS(fileName, mod[dataKey])
+    doc.addFont(fileName, entry.family, jspdfStyle)
+  })
+  return entry.family
+}
+
 // ── Low-level writer: handles pagination + inline bold/italic word-wrap ──
 class PdfWriter {
-  constructor(doc) {
+  constructor(doc, fontFamily = 'helvetica') {
     this.doc = doc
     this.y = MARGIN
+    this.fontFamily = fontFamily
   }
 
   ensureSpace(h) {
@@ -47,12 +97,12 @@ class PdfWriter {
     if (bold && italic) style = 'bolditalic'
     else if (bold) style = 'bold'
     else if (italic) style = 'italic'
-    this.doc.setFont('helvetica', style)
+    this.doc.setFont(this.fontFamily, style)
     this.doc.setFontSize(size)
   }
 
   spaceWidth(size) {
-    this.doc.setFont('helvetica', 'normal')
+    this.doc.setFont(this.fontFamily, 'normal')
     this.doc.setFontSize(size)
     return this.doc.getTextWidth(' ')
   }
@@ -117,7 +167,7 @@ class PdfWriter {
     const text = parts.filter(Boolean).join('   •   ')
     if (!text) return
     this.ensureSpace(8)
-    this.doc.setFont('helvetica', 'normal')
+    this.doc.setFont(this.fontFamily, 'normal')
     this.doc.setFontSize(9.5)
     this.doc.setTextColor(MUTED)
     this.doc.text(text, MARGIN, this.y)
@@ -135,7 +185,7 @@ class PdfWriter {
   writeSectionHeading(text) {
     this.ensureSpace(16)
     this.y += 3
-    this.doc.setFont('helvetica', 'bold')
+    this.doc.setFont(this.fontFamily, 'bold')
     this.doc.setFontSize(13.5)
     this.doc.setTextColor(BRAND)
     this.doc.text(text, MARGIN, this.y)
@@ -152,7 +202,7 @@ class PdfWriter {
       if (/^##/.test(b)) {
         this.ensureSpace(11)
         this.y += 2
-        this.doc.setFont('helvetica', 'bold')
+        this.doc.setFont(this.fontFamily, 'bold')
         this.doc.setFontSize(size + 2.5)
         this.doc.setTextColor(BRAND)
         this.doc.text(b.replace(/^##\s*/, ''), MARGIN, this.y)
@@ -160,7 +210,7 @@ class PdfWriter {
       } else if (/^#/.test(b)) {
         this.ensureSpace(9)
         this.y += 1
-        this.doc.setFont('helvetica', 'bold')
+        this.doc.setFont(this.fontFamily, 'bold')
         this.doc.setFontSize(size + 1)
         this.doc.setTextColor(BRAND_LIGHT)
         this.doc.text(b.replace(/^#\s*/, ''), MARGIN, this.y)
@@ -182,7 +232,7 @@ class PdfWriter {
   writeKeyValue(label, value, { size = 10.5 } = {}) {
     if (!value) return
     this.ensureSpace(7)
-    this.doc.setFont('helvetica', 'bold')
+    this.doc.setFont(this.fontFamily, 'bold')
     this.doc.setFontSize(size - 1)
     this.doc.setTextColor(GOLD)
     this.doc.text(label.toUpperCase(), MARGIN, this.y)
@@ -192,12 +242,12 @@ class PdfWriter {
 }
 
 function writeMasthead(writer, doc, kicker) {
-  doc.setFont('helvetica', 'bold')
+  doc.setFont(writer.fontFamily, 'bold')
   doc.setFontSize(10)
   doc.setTextColor(BRAND)
   doc.text('CCG WORLD', MARGIN, writer.y)
   if (kicker) {
-    doc.setFont('helvetica', 'normal')
+    doc.setFont(writer.fontFamily, 'normal')
     doc.setTextColor(MUTED)
     doc.text(kicker, PAGE_W - MARGIN, writer.y, { align: 'right' })
   }
@@ -208,11 +258,11 @@ function writeMasthead(writer, doc, kicker) {
   writer.y += 10
 }
 
-function writeFooter(doc) {
+function writeFooter(doc, fontFamily) {
   const total = doc.getNumberOfPages()
   for (let p = 1; p <= total; p++) {
     doc.setPage(p)
-    doc.setFont('helvetica', 'normal')
+    doc.setFont(fontFamily, 'normal')
     doc.setFontSize(8.5)
     doc.setTextColor(MUTED)
     doc.text('CCG World — Christian Church of God Mission', MARGIN, PAGE_H - 10)
@@ -227,15 +277,19 @@ function fmtDate(d) {
 }
 
 // ── Public exports ────────────────────────────────────────────────────────
+// Both now async (font registration is a dynamic import) — callers should
+// `await` them, though jsPDF's doc.save() still fires automatically once
+// the returned promise resolves either way.
 
-export function exportSabbathLessonPDF(lesson) {
+export async function exportSabbathLessonPDF(lesson, { fontFamily = 'helvetica' } = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
-  const writer = new PdfWriter(doc)
+  const family = await registerFont(doc, fontFamily)
+  const writer = new PdfWriter(doc, family)
 
   writeMasthead(writer, doc, 'Sabbath School')
 
   if (lesson.quarter) {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(family, 'bold')
     doc.setFontSize(9)
     doc.setTextColor(GOLD)
     doc.text(lesson.quarter.toUpperCase(), MARGIN, writer.y)
@@ -266,7 +320,7 @@ export function exportSabbathLessonPDF(lesson) {
     if (lesson.analysis) writer.writeBlocks(lesson.analysis)
     if (lesson.analysis_points) {
       writer.y += 2
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(family, 'bold')
       doc.setFontSize(11.5)
       doc.setTextColor(BRAND)
       writer.ensureSpace(10)
@@ -280,7 +334,7 @@ export function exportSabbathLessonPDF(lesson) {
   if (hasService) {
     writer.writeSectionHeading('Divine Service')
     if (lesson.divine_message_title || lesson.divine_message_speaker) {
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(BRAND)
+      doc.setFont(family, 'bold'); doc.setFontSize(10.5); doc.setTextColor(BRAND)
       writer.ensureSpace(7)
       doc.text('Morning Service', MARGIN, writer.y); writer.y += 6
       writer.writeKeyValue('Sermon Title', lesson.divine_message_title)
@@ -289,7 +343,7 @@ export function exportSabbathLessonPDF(lesson) {
       writer.writeKeyValue('Notes', lesson.divine_message_notes)
     }
     if (lesson.evening_title || lesson.evening_speaker) {
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(BRAND)
+      doc.setFont(family, 'bold'); doc.setFontSize(10.5); doc.setTextColor(BRAND)
       writer.ensureSpace(7)
       doc.text('Evening Service', MARGIN, writer.y); writer.y += 6
       writer.writeKeyValue('Sermon Title', lesson.evening_title)
@@ -299,18 +353,19 @@ export function exportSabbathLessonPDF(lesson) {
     }
   }
 
-  writeFooter(doc)
+  writeFooter(doc, family)
   doc.save(`sabbath-school-${slugify(lesson.title)}.pdf`)
 }
 
-export function exportSermonPDF(sermon) {
+export async function exportSermonPDF(sermon, { fontFamily = 'helvetica' } = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
-  const writer = new PdfWriter(doc)
+  const family = await registerFont(doc, fontFamily)
+  const writer = new PdfWriter(doc, family)
 
   writeMasthead(writer, doc, 'Sermons')
 
   if (sermon.series) {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(family, 'bold')
     doc.setFontSize(9)
     doc.setTextColor(GOLD)
     doc.text(sermon.series.toUpperCase(), MARGIN, writer.y)
@@ -335,6 +390,6 @@ export function exportSermonPDF(sermon) {
   if (sermon.videoUrl) writer.writeKeyValue('Watch Online', sermon.videoUrl)
   if (sermon.audioUrl) writer.writeKeyValue('Listen Online', sermon.audioUrl)
 
-  writeFooter(doc)
+  writeFooter(doc, family)
   doc.save(`sermon-${slugify(sermon.title)}.pdf`)
 }
