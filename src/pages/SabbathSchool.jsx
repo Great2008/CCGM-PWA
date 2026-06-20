@@ -77,7 +77,7 @@ function thisWeekLesson(lessons) {
   )[0]
 }
 
-
+export default function SabbathSchool() {
   const [lessons, setLessons]     = useState([])
   const [selected, setSelected]   = useState(null)
   const [loading, setLoading]     = useState(true)
