@@ -6,18 +6,79 @@ import AdminCard from '../components/AdminCard'
 
 const DEFAULT = { enabled: false, message: '', eta: '' }
 
+function formatRemaining(ms) {
+  if (ms <= 0) return null
+  const totalMin = Math.floor(ms / 60000)
+  const d = Math.floor(totalMin / 1440)
+  const h = Math.floor((totalMin % 1440) / 60)
+  const m = totalMin % 60
+  const parts = []
+  if (d) parts.push(`${d}d`)
+  if (h) parts.push(`${h}h`)
+  if (!d) parts.push(`${m}m`)
+  return parts.join(' ')
+}
+
 export default function AdminMaintenance() {
   const { showToast, logAction } = useAdmin()
   const [data, setData]       = useState(DEFAULT)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving]   = useState(false)
+  const [remaining, setRemaining] = useState(null)
 
   useEffect(() => {
-    getContent('maintenance').then(d => {
-      if (d) setData({ enabled: !!d.enabled, message: d.message || '', eta: d.eta || '' })
+    getContent('maintenance').then(async (d) => {
+      if (d) {
+        const loaded = { enabled: !!d.enabled, message: d.message || '', eta: d.eta || '' }
+        setData(loaded)
+
+        // Self-heal: if the countdown already passed before this admin
+        // opened the page, the public site has already auto-unlocked
+        // itself — persist that correction here too, so this panel
+        // doesn't keep showing "locked" indefinitely.
+        if (loaded.enabled && loaded.eta) {
+          const etaTime = new Date(loaded.eta).getTime()
+          if (!isNaN(etaTime) && Date.now() >= etaTime) {
+            const corrected = { ...loaded, enabled: false }
+            setData(corrected)
+            try {
+              await setContent('maintenance', corrected)
+              logAction('maintenance_disabled', 'Maintenance mode auto-disabled after countdown expired', null)
+            } catch {}
+          }
+        }
+      }
       setLoading(false)
     }).catch(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Live "auto-unlocks in …" countdown shown on the status card, and
+  // auto-flips + persists the toggle the moment it reaches zero while
+  // the admin is looking at the page.
+  useEffect(() => {
+    if (!data.enabled || !data.eta) { setRemaining(null); return }
+    const etaTime = new Date(data.eta).getTime()
+    if (isNaN(etaTime)) { setRemaining(null); return }
+    const tick = () => {
+      const ms = etaTime - Date.now()
+      if (ms <= 0) {
+        setRemaining(null)
+        setData(d => {
+          if (!d.enabled) return d
+          const corrected = { ...d, enabled: false }
+          setContent('maintenance', corrected).catch(() => {})
+          logAction('maintenance_disabled', 'Maintenance mode auto-disabled after countdown expired', null)
+          return corrected
+        })
+      } else {
+        setRemaining(formatRemaining(ms))
+      }
+    }
+    tick()
+    const t = setInterval(tick, 1000)
+    return () => clearInterval(t)
+  }, [data.enabled, data.eta])
 
   const save = async (overrides = {}) => {
     const payload = { ...data, ...overrides }
@@ -62,6 +123,11 @@ export default function AdminMaintenance() {
                 ? 'Visitors see the maintenance page. The navbar and footer are hidden site-wide.'
                 : 'Visitors see the normal site.'}
             </div>
+            {data.enabled && remaining && (
+              <div style={{ marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fef3c7', color: '#92400e', fontSize: '0.78rem', fontWeight: 700, padding: '4px 10px', borderRadius: 20 }}>
+                ⏱️ Auto-unlocks in {remaining}
+              </div>
+            )}
           </div>
           <button
             onClick={() => save({ enabled: !data.enabled })}
@@ -106,8 +172,10 @@ export default function AdminMaintenance() {
 
         <p style={{ color: 'var(--text-light)', fontSize: '0.78rem', marginTop: 14, marginBottom: 0 }}>
           💡 Changes apply within about 30 seconds — visitors already on the site switch to/from the
-          maintenance page automatically, without needing to refresh. The <code>/admin</code> panel is
-          never affected by this setting.
+          maintenance page automatically, without needing to refresh. If you set an expected
+          back-online time, the site unlocks itself the instant the countdown hits zero — no need to
+          come back and turn it off manually. The <code>/admin</code> panel is never affected by this
+          setting.
         </p>
       </AdminCard>
     </div>
