@@ -395,7 +395,7 @@ export default function Sermons() {
         `}</style>
 
         {/* Hero */}
-        <div className="sm-hero" style={{ background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)', padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center' }}>
+        <div className="sm-hero" style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1600&q=80") center/cover no-repeat', padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center' }}>
           <span className="section-label">Messages & Teachings</span>
           <h1 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(2rem, 5vw, 3.2rem)', marginBottom: 16 }}>
             Sermons & Messages

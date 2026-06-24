@@ -146,7 +146,7 @@ export default function AdminApp() {
           transform: typeof window !== 'undefined' && window.innerWidth < 768 && !sideOpen ? 'translateX(-100%)' : 'none',
         }}>
           <div style={{ padding:'22px 18px', borderBottom:'1px solid rgba(255,255,255,0.08)', display:'flex', alignItems:'center', gap:10 }}>
-            <img src="/logo.png" alt="CCG World" style={{ width:36, height:36, objectFit:'contain', flexShrink:0 }} />
+            <picture><source srcSet="/logo-sm.webp" type="image/webp" /><img src="/logo.webp" alt="CCG World" width={36} height={36} style={{ width:36, height:36, objectFit:'contain', flexShrink:0 }} /></picture>
             <div>
               <div style={{ color:'white', fontFamily:'var(--font-display)', fontWeight:900, fontSize:'0.95rem' }}>CCG <span style={{ color:'var(--gold)' }}>World</span></div>
               <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase' }}>Admin Panel</div>

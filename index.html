@@ -56,9 +56,16 @@
     }
     </script>
 
+    <!-- Preconnect to critical third-party origins for LCP savings -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://api.qrserver.com" />
+    <link rel="preconnect" href="https://beta.ourmanna.com" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <!-- Load Google Fonts non-blocking to eliminate render-blocking -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&display=swap" /></noscript>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -118,10 +125,8 @@
 
 
     <div id="ccg-splash">
-      <picture>
-        <source srcset="/logo-splash.webp" type="image/webp" />
-        <img src="/logo.png" alt="CCG World" fetchpriority="high" decoding="sync" />
-      </picture>
+      <!-- logo-splash.webp is identical to logo.webp — single WebP asset, no PNG fallback needed -->
+      <img src="/logo-splash.webp" alt="CCG World" fetchpriority="high" decoding="sync" width="270" height="270" />
       <div id="ccg-splash-title">CCG World</div>
       <div id="ccg-splash-sub">Christian Church Of God Mission</div>
     </div>
@@ -134,10 +139,25 @@
         setTimeout(function () { el.style.display = 'none' }, 650)
       }
 
-
-      setTimeout(function () {
-        window.__ccgHideSplash && window.__ccgHideSplash()
-      }, 6000)
+      // Cookie: skip splash animation on return visits (show for max 300ms)
+      // Cookie is set by the app after first load completes
+      var hasVisited = document.cookie.split(';').some(function(c) {
+        return c.trim().startsWith('ccgm_visited=')
+      })
+      if (hasVisited) {
+        // Return visitor: hide splash almost immediately
+        setTimeout(function () {
+          window.__ccgHideSplash && window.__ccgHideSplash()
+        }, 300)
+      } else {
+        // First visit: show full splash, then set cookie
+        setTimeout(function () {
+          window.__ccgHideSplash && window.__ccgHideSplash()
+          // Set cookie for 30 days
+          var expires = new Date(Date.now() + 30 * 864e5).toUTCString()
+          document.cookie = 'ccgm_visited=1; path=/; expires=' + expires + '; SameSite=Lax'
+        }, 3500)
+      }
     </script>
 
     <div id="root"></div>

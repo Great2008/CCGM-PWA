@@ -69,7 +69,7 @@ export default function Verify() {
     <>
       <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(80px,12vw,110px) 5% 48px', textAlign: 'center' }}>
         <div style={{ display:'flex', justifyContent:'center', marginBottom:16 }}>
-          <img src="/logo.png" alt="CCG World" style={{ width:64, height:64, objectFit:'contain' }} />
+          <picture><source srcSet="/logo-sm.webp" type="image/webp" /><img src="/logo.webp" alt="CCG World" width={64} height={64} style={{ width:64, height:64, objectFit:'contain' }} /></picture>
         </div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.8rem,4vw,2.6rem)', color: 'white', margin: '0 0 10px' }}>
           🔍 Certificate Verification
@@ -181,7 +181,7 @@ export default function Verify() {
 
             {/* Issuer note */}
             <div style={{ background: 'var(--brand-pale)', borderRadius: 14, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
-              <img src="/logo.png" alt="CCG" style={{ width: 40, height: 40, objectFit: 'contain', flexShrink: 0 }} />
+              <picture><source srcSet="/logo-sm.webp" type="image/webp" /><img src="/logo.webp" alt="CCG" width={40} height={40} style={{ width: 40, height: 40, objectFit: 'contain', flexShrink: 0 }} /></picture>
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: '0.88rem' }}>Christian Church of God Mission</div>
                 <div style={{ color: 'var(--text-light)', fontSize: '0.8rem', marginTop: 2 }}>

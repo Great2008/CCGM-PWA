@@ -45,7 +45,7 @@ export default function NotFound() {
       </div>
 
       {/* Logo */}
-      <img src="/logo.png" alt="CCG World" style={{ width: 'clamp(72px,16vw,108px)', height: 'auto', marginBottom: 24, filter: 'drop-shadow(0 4px 20px rgba(245,208,96,0.3))', marginTop: 8 }} />
+      <picture><source srcSet="/logo.webp" type="image/webp" /><img src="/logo.webp" alt="CCG World" width={108} height={108} style={{ width: 'clamp(72px,16vw,108px)', height: 'auto', marginBottom: 24, filter: 'drop-shadow(0 4px 20px rgba(245,208,96,0.3))', marginTop: 8 }} /></picture>
 
       {/* 404 number */}
       <div style={{ position: 'relative', marginBottom: 8 }}>

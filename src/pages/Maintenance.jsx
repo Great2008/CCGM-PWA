@@ -115,16 +115,19 @@ export default function Maintenance({ message, eta }) {
         }}>
 
           {/* Logo */}
-          <img
-            src="/logo.png"
+          <picture>
+            <source srcSet="/logo.webp" type="image/webp" />
+            <img
+            src="/logo.webp"
             alt="CCG World"
+            width={130} height={130}
             style={{
               width: 'clamp(90px,22vw,130px)',
               height: 'auto',
               marginBottom: 24,
               filter: 'drop-shadow(0 6px 24px rgba(0,0,0,0.25))',
             }}
-          />
+          /></picture>
 
           {/* Gear / wrench icon */}
           <div style={{

@@ -53,7 +53,7 @@ export default function Contact() {
         description="Get in touch with CCG World — Christian Church Of God Mission. Send a prayer request, general inquiry or find out how to get involved."
         path="/contact"
       />
-      <div style={{ background:'linear-gradient(135deg,var(--brand-deep) 0%,var(--brand-mid) 100%)', padding:'clamp(90px,14vw,130px) 5% 56px', textAlign:'center' }}>
+      <div style={{ background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1600&q=80") center/cover no-repeat', padding:'clamp(90px,14vw,130px) 5% 56px', textAlign:'center' }}>
         <span className="section-label">Get In Touch</span>
         <h1 style={{ fontFamily:'var(--font-display)', fontWeight:900, fontSize:'clamp(2rem,5vw,3.2rem)', color:'white', margin:'8px 0 16px' }}>Contact Us</h1>
         <p style={{ color:'rgba(255,255,255,0.75)', fontSize:'clamp(0.95rem,1.8vw,1.1rem)', maxWidth:520, margin:'0 auto', lineHeight:1.8 }}>

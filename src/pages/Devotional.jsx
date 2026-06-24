@@ -265,7 +265,7 @@ export default function Devotional() {
       )}
 
       {/* Hero */}
-      <div className="dev-hero" style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(90px,14vw,130px) 5% 56px', textAlign: 'center' }}>
+      <div className="dev-hero" style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80") center/cover no-repeat', padding: 'clamp(90px,14vw,130px) 5% 56px', textAlign: 'center' }}>
         <span className="section-label" style={{ color: 'var(--gold)' }}>Daily Bread</span>
         <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2rem,5vw,3rem)', color: 'white', margin: '8px 0 16px' }}>
           🌅 Daily Devotional

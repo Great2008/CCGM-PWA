@@ -427,7 +427,7 @@ export default function Certificate() {
 
     _step = 'logo-watermark'
     try {
-      const logo = await loadImage('/logo.png')
+      const logo = await loadImage('/logo.webp')
       ctx.save(); ctx.globalAlpha = 0.04
       ctx.drawImage(logo, W/2-200, H/2-200, 400, 400)
       ctx.restore()
@@ -449,7 +449,7 @@ export default function Certificate() {
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(1,'#166534')
     ctx.fillStyle = grad; ctx.fillRect(36,36,W-72,190)
 
-    try { const logo = await loadImage('/logo.png'); ctx.drawImage(logo,70,52,140,140) } catch(_){}
+    try { const logo = await loadImage('/logo.webp'); ctx.drawImage(logo,70,52,140,140) } catch(_){}
     drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
 
     ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 28px Georgia, serif'; ctx.textAlign = 'center'
@@ -541,7 +541,7 @@ export default function Certificate() {
     ctx.fillStyle = '#fffef5'; ctx.fillRect(0,0,W,H)
 
     try {
-      const logo = await loadImage('/logo.png')
+      const logo = await loadImage('/logo.webp')
       ctx.save(); ctx.globalAlpha = 0.04
       ctx.drawImage(logo, W/2-180, H/2-180, 360, 360)
       ctx.restore()
@@ -572,7 +572,7 @@ export default function Certificate() {
     const grad = ctx.createLinearGradient(0,0,W,0)
     grad.addColorStop(0,'#0a2612'); grad.addColorStop(0.6,'#14532d'); grad.addColorStop(1,'#b45309')
     ctx.fillStyle = grad; ctx.fillRect(34,34,W-68,190)
-    try { const logo = await loadImage('/logo.png'); ctx.drawImage(logo,70,52,140,140) } catch(_){}
+    try { const logo = await loadImage('/logo.webp'); ctx.drawImage(logo,70,52,140,140) } catch(_){}
     drawCornerStripes(ctx, W, getCapeStripes(churchTitle))
 
     ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 26px Georgia, serif'; ctx.textAlign = 'center'
@@ -728,7 +728,7 @@ export default function Certificate() {
     }
 
     try {
-      const logo = await loadImage('/logo.png')
+      const logo = await loadImage('/logo.webp')
       ctx.drawImage(logo, W/2-40, 22, 80, 80)
     } catch(_){}
 
@@ -931,7 +931,7 @@ export default function Certificate() {
   // ─────────────────────────────────────────────────────────────────
   return (
     <>
-      <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'clamp(80px,12vw,110px) 5% 48px', textAlign:'center' }}>
+      <div style={{ background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=80") center/cover no-repeat', padding:'clamp(80px,12vw,110px) 5% 48px', textAlign:'center' }}>
         <span className="section-label">Member Recognition</span>
         <h1 style={{ fontFamily:'var(--font-display)', fontWeight:900, fontSize:'clamp(2rem,5vw,3rem)', color:'white', margin:'8px 0 12px' }}>
           🏅 My Certificates

@@ -268,7 +268,7 @@ export default function Bible() {
         description="Read the full King James Version Bible online and offline. CCG World — Christian Church Of God Mission."
         path="/bible"
       />
-      <div style={{ background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)', padding: 'clamp(80px,12vw,120px) 5% 0' }}>
+      <div style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=1600&q=80") center/cover no-repeat', padding: 'clamp(80px,12vw,120px) 5% 0' }}>
         <div className="container">
           <div className="bible-header-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, paddingBottom: 24 }}>
             <div>
