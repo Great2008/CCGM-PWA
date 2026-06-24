@@ -1,5 +1,5 @@
-// CCG World Service Worker v7 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache
-const CACHE = 'ccgworld-v8'
+// CCG World Service Worker v9 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache
+const CACHE = 'ccgworld-v9'
 const API_CACHE = 'ccgworld-api-v2'
 
 const PRECACHE = [
@@ -7,6 +7,8 @@ const PRECACHE = [
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
   '/notifications',
+  // Precache WebP logos for instant display
+  '/logo.webp', '/logo-sm.webp', '/logo-splash.webp',
 ]
 
 self.addEventListener('install', e => {
