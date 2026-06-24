@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
+import { getSiteSetting, setSiteSettingCache } from '../lib/siteSettings'
 import AppDownloadBanner from './AppDownloadBanner'
 
 const BELL_SEEN_KEY = 'ccg-notif-last-seen'
@@ -101,11 +102,11 @@ export default function Navbar() {
   }, [])
 
   // Check live status
-  useEffect(() => {    supabase.from('site_settings').select('value').eq('key','live').single()
-      .then(({ data }) => setIsLive(!!data?.value?.isLive))
+  useEffect(() => {
+    getSiteSetting('live').then(value => setIsLive(!!value?.isLive))
     const sub = supabase.channel('nav-live')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
-        payload => setIsLive(!!payload.new.value?.isLive))
+        payload => { setIsLive(!!payload.new.value?.isLive); setSiteSettingCache('live', payload.new.value) })
       .subscribe()
     return () => supabase.removeChannel(sub)
   }, [])

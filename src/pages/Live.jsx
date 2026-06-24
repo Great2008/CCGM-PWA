@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import supabase from '../lib/supabase'
+import { getSiteSetting, setSiteSettingCache } from '../lib/siteSettings'
 import { useAuth } from '../contexts/AuthContext'
 import SEO from '../components/SEO'
 
@@ -282,14 +283,13 @@ export default function Live() {
   const [activeTab, setActiveTab] = useState('youtube')
 
   useEffect(() => {
-    supabase.from('site_settings').select('value').eq('key','live').single()
-      .then(({ data }) => { setSettings(data?.value || null); setLoading(false) })
+    getSiteSetting('live').then(value => { setSettings(value || null); setLoading(false) })
   }, [])
 
   useEffect(() => {
     const sub = supabase.channel('live-settings')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
-        payload => setSettings(payload.new.value))
+        payload => { setSettings(payload.new.value); setSiteSettingCache('live', payload.new.value) })
       .subscribe()
     return () => supabase.removeChannel(sub)
   }, [])

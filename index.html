@@ -118,7 +118,10 @@
 
 
     <div id="ccg-splash">
-      <img src="/logo.png" alt="CCG World" />
+      <picture>
+        <source srcset="/logo-splash.webp" type="image/webp" />
+        <img src="/logo.png" alt="CCG World" fetchpriority="high" decoding="sync" />
+      </picture>
       <div id="ccg-splash-title">CCG World</div>
       <div id="ccg-splash-sub">Christian Church Of God Mission</div>
     </div>

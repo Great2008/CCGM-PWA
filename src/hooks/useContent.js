@@ -5,6 +5,7 @@
  */
 import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
+import { getSiteSetting } from '../lib/siteSettings'
 
 export const DEFAULTS = {
   homepage: {
@@ -39,10 +40,10 @@ const CACHE = 'ccgworld_setting_'
 async function fetchSetting(key, fallback) {
   const cacheKey = CACHE + key
   try {
-    const { data, error } = await supabase.from('site_settings').select('value').eq('key', key).single()
-    if (error || !data) throw new Error(error?.message || 'not found')
-    try { localStorage.setItem(cacheKey, JSON.stringify(data.value)) } catch {}
-    return data.value
+    const value = await getSiteSetting(key)
+    if (!value) throw new Error('not found')
+    try { localStorage.setItem(cacheKey, JSON.stringify(value)) } catch {}
+    return value
   } catch {
     try { const c = localStorage.getItem(cacheKey); if (c) return JSON.parse(c) } catch {}
     return fallback

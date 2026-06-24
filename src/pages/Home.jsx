@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useHomepageContent, useSermonsContent, useEventsContent } from '../hooks/useContent'
 import supabase from '../lib/supabase'
+import { getSiteSetting, setSiteSettingCache } from '../lib/siteSettings'
 import AppDownloadBanner from '../components/AppDownloadBanner'
 import SEO from '../components/SEO'
 
@@ -13,11 +14,10 @@ export default function Home() {
   const [activeProg, setActiveProg] = useState(null) // active programme or null
 
   useEffect(() => {
-    supabase.from('site_settings').select('value').eq('key','live').single()
-      .then(({ data }) => setLiveData(data?.value || null))
+    getSiteSetting('live').then(value => setLiveData(value || null))
     const sub = supabase.channel('home-live')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'site_settings', filter:'key=eq.live' },
-        payload => setLiveData(payload.new.value))
+        payload => { setLiveData(payload.new.value); setSiteSettingCache('live', payload.new.value) })
       .subscribe()
     return () => supabase.removeChannel(sub)
   }, [])
@@ -25,14 +25,14 @@ export default function Home() {
   // Fetch active programme for homepage banner
   useEffect(() => {
     supabase.from('programmes').select('id,title,theme,start_date,end_date,venue')
-      .eq('is_active', true).limit(1).single()
+      .eq('is_active', true).limit(1).maybeSingle()
       .then(({ data }) => setActiveProg(data || null))
     const sub = supabase.channel('home-prog')
       .on('postgres_changes', { event:'*', schema:'public', table:'programmes' },
         async () => {
           const { data } = await supabase.from('programmes')
             .select('id,title,theme,start_date,end_date,venue')
-            .eq('is_active', true).limit(1).single()
+            .eq('is_active', true).limit(1).maybeSingle()
           setActiveProg(data || null)
         })
       .subscribe()
@@ -61,7 +61,7 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         minHeight:'100vh',
-        background:`linear-gradient(160deg,rgba(10,38,18,0.92) 0%,rgba(22,100,52,0.85) 55%,rgba(22,163,74,0.4) 100%),url('https://images.unsplash.com/photo-1438232992991-995b671e4b8b?w=1600&q=80') center/cover no-repeat`,
+        background:`linear-gradient(160deg,rgba(10,38,18,0.92) 0%,rgba(22,100,52,0.85) 55%,rgba(22,163,74,0.4) 100%),url('https://images.unsplash.com/photo-1600288480699-0b0d8a456dd8?w=1600&q=80') center/cover no-repeat`,
         display:'flex',alignItems:'center',justifyContent:'center',
         textAlign:'center',padding:'clamp(100px,15vw,140px) 20px 80px',
         position:'relative',overflow:'hidden',
@@ -158,7 +158,7 @@ export default function Home() {
               onMouseEnter={e=>e.currentTarget.style.transform='translateY(-4px)'}
               onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
                 <div style={{fontSize:'1.5rem',marginBottom:8}}>{icon||'✝'}</div>
-                <div style={{fontWeight:900,fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',color:day==='Saturday'?'var(--gold)':'var(--green-mid)',marginBottom:4}}>{day}</div>
+                <div style={{fontWeight:900,fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',color:day==='Saturday'?'var(--gold-deep)':'var(--green-mid)',marginBottom:4}}>{day}</div>
                 <div style={{fontFamily:'var(--font-display)',fontSize:'0.88rem',color:'var(--green-deep)',fontWeight:700,lineHeight:1.3,marginBottom:time?4:0}}>{name}</div>
                 {time&&<div style={{fontSize:'0.75rem',color:'var(--text-light)'}}>{time}</div>}
               </div>

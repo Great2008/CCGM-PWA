@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import supabase from '../lib/supabase'
+import { getSiteSetting } from '../lib/siteSettings'
 
 const STORAGE_KEY = 'ccgm-verse-dismissed'
+const API_CACHE_KEY = 'ccgm-verse-api-cache'
 const BG_COLORS = [
   { label:'Deep Green', value:'linear-gradient(135deg,#0a2612,#166534)' },
   { label:'Gold Amber', value:'linear-gradient(135deg,#92400e,#d97706)' },
@@ -13,14 +14,28 @@ const BG_COLORS = [
 
 const DEFAULT_BG = BG_COLORS[0].value
 
-async function fetchApiVerse() {
+async function fetchApiVerse(today) {
+  // The verse only changes once a day, so cache it client-side keyed by
+  // date instead of re-fetching (with cache:'no-store', no less) on every
+  // single page load — this was a ~1.2s request sitting in the critical
+  // render path on first paint.
   try {
-    const res = await fetch('https://beta.ourmanna.com/api/v1/get/?format=json', { cache:'no-store' })
+    const cached = JSON.parse(localStorage.getItem(API_CACHE_KEY) || 'null')
+    if (cached?.date === today && cached?.text && cached?.reference) {
+      return { text: cached.text, reference: cached.reference }
+    }
+  } catch(_) {}
+
+  try {
+    const res = await fetch('https://beta.ourmanna.com/api/v1/get/?format=json')
     if (!res.ok) throw new Error('API error')
     const data = await res.json()
     const text = data?.verse?.details?.text?.trim()
     const ref  = data?.verse?.details?.reference?.trim()
-    if (text && ref) return { text, reference: ref }
+    if (text && ref) {
+      try { localStorage.setItem(API_CACHE_KEY, JSON.stringify({ date: today, text, reference: ref })) } catch(_) {}
+      return { text, reference: ref }
+    }
   } catch(_) {}
   // Hardcoded fallback in case API is down
   return {
@@ -44,13 +59,7 @@ export default function DailyVerseBanner() {
 
     async function load() {
       // 1. Check admin override
-      const { data: setting } = await supabase
-        .from('site_settings')
-        .select('value')
-        .eq('key', 'daily_verse')
-        .single()
-
-      const override = setting?.value
+      const override = await getSiteSetting('daily_verse')
       if (override?.reference && override?.text && override?.override_date === today) {
         setVerse({
           text: override.text,
@@ -64,7 +73,7 @@ export default function DailyVerseBanner() {
       }
 
       // 2. Fall back to API
-      const api = await fetchApiVerse()
+      const api = await fetchApiVerse(today)
       setVerse({
         text: api.text,
         reference: api.reference,

@@ -13,6 +13,7 @@
 
   --gold:         #f59e0b;
   --gold-light:   #fcd34d;
+  --gold-deep:    #92400e;   /* darker amber — use for gold TEXT on light backgrounds (meets WCAG AA contrast; --gold itself is decorative-only on light bg) */
 
   --white:        #ffffff;
   --milk:         #fdfcf8;   /* warm milk white */
@@ -269,7 +270,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 
 .section-label {
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--brand-base); display: block; margin-bottom: 8px;
+  text-transform: uppercase; color: var(--brand-mid); display: block; margin-bottom: 8px;
 }
 .section-title {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
