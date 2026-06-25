@@ -1,37 +1,47 @@
 /**
  * useMaintenanceMode.js
- * Reads the 'maintenance' key from the shared site_settings table
- * (same table/pattern as useContent.js).
+ * Reads the 'maintenance' and 'maintenance_schedule' keys from site_settings.
  *
- *   - Turning maintenance ON instantly locks visitors already on the site
- *     (next 30s poll picks it up).
- *   - If an ETA is set, the site automatically unlocks itself the exact
- *     moment the countdown hits zero — no admin action needed. This is
- *     done purely client-side (no write to Supabase from the public,
- *     anon-key client — only /admin, using the privileged service-role
- *     client, is allowed to persist the "enabled" flag).
- *   - Turning maintenance OFF from /admin instantly restores the site
- *     for anyone already on it, without a hard refresh.
+ * Manual mode:
+ *   - Admin flips the toggle → instantly locks/unlocks within 30s poll.
+ *   - If an ETA is set, auto-unlocks the moment countdown hits zero.
  *
- * Falls back to a localStorage cache so a previously-known maintenance
- * state still applies while offline.
+ * Scheduled mode:
+ *   - Admin sets recurring windows (e.g. every Friday 17:00–18:00).
+ *   - The hook checks the schedule on every poll and auto-enables/disables
+ *     maintenance mode client-side during the window.
+ *   - Manual toggle always overrides the schedule for that session.
  */
 import { useState, useEffect, useRef } from 'react'
 import supabase from '../lib/supabase'
 
-const CACHE_KEY = 'ccgworld_maintenance_cache'
-const POLL_MS = 30000
-const MAX_TIMEOUT_MS = 2 ** 31 - 1 // setTimeout's practical ceiling (~24.8 days)
+const CACHE_KEY     = 'ccgworld_maintenance_cache'
+const SCHED_KEY     = 'ccgworld_maintenance_schedule'
+const POLL_MS       = 30000
+const MAX_TIMEOUT_MS = 2 ** 31 - 1
 const DEFAULT_STATE = { enabled: false, message: '', eta: null }
+const DEFAULT_SCHED = { enabled: false, days: [], startTime: '', endTime: '', message: '' }
 
-// If an ETA is set and has already passed, treat the site as live —
-// this is what makes maintenance mode "auto disable on countdown".
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+
+// Returns true if current local time falls inside any scheduled window
+function isInScheduleWindow(schedule) {
+  if (!schedule?.enabled || !schedule.days?.length || !schedule.startTime || !schedule.endTime) return false
+  const now   = new Date()
+  const day   = now.getDay() // 0=Sun … 6=Sat
+  if (!schedule.days.includes(day)) return false
+  const [sh, sm] = schedule.startTime.split(':').map(Number)
+  const [eh, em] = schedule.endTime.split(':').map(Number)
+  const startMins = sh * 60 + sm
+  const endMins   = eh * 60 + em
+  const nowMins   = now.getHours() * 60 + now.getMinutes()
+  return nowMins >= startMins && nowMins < endMins
+}
+
 function applyExpiry(state) {
   if (!state.enabled || !state.eta) return state
   const etaTime = new Date(state.eta).getTime()
-  if (!isNaN(etaTime) && Date.now() >= etaTime) {
-    return { ...state, enabled: false }
-  }
+  if (!isNaN(etaTime) && Date.now() >= etaTime) return { ...state, enabled: false }
   return state
 }
 
@@ -39,30 +49,32 @@ function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     return raw ? applyExpiry({ ...DEFAULT_STATE, ...JSON.parse(raw) }) : DEFAULT_STATE
-  } catch {
-    return DEFAULT_STATE
-  }
+  } catch { return DEFAULT_STATE }
 }
 
-function saveCache(state) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify(state)) } catch {}
+function loadSchedCache() {
+  try {
+    const raw = localStorage.getItem(SCHED_KEY)
+    return raw ? { ...DEFAULT_SCHED, ...JSON.parse(raw) } : DEFAULT_SCHED
+  } catch { return DEFAULT_SCHED }
 }
+
+function saveCache(state)  { try { localStorage.setItem(CACHE_KEY, JSON.stringify(state)) } catch {} }
+function saveSchedCache(s) { try { localStorage.setItem(SCHED_KEY, JSON.stringify(s)) } catch {} }
 
 export default function useMaintenanceMode() {
-  const [state, setState] = useState(loadCache)
-  const [loaded, setLoaded] = useState(false)
+  const [state,    setState]    = useState(loadCache)
+  const [schedule, setSchedule] = useState(loadSchedCache)
+  const [loaded,   setLoaded]   = useState(false)
   const expiryTimer = useRef(null)
 
-  // Schedules an exact, instant unlock right when the ETA is reached,
-  // instead of waiting for the next 30s poll.
   const scheduleExpiry = (s) => {
     if (expiryTimer.current) { clearTimeout(expiryTimer.current); expiryTimer.current = null }
     if (!s.enabled || !s.eta) return
     const etaTime = new Date(s.eta).getTime()
     if (isNaN(etaTime)) return
     const delay = etaTime - Date.now()
-    if (delay <= 0) return // already expired — applyExpiry() handles this
-    if (delay > MAX_TIMEOUT_MS) return // sanity guard for absurdly far-out ETAs
+    if (delay <= 0 || delay > MAX_TIMEOUT_MS) return
     expiryTimer.current = setTimeout(() => {
       setState(prev => {
         const next = { ...prev, enabled: false }
@@ -77,38 +89,52 @@ export default function useMaintenanceMode() {
 
     const check = async () => {
       try {
-        const { data, error } = await supabase
+        // Fetch both maintenance state and schedule in one round trip
+        const { data: rows, error } = await supabase
           .from('site_settings')
-          .select('value')
-          .eq('key', 'maintenance')
-          .single()
-        if (!active) return
-        if (!error && data?.value) {
-          const next = applyExpiry({
-            enabled: !!data.value.enabled,
-            message: data.value.message || '',
-            eta: data.value.eta || null,
-          })
-          setState(next)
-          saveCache(next)
-          scheduleExpiry(next)
-        } else if (!error) {
-          // Row not found / no maintenance configured yet — site is live
-          setState(DEFAULT_STATE)
-          saveCache(DEFAULT_STATE)
-          scheduleExpiry(DEFAULT_STATE)
+          .select('key, value')
+          .in('key', ['maintenance', 'maintenance_schedule'])
+
+        if (!active || error) return
+
+        let nextState    = DEFAULT_STATE
+        let nextSchedule = DEFAULT_SCHED
+
+        rows?.forEach(row => {
+          if (row.key === 'maintenance' && row.value) {
+            nextState = applyExpiry({
+              enabled: !!row.value.enabled,
+              message: row.value.message || '',
+              eta:     row.value.eta || null,
+            })
+          }
+          if (row.key === 'maintenance_schedule' && row.value) {
+            nextSchedule = { ...DEFAULT_SCHED, ...row.value }
+          }
+        })
+
+        // If manual mode is OFF, let the schedule decide
+        if (!nextState.enabled && isInScheduleWindow(nextSchedule)) {
+          nextState = {
+            enabled: true,
+            message: nextSchedule.message || DEFAULT_STATE.message,
+            eta: null,
+          }
         }
+
+        setState(nextState)
+        saveCache(nextState)
+        scheduleExpiry(nextState)
+        setSchedule(nextSchedule)
+        saveSchedCache(nextSchedule)
       } catch {
-        // Network error — keep whatever we last knew (cache/in-memory state)
+        // Network error — keep cached state
       } finally {
         if (active) setLoaded(true)
       }
     }
 
-    // Apply expiry to the cached state immediately and schedule its
-    // unlock too, in case it was loaded mid-countdown from a previous visit.
     scheduleExpiry(state)
-
     check()
     const interval = setInterval(check, POLL_MS)
     return () => {
@@ -119,5 +145,5 @@ export default function useMaintenanceMode() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return { ...state, loaded }
+  return { ...state, loaded, schedule }
 }
