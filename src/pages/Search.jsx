@@ -206,7 +206,7 @@ export default function Search() {
     <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: 66 }}>
 
       {/* ── Search hero ── */}
-      <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(40px,8vw,72px) 5% 0', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=1600&q=80") center/cover no-repeat', padding: 'clamp(40px,8vw,72px) 5% 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(ellipse at 70% 50%,rgba(245,158,11,0.1) 0%,transparent 60%)', pointerEvents: 'none' }} />
         <div style={{ maxWidth: 700, margin: '0 auto', position: 'relative' }}>
           <span className="section-label" style={{ color: 'var(--gold)' }}>Search Everything</span>

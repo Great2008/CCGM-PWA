@@ -242,7 +242,7 @@ export default function Profile() {
 
       {/* ── Hero header ── */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 60%, #1a6b3c 100%)',
+        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&q=80") center/cover no-repeat',
         padding: 'clamp(36px,6vw,64px) 5% 0',
         position: 'relative', overflow: 'hidden',
       }}>

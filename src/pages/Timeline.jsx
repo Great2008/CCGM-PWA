@@ -655,7 +655,7 @@ function NewTopicModal({ currentUser, profile, onClose, onCreated }) {
   return (
     <div style={{position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:20}}>
       <div style={{background:'var(--white, white)', borderRadius:20, width:'100%', maxWidth:520, boxShadow:'0 24px 80px rgba(0,0,0,0.3)', overflow:'hidden'}}>
-        <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'20px 24px'}}>
+        <div style={{background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1600&q=80") center/cover no-repeat', padding:'20px 24px'}}>
           <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
             <h3 style={{fontFamily:'var(--font-display)', color:'white', margin:0, fontSize:'1.15rem'}}>💬 Start a New Topic</h3>
             <button onClick={onClose} style={{background:'rgba(255,255,255,0.15)', border:'none', borderRadius:8, cursor:'pointer', color:'white', fontSize:'1rem', padding:'4px 10px'}}>✕</button>
@@ -1471,7 +1471,7 @@ export default function Timeline() {
       />
 
       {/* ── Page header ── */}
-      <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(90px,14vw,110px) 5% 0',marginBottom:0}}>
+      <div style={{background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1600&q=80") center/cover no-repeat',padding:'clamp(90px,14vw,110px) 5% 0',marginBottom:0}}>
         <div className="container" style={{maxWidth:760}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:16,marginBottom:24}}>
             <div>

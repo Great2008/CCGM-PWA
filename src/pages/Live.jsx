@@ -200,7 +200,7 @@ function LiveChat({ isLive }) {
           border: '1px solid rgba(0,0,0,0.1)',
         }}>
           {/* Header */}
-          <div style={{ padding: '12px 16px', background: isLive ? 'linear-gradient(135deg,#dc2626,#b91c1c)' : 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ padding: '12px 16px', background: isLive ? 'linear-gradient(135deg,#dc2626,#b91c1c)' : 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=1600&q=80") center/cover no-repeat', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {isLive && <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'white', animation: 'blink 1s infinite', display: 'inline-block' }} />}
               <span style={{ color: 'white', fontWeight: 700, fontSize: '0.9rem' }}>
@@ -328,7 +328,7 @@ export default function Live() {
 
   return (
     <>
-      <div style={{background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))',padding:'clamp(80px,12vw,110px) 5% 48px'}}>
+      <div style={{background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=1600&q=80") center/cover no-repeat',padding:'clamp(80px,12vw,110px) 5% 48px'}}>
         <div className="container" style={{maxWidth:900,textAlign:'center'}}>
           <div style={{display:'inline-flex',alignItems:'center',gap:8,marginBottom:20}}>
             {isLive ? (

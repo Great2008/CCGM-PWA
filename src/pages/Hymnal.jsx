@@ -4,23 +4,30 @@ import { useAuth } from '../contexts/AuthContext'
 import SACRED_SONGS from '../data/sacredSongsData'
 
 const CACHE_KEY     = 'ccgworld_hymns'
-const CACHE_TTL     = 24 * 60 * 60 * 1000
+const CACHE_HASH    = 'ccgworld_hymns_hash'
 const FONT_SIZE_KEY = 'ccgworld_hymnal_fontsize'
 
-function loadCache(ignoreExpiry = false) {
+// Simple hash: count + joined ids — cheap but catches any add/remove/update
+function dataHash(data) {
+  if (!data?.length) return ''
+  return data.length + ':' + data.map(h => h.id + (h.updated_at || '')).join(',')
+}
+
+function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
     const data = Array.isArray(parsed) ? parsed : parsed.data
-    const ts   = Array.isArray(parsed) ? 0     : parsed.ts
     if (!data || data.length === 0) return null
-    if (!ignoreExpiry && ts && Date.now() - ts > CACHE_TTL && navigator.onLine) return null
     return data
   } catch { return null }
 }
 function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() })) } catch {}
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data }))
+    localStorage.setItem(CACHE_HASH, dataHash(data))
+  } catch {}
 }
 function firstHymn(hymns) {
   if (!hymns?.length) return null
@@ -161,7 +168,7 @@ function SacredSongsTab({ fontSize, changeFontSize }) {
             ) : (
               <div className="hm-card" style={{ background:'white', borderRadius:16, boxShadow:'var(--shadow-sm)', border:'1.5px solid #d1fae5', overflow:'hidden' }}>
                 {/* Header */}
-                <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
+                <div style={{ background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1600&q=80") center/cover no-repeat', padding:'clamp(20px,4vw,32px) clamp(18px,4vw,32px) 0' }}>
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:12, flexWrap:'wrap', marginBottom:10 }}>
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--gold)', color:'var(--brand-deep)', padding:'4px 14px', borderRadius:20, fontSize:'0.72rem', fontWeight:900, letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:10 }}>
@@ -242,9 +249,15 @@ export default function Hymnal() {
     try {
       const { data } = await supabase.from('hymns').select('*').eq('published', true).order('sort_order', { ascending: true })
       if (data && data.length > 0) {
+        const freshHash = dataHash(data)
+        const cachedHash = localStorage.getItem(CACHE_HASH) || ''
+        if (freshHash !== cachedHash) {
+          // New or updated hymns — replace cache entirely
+          saveCache(data)
+        }
         setHymns(data)
         setSelected(prev => prev ? (data.find(h => h.id === prev.id) || firstHymn(data)) : firstHymn(data))
-        saveCache(data); setOffline(false)
+        setOffline(false)
       } else {
         if (!cached || cached.length === 0) setLoading(false)
         setOffline(true)
@@ -332,7 +345,7 @@ export default function Hymnal() {
       `}</style>
 
       {/* Hero */}
-      <div className="hm-hero" style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(90px,14vw,130px) 5% 32px', textAlign: 'center' }}>
+      <div className="hm-hero" style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1600&q=80") center/cover no-repeat', padding: 'clamp(90px,14vw,130px) 5% 32px', textAlign: 'center' }}>
         <span className="section-label" style={{ color: 'var(--gold)' }}>Worship & Praise</span>
         <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2rem,5vw,3rem)', color: 'white', margin: '8px 0 20px' }}>🎵 Hymnal</h1>
 

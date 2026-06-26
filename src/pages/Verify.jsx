@@ -67,7 +67,7 @@ export default function Verify() {
 
   return (
     <>
-      <div style={{ background: 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: 'clamp(80px,12vw,110px) 5% 48px', textAlign: 'center' }}>
+      <div style={{ background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=80") center/cover no-repeat', padding: 'clamp(80px,12vw,110px) 5% 48px', textAlign: 'center' }}>
         <div style={{ display:'flex', justifyContent:'center', marginBottom:16 }}>
           <picture><source srcSet="/logo-sm.webp" type="image/webp" /><img src="/logo.webp" alt="CCG World" width={64} height={64} style={{ width:64, height:64, objectFit:'contain' }} /></picture>
         </div>

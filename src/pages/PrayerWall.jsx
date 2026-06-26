@@ -263,7 +263,7 @@ export default function PrayerWall() {
 
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%)',
+        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1476234251651-f353703a034d?w=1600&q=80") center/cover no-repeat',
         padding: 'clamp(40px,8vw,80px) 5% 44px',
         position: 'relative', overflow: 'hidden', textAlign: 'center',
       }}>

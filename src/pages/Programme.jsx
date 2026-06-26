@@ -149,7 +149,7 @@ export default function Programme() {
   if (!loading && !programme) {
     return (
       <>
-        <div style={{ background:'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding:'clamp(90px,14vw,130px) 5% 60px', textAlign:'center' }}>
+        <div style={{ background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600&q=80") center/cover no-repeat', padding:'clamp(90px,14vw,130px) 5% 60px', textAlign:'center' }}>
           <h1 style={{ fontFamily:'var(--font-display)', fontWeight:900, fontSize:'clamp(2rem,5vw,3rem)', color:'white', margin:'0 0 14px' }}>
             📅 Programme of Activities
           </h1>

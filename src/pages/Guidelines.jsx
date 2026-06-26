@@ -61,7 +61,7 @@ export default function Guidelines() {
 
       {/* Hero */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--brand-deep, #0a2612), var(--brand-mid, #166534))',
+        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&q=80") center/cover no-repeat',
         padding: 'clamp(60px, 10vw, 100px) 5% 56px',
         textAlign: 'center',
         position: 'relative',

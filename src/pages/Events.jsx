@@ -37,7 +37,7 @@ export default function Events() {
         path="/events"
       />
       <div style={{
-        background: 'linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%)',
+        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1600&q=80") center/cover no-repeat',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',
       }}>
         <span className="section-label" style={{ color: 'var(--green-light)' }}>Stay Connected</span>

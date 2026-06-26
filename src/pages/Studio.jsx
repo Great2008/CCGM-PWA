@@ -359,7 +359,7 @@ export default function Studio() {
       `}</style>
 
       {/* Hero */}
-      <div style={{ background:'linear-gradient(135deg,var(--brand-deep,#0a1628),var(--brand-mid,#1d4ed8))', padding:'clamp(90px,14vw,110px) 5% 48px', marginBottom:0 }}>
+      <div style={{ background:'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1600&q=80") center/cover no-repeat', padding:'clamp(90px,14vw,110px) 5% 48px', marginBottom:0 }}>
         <div className="container" style={{ maxWidth:1100 }}>
           <span style={{ fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gold,#f59e0b)', display:'block', marginBottom:10 }}>
             🎬 Media
