@@ -109,17 +109,6 @@ export function AuthProvider({ children }) {
     return error
   }
 
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin + '/timeline',
-        queryParams: { access_type: 'offline', prompt: 'consent' },
-      },
-    })
-    return error
-  }
-
   const signOut = () => supabase.auth.signOut()
 
   const updateProfile = async (updates) => {
@@ -141,7 +130,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{
       user, profile, loading,
-      signUp, verifyOtp, resendOtp, signIn, signInWithGoogle, signOut, updateProfile,
+      signUp, verifyOtp, resendOtp, signIn, signOut, updateProfile,
       // Role flags
       appRole, isSuperAdmin, isAdmin, isModerator, canModerate,
       churchTitle,
