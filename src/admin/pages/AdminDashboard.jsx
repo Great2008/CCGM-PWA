@@ -11,12 +11,19 @@ export default function AdminDashboard() {
   useEffect(() => {
     const load = async () => {
       const [s,e,b,p,g,m,t] = await Promise.all([
-        supabase.from('sermons').select('*',{count:'exact',head:true}),
+        // Published sermons only
+        supabase.from('sermons').select('*',{count:'exact',head:true}).eq('published',true),
+        // All events (admin sees all)
         supabase.from('events').select('*',{count:'exact',head:true}),
-        supabase.from('posts').select('*',{count:'exact',head:true}),
-        supabase.from('prayers').select('*',{count:'exact',head:true}),
+        // Published blog posts only (exclude drafts)
+        supabase.from('posts').select('*',{count:'exact',head:true}).eq('published',true),
+        // Active prayer requests (not archived/resolved)
+        supabase.from('prayers').select('*',{count:'exact',head:true}).eq('status','new'),
+        // All gallery photos
         supabase.from('gallery').select('*',{count:'exact',head:true}),
-        supabase.from('profiles').select('*',{count:'exact',head:true}),
+        // Active members only (exclude suspended accounts)
+        supabase.from('profiles').select('*',{count:'exact',head:true}).eq('suspended',false),
+        // All timeline posts
         supabase.from('timeline_posts').select('*',{count:'exact',head:true}),
       ])
       setCounts({ sermons:s.count||0, events:e.count||0, posts:b.count||0, prayers:p.count||0, gallery:g.count||0, members:m.count||0, posts_timeline:t.count||0 })
@@ -25,13 +32,13 @@ export default function AdminDashboard() {
   }, [])
 
   const stats = [
-    { label:'Sermons',         value:counts.sermons,        icon:'🎙', page:'sermons', bg:'#eff6ff' },
-    { label:'Events',          value:counts.events,         icon:'📅', page:'events',  bg:'#f0fdf4' },
-    { label:'Blog Posts',      value:counts.posts,          icon:'✍️', page:'blog',    bg:'#fdf4ff' },
-    { label:'Prayer Requests', value:counts.prayers,        icon:'🙏', page:'prayer',  bg:'#fff7ed' },
-    { label:'Gallery Photos',  value:counts.gallery,        icon:'🖼', page:'gallery', bg:'#fef2f2' },
-    { label:'Members',         value:counts.members,        icon:'👥', page:'members', bg:'#f8fafc' },
-    { label:'Timeline Posts',  value:counts.posts_timeline, icon:'💬', page:'timeline',bg:'#eff6ff' },
+    { label:'Published Sermons',  value:counts.sermons,        icon:'🎙', page:'sermons', bg:'#eff6ff' },
+    { label:'Events',             value:counts.events,         icon:'📅', page:'events',  bg:'#f0fdf4' },
+    { label:'Published Posts',    value:counts.posts,          icon:'✍️', page:'blog',    bg:'#fdf4ff' },
+    { label:'Active Prayers',     value:counts.prayers,        icon:'🙏', page:'prayer',  bg:'#fff7ed' },
+    { label:'Gallery Photos',     value:counts.gallery,        icon:'🖼', page:'gallery', bg:'#fef2f2' },
+    { label:'Active Members',     value:counts.members,        icon:'👥', page:'members', bg:'#f8fafc' },
+    { label:'Timeline Posts',     value:counts.posts_timeline, icon:'💬', page:'timeline',bg:'#eff6ff' },
   ]
 
   return (
