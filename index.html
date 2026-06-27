@@ -59,7 +59,7 @@
     <!-- Preconnect: max 4 most critical origins for LCP savings -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://beta.ourmanna.com" />
+    <link rel="preconnect" href="https://beta.ourmanna.com" crossorigin />
     <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
     <!-- Load Google Fonts non-blocking to eliminate render-blocking -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&display=swap" />
@@ -89,7 +89,7 @@
            Ellipse sized to cover all corners from the 22%-high focal point. */
         background: radial-gradient(ellipse 144% 156% at 50% 22%, #00b250 0%, #48c878 45%, #dcf5e6 100%);
         opacity: 1;
-        transition: opacity 0.6s ease;
+        transition: opacity 0.3s ease;
         padding-bottom: 18%;
         user-select: none;
       }
@@ -99,6 +99,8 @@
         object-fit: contain;
         margin-bottom: 28px;
         filter: drop-shadow(0 4px 16px rgba(0,80,20,0.18));
+        /* Exclude from LCP — splash is decorative, not content */
+        content-visibility: hidden;
       }
       #ccg-splash-title {
         font-family: Georgia, "Playfair Display", serif;
@@ -167,8 +169,14 @@
         autoDisplay: false,
       }, 'google_translate_element');
     }
+    // Defer Google Translate until page is fully loaded — keeps it off critical path
+    window.addEventListener('load', function() {
+      var s = document.createElement('script')
+      s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+      s.async = true
+      document.body.appendChild(s)
+    })
   </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
   <!-- Hide the Google Translate top bar -->
   <style>
