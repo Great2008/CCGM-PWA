@@ -9,25 +9,25 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     chunkSizeWarningLimit: 1000,
-    cssCodeSplit: true,
+    // cssCodeSplit:false keeps ALL styles in one file — avoids per-route CSS chunks
+    // which add extra network requests. The main CSS is already small (3.1 KiB).
+    cssCodeSplit: false,
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Core React — always needed
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
-            return 'react-vendor'
-          }
-          // Supabase — always needed for auth
-          if (id.includes('node_modules/@supabase')) {
-            return 'supabase'
-          }
-          // jsPDF + fabric — only on /certificate page
-          if (id.includes('jspdf') || id.includes('fabric') || id.includes('html2canvas')) {
-            return 'pdf-cert'
-          }
-          // Note: admin is NOT split here — it's dynamically imported in main.jsx
-          // only when pathname starts with /admin. Splitting it here causes browsers
-          // to prefetch it via modulepreload hints even on non-admin pages.
+          // React core — always needed, split so it caches independently
+          if (id.includes('node_modules/react-dom')) return 'react-dom'
+          if (id.includes('node_modules/react-router-dom')) return 'react-router'
+          if (id.includes('node_modules/react')) return 'react-core'
+
+          // Supabase — needed for auth on all pages but can load slightly deferred
+          if (id.includes('node_modules/@supabase')) return 'supabase'
+
+          // jsPDF/fabric — do NOT split into named chunk
+          // They are already dynamically imported inside Certificate.jsx
+          // Putting them in manualChunks causes Vite to emit modulepreload hints
+          // which load the chunk on every page, not just /certificate
+          // Leave them in their own auto-generated chunk — no hint emitted
         },
       },
     },

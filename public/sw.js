@@ -1,5 +1,5 @@
-// CCG World Service Worker v10 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache + BG Image Cache
-const CACHE = 'ccgworld-v10'
+// CCG World Service Worker v11 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache + BG Image Cache
+const CACHE = 'ccgworld-v11'
 const API_CACHE = 'ccgworld-api-v2'
 const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
 
@@ -34,6 +34,23 @@ self.addEventListener('fetch', e => {
   const { request } = e
   const url = new URL(request.url)
   if (request.method !== 'GET' || url.protocol === 'chrome-extension:') return
+
+  // QR code images from api.qrserver.com — cache permanently (QR content never changes)
+  if (url.hostname.includes('api.qrserver.com')) {
+    e.respondWith((async () => {
+      const cache = await caches.open(BG_CACHE)
+      const cached = await cache.match(request.url)
+      if (cached) return cached
+      try {
+        const res = await fetch(request.clone())
+        if (res && res.status === 200) cache.put(request.url, res.clone())
+        return res
+      } catch {
+        return cached || new Response('', { status: 503 })
+      }
+    })())
+    return
+  }
 
   // Unsplash hero background images — cache-first, permanent
   // After first load the image is served instantly from cache with no network hit.
