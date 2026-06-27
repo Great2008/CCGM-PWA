@@ -56,15 +56,16 @@
     }
     </script>
 
-    <!-- Self-hosted fonts — no external dependency, no render-blocking -->
-    <link rel="preload" as="style" href="/fonts/fonts.css" />
-    <link rel="stylesheet" href="/fonts/fonts.css" />
-    <!-- Preconnect: only non-font critical origins -->
+    <!-- Preconnect: critical API origins -->
     <link rel="preconnect" href="https://beta.ourmanna.com" crossorigin />
     <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
-    <!-- Preload the 2 most used font weights for instant text render -->
+    <!-- Preload critical font files so they start downloading immediately -->
     <link rel="preload" as="font" type="font/woff2" href="/fonts/lato-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/lato-700.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-700.woff2" crossorigin />
+    <!-- Load fonts.css non-blocking — fonts already preloaded above so no FOUT -->
+    <link rel="preload" as="style" href="/fonts/fonts.css" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="/fonts/fonts.css" /></noscript>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {

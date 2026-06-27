@@ -1,6 +1,7 @@
-// CCG World Service Worker v9 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache
-const CACHE = 'ccgworld-v9'
+// CCG World Service Worker v10 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache + BG Image Cache
+const CACHE = 'ccgworld-v10'
 const API_CACHE = 'ccgworld-api-v2'
+const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
@@ -23,7 +24,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE && k !== API_CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => k !== CACHE && k !== API_CACHE && k !== BG_CACHE).map(k => caches.delete(k)))
     )
   )
   self.clients.claim()
@@ -34,35 +35,66 @@ self.addEventListener('fetch', e => {
   const url = new URL(request.url)
   if (request.method !== 'GET' || url.protocol === 'chrome-extension:') return
 
-  // Supabase API — cache sabbath_lessons and devotional posts for offline access
+  // Unsplash hero background images — cache-first, permanent
+  // After first load the image is served instantly from cache with no network hit.
+  // Only updates if the URL changes (which it won't since URLs are hardcoded in JSX).
+  if (url.hostname.includes('images.unsplash.com')) {
+    e.respondWith((async () => {
+      const bgCache = await caches.open(BG_CACHE)
+      const cached = await bgCache.match(request.url)
+      if (cached) return cached  // Instant — serve from cache
+      try {
+        const res = await fetch(request.clone())
+        if (res && res.status === 200) {
+          bgCache.put(request.url, res.clone())
+        }
+        return res
+      } catch {
+        // Offline and not cached yet — return empty transparent image
+        return new Response('', { status: 200, headers: { 'Content-Type': 'image/webp' } })
+      }
+    })())
+    return
+  }
+
+  // Supabase API — permanent offline cache for sabbath_lessons, devotionals, hymns
+  // Strategy: cache-first when offline, network-first when online but only
+  // replace the cache if the response body actually changed (length check).
+  // This means data persists forever offline and only updates when new content exists.
   if (url.hostname.includes('supabase.co') && url.pathname.includes('/rest/v1/')) {
     const isSabbath    = url.pathname.includes('sabbath_lessons')
     const isDevotional = url.pathname.includes('posts') && url.search.includes('devotional')
+    const isHymnal     = url.pathname.includes('hymns')
 
-    if (isSabbath || isDevotional) {
+    if (isSabbath || isDevotional || isHymnal) {
       e.respondWith((async () => {
+        const apiCache = await caches.open(API_CACHE)
+        const cachedRes = await apiCache.match(request.url)
+
         try {
-          // Network first — always try to get fresh data
+          // Always try network when available
           const res = await fetch(request.clone())
           if (res && res.status === 200) {
-            // Only cache if response has content
-            const clone = res.clone()
-            const text = await clone.text()
-            if (text && text.length > 2) {
-              const apiCache = await caches.open(API_CACHE)
-              // Store with URL as key (includes query params)
-              apiCache.put(request.url, new Response(text, {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' }
-              }))
+            const freshText = await res.clone().text()
+            if (freshText && freshText.length > 2) {
+              // Only overwrite cache if content actually changed
+              let shouldUpdate = true
+              if (cachedRes) {
+                const cachedText = await cachedRes.clone().text()
+                shouldUpdate = freshText.length !== cachedText.length || freshText !== cachedText
+              }
+              if (shouldUpdate) {
+                await apiCache.put(request.url, new Response(freshText, {
+                  status: 200,
+                  headers: { 'Content-Type': 'application/json' }
+                }))
+              }
             }
           }
           return res
         } catch(_) {
-          // Offline — serve from API cache
-          const apiCache = await caches.open(API_CACHE)
-          const cached = await apiCache.match(request.url)
-          if (cached) return cached
+          // Offline — serve permanently cached data
+          if (cachedRes) return cachedRes
           return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } })
         }
       })())
