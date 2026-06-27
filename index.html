@@ -56,13 +56,12 @@
     }
     </script>
 
-    <!-- Preconnect: critical API origins -->
-    <link rel="preconnect" href="https://beta.ourmanna.com" crossorigin />
-    <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
-    <!-- Preload critical font files so they start downloading immediately -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/lato-400.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/lato-700.woff2" crossorigin />
+    <!-- Preconnect: only origins that are actually used on homepage -->
+    <link rel="preconnect" href="https://gxetxqlzuipiymdmibpt.supabase.co" crossorigin />
+    <!-- Preload LCP font first — Playfair 900 is used in hero h1 -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-900.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/lato-400.woff2" crossorigin />
     <!-- Load fonts.css non-blocking — fonts already preloaded above so no FOUT -->
     <link rel="preload" as="style" href="/fonts/fonts.css" onload="this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="/fonts/fonts.css" /></noscript>

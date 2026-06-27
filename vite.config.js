@@ -25,10 +25,9 @@ export default defineConfig({
           if (id.includes('jspdf') || id.includes('fabric') || id.includes('html2canvas')) {
             return 'pdf-cert'
           }
-          // Admin pages — never loaded by regular users
-          if (id.includes('/src/admin/')) {
-            return 'admin'
-          }
+          // Note: admin is NOT split here — it's dynamically imported in main.jsx
+          // only when pathname starts with /admin. Splitting it here causes browsers
+          // to prefetch it via modulepreload hints even on non-admin pages.
         },
       },
     },
