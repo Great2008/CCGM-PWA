@@ -217,6 +217,6 @@ export default function AdminStudio() {
 
       </div>
 
-
+    </div>
   )
 }
