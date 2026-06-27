@@ -217,26 +217,6 @@ export default function AdminStudio() {
 
       </div>
 
-      {/* Setup guide */}
-      <div style={{ marginTop:28, background:'#f0f9ff', borderRadius:14, padding:22, border:'1px solid #bae6fd' }}>
-        <h4 style={{ margin:'0 0 10px', color:'#0369a1', fontFamily:'var(--font-display)' }}>⚙️ Setup Checklist</h4>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:10 }}>
-          {[
-            { label:'YOUTUBE_API_KEY', desc:'Google Cloud Console → APIs & Services → Credentials' },
-            { label:'YOUTUBE_CHANNEL_ID', desc:'YouTube Studio → Settings → Channel → Advanced → Channel ID (starts with UC)' },
-          ].map(({ label, desc }) => (
-            <div key={label} style={{ background:'white', borderRadius:8, padding:'12px 14px', border:'1px solid #e0f2fe' }}>
-              <code style={{ fontSize:'0.78rem', fontWeight:700, color:'#0284c7', display:'block', marginBottom:4 }}>{label}</code>
-              <div style={{ fontSize:'0.75rem', color:'#0369a1', lineHeight:1.5 }}>{desc}</div>
-            </div>
-          ))}
-        </div>
-        <p style={{ margin:'12px 0 0', fontSize:'0.78rem', color:'#0369a1', lineHeight:1.6 }}>
-          Add both as environment variables in your <strong>Vercel dashboard</strong> (Settings → Environment Variables).
-          The API key is never exposed to the browser — it's only used in <code>api/index.py</code>.
-          Enable the <strong>YouTube Data API v3</strong> in Google Cloud Console for your project.
-        </p>
-      </div>
-    </div>
+
   )
 }
