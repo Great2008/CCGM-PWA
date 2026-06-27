@@ -170,13 +170,18 @@
         autoDisplay: false,
       }, 'google_translate_element');
     }
-    // Defer Google Translate until page is fully loaded — keeps it off critical path
-    window.addEventListener('load', function() {
+    // Load Google Translate only when user interacts with language picker
+    // This keeps the 65KB translate script completely off the critical path
+    window.__loadGoogleTranslate = function() {
+      if (window.__gtLoaded) return
+      window.__gtLoaded = true
       var s = document.createElement('script')
       s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
       s.async = true
       document.body.appendChild(s)
-    })
+    }
+    // Also load after 5s idle as fallback so it's ready if needed
+    setTimeout(window.__loadGoogleTranslate, 5000)
   </script>
 
   <!-- Hide the Google Translate top bar -->

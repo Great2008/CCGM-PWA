@@ -219,7 +219,7 @@ export default function Navbar() {
             {/* Language picker */}
             <div style={{ position: 'relative' }}>
               <button
-                onClick={() => setLangOpen(o => !o)}
+                onClick={() => { setLangOpen(o => !o); window.__loadGoogleTranslate && window.__loadGoogleTranslate() }}
                 title="Translate"
                 style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', borderRadius: 6, background: langOpen ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', color: currentLang !== 'en' ? 'var(--gold)' : 'rgba(255,255,255,0.82)', fontSize: '0.82rem', fontFamily: 'var(--font-body)', fontWeight: currentLang !== 'en' ? 700 : 500, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
                 onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}

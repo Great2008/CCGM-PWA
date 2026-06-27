@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
@@ -6,35 +6,39 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
-import Home       from './pages/Home'
-import Sermons    from './pages/Sermons'
-import Events     from './pages/Events'
-import About      from './pages/About'
-import Contact    from './pages/Contact'
-import Gallery    from './pages/Gallery'
-import Blog       from './pages/Blog'
-import Bible      from './pages/Bible'
-import Hymnal     from './pages/Hymnal'
-import Devotional from './pages/Devotional'
-import Timeline   from './pages/Timeline'
-import Live       from './pages/Live'
 import PushPrompt from './components/PushPrompt'
-import SabbathSchool from './pages/SabbathSchool'
-import Notifications from './pages/Notifications'
-import FindChurch from './pages/FindChurch'
-import PrayerWall from './pages/PrayerWall'
-import Studio     from './pages/Studio'
-import Profile    from './pages/Profile'
-import Search       from './pages/Search'
-import Certificate  from './pages/Certificate'
-import Guidelines  from './pages/Guidelines'
-import NotFound    from './pages/NotFound'
-import Verify       from './pages/Verify'
-import Programme    from './pages/Programme'
 import SuspensionNotice from './components/SuspensionNotice'
 import DailyVerseBanner from './components/DailyVerseBanner'
-import Maintenance from './pages/Maintenance'
 import useMaintenanceMode from './hooks/useMaintenanceMode'
+
+// Eagerly load Home and Maintenance — always needed on first paint
+import Home       from './pages/Home'
+import Maintenance from './pages/Maintenance'
+
+// All other pages lazy-loaded — only downloaded when user navigates to them
+const Sermons      = lazy(() => import('./pages/Sermons'))
+const Events       = lazy(() => import('./pages/Events'))
+const About        = lazy(() => import('./pages/About'))
+const Contact      = lazy(() => import('./pages/Contact'))
+const Gallery      = lazy(() => import('./pages/Gallery'))
+const Blog         = lazy(() => import('./pages/Blog'))
+const Bible        = lazy(() => import('./pages/Bible'))
+const Hymnal       = lazy(() => import('./pages/Hymnal'))
+const Devotional   = lazy(() => import('./pages/Devotional'))
+const Timeline     = lazy(() => import('./pages/Timeline'))
+const Live         = lazy(() => import('./pages/Live'))
+const SabbathSchool  = lazy(() => import('./pages/SabbathSchool'))
+const Notifications  = lazy(() => import('./pages/Notifications'))
+const FindChurch     = lazy(() => import('./pages/FindChurch'))
+const PrayerWall     = lazy(() => import('./pages/PrayerWall'))
+const Studio         = lazy(() => import('./pages/Studio'))
+const Profile        = lazy(() => import('./pages/Profile'))
+const Search         = lazy(() => import('./pages/Search'))
+const Certificate    = lazy(() => import('./pages/Certificate'))
+const Guidelines     = lazy(() => import('./pages/Guidelines'))
+const NotFound       = lazy(() => import('./pages/NotFound'))
+const Verify         = lazy(() => import('./pages/Verify'))
+const Programme      = lazy(() => import('./pages/Programme'))
 
 function AppInner() {
   const { user } = useAuth()
@@ -57,6 +61,7 @@ function AppInner() {
     <>
       <Navbar />
       <main style={{ overflowX: 'hidden' }}>
+        <Suspense fallback={<div style={{minHeight:'60vh'}} />}>
         <Routes>
           <Route path="/"           element={<Home />} />
           <Route path="/sermons"    element={<Sermons />} />
@@ -83,6 +88,7 @@ function AppInner() {
           <Route path="/guidelines"       element={<Guidelines />} />
           <Route path="*"                 element={<NotFound />} />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
       <PushPrompt user={user} />
