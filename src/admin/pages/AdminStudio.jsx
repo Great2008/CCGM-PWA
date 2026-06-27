@@ -135,7 +135,7 @@ export default function AdminStudio() {
             <label style={{ display:'block', fontSize:'0.78rem', fontWeight:700, color:'var(--text-mid)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }}>
               Title *
             </label>
-            <input style={inputStyle} value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Sunday Service — Easter 2025" />
+            <input style={inputStyle} value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Divine Service" />
           </div>
 
           <div style={{ marginBottom:20 }}>
