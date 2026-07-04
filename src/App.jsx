@@ -6,10 +6,12 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
-import PushPrompt from './components/PushPrompt'
-import SuspensionNotice from './components/SuspensionNotice'
-import DailyVerseBanner from './components/DailyVerseBanner'
 import useMaintenanceMode from './hooks/useMaintenanceMode'
+
+// Lazy-load non-critical UI components — not needed for first paint
+const PushPrompt       = lazy(() => import('./components/PushPrompt'))
+const SuspensionNotice = lazy(() => import('./components/SuspensionNotice'))
+const DailyVerseBanner = lazy(() => import('./components/DailyVerseBanner'))
 
 // Eagerly load Home and Maintenance — always needed on first paint
 import Home       from './pages/Home'
