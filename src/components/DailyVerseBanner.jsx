@@ -83,10 +83,8 @@ export default function DailyVerseBanner() {
       })
       setLoading(false)
     }
-    // Delay fetch until after LCP — ourmanna API was sitting on critical path
-    // If verse is cached from today it loads instantly anyway after the timeout
-    const t = setTimeout(load, 2500)
-    return () => clearTimeout(t)
+    // Component is deferred 3s in App.jsx so fetch immediately on mount
+    load()
   }, [])
 
   const dismiss = () => {

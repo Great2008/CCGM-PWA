@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
@@ -44,7 +44,15 @@ const Programme      = lazy(() => import('./pages/Programme'))
 
 function AppInner() {
   const { user } = useAuth()
+  const [showDeferred, setShowDeferred] = React.useState(false)
   const { enabled, message, eta } = useMaintenanceMode()
+
+  // Defer non-critical components until after LCP
+  // DailyVerseBanner, PushPrompt load only after page is interactive
+  useEffect(() => {
+    const t = setTimeout(() => setShowDeferred(true), 3000)
+    return () => clearTimeout(t)
+  }, [])
 
   // While maintenance mode is on, show ONLY the maintenance page —
   // no Navbar/Footer/routes. /admin is a separate app (see main.jsx)
@@ -93,9 +101,13 @@ function AppInner() {
         </Suspense>
       </main>
       <Footer />
-      <PushPrompt user={user} />
-      <SuspensionNotice />
-      <DailyVerseBanner />
+      {showDeferred && (
+        <Suspense fallback={null}>
+          <PushPrompt user={user} />
+          <SuspensionNotice />
+          <DailyVerseBanner />
+        </Suspense>
+      )}
       <Analytics />
     </>
   )
