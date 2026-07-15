@@ -47,7 +47,7 @@ function mapRowToDevotional(row) {
     category:  String(found.category ?? 'Devotional').trim() || 'Devotional',
     excerpt:   String(found.excerpt ?? '').trim(),
     body:      String(found.body ?? '').trim(),
-    tags:      String(found.tags ?? '').trim(),
+    tags:      String(found.tags ?? '').trim().split(',').map(t => t.trim()).filter(Boolean),
     read_time: String(found.read_time ?? '').trim(),
     type: 'devotional',
     published: false, // always land as drafts for review
