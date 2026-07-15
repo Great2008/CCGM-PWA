@@ -221,7 +221,7 @@ function PlayerModal({ item, onClose }) {
 
 function EmptyState({ tab }) {
   const msgs = {
-    videos: { icon:'🎬', text:'No videos found. Check your channel ID and API key.' },
+    videos: { icon:'🎬', text:'No videos found. Check your internet connection and try gain.' },
     playlists: { icon:'📂', text:'No playlists found on this channel.' },
     live: { icon:'📡', text:'No live streams active right now.' },
   }
