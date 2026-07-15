@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import * as XLSX from 'xlsx'
 import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
@@ -6,6 +7,52 @@ import supabaseAdmin from '../../lib/supabaseAdmin'
 
 const EMPTY = { title:'', author:'', date:'', category:'', type:'blog', excerpt:'', body:'', image_url:'', tags:'', published:true }
 const CATS = ['Devotional','Sermon Notes','Announcement','Ministry','Testimony','Teaching']
+
+// ── Bulk Excel upload (devotionals) ──────────────────────────────────────
+// Column headers are matched loosely (case/space/underscore-insensitive)
+// so the file doesn't need to match one exact template.
+const HEADER_ALIASES = {
+  date:      ['date','day'],
+  title:     ['title','heading'],
+  category:  ['category'],
+  tags:      ['tags','scripture','reference','scripturereference'],
+  excerpt:   ['excerpt','verse','scripturetext','keyverse'],
+  body:      ['body','content','devotional','message','reflection'],
+  author:    ['author','writer'],
+  read_time: ['readtime','duration'],
+}
+const normalizeKey = k => String(k || '').toLowerCase().replace(/[\s_-]/g, '')
+
+function excelDateToISO(val) {
+  if (val instanceof Date && !isNaN(val)) {
+    return `${val.getFullYear()}-${String(val.getMonth()+1).padStart(2,'0')}-${String(val.getDate()).padStart(2,'0')}`
+  }
+  return String(val ?? '').trim()
+}
+
+function mapRowToDevotional(row) {
+  const found = {}
+  Object.keys(row).forEach(rawKey => {
+    const nk = normalizeKey(rawKey)
+    for (const field in HEADER_ALIASES) {
+      if (HEADER_ALIASES[field].includes(nk) && found[field] === undefined) {
+        found[field] = row[rawKey]
+      }
+    }
+  })
+  return {
+    title:     String(found.title ?? '').trim(),
+    author:    String(found.author ?? '').trim(),
+    date:      excelDateToISO(found.date),
+    category:  String(found.category ?? 'Devotional').trim() || 'Devotional',
+    excerpt:   String(found.excerpt ?? '').trim(),
+    body:      String(found.body ?? '').trim(),
+    tags:      String(found.tags ?? '').trim(),
+    read_time: String(found.read_time ?? '').trim(),
+    type: 'devotional',
+    published: false, // always land as drafts for review
+  }
+}
 
 export default function AdminBlog() {
   const { showToast, logAction } = useAdmin()
@@ -15,6 +62,10 @@ export default function AdminBlog() {
   const [loading, setLoading] = useState(true)
   const [delId, setDelId] = useState(null)
   const [preview, setPreview] = useState(false)
+  const [bulkRows, setBulkRows] = useState(null) // parsed rows awaiting confirmation
+  const [bulkError, setBulkError] = useState('')
+  const [bulkUploading, setBulkUploading] = useState(false)
+  const fileInputRef = useRef(null)
 
   const load = async () => {
     const { data, error } = await supabaseAdmin.from('posts').select('*').order('date', { ascending: false })
@@ -42,6 +93,44 @@ export default function AdminBlog() {
     setDelId(null)
   }
   const F = k => ({ value:form?.[k]||'', onChange:e=>setForm(f=>({...f,[k]:e.target.value})) })
+
+  // ── Bulk Excel upload ──────────────────────────────────────────────────
+  const handleBulkFile = async e => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // allow re-selecting the same file later
+    if (!file) return
+    setBulkError('')
+    try {
+      const buf = await file.arrayBuffer()
+      const wb = XLSX.read(buf, { type: 'array', cellDates: true })
+      const sheet = wb.Sheets[wb.SheetNames[0]]
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+      if (!rows.length) { setBulkError('That file has no rows.'); return }
+      const mapped = rows.map(mapRowToDevotional).filter(r => r.title || r.body)
+      if (!mapped.length) {
+        setBulkError('Could not find any rows with a Title or Body. Make sure the file has column headers like Date, Title, Category, Tags, Excerpt, Body, Author.')
+        return
+      }
+      setBulkRows(mapped)
+    } catch (err) {
+      setBulkError('Could not read that file — make sure it\'s a valid .xlsx/.xls/.csv export.')
+    }
+  }
+
+  const confirmBulkUpload = async () => {
+    if (!bulkRows?.length) return
+    setBulkUploading(true)
+    const { error } = await supabaseAdmin.from('posts').insert(bulkRows)
+    if (!error) {
+      showToast(`📤 ${bulkRows.length} devotional${bulkRows.length!==1?'s':''} uploaded as drafts — review & publish below.`)
+      logAction('devotional_bulk_upload', `Bulk-uploaded ${bulkRows.length} devotionals from Excel as drafts`, null)
+      setBulkRows(null)
+      load()
+    } else {
+      showToast(error.message, 'error')
+    }
+    setBulkUploading(false)
+  }
 
   if (loading) return <div style={{ textAlign:'center', padding:60, color:'var(--text-light)' }}>Loading posts...</div>
 
@@ -103,7 +192,21 @@ export default function AdminBlog() {
 
   return (
     <div>
-      <PageHeader icon="✍️" title="Blog & Devotionals" subtitle={`${items.length} posts`} action={<button className="btn btn-blue" onClick={()=>setForm({...EMPTY,date:new Date().toISOString().split('T')[0]})}>+ New Post</button>} />
+      <PageHeader icon="✍️" title="Blog & Devotionals" subtitle={`${items.length} posts`} action={
+        <div style={{ display:'flex', gap:10 }}>
+          <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleBulkFile} style={{ display:'none' }} />
+          <button className="btn btn-outline-blue" onClick={()=>fileInputRef.current?.click()}>📤 Bulk Upload (Excel)</button>
+          <button className="btn btn-blue" onClick={()=>setForm({...EMPTY,date:new Date().toISOString().split('T')[0]})}>+ New Post</button>
+        </div>
+      } />
+      {bulkError && (
+        <AdminCard style={{ marginBottom:16, border:'1.5px solid #fecaca', background:'#fef2f2' }}>
+          <div style={{ color:'#dc2626', fontSize:'0.85rem', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12 }}>
+            <span>⚠️ {bulkError}</span>
+            <button onClick={()=>setBulkError('')} style={{ background:'none', border:'none', color:'#dc2626', cursor:'pointer', fontWeight:700 }}>✕</button>
+          </div>
+        </AdminCard>
+      )}
       {items.length===0&&<AdminCard><div style={{ textAlign:'center', padding:'40px 20px', color:'var(--text-light)' }}>No posts yet.</div></AdminCard>}
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
         {items.map(item=>(
@@ -127,6 +230,32 @@ export default function AdminBlog() {
         ))}
       </div>
       {delId&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }}><div style={{ background:'white', borderRadius:16, padding:32, maxWidth:360, width:'90%', textAlign:'center' }}><div style={{ fontSize:'2.5rem', marginBottom:12 }}>⚠️</div><h3 style={{ color:'var(--brand-deep)', margin:'0 0 8px' }}>Delete Post?</h3><p style={{ color:'var(--text-mid)', marginBottom:24 }}>Cannot be undone.</p><div style={{ display:'flex', gap:12, justifyContent:'center' }}><button className="btn btn-blue" onClick={handleDelete}>Delete</button><button className="btn btn-outline-blue" onClick={()=>setDelId(null)}>Cancel</button></div></div></div>}
+
+      {bulkRows && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:20 }}>
+          <div style={{ background:'white', borderRadius:16, padding:28, maxWidth:520, width:'100%', maxHeight:'80vh', display:'flex', flexDirection:'column' }}>
+            <div style={{ fontSize:'2rem', marginBottom:8 }}>📤</div>
+            <h3 style={{ color:'var(--brand-deep)', margin:'0 0 6px' }}>{bulkRows.length} devotional{bulkRows.length!==1?'s':''} found</h3>
+            <p style={{ color:'var(--text-mid)', fontSize:'0.85rem', marginBottom:16 }}>
+              These will be added as <strong>drafts</strong> — nothing goes live on the site until you review and publish each one.
+            </p>
+            <div style={{ overflowY:'auto', flex:1, border:'1.5px solid #e2e8f0', borderRadius:10, marginBottom:20 }}>
+              {bulkRows.map((r,i)=>(
+                <div key={i} style={{ padding:'10px 14px', borderBottom: i<bulkRows.length-1 ? '1px solid #f1f5f9' : 'none', display:'flex', justifyContent:'space-between', gap:10, alignItems:'center' }}>
+                  <span style={{ fontSize:'0.85rem', color:'var(--text-dark)', fontWeight:600 }}>{r.title || <em style={{ color:'#dc2626' }}>Untitled</em>}</span>
+                  <span style={{ fontSize:'0.75rem', color:'var(--text-light)', flexShrink:0 }}>{r.date || 'no date'}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display:'flex', gap:12, justifyContent:'flex-end' }}>
+              <button className="btn btn-outline-blue" onClick={()=>setBulkRows(null)} disabled={bulkUploading}>Cancel</button>
+              <button className="btn btn-blue" onClick={confirmBulkUpload} disabled={bulkUploading}>
+                {bulkUploading ? '⏳ Uploading...' : `💾 Upload ${bulkRows.length} as Drafts`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
