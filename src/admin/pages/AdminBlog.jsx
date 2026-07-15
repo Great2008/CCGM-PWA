@@ -67,6 +67,15 @@ export default function AdminBlog() {
   const [bulkUploading, setBulkUploading] = useState(false)
   const fileInputRef = useRef(null)
 
+  // ── Bulk select / approve ────────────────────────────────────────────────
+  const [selected, setSelected] = useState(new Set())
+  const [bulkActing, setBulkActing] = useState(false)
+  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false)
+  const toggleSelect = id => setSelected(s => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n })
+  const allSelected = items.length > 0 && selected.size === items.length
+  const toggleSelectAll = () => setSelected(allSelected ? new Set() : new Set(items.map(i => i.id)))
+  const clearSelection = () => setSelected(new Set())
+
   const load = async () => {
     const { data, error } = await supabaseAdmin.from('posts').select('*').order('date', { ascending: false })
     if (error) showToast('Failed to load: ' + error.message, 'error')
@@ -130,6 +139,48 @@ export default function AdminBlog() {
       showToast(error.message, 'error')
     }
     setBulkUploading(false)
+  }
+
+  // ── Bulk actions on selected posts ───────────────────────────────────────
+  const bulkSetPublished = async published => {
+    if (!selected.size) return
+    setBulkActing(true)
+    const ids = [...selected]
+    const { error } = await supabaseAdmin.from('posts').update({ published }).in('id', ids)
+    if (!error) {
+      showToast(`${published ? '✅ Published' : '📥 Unpublished'} ${ids.length} post${ids.length !== 1 ? 's' : ''}`)
+      logAction(published ? 'blog_bulk_publish' : 'blog_bulk_unpublish', `${published ? 'Published' : 'Unpublished'} ${ids.length} posts in bulk`, null)
+      setItems(list => list.map(x => ids.includes(x.id) ? { ...x, published } : x))
+      clearSelection()
+    } else showToast(error.message, 'error')
+    setBulkActing(false)
+  }
+  const bulkSetCategory = async category => {
+    if (!selected.size || !category) return
+    setBulkActing(true)
+    const ids = [...selected]
+    const { error } = await supabaseAdmin.from('posts').update({ category }).in('id', ids)
+    if (!error) {
+      showToast(`🏷 Category set to "${category}" for ${ids.length} post${ids.length !== 1 ? 's' : ''}`)
+      logAction('blog_bulk_category', `Changed category to "${category}" for ${ids.length} posts in bulk`, null)
+      setItems(list => list.map(x => ids.includes(x.id) ? { ...x, category } : x))
+      clearSelection()
+    } else showToast(error.message, 'error')
+    setBulkActing(false)
+  }
+  const bulkDelete = async () => {
+    if (!selected.size) return
+    setBulkActing(true)
+    const ids = [...selected]
+    const { error } = await supabaseAdmin.from('posts').delete().in('id', ids)
+    if (!error) {
+      showToast(`🗑 Deleted ${ids.length} post${ids.length !== 1 ? 's' : ''}`)
+      logAction('blog_bulk_delete', `Deleted ${ids.length} posts in bulk`, null)
+      setItems(list => list.filter(x => !ids.includes(x.id)))
+      clearSelection()
+    } else showToast(error.message, 'error')
+    setBulkActing(false)
+    setBulkDeleteConfirm(false)
   }
 
   if (loading) return <div style={{ textAlign:'center', padding:60, color:'var(--text-light)' }}>Loading posts...</div>
@@ -208,10 +259,49 @@ export default function AdminBlog() {
         </AdminCard>
       )}
       {items.length===0&&<AdminCard><div style={{ textAlign:'center', padding:'40px 20px', color:'var(--text-light)' }}>No posts yet.</div></AdminCard>}
+
+      {items.length>0 && (
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12, padding:'0 4px' }}>
+          <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer', fontSize:'0.85rem', color:'var(--text-mid)' }}>
+            <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} style={{ width:16, height:16 }} />
+            Select all
+          </label>
+          {selected.size>0 && <span style={{ fontSize:'0.82rem', color:'var(--brand-light)', fontWeight:700 }}>{selected.size} selected</span>}
+        </div>
+      )}
+
+      {selected.size>0 && (
+        <div style={{ position:'sticky', top:0, zIndex:20, background:'white', border:'1.5px solid var(--brand-pale)', borderRadius:12, padding:'10px 14px', marginBottom:14, display:'flex', flexWrap:'wrap', alignItems:'center', gap:10, boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+          <span style={{ fontSize:'0.85rem', fontWeight:700, color:'var(--brand-deep)' }}>{selected.size} selected</span>
+          <button className="btn btn-outline-blue" style={{ padding:'6px 14px', fontSize:'0.8rem' }} disabled={bulkActing} onClick={()=>bulkSetPublished(true)}>✅ Publish</button>
+          <button className="btn btn-outline-blue" style={{ padding:'6px 14px', fontSize:'0.8rem' }} disabled={bulkActing} onClick={()=>bulkSetPublished(false)}>📥 Unpublish</button>
+          <select
+            defaultValue=""
+            disabled={bulkActing}
+            onChange={e=>{ const v=e.target.value; if(v){ bulkSetCategory(v); e.target.value='' } }}
+            style={{ padding:'6px 10px', borderRadius:8, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.8rem' }}
+          >
+            <option value="">🏷 Change category...</option>
+            {CATS.map(c=><option key={c} value={c}>{c}</option>)}
+          </select>
+          <button
+            style={{ padding:'6px 14px', borderRadius:30, border:'1.5px solid #fecaca', background:'white', color:'#dc2626', cursor:'pointer', fontSize:'0.8rem', fontFamily:'var(--font-body)' }}
+            disabled={bulkActing}
+            onClick={()=>setBulkDeleteConfirm(true)}
+          >🗑 Delete</button>
+          <button
+            style={{ marginLeft:'auto', padding:'6px 10px', border:'none', background:'none', color:'var(--text-light)', cursor:'pointer', fontSize:'0.8rem' }}
+            disabled={bulkActing}
+            onClick={clearSelection}
+          >✕ Clear</button>
+        </div>
+      )}
+
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
         {items.map(item=>(
           <AdminCard key={item.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
             <div style={{ flex:1, display:'flex', gap:14, alignItems:'center' }}>
+              <input type="checkbox" checked={selected.has(item.id)} onChange={()=>toggleSelect(item.id)} style={{ width:18, height:18, flexShrink:0 }} />
               {item.image_url&&<img src={item.image_url} alt="" style={{ width:52, height:52, borderRadius:8, objectFit:'cover', flexShrink:0 }} />}
               <div>
                 <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:4, flexWrap:'wrap' }}>
@@ -230,6 +320,8 @@ export default function AdminBlog() {
         ))}
       </div>
       {delId&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }}><div style={{ background:'white', borderRadius:16, padding:32, maxWidth:360, width:'90%', textAlign:'center' }}><div style={{ fontSize:'2.5rem', marginBottom:12 }}>⚠️</div><h3 style={{ color:'var(--brand-deep)', margin:'0 0 8px' }}>Delete Post?</h3><p style={{ color:'var(--text-mid)', marginBottom:24 }}>Cannot be undone.</p><div style={{ display:'flex', gap:12, justifyContent:'center' }}><button className="btn btn-blue" onClick={handleDelete}>Delete</button><button className="btn btn-outline-blue" onClick={()=>setDelId(null)}>Cancel</button></div></div></div>}
+
+      {bulkDeleteConfirm&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }}><div style={{ background:'white', borderRadius:16, padding:32, maxWidth:380, width:'90%', textAlign:'center' }}><div style={{ fontSize:'2.5rem', marginBottom:12 }}>⚠️</div><h3 style={{ color:'var(--brand-deep)', margin:'0 0 8px' }}>Delete {selected.size} Post{selected.size!==1?'s':''}?</h3><p style={{ color:'var(--text-mid)', marginBottom:24 }}>This will permanently delete all {selected.size} selected post{selected.size!==1?'s':''}. Cannot be undone.</p><div style={{ display:'flex', gap:12, justifyContent:'center' }}><button className="btn btn-blue" onClick={bulkDelete} disabled={bulkActing}>{bulkActing?'⏳...':`Delete ${selected.size}`}</button><button className="btn btn-outline-blue" onClick={()=>setBulkDeleteConfirm(false)} disabled={bulkActing}>Cancel</button></div></div></div>}
 
       {bulkRows && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:20 }}>
