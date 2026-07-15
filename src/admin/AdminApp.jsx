@@ -127,10 +127,13 @@ export default function AdminApp() {
   const isSuperAdmin = adminRole === 'super_admin'
   const isFullAdmin  = adminRole === 'admin' || isSuperAdmin
   const visibleNav   = isFullAdmin
-    ? NAV
+    ? NAV.filter(([id]) => id !== 'maintenance' || isSuperAdmin)
     : NAV.filter(([id]) => ['timeline', 'prayer'].includes(id))
 
-  const Page = PAGES[page] || (isFullAdmin ? AdminDashboard : AdminTimeline)
+  // Maintenance Mode is super-admin only, even if someone lands on the page
+  // directly (e.g. stale link) without it being in their nav.
+  const requestedPage = page === 'maintenance' && !isSuperAdmin ? null : page
+  const Page = PAGES[requestedPage] || (isFullAdmin ? AdminDashboard : AdminTimeline)
   return (
     <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin, logAction }}>
       <div style={{ display:'flex', minHeight:'100vh', fontFamily:'var(--font-body)', background:'#f0f4fa' }}>
