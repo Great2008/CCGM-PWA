@@ -125,13 +125,14 @@ export default function AdminApp() {
   // Moderators see only moderation-relevant pages
   const isSuperAdmin = adminRole === 'super_admin'
   const isFullAdmin  = adminRole === 'admin' || isSuperAdmin
+  const superAdminOnlyPages = ['maintenance', 'audit-log']
   const visibleNav   = isFullAdmin
-    ? NAV.filter(([id]) => id !== 'maintenance' || isSuperAdmin)
+    ? NAV.filter(([id]) => !superAdminOnlyPages.includes(id) || isSuperAdmin)
     : NAV.filter(([id]) => ['timeline', 'prayer'].includes(id))
 
-  // Maintenance Mode is super-admin only, even if someone lands on the page
-  // directly (e.g. stale link) without it being in their nav.
-  const requestedPage = page === 'maintenance' && !isSuperAdmin ? null : page
+  // Maintenance Mode and the Audit Log are super-admin only, even if someone
+  // lands on the page directly (e.g. stale link) without it being in their nav.
+  const requestedPage = superAdminOnlyPages.includes(page) && !isSuperAdmin ? null : page
   const Page = PAGES[requestedPage] || (isFullAdmin ? AdminDashboard : AdminTimeline)
   return (
     <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin, logAction }}>
