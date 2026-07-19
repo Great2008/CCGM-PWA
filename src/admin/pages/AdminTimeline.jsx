@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import { useTable } from '../useSupabaseAdmin'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 import { Confirm } from '../components/CrudShell'
 
 function timeAgo(ts) {

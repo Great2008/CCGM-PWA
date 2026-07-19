@@ -1,4 +1,4 @@
-import supabaseAdmin from '../lib/supabaseAdmin'
+import supabaseAdmin from '../lib/supabase'
 
 // ── Site Settings ──────────────────────────────────────────
 export async function getContent(key) {

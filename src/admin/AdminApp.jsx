@@ -1,7 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import supabase from '../lib/supabase'
-import supabaseAdmin from '../lib/supabaseAdmin'
 import AdminLogin     from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminSermons   from './pages/AdminSermons'
@@ -109,7 +108,7 @@ export default function AdminApp() {
   const logAction = async (action, detail, targetName = null) => {
     if (!adminUser?.id) return
     try {
-      await supabaseAdmin.from('admin_audit_log').insert({
+      await supabase.from('admin_audit_log').insert({
         admin_id:    adminUser.id,
         action,
         detail:      detail || null,

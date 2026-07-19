@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import supabaseAdmin from '../lib/supabaseAdmin'
+import supabaseAdmin from '../lib/supabase'
 
 export function useTable(table, opts = {}) {
   const [rows, setRows]       = useState([])
