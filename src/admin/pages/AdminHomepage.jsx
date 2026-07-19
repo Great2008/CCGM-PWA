@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import AdminCard from '../components/AdminCard'
 import { getContent, setContent } from '../supabase'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 import { BG_COLORS, DEFAULT_BG } from '../../components/DailyVerseBanner'
 
 const ICONS = ['🤝','🙏','📖','⛪','🔥','✨','🌟','🎵','📢','✝','🕊','💒']

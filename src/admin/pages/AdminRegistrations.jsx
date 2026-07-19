@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 

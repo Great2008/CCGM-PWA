@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import { getContent, setContent } from '../supabase'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const ICONS = ['📡','🌟','🙏','📖','⛪','🔥','✨','🤝','🎵','✝','🎤','🏛','🎊','📢']

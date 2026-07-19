@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 
 const PERIODS = ['morning','afternoon','evening','special']
 const PERIOD_LABELS = { morning:'🌅 Morning', afternoon:'☀️ Afternoon', evening:'🌙 Evening', special:'⭐ Special' }

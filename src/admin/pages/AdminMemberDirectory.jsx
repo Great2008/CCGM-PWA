@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 
 function initials(m) {
   return (m?.display_name || m?.full_name || '?').charAt(0).toUpperCase()

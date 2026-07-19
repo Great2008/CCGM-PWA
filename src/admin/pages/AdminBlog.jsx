@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx'
 import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 
 const EMPTY = { title:'', author:'', date:'', category:'', type:'blog', excerpt:'', body:'', image_url:'', tags:'', published:true }
 const CATS = ['Devotional','Sermon Notes','Announcement','Ministry','Testimony','Teaching']

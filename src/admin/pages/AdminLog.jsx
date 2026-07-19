@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAdmin } from '../AdminApp'
-import supabase from '../../lib/supabaseAdmin'
+import supabase from '../../lib/supabase'
 
 const ACTION_ICONS = {
   'role_change':        '🛡',

@@ -19,7 +19,7 @@ import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { useTable } from '../useSupabaseAdmin'
-import supabaseAdmin from '../../lib/supabaseAdmin'
+import supabaseAdmin from '../../lib/supabase'
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 

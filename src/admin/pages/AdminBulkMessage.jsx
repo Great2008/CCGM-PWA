@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
-import supabase from '../../lib/supabaseAdmin'
+import supabase from '../../lib/supabase'
 
 export default function AdminBulkMessage() {
   const { showToast } = useAdmin()
