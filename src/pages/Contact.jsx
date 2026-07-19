@@ -18,7 +18,7 @@ export default function Contact() {
     setLoading(true); setError('')
     try {
       // Insert as anonymous — uses anon key with RLS policy "prayers: anyone submit"
-      const { data, error: err } = await supabase
+      const { error: err } = await supabase
         .from('prayers')
         .insert([{
           name: form.name,
@@ -30,7 +30,6 @@ export default function Contact() {
           prayer_type: form.subject,
           status: 'new',
         }])
-        .select()
 
       if (err) {
         console.error('Supabase error:', err)
