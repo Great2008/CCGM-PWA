@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
-import { useAuth } from '../contexts/AuthContext'
 import SEO from '../components/SEO'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -269,7 +268,6 @@ const TABS = ['videos', 'playlists', 'live']
 const TAB_LABELS = { videos:'Videos', playlists:'Playlists', live:'🔴 Live' }
 
 export default function Studio() {
-  const { isAdmin } = useAuth?.() || {}
   const [tab, setTab]         = useState('videos')
   const [data, setData]       = useState({ videos:null, playlists:null, live:null })
   const [loading, setLoading] = useState({ videos:false, playlists:false, live:false })
