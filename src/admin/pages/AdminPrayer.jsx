@@ -120,7 +120,7 @@ export default function AdminPrayer() {
                   <div style={{ flex:1 }}>
                     <div style={{ fontWeight:700, color:'var(--brand-deep)', marginBottom:4 }}>{item.name||'Anonymous'}</div>
                     <div style={{ fontSize:'0.82rem', color:'var(--text-mid)', lineHeight:1.6, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{item.request}</div>
-                    <div style={{ fontSize:'0.72rem', color:'var(--text-light)', marginTop:6 }}>{item.email&&`📧 ${item.email} · `}{new Date(item.submitted_at).toLocaleDateString()}</div>
+                    <div style={{ fontSize:'0.72rem', color:'var(--text-light)', marginTop:6 }}>{item.email&&`📧 ${item.email} · `}{item.phone&&`📞 ${item.phone} · `}{new Date(item.submitted_at).toLocaleDateString()}</div>
                   </div>
                   <span style={{ padding:'3px 12px', borderRadius:20, fontSize:'0.68rem', fontWeight:700, background:sc.bg, color:sc.text, flexShrink:0 }}>{sc.label}</span>
                 </div>
@@ -135,7 +135,8 @@ export default function AdminPrayer() {
                 <h3 style={{ margin:0, color:'var(--brand-deep)', fontSize:'1rem' }}>{selected.name||'Anonymous'}</h3>
                 <button onClick={()=>setSelected(null)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1.2rem', color:'var(--text-light)' }}>✕</button>
               </div>
-              {selected.email&&<div style={{ fontSize:'0.82rem', color:'var(--text-mid)', marginBottom:12 }}>📧 {selected.email}</div>}
+              {selected.email&&<div style={{ fontSize:'0.82rem', color:'var(--text-mid)', marginBottom:4 }}>📧 {selected.email}</div>}
+              {selected.phone&&<div style={{ fontSize:'0.82rem', color:'var(--text-mid)', marginBottom:12 }}>📞 {selected.phone}</div>}
               <div style={{ background:'var(--brand-pale)', borderRadius:10, padding:14, marginBottom:16, fontSize:'0.9rem', lineHeight:1.8, color:'var(--text-dark)' }}>{selected.request}</div>
               <div style={{ marginBottom:16 }}>
                 <div style={{ fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--text-light)', marginBottom:8 }}>Status</div>

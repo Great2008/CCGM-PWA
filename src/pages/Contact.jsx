@@ -23,6 +23,7 @@ export default function Contact() {
         .insert([{
           name: form.name,
           email: form.email,
+          phone: form.phone,
           request: form.subject === 'General Inquiry'
             ? form.message
             : `[${form.subject}] ${form.message}`,
