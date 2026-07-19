@@ -265,7 +265,7 @@ function TrendingBanner({ posts, onOpen }) {
 }
 
 /* ── ThreadedReply component for Topics (with media support) ── */
-function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, isAdmin, members=[] }) {
+function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, members=[] }) {
   const [showReplyBox, setShowReplyBox] = useState(false)
   const [replyText, setReplyText]       = useState('')
   const [mediaFile, setMediaFile]       = useState(null)
@@ -333,7 +333,7 @@ function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, i
               </span>
               <div style={{display:'flex', alignItems:'center', gap:6}}>
                 <span style={{fontSize:'0.7rem', color:'var(--text-light)'}}>{timeAgo(reply.created_at)}</span>
-                {(currentUserId === reply.user_id || isAdmin) && (
+                {currentUserId === reply.user_id && (
                   <button onClick={deleteReply} style={{background:'none',border:'none',cursor:'pointer',color:'#ef4444',fontSize:'0.75rem',opacity:0.5,padding:'0 2px'}}>🗑</button>
                 )}
               </div>
@@ -393,14 +393,14 @@ function ThreadedReply({ reply, depth=0, currentUserId, topicId, onReplyAdded, i
       {childReplies.map(child => (
         <ThreadedReply key={child.id} reply={child} depth={depth+1}
           currentUserId={currentUserId} topicId={topicId}
-          onReplyAdded={onReplyAdded} isAdmin={isAdmin} members={members} />
+          onReplyAdded={onReplyAdded} members={members} />
       ))}
     </div>
   )
 }
 
 /* ── TopicCard component ── */
-function TopicCard({ topic, currentUserId, isAdmin, onDelete, onOpen, onPin }) {
+function TopicCard({ topic, currentUserId, onDelete, onOpen }) {
   const cat = TOPIC_CATEGORIES.find(c=>c.id===topic.category) || TOPIC_CATEGORIES[0]
   return (
     <div onClick={() => onOpen(topic)}
@@ -423,14 +423,7 @@ function TopicCard({ topic, currentUserId, isAdmin, onDelete, onOpen, onPin }) {
           <p style={{margin:0, fontSize:'0.85rem', color:'var(--text-mid)', lineHeight:1.6, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden'}}>{topic.body}</p>
         </div>
         <div style={{display:'flex', flexDirection:'column', gap:4, alignItems:'center', flexShrink:0}}>
-          {isAdmin && (
-            <button onClick={e=>{e.stopPropagation(); onPin && onPin(topic)}}
-              title={topic.pinned?'Unpin topic':'Pin topic'}
-              style={{background:'none',border:'none',cursor:'pointer',color:topic.pinned?'#d97706':'var(--text-light)',fontSize:'0.9rem',opacity:topic.pinned?1:0.4,padding:3}}>
-              📌
-            </button>
-          )}
-          {(currentUserId === topic.user_id || isAdmin) && (
+          {currentUserId === topic.user_id && (
             <button onClick={e=>{e.stopPropagation(); onDelete(topic.id)}}
               style={{background:'none', border:'none', cursor:'pointer', color:'#ef4444', fontSize:'1rem', opacity:0.45, padding:3}} title="Delete">🗑</button>
           )}
@@ -456,7 +449,7 @@ function TopicCard({ topic, currentUserId, isAdmin, onDelete, onOpen, onPin }) {
 }
 
 /* ── TopicDetailModal ── */
-function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdated, members=[] }) {
+function TopicDetailModal({ topic, currentUserId, onClose, onTopicUpdated, members=[] }) {
   const [replies, setReplies]     = useState([])
   const [loading, setLoading]     = useState(true)
   const [replyText, setReplyText] = useState('')
@@ -594,7 +587,7 @@ function TopicDetailModal({ topic, currentUserId, isAdmin, onClose, onTopicUpdat
           {replies.map(r => (
             <ThreadedReply key={r.id} reply={r} depth={0}
               currentUserId={currentUserId} topicId={topic.id}
-              onReplyAdded={loadReplies} isAdmin={isAdmin} members={members} />
+              onReplyAdded={loadReplies} members={members} />
           ))}
         </div>
 
@@ -705,7 +698,7 @@ function NewTopicModal({ currentUser, profile, onClose, onCreated }) {
 }
 
 /* ── PostCard ── */
-function PostCard({ post, currentUserId, onReact, onDelete, onEdit, isAdmin, onReport, reportedByMe, followedIds, onFollow, members=[] }) {
+function PostCard({ post, currentUserId, onReact, onDelete, onEdit, onReport, reportedByMe, followedIds, onFollow, members=[] }) {
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments]         = useState([])
   const [commentText, setCommentText]   = useState('')
@@ -787,13 +780,13 @@ function PostCard({ post, currentUserId, onReact, onDelete, onEdit, isAdmin, onR
               ✏️
             </button>
           )}
-          {currentUserId && currentUserId !== post.user_id && !isAdmin && (
+          {currentUserId && currentUserId !== post.user_id && (
             <button onClick={()=>onReport(post)} title={reportedByMe?'Already reported':'Report post'}
               style={{color:reportedByMe?'#f59e0b':'var(--text-light)',background:'none',border:'none',cursor:reportedByMe?'default':'pointer',fontSize:'0.9rem',opacity:reportedByMe?0.8:0.4,padding:4}}>
               🚩
             </button>
           )}
-          {(isMyPost||isAdmin)&&(
+          {isMyPost&&(
             <button onClick={()=>onDelete(post.id)} style={{color:'#ef4444',background:'none',border:'none',cursor:'pointer',fontSize:'1rem',opacity:0.5,padding:4}} title="Delete">🗑</button>
           )}
         </div>
@@ -1370,15 +1363,11 @@ export default function Timeline() {
   }
 
   const handleDelete = async (postId) => {
+    // Only reachable for a member's own post; moderation of others' posts is admin-only (Admin Panel).
     if (!window.confirm('Delete this post?')) return
-    const post = posts.find(p => p.id === postId)
     await supabase.from('timeline_reactions').delete().eq('post_id', postId)
     await supabase.from('timeline_comments').delete().eq('post_id', postId)
     await supabase.from('timeline_posts').delete().eq('id', postId)
-    if (post && post.user_id !== user?.id) {
-      const authorName = post.profiles?.display_name || post.profiles?.full_name || 'member'
-      auditLog('timeline_delete', `Deleted timeline post by ${authorName}`, authorName)
-    }
     setPosts(p => p.filter(x => x.id !== postId))
   }
 
@@ -1438,10 +1427,7 @@ export default function Timeline() {
     setTopics(t => t.filter(x => x.id !== topicId))
   }
 
-  const handlePinTopic = async (topic) => {
-    await supabase.from('timeline_topics').update({ pinned: !topic.pinned }).eq('id', topic.id)
-    await loadTopics()
-  }
+  // Topic pinning is admin-only and handled in the Admin Panel (Admin → Timeline).
 
   // ── Derived: filtered posts ──
   const filteredPosts = feedFilter === 'all' ? posts : posts.filter(p => p.post_type === feedFilter)
@@ -1628,7 +1614,6 @@ export default function Timeline() {
                     onReact={handleReact}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
-                    isAdmin={isAdmin}
                     onReport={handleReport}
                     reportedByMe={myReports.includes(post.id)}
                     followedIds={followedIds}
@@ -1707,10 +1692,9 @@ export default function Timeline() {
 
             {filteredTopics.map(topic => (
               <TopicCard key={topic.id} topic={topic}
-                currentUserId={user?.id} isAdmin={isAdmin}
+                currentUserId={user?.id}
                 onDelete={handleDeleteTopic}
                 onOpen={t => setOpenTopic(t)}
-                onPin={isAdmin ? handlePinTopic : null}
               />
             ))}
           </>
@@ -1734,7 +1718,6 @@ export default function Timeline() {
         <TopicDetailModal
           topic={openTopic}
           currentUserId={user?.id}
-          isAdmin={isAdmin}
           onClose={() => setOpenTopic(null)}
           onTopicUpdated={loadTopics}
           members={members}

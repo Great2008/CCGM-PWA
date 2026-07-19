@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
-import { auditLog } from '../lib/auditLog'
 import SEO from '../components/SEO'
 
 function timeAgo(ts) {
@@ -12,7 +11,7 @@ function timeAgo(ts) {
   return `${Math.floor(s/86400)}d ago`
 }
 
-function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply }) {
+function PrayerCard({ prayer, currentUserId, onPray, onReply }) {
   const [showReplies, setShowReplies] = useState(false)
   const [replies, setReplies]         = useState([])
   const [replyText, setReplyText]     = useState('')
@@ -81,9 +80,6 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
               <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 10px', borderRadius: 20, background: 'var(--brand-pale)', color: 'var(--brand-light)', border: '1px solid #bfdbfe' }}>
                 {prayer.category}
               </span>
-            )}
-            {(isAdmin) && (
-              <button onClick={() => onDelete(prayer.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', opacity: 0.5, padding: 4, fontSize: '0.9rem' }} title="Delete">🗑</button>
             )}
           </div>
         </div>
@@ -173,7 +169,7 @@ function PrayerCard({ prayer, currentUserId, isAdmin, onPray, onDelete, onReply 
 const CATEGORIES = ['All', 'Health', 'Family', 'Finance', 'Guidance', 'Thanksgiving', 'Relationships', 'Other']
 
 export default function PrayerWall() {
-  const { user, canModerate } = useAuth()
+  const { user } = useAuth()
   const [prayers, setPrayers]       = useState([])
   const [loading, setLoading]       = useState(true)
   const [request, setRequest]       = useState('')
@@ -236,19 +232,7 @@ export default function PrayerWall() {
     await loadPrayers()
   }
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this prayer request?')) return
-    const prayer = prayers.find(p => p.id === id)
-    await supabase.from('prayer_prays').delete().eq('prayer_id', id)
-    await supabase.from('prayer_replies').delete().eq('prayer_id', id)
-    await supabase.from('prayer_requests').delete().eq('id', id)
-    // Log if moderator/admin deleted someone else's prayer
-    if (prayer && prayer.user_id !== user?.id) {
-      const authorName = prayer.profiles?.display_name || prayer.profiles?.full_name || 'member'
-      auditLog('prayer_delete', `Deleted prayer request by ${authorName}`, authorName)
-    }
-    await loadPrayers()
-  }
+  // Prayer wall moderation (delete) is handled exclusively in the Admin Panel (Admin → Prayer).
 
   const filtered = filter === 'All' ? prayers : prayers.filter(p => p.category === filter)
 
@@ -390,9 +374,7 @@ export default function PrayerWall() {
               key={prayer.id}
               prayer={prayer}
               currentUserId={user?.id}
-              isAdmin={canModerate}
               onPray={handlePray}
-              onDelete={handleDelete}
               onReply={() => {}}
             />
           ))}
