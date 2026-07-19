@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
-import supabase from '../../lib/supabase'
+import supabase from '../../lib/supabaseAdmin'
 
 const SC = { new:{bg:'#eff6ff',text:'#1d4ed8',label:'New'}, praying:{bg:'#dcfce7',text:'#166534',label:'Praying'}, answered:{bg:'#fef9c3',text:'#854d0e',label:'Answered'}, closed:{bg:'#f5f5f5',text:'#6b7280',label:'Closed'} }
 
