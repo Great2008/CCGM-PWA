@@ -16,8 +16,98 @@ function imgToDataUrl(img) {
   return c.toDataURL('image/png')
 }
 
-const BRAND_GREEN = [10, 38, 18]     // #0a2612
-const BRAND_ORANGE = [217, 119, 6]   // #d97706
+const BRAND_GREEN   = [10, 38, 18]      // #0a2612 — app navbar green (used for CCG World variant)
+const BRAND_ORANGE  = [217, 119, 6]     // #d97706
+const CHURCH_GREEN  = [15, 130, 58]     // banner green from the real letterhead
+const CHURCH_RED    = [198, 30, 30]     // motto/email/footer red
+const REF_LABEL     = [176, 108, 22]    // "Our Ref / Your Ref / Date" orange-brown labels
+const CREAM_BG      = [238, 242, 216]
+const MINT_BG       = [231, 239, 233]
+
+// ── Draws the header chrome for either letterhead type. Returns the y cursor
+//    position where the letter body should start. ──
+async function drawHeader(pdf, type, date) {
+  const pageW = pdf.internal.pageSize.getWidth()
+  const marginX = 42
+
+  if (type === 'ccgworld') {
+    // Digital-team letterhead — deliberately distinct from the official church
+    // letterhead (no shield, navbar-style branding) so it reads as coming
+    // from the tech/ops side, not the pastoral body.
+    pdf.setFillColor(...MINT_BG); pdf.rect(0, 0, pageW, 88, 'F')
+    pdf.setFillColor(...BRAND_GREEN); pdf.rect(marginX, 40, pageW - marginX*2, 34, 'F')
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(20); pdf.setTextColor(255,255,255)
+    pdf.text('CCG', marginX + 14, 63)
+    const ccgW = pdf.getTextWidth('CCG ')
+    pdf.setTextColor(...BRAND_ORANGE)
+    pdf.text('World', marginX + 14 + ccgW, 63)
+    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(220,230,225)
+    pdf.text('DIGITAL MINISTRY TEAM — CHRISTIAN CHURCH OF GOD MISSION', pageW - marginX - 14, 63, { align: 'right' })
+
+    pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9.5); pdf.setTextColor(...CHURCH_GREEN)
+    pdf.text('Official Digital Correspondence', marginX, 100)
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10); pdf.setTextColor(20,20,20)
+    pdf.text('ccgm-pwa.vercel.app', marginX, 114)
+
+    pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9)
+    pdf.setTextColor(...CHURCH_GREEN)
+    const addrLines = ['CCG World', 'Digital Ministry Team', 'Christian Church of God Mission']
+    addrLines.forEach((l, i) => pdf.text(l, pageW - marginX, 100 + i*12, { align: 'right' }))
+  } else {
+    // Official church letterhead — matches the printed original.
+    pdf.setFillColor(...CREAM_BG); pdf.rect(0, 0, pageW, 88, 'F')
+    try {
+      const logo = await loadImg('/logo.png')
+      pdf.addImage(imgToDataUrl(logo), 'PNG', marginX, 18, 88, 88)
+    } catch { /* logo optional — continue without it if it fails to load */ }
+
+    const bannerX = marginX + 96
+    pdf.setFillColor(...CHURCH_GREEN); pdf.rect(bannerX, 38, pageW - marginX - bannerX, 30, 'F')
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(15); pdf.setTextColor(255,255,255)
+    pdf.text('CHRISTIAN CHURCH OF GOD MISSION NIGERIA', bannerX + (pageW - marginX - bannerX)/2, 58, { align: 'center' })
+
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10)
+    pdf.setTextColor(...CHURCH_RED); pdf.text('MOTTO:', bannerX, 82)
+    const mottoW = pdf.getTextWidth('MOTTO: ')
+    pdf.setTextColor(...CHURCH_GREEN); pdf.text('GOD FIRST', bannerX + mottoW, 82)
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10.5); pdf.setTextColor(20,20,20)
+    pdf.text('www.ccgmission.org', bannerX, 96)
+    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(8.5); pdf.setTextColor(...CHURCH_RED)
+    pdf.text('E-mail: christianchurchofgodmissionnig@gmail.com', bannerX, 108)
+
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(...CHURCH_GREEN)
+    pdf.text('The Secretariat', pageW - marginX, 84, { align: 'right' })
+    pdf.setFont('helvetica', 'normal')
+    ;['131 Ahoada Road,', 'P.O. Box 10 Omoku', 'ONELGA, Rivers State, Nigeria'].forEach((l, i) =>
+      pdf.text(l, pageW - marginX, 96 + i*11, { align: 'right' }))
+  }
+
+  // ── Our Ref / Your Ref / Date — same formal fields on both letterheads ──
+  let y = 128
+  pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(...REF_LABEL)
+  pdf.text('Our Ref:', marginX, y)
+  pdf.setDrawColor(...REF_LABEL); pdf.setLineWidth(0.6)
+  pdf.line(marginX + 42, y, pageW - marginX, y)
+  y += 18
+  pdf.text('Your Ref:', marginX, y)
+  pdf.line(marginX + 46, y, marginX + 260, y)
+  pdf.setTextColor(...REF_LABEL)
+  pdf.text('Date:', pageW - marginX - 150, y)
+  pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10); pdf.setTextColor(20,20,20)
+  const dateStr = new Date(date).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })
+  pdf.text(dateStr, pageW - marginX - 118, y)
+  return y + 32
+}
+
+function drawFooter(pdf, type) {
+  const pageW = pdf.internal.pageSize.getWidth()
+  const pageH = pdf.internal.pageSize.getHeight()
+  pdf.setFont('helvetica', 'italic'); pdf.setFontSize(8.5); pdf.setTextColor(...CHURCH_RED)
+  const note = type === 'ccgworld'
+    ? 'All correspondence from CCG World to be addressed to the Digital Ministry Team'
+    : 'All Correspondence to be addressed to the Office of the General Secretariat'
+  pdf.text(note, pageW/2, pageH - 24, { align: 'center' })
+}
 
 // ── Builds and downloads the PDF, returns nothing (side-effect: triggers download) ──
 async function buildLetterPDF({ letterhead, date, recipient, subject, body, signatureImage, signatureName }) {
@@ -26,40 +116,9 @@ async function buildLetterPDF({ letterhead, date, recipient, subject, body, sign
   const pageW = pdf.internal.pageSize.getWidth()
   const pageH = pdf.internal.pageSize.getHeight()
   const marginX = 56
-  let y = 56
+  let y = await drawHeader(pdf, letterhead, date)
 
-  // ── Letterhead ──
-  if (letterhead === 'ccgworld') {
-    pdf.setFillColor(...BRAND_GREEN)
-    pdf.rect(0, 0, pageW, 74, 'F')
-    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(20); pdf.setTextColor(255,255,255)
-    pdf.text('CCG', marginX, 34)
-    const ccgW = pdf.getTextWidth('CCG ')
-    pdf.setTextColor(...BRAND_ORANGE)
-    pdf.text('World', marginX + ccgW, 34)
-    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(220,230,225)
-    pdf.text('CHRISTIAN CHURCH OF GOD MISSION — DIGITAL TEAM', marginX, 52)
-    y = 100
-  } else {
-    try {
-      const logo = await loadImg('/logo.png')
-      pdf.addImage(imgToDataUrl(logo), 'PNG', marginX, 40, 50, 50)
-    } catch { /* logo optional — continue without it if it fails to load */ }
-    pdf.setFont('times', 'bold'); pdf.setFontSize(15); pdf.setTextColor(...BRAND_GREEN)
-    pdf.text('CHRISTIAN CHURCH OF GOD MISSION', marginX + 62, 58)
-    pdf.setFont('times', 'italic'); pdf.setFontSize(9.5); pdf.setTextColor(90,100,95)
-    pdf.text('(Registered 1st Oct. 1954)', marginX + 62, 72)
-    pdf.setDrawColor(...BRAND_GREEN); pdf.setLineWidth(1.4)
-    pdf.line(marginX, 100, pageW - marginX, 100)
-    y = 128
-  }
-
-  // ── Date ──
   pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10.5); pdf.setTextColor(40,40,40)
-  const dateStr = new Date(date).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })
-  pdf.text(dateStr, pageW - marginX, y, { align: 'right' })
-  y += 26
-
   // ── Recipient ──
   if (recipient?.trim()) {
     const lines = pdf.splitTextToSize(recipient.trim(), pageW - marginX*2)
@@ -97,6 +156,12 @@ async function buildLetterPDF({ letterhead, date, recipient, subject, body, sign
     y += 14
     pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10)
     pdf.text(signatureName || 'Authorized Signatory', marginX, y)
+  }
+
+  const totalPages = pdf.internal.getNumberOfPages()
+  for (let p = 1; p <= totalPages; p++) {
+    pdf.setPage(p)
+    drawFooter(pdf, letterhead)
   }
 
   const fname = `CCG-Letter-${(subject||recipient||'letter').replace(/[^a-z0-9]+/gi,'-').slice(0,40)}-${date}.pdf`
