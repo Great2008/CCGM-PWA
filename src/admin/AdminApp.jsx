@@ -11,7 +11,6 @@ import AdminHomepage  from './pages/AdminHomepage'
 import AdminPrayer    from './pages/AdminPrayer'
 import AdminMembers   from './pages/AdminMembers'
 import AdminTimeline  from './pages/AdminTimeline'
-import AdminHymnal    from './pages/AdminHymnal'
 import AdminLive     from './pages/AdminLive'
 import AdminSabbath  from './pages/AdminSabbath'
 import AdminAnalytics from './pages/AdminAnalytics'
@@ -42,7 +41,6 @@ const NAV = [
   ['programme', '📅', 'Programme'],
   ['blog',      '✍️', 'Blog & Devotionals'],
   ['gallery',   '🖼', 'Gallery'],
-  ['hymnal',    '🎵', 'Hymnal'],
   ['homepage',  '🏠', 'Homepage'],
   ['prayer',    '🙏', 'Prayer Requests'],
   ['timeline',  '💬', 'Timeline'],
@@ -62,7 +60,7 @@ const NAV = [
   ['letters',     '✉️', 'Letter Writer'],
   ['maintenance', '🚧', 'Maintenance Mode'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, hymnal:AdminHymnal, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
