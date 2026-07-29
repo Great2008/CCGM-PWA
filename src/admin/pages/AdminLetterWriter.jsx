@@ -16,43 +16,50 @@ function imgToDataUrl(img) {
   return c.toDataURL('image/png')
 }
 
-const BRAND_GREEN   = [10, 38, 18]      // #0a2612 — app navbar green (used for CCG World variant)
-const BRAND_ORANGE  = [217, 119, 6]     // #d97706
-const CHURCH_GREEN  = [15, 130, 58]     // banner green from the real letterhead
-const CHURCH_RED    = [198, 30, 30]     // motto/email/footer red
-const REF_LABEL     = [176, 108, 22]    // "Our Ref / Your Ref / Date" orange-brown labels
-const CREAM_BG      = [238, 242, 216]
-const MINT_BG       = [231, 239, 233]
+const BRAND_ORANGE   = [234, 158, 36]   // lightened gold for CCG World accent
+const CCGWORLD_GREEN = [45, 110, 74]    // lighter, softer green for CCG World banner
+const CHURCH_GREEN   = [15, 130, 58]     // banner green from the real letterhead
+const CHURCH_RED     = [198, 30, 30]     // motto/email/footer red
+const REF_LABEL       = [176, 108, 22]    // "Our Ref / Your Ref / Date" orange-brown labels
+const CREAM_BG        = [238, 242, 216]
+const MINT_BG         = [240, 246, 242]  // lightened background tint for CCG World
 
 // ── Draws the header chrome for either letterhead type. Returns the y cursor
 //    position where the letter body should start. ──
-async function drawHeader(pdf, type, date) {
+async function drawHeader(pdf, type, date, ourRef, yourRef) {
   const pageW = pdf.internal.pageSize.getWidth()
   const marginX = 42
+  const bannerX = marginX + 96
 
   if (type === 'ccgworld') {
-    // Digital-team letterhead — deliberately distinct from the official church
-    // letterhead (no shield, navbar-style branding) so it reads as coming
-    // from the tech/ops side, not the pastoral body.
+    // Digital-team letterhead — same structure as the church letterhead
+    // (logo + banner + right-side block) but in lighter, softer tones so it
+    // still reads as distinct from the official church correspondence.
     pdf.setFillColor(...MINT_BG); pdf.rect(0, 0, pageW, 88, 'F')
-    pdf.setFillColor(...BRAND_GREEN); pdf.rect(marginX, 40, pageW - marginX*2, 34, 'F')
-    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(20); pdf.setTextColor(255,255,255)
-    pdf.text('CCG', marginX + 14, 63)
+    try {
+      const logo = await loadImg('/logo.png')
+      pdf.addImage(imgToDataUrl(logo), 'PNG', marginX, 18, 88, 88)
+    } catch { /* logo optional — continue without it if it fails to load */ }
+
+    pdf.setFillColor(...CCGWORLD_GREEN); pdf.rect(bannerX, 38, pageW - marginX - bannerX, 30, 'F')
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14); pdf.setTextColor(255,255,255)
+    pdf.text('CCG', bannerX + 14, 58)
     const ccgW = pdf.getTextWidth('CCG ')
     pdf.setTextColor(...BRAND_ORANGE)
-    pdf.text('World', marginX + 14 + ccgW, 63)
-    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(220,230,225)
-    pdf.text('DIGITAL MINISTRY TEAM — CHRISTIAN CHURCH OF GOD MISSION', pageW - marginX - 14, 63, { align: 'right' })
+    pdf.text('World', bannerX + 14 + ccgW, 58)
+    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(255,255,255)
+    pdf.text('DIGITAL MINISTRY TEAM', pageW - marginX - 10, 58, { align: 'right' })
 
-    pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9.5); pdf.setTextColor(...CHURCH_GREEN)
-    pdf.text('Official Digital Correspondence', marginX, 100)
+    pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9.5); pdf.setTextColor(...CCGWORLD_GREEN)
+    pdf.text('Official Digital Correspondence', bannerX, 82)
     pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10); pdf.setTextColor(20,20,20)
-    pdf.text('ccgm-pwa.vercel.app', marginX, 114)
+    pdf.text('ccgm-pwa.vercel.app', bannerX, 96)
 
-    pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9)
-    pdf.setTextColor(...CHURCH_GREEN)
-    const addrLines = ['CCG World', 'Digital Ministry Team', 'Christian Church of God Mission']
-    addrLines.forEach((l, i) => pdf.text(l, pageW - marginX, 100 + i*12, { align: 'right' }))
+    pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(...CCGWORLD_GREEN)
+    pdf.text('CCG World', pageW - marginX, 84, { align: 'right' })
+    pdf.setFont('helvetica', 'normal')
+    ;['Digital Ministry Team', 'Christian Church of God Mission'].forEach((l, i) =>
+      pdf.text(l, pageW - marginX, 96 + i*11, { align: 'right' }))
   } else {
     // Official church letterhead — matches the printed original.
     pdf.setFillColor(...CREAM_BG); pdf.rect(0, 0, pageW, 88, 'F')
@@ -61,7 +68,6 @@ async function drawHeader(pdf, type, date) {
       pdf.addImage(imgToDataUrl(logo), 'PNG', marginX, 18, 88, 88)
     } catch { /* logo optional — continue without it if it fails to load */ }
 
-    const bannerX = marginX + 96
     pdf.setFillColor(...CHURCH_GREEN); pdf.rect(bannerX, 38, pageW - marginX - bannerX, 30, 'F')
     pdf.setFont('helvetica', 'bold'); pdf.setFontSize(15); pdf.setTextColor(255,255,255)
     pdf.text('CHRISTIAN CHURCH OF GOD MISSION NIGERIA', bannerX + (pageW - marginX - bannerX)/2, 58, { align: 'center' })
@@ -86,12 +92,24 @@ async function drawHeader(pdf, type, date) {
   let y = 128
   pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(...REF_LABEL)
   pdf.text('Our Ref:', marginX, y)
-  pdf.setDrawColor(...REF_LABEL); pdf.setLineWidth(0.6)
-  pdf.line(marginX + 42, y, pageW - marginX, y)
+  pdf.setFont('helvetica', 'normal'); pdf.setTextColor(20,20,20)
+  if (ourRef?.trim()) {
+    pdf.text(ourRef.trim(), marginX + 46, y)
+  } else {
+    pdf.setDrawColor(...REF_LABEL); pdf.setLineWidth(0.6)
+    pdf.line(marginX + 42, y, pageW - marginX, y)
+  }
   y += 18
+  pdf.setFont('helvetica', 'bold'); pdf.setTextColor(...REF_LABEL)
   pdf.text('Your Ref:', marginX, y)
-  pdf.line(marginX + 46, y, marginX + 260, y)
-  pdf.setTextColor(...REF_LABEL)
+  pdf.setFont('helvetica', 'normal'); pdf.setTextColor(20,20,20)
+  if (yourRef?.trim()) {
+    pdf.text(yourRef.trim(), marginX + 50, y)
+  } else {
+    pdf.setDrawColor(...REF_LABEL); pdf.setLineWidth(0.6)
+    pdf.line(marginX + 46, y, marginX + 260, y)
+  }
+  pdf.setFont('helvetica', 'bold'); pdf.setTextColor(...REF_LABEL)
   pdf.text('Date:', pageW - marginX - 150, y)
   pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10); pdf.setTextColor(20,20,20)
   const dateStr = new Date(date).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })
@@ -110,13 +128,13 @@ function drawFooter(pdf, type) {
 }
 
 // ── Builds and downloads the PDF, returns nothing (side-effect: triggers download) ──
-async function buildLetterPDF({ letterhead, date, recipient, subject, body, signatureImage, signatureName }) {
+async function buildLetterPDF({ letterhead, date, recipient, subject, body, signatureImage, signatureName, ourRef, yourRef }) {
   const { jsPDF } = await import('jspdf')
   const pdf = new jsPDF({ unit: 'pt', format: 'a4' })
   const pageW = pdf.internal.pageSize.getWidth()
   const pageH = pdf.internal.pageSize.getHeight()
   const marginX = 56
-  let y = await drawHeader(pdf, letterhead, date)
+  let y = await drawHeader(pdf, letterhead, date, ourRef, yourRef)
 
   pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10.5); pdf.setTextColor(40,40,40)
   // ── Recipient ──
@@ -260,11 +278,30 @@ export default function AdminLetterWriter() {
   // ── Letter form ──
   const [form, setForm] = useState({
     letterhead: 'church', date: new Date().toISOString().slice(0,10),
-    recipient: '', subject: '', body: '', signatureId: '',
+    recipient: '', subject: '', body: '', signatureId: '', ourRef: '', yourRef: '',
   })
   const [generating, setGenerating] = useState(false)
+  const [genRefLoading, setGenRefLoading] = useState(false)
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  // ── Our Ref auto-generation: CCG/{DEPT}/{YEAR}/{seq}, separate counter per
+  //    letterhead type per year, persisted in site_settings so numbers are
+  //    never reused even if a letter is later deleted from history. ──
+  const generateOurRef = async () => {
+    setGenRefLoading(true)
+    try {
+      const deptCode = form.letterhead === 'ccgworld' ? 'DGT' : 'SEC'
+      const year = new Date().getFullYear()
+      const counterKey = `${deptCode}_${year}`
+      const counters = (await getContent('letter_ref_counters')) || {}
+      const next = (counters[counterKey] || 0) + 1
+      const updated = { ...counters, [counterKey]: next }
+      await setContent('letter_ref_counters', updated)
+      set('ourRef', `CCG/${deptCode}/${year}/${String(next).padStart(3,'0')}`)
+    } catch (e) { showToast(e.message || 'Failed to generate reference', 'error') }
+    setGenRefLoading(false)
+  }
 
   const handleGenerate = async () => {
     if (!form.body.trim()) { showToast('Write the letter body first.', 'error'); return }
@@ -275,12 +312,14 @@ export default function AdminLetterWriter() {
         letterhead: form.letterhead, date: form.date, recipient: form.recipient,
         subject: form.subject, body: form.body,
         signatureImage: sig?.image || null, signatureName: sig?.name || null,
+        ourRef: form.ourRef, yourRef: form.yourRef,
       })
       const { data: { user } } = await supabase.auth.getUser()
       await supabase.from('admin_letters').insert({
         letterhead: form.letterhead, recipient: form.recipient, subject: form.subject,
         body: form.body, letter_date: form.date,
         signature_name: sig?.name || null, signature_image: sig?.image || null,
+        our_ref: form.ourRef || null, your_ref: form.yourRef || null,
         created_by: user?.id || null,
       })
       logAction('letter_generated', `Generated letter: ${form.subject || '(no subject)'}`, form.recipient || null)
@@ -305,6 +344,7 @@ export default function AdminLetterWriter() {
       letterhead: row.letterhead, date: row.letter_date, recipient: row.recipient,
       subject: row.subject, body: row.body,
       signatureImage: row.signature_image, signatureName: row.signature_name,
+      ourRef: row.our_ref, yourRef: row.your_ref,
     })
   }
   const deleteHistory = async (id) => {
@@ -400,6 +440,23 @@ export default function AdminLetterWriter() {
           <div>
             <label style={label}>Date</label>
             <input type="date" style={input} value={form.date} onChange={e=>set('date', e.target.value)} />
+          </div>
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }}>
+          <div>
+            <label style={label}>Our Ref</label>
+            <div style={{ display:'flex', gap:8 }}>
+              <input style={input} value={form.ourRef} onChange={e=>set('ourRef', e.target.value)} placeholder="e.g. CCG/SEC/2026/001" />
+              <button onClick={generateOurRef} disabled={genRefLoading} type="button"
+                style={{ padding:'0 14px', borderRadius:8, border:'1px solid #d1fae5', background:'transparent', color:'var(--brand-deep)', fontWeight:700, fontSize:'0.78rem', cursor:'pointer', whiteSpace:'nowrap' }}>
+                {genRefLoading ? '…' : 'Generate'}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label style={label}>Your Ref (optional)</label>
+            <input style={input} value={form.yourRef} onChange={e=>set('yourRef', e.target.value)} placeholder="Reference being replied to" />
           </div>
         </div>
 
