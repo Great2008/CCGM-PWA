@@ -1,34 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import supabase from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import SACRED_SONGS from '../data/sacredSongsData'
+import CCG_HYMNS from '../data/ccghymnaldata'
 
-const CACHE_KEY     = 'ccgworld_hymns'
-const CACHE_HASH    = 'ccgworld_hymns_hash'
 const FONT_SIZE_KEY = 'ccgworld_hymnal_fontsize'
 
-// Simple hash: count + joined ids — cheap but catches any add/remove/update
-function dataHash(data) {
-  if (!data?.length) return ''
-  return data.length + ':' + data.map(h => h.id + (h.updated_at || '')).join(',')
-}
-
-function loadCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    const data = Array.isArray(parsed) ? parsed : parsed.data
-    if (!data || data.length === 0) return null
-    return data
-  } catch { return null }
-}
-function saveCache(data) {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ data }))
-    localStorage.setItem(CACHE_HASH, dataHash(data))
-  } catch {}
-}
 function firstHymn(hymns) {
   if (!hymns?.length) return null
   return [...hymns].sort((a, b) => (a.sort_order ?? 9999) - (b.sort_order ?? 9999))[0]
@@ -224,12 +201,10 @@ export default function Hymnal() {
   const [activeTab, setActiveTab] = useState('hymnal')
   const [hymns,    setHymns]    = useState([])
   const [loading,  setLoading]  = useState(true)
-  const [offline,  setOffline]  = useState(false)
   const [selected, setSelected] = useState(null)
   const [search,   setSearch]   = useState('')
   const [category, setCategory] = useState('All')
   const [showList, setShowList] = useState(false)
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [fontSize, setFontSize] = useState(() => {
     try { return parseInt(localStorage.getItem(FONT_SIZE_KEY)) || 17 } catch { return 17 }
   })
@@ -245,40 +220,10 @@ export default function Hymnal() {
     })
   }
 
-  const fetchFresh = useCallback(async cached => {
-    try {
-      const { data } = await supabase.from('hymns').select('*').eq('published', true).order('sort_order', { ascending: true })
-      if (data && data.length > 0) {
-        const freshHash = dataHash(data)
-        const cachedHash = localStorage.getItem(CACHE_HASH) || ''
-        if (freshHash !== cachedHash) {
-          // New or updated hymns — replace cache entirely
-          saveCache(data)
-        }
-        setHymns(data)
-        setSelected(prev => prev ? (data.find(h => h.id === prev.id) || firstHymn(data)) : firstHymn(data))
-        setOffline(false)
-      } else {
-        if (!cached || cached.length === 0) setLoading(false)
-        setOffline(true)
-      }
-    } catch {
-      if (!cached || cached.length === 0) { setOffline(true); setLoading(false) }
-      else setOffline(true)
-    }
-    if (!cached || cached.length === 0) setLoading(false)
-  }, [])
-
   useEffect(() => {
-    const cached = loadCache(true)
-    if (cached && cached.length > 0) { setHymns(cached); setSelected(firstHymn(cached)); setLoading(false) }
-    fetchFresh(cached)
-  }, [fetchFresh])
-
-  useEffect(() => {
-    const on = () => setIsOnline(true), off = () => setIsOnline(false)
-    window.addEventListener('online', on); window.addEventListener('offline', off)
-    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
+    setHymns(CCG_HYMNS)
+    setSelected(firstHymn(CCG_HYMNS))
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -356,13 +301,8 @@ export default function Hymnal() {
         </div>
 
         {activeTab === 'hymnal' && (
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>
-              {isOnline ? '🟢 Online — syncing latest hymns' : '🔴 Offline — showing cached hymns'}
-            </div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>
-              📴 Available Offline
-            </div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>
+            📴 {hymns.length} hymns — Available Offline
           </div>
         )}
         {activeTab === 'sacred' && (
@@ -378,22 +318,16 @@ export default function Hymnal() {
       {/* Hymnal tab */}
       {activeTab === 'hymnal' && (
         <>
-          {offline && hymns.length > 0 && (
-            <div style={{ background: '#fff9f0', borderBottom: '2px solid #fed7aa', padding: '10px 20px', textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-dark)', fontWeight: 600 }}>
-              Offline — showing {hymns.length} cached hymn{hymns.length !== 1 ? 's' : ''}
-            </div>
-          )}
-
           {loading ? (
             <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
               <div style={{ fontSize: '2rem', animation: 'pulse 1.5s infinite' }}>🎵</div>
               <div style={{ color: 'var(--text-light)' }}>Loading hymns...</div>
             </div>
-          ) : offline && hymns.length === 0 ? (
+          ) : hymns.length === 0 ? (
             <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, padding: '0 24px', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem' }}>📴</div>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.3rem', color: 'var(--brand-deep)' }}>You are Offline</div>
-              <div style={{ color: 'var(--text-mid)', maxWidth: 320, lineHeight: 1.7 }}>No offline hymns found. Visit the Hymnal while online at least once to enable offline access.</div>
+              <div style={{ fontSize: '3rem' }}>🎵</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.3rem', color: 'var(--brand-deep)' }}>No hymns yet</div>
+              <div style={{ color: 'var(--text-mid)', maxWidth: 320, lineHeight: 1.7 }}>The hymnal data file hasn't been filled in yet.</div>
             </div>
           ) : (
             <>
