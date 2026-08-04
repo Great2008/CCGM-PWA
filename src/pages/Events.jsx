@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useEventsContent } from '../hooks/useContent'
 import { useAuth } from '../contexts/AuthContext'
@@ -12,16 +12,33 @@ export default function Events() {
   const [rsvping, setRsvping] = useState({})
   const { user, isApproved } = useAuth()
 
+  // Load the user's existing registrations so the button reflects real DB state
+  // on page load / refresh, instead of always starting as "not RSVP'd".
+  useEffect(() => {
+    if (!user || !events.length) return
+    let cancelled = false
+    supabase.from('event_registrations').select('event_id').eq('user_id', user.id)
+      .in('event_id', events.map(e => e.id))
+      .then(({ data, error }) => {
+        if (cancelled || error || !data) return
+        const map = {}
+        data.forEach(r => { map[r.event_id] = true })
+        setRsvpd(map)
+      })
+    return () => { cancelled = true }
+  }, [user, events])
+
   const handleRsvp = async (event) => {
     if (!user || !isApproved) return
     setRsvping(r=>({...r,[event.id]:true}))
     if (rsvpd[event.id]) {
       // Un-RSVP
-      await supabase.from('event_registrations').delete().eq('event_id',event.id).eq('user_id',user.id)
-      setRsvpd(r=>({...r,[event.id]:false}))
+      const { error } = await supabase.from('event_registrations').delete().eq('event_id',event.id).eq('user_id',user.id)
+      if (!error) setRsvpd(r=>({...r,[event.id]:false}))
     } else {
       const { error } = await supabase.from('event_registrations').insert({ event_id:event.id, user_id:user.id })
-      if (!error) setRsvpd(r=>({...r,[event.id]:true}))
+      // 23505 = unique violation — a row already exists (state was just out of sync), treat as success
+      if (!error || error.code === '23505') setRsvpd(r=>({...r,[event.id]:true}))
     }
     setRsvping(r=>({...r,[event.id]:false}))
   }
