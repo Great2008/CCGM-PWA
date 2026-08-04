@@ -10,6 +10,7 @@ export default function Events() {
   const [filter, setFilter] = useState('All')
   const [rsvpd, setRsvpd] = useState({})
   const [rsvping, setRsvping] = useState({})
+  const [rsvpError, setRsvpError] = useState({})
   const { user, isApproved } = useAuth()
 
   // Load the user's existing registrations so the button reflects real DB state
@@ -31,14 +32,17 @@ export default function Events() {
   const handleRsvp = async (event) => {
     if (!user || !isApproved) return
     setRsvping(r=>({...r,[event.id]:true}))
+    setRsvpError(r=>({...r,[event.id]:null}))
     if (rsvpd[event.id]) {
       // Un-RSVP
       const { error } = await supabase.from('event_registrations').delete().eq('event_id',event.id).eq('user_id',user.id)
       if (!error) setRsvpd(r=>({...r,[event.id]:false}))
+      else { console.error('Un-RSVP failed:', error); setRsvpError(r=>({...r,[event.id]:error.message})) }
     } else {
       const { error } = await supabase.from('event_registrations').insert({ event_id:event.id, user_id:user.id })
       // 23505 = unique violation — a row already exists (state was just out of sync), treat as success
       if (!error || error.code === '23505') setRsvpd(r=>({...r,[event.id]:true}))
+      else { console.error('RSVP failed:', error.message, error.code, error.details, error.hint); setRsvpError(r=>({...r,[event.id]:error.message})) }
     }
     setRsvping(r=>({...r,[event.id]:false}))
   }
@@ -179,6 +183,9 @@ export default function Events() {
                             </a>
                           )}
                         </div>
+                        {rsvpError[event.id] && (
+                          <div style={{ marginTop: 8, fontSize: '0.76rem', color: '#dc2626' }}>⚠️ {rsvpError[event.id]}</div>
+                        )}
                       </div>
                     </div>
                   ))}
