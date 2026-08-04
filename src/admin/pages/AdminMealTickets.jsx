@@ -87,10 +87,11 @@ export default function AdminMealTickets() {
       ;(ci || []).forEach(c => { map[c.registration_id] = { ...map[c.registration_id], [c.slot]: c.checked_in_at } })
       setCheckins(map)
     } catch (e) {
-      // offline fallback: use cached roster
+      console.error('Meal roster load failed:', e)
       const cached = localStorage.getItem(cacheKey)
-      if (cached) { setRoster(JSON.parse(cached)); showToastRef.current('Offline — using cached roster', 'error') }
-      else showToastRef.current('Could not load roster — check the meal_checkins migration has been run', 'error')
+      const reason = navigator.onLine ? (e?.message || e?.error_description || 'Unknown error') : 'No internet connection'
+      if (cached) { setRoster(JSON.parse(cached)); showToastRef.current(`Using cached roster — ${reason}`, 'error') }
+      else showToastRef.current(`Could not load roster: ${reason}`, 'error')
     }
     setLoadingRoster(false)
   }, []) // intentionally no deps: showToast is read via ref so this never changes identity
