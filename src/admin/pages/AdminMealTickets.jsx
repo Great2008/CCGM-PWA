@@ -29,6 +29,7 @@ export default function AdminMealTickets() {
   const { showToast, adminUser } = useAdmin()
   const [events, setEvents]       = useState([])
   const [eventId, setEventId]     = useState('')
+  const selectedEvent = events.find(e => e.id === eventId)
   const [roster, setRoster]       = useState([])       // cached registrations for offline lookup
   const [loading, setLoading]     = useState(true)
   const [loadingRoster, setLoadingRoster] = useState(false)
@@ -45,6 +46,7 @@ export default function AdminMealTickets() {
   const [savingWalkin, setSavingWalkin] = useState(false)
   const [ticketReg, setTicketReg] = useState(null) // just-registered guest, shown with QR to screenshot
   const [possibleDupe, setPossibleDupe] = useState(null) // existing registration that looks like a name match
+  const [walkinPaid, setWalkinPaid] = useState(false)
   const videoRef  = useRef(null)
   const streamRef = useRef(null)
   const rafRef    = useRef(null)
@@ -54,7 +56,7 @@ export default function AdminMealTickets() {
 
   // Load the events list
   useEffect(() => {
-    supabaseAdmin.from('events').select('id,title,date').order('date', { ascending: false })
+    supabaseAdmin.from('events').select('id,title,date,requires_payment').order('date', { ascending: false })
       .then(({ data }) => { setEvents(data || []); setLoading(false) })
   }, [])
 
@@ -72,7 +74,7 @@ export default function AdminMealTickets() {
     try {
       const { data, error } = await supabaseAdmin
         .from('event_registrations')
-        .select('id, user_id, is_guest, guest_name, guest_phone, profiles!user_id(full_name,display_name,email,avatar_url)')
+        .select('id, user_id, is_guest, guest_name, guest_phone, payment_confirmed, profiles!user_id(full_name,display_name,email,avatar_url)')
         .eq('event_id', id)
       if (error) throw error
       setRoster(data || [])
@@ -124,6 +126,10 @@ export default function AdminMealTickets() {
   }, [online, queue])
 
   const markMeal = async (reg, slot) => {
+    if (selectedEvent?.requires_payment && !reg.payment_confirmed) {
+      showToast('Payment not confirmed yet — confirm payment before serving this ticket', 'error')
+      return
+    }
     const already = checkins[reg.id]?.[slot]
     if (already) {
       if (!window.confirm(`Already marked ${slot} at ${new Date(already).toLocaleTimeString()}. Mark again?`)) return
@@ -178,8 +184,10 @@ export default function AdminMealTickets() {
 
   const doInsertWalkin = async () => {
     setSavingWalkin(true)
-    const payload = { event_id: eventId, is_guest: true, guest_name: walkinName.trim(), guest_phone: walkinPhone.trim() || null, registered_by: adminUser?.id }
-    const { data, error } = await supabaseAdmin.from('event_registrations').insert(payload).select('id, user_id, is_guest, guest_name, guest_phone').single()
+    const payload = { event_id: eventId, is_guest: true, guest_name: walkinName.trim(), guest_phone: walkinPhone.trim() || null, registered_by: adminUser?.id,
+      payment_confirmed: !selectedEvent?.requires_payment || walkinPaid,
+      ...(walkinPaid ? { payment_confirmed_by: adminUser?.id, payment_confirmed_at: new Date().toISOString() } : {}) }
+    const { data, error } = await supabaseAdmin.from('event_registrations').insert(payload).select('id, user_id, is_guest, guest_name, guest_phone, payment_confirmed').single()
     setSavingWalkin(false)
     if (error) { showToast('Could not register — try again', 'error'); return }
     setRoster(r => {
@@ -187,10 +195,24 @@ export default function AdminMealTickets() {
       localStorage.setItem(`ccgm_meal_roster_${eventId}`, JSON.stringify(next))
       return next
     })
-    setShowWalkin(false); setWalkinName(''); setWalkinPhone(''); setPossibleDupe(null)
+    setShowWalkin(false); setWalkinName(''); setWalkinPhone(''); setWalkinPaid(false); setPossibleDupe(null)
     setSelected(data)
     setTicketReg(data)
     showToast(`✅ ${data.guest_name} registered`)
+  }
+
+  const confirmPayment = async (reg) => {
+    const patch = { payment_confirmed: true, payment_confirmed_by: adminUser?.id, payment_confirmed_at: new Date().toISOString() }
+    const { error } = await supabaseAdmin.from('event_registrations').update(patch).eq('id', reg.id)
+    if (error) { showToast('Could not confirm payment: ' + error.message, 'error'); return }
+    const updated = { ...reg, ...patch }
+    setRoster(r => {
+      const next = r.map(x => x.id === reg.id ? updated : x)
+      localStorage.setItem(`ccgm_meal_roster_${eventId}`, JSON.stringify(next))
+      return next
+    })
+    setSelected(updated)
+    showToast(`✅ Payment confirmed for ${displayName(reg)}`)
   }
 
   // ── Camera scanning ─────────────────────────────────────────────
@@ -315,6 +337,13 @@ export default function AdminMealTickets() {
               <input value={walkinPhone} onChange={e => setWalkinPhone(e.target.value)} placeholder="Phone (optional)"
                 style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: '0.88rem', marginBottom: 12, boxSizing: 'border-box' }} />
 
+              {selectedEvent?.requires_payment && (
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, fontSize: '0.85rem', color: 'var(--brand-deep)', cursor: 'pointer' }}>
+                  <input type="checkbox" checked={walkinPaid} onChange={e => setWalkinPaid(e.target.checked)} />
+                  💰 Payment received now (otherwise ticket stays locked until confirmed)
+                </label>
+              )}
+
               {possibleDupe && (
                 <div style={{ background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: 10, padding: 12, marginBottom: 12 }}>
                   <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#92400e', marginBottom: 8 }}>
@@ -335,7 +364,7 @@ export default function AdminMealTickets() {
                 {!possibleDupe && (
                   <button onClick={registerWalkin} disabled={savingWalkin} className="btn btn-primary" style={{ fontSize: '0.85rem' }}>{savingWalkin ? 'Saving...' : 'Register & Generate Ticket'}</button>
                 )}
-                <button onClick={() => { setShowWalkin(false); setWalkinName(''); setWalkinPhone(''); setPossibleDupe(null) }} className="btn btn-outline-blue" style={{ fontSize: '0.85rem' }}>Cancel</button>
+                <button onClick={() => { setShowWalkin(false); setWalkinName(''); setWalkinPhone(''); setWalkinPaid(false); setPossibleDupe(null) }} className="btn btn-outline-blue" style={{ fontSize: '0.85rem' }}>Cancel</button>
               </div>
             </div>
           )}
@@ -392,15 +421,22 @@ export default function AdminMealTickets() {
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>{selected.is_guest ? (selected.guest_phone || '') : p.email}</div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  {SLOTS.map(s => (
-                    <button key={s.id} onClick={() => markMeal(selected, s.id)}
-                      style={{ flex: 1, minWidth: 140, padding: '14px 10px', borderRadius: 12, border: '2px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.9rem',
-                        borderColor: c[s.id] ? '#bbf7d0' : '#e2e8f0', background: c[s.id] ? '#f0fdf4' : 'white', color: c[s.id] ? '#16a34a' : 'var(--brand-deep)' }}>
-                      {s.label}{c[s.id] ? ` ✅ ${new Date(c[s.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
-                    </button>
-                  ))}
-                </div>
+                {selectedEvent?.requires_payment && !selected.payment_confirmed ? (
+                  <div style={{ background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: 12, padding: 16, textAlign: 'center' }}>
+                    <div style={{ fontWeight: 700, color: '#92400e', marginBottom: 10, fontSize: '0.88rem' }}>🔒 Payment not yet confirmed — ticket is locked</div>
+                    <button onClick={() => confirmPayment(selected)} className="btn btn-primary" style={{ fontSize: '0.85rem' }}>✅ Confirm Payment Received</button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    {SLOTS.map(s => (
+                      <button key={s.id} onClick={() => markMeal(selected, s.id)}
+                        style={{ flex: 1, minWidth: 140, padding: '14px 10px', borderRadius: 12, border: '2px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.9rem',
+                          borderColor: c[s.id] ? '#bbf7d0' : '#e2e8f0', background: c[s.id] ? '#f0fdf4' : 'white', color: c[s.id] ? '#16a34a' : 'var(--brand-deep)' }}>
+                        {s.label}{c[s.id] ? ` ✅ ${new Date(c[s.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )
           })()}

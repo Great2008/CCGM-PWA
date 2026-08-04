@@ -4,7 +4,7 @@ import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { getAll, insert, update, remove } from '../supabase'
 
-const EMPTY = { title:'', date:'', end_date:'', time:'', location:'', category:'', description:'', image_url:'', registration_url:'' }
+const EMPTY = { title:'', date:'', end_date:'', time:'', location:'', category:'', description:'', image_url:'', registration_url:'', requires_payment:false }
 const CATS = ['Worship','Fellowship','Youth','Outreach','Conference','Prayer','Special']
 
 export default function AdminEvents() {
@@ -51,6 +51,12 @@ export default function AdminEvents() {
             <div className="form-group" style={{ gridColumn:'1/-1' }}><label>Image URL</label><input {...F('image_url')} placeholder="https://..." /></div>
             <div className="form-group" style={{ gridColumn:'1/-1' }}><label>Registration URL</label><input {...F('registration_url')} /></div>
             <div className="form-group" style={{ gridColumn:'1/-1' }}><label>Description</label><textarea {...F('description')} rows={4} style={{ resize:'vertical' }} /></div>
+            <div className="form-group" style={{ gridColumn:'1/-1' }}>
+              <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}>
+                <input type="checkbox" checked={!!form.requires_payment} onChange={e=>setForm(f=>({...f,requires_payment:e.target.checked}))} />
+                💰 Meals are paid — require moderator payment confirmation before a ticket can be used
+              </label>
+            </div>
           </div>
           <div style={{ display:'flex', gap:12, marginTop:8 }}>
             <button type="submit" className="btn btn-blue" disabled={saving}>{saving?'⏳ Saving...':'💾 Save Event'}</button>
@@ -68,6 +74,7 @@ export default function AdminEvents() {
         <div style={{ fontWeight:700, color:'var(--brand-deep)', marginBottom:4 }}>{item.title}</div>
         <div style={{ fontSize:'0.82rem', color:'var(--text-mid)' }}>📅 {item.date}{item.time&&` · ⏰ ${item.time}`}{item.location&&` · 📍 ${item.location}`}</div>
         {item.category&&<span style={{ display:'inline-block', marginTop:6, fontSize:'0.7rem', background:'var(--brand-pale)', color:'var(--brand-light)', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>{item.category}</span>}
+        {item.requires_payment&&<span style={{ display:'inline-block', marginTop:6, marginLeft:6, fontSize:'0.7rem', background:'#fef3c7', color:'#92400e', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>💰 Paid</span>}
       </div>
       <div style={{ display:'flex', gap:8 }}>
         <button className="btn btn-outline-blue" style={{ padding:'7px 16px', fontSize:'0.82rem' }} onClick={()=>setForm(item)}>✏️ Edit</button>
