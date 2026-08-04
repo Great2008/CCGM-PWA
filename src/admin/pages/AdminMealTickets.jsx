@@ -72,7 +72,7 @@ export default function AdminMealTickets() {
     try {
       const { data, error } = await supabaseAdmin
         .from('event_registrations')
-        .select('id, user_id, is_guest, guest_name, guest_phone, profiles(full_name,display_name,email,avatar_url)')
+        .select('id, user_id, is_guest, guest_name, guest_phone, profiles!user_id(full_name,display_name,email,avatar_url)')
         .eq('event_id', id)
       if (error) throw error
       setRoster(data || [])
