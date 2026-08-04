@@ -41,6 +41,7 @@ const Guidelines     = lazy(() => import('./pages/Guidelines'))
 const NotFound       = lazy(() => import('./pages/NotFound'))
 const Verify         = lazy(() => import('./pages/Verify'))
 const Programme      = lazy(() => import('./pages/Programme'))
+const MealTicket      = lazy(() => import('./pages/MealTicket'))
 
 function AppInner() {
   const { user } = useAuth()
@@ -95,6 +96,7 @@ function AppInner() {
           <Route path="/certificate"      element={<Certificate />} />
           <Route path="/verify"           element={<Verify />} />
           <Route path="/programme"        element={<Programme />} />
+          <Route path="/meal-ticket"      element={<MealTicket />} />
           <Route path="/guidelines"       element={<Guidelines />} />
           <Route path="*"                 element={<NotFound />} />
         </Routes>

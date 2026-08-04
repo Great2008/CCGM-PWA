@@ -145,7 +145,13 @@ export default function Events() {
                               }}>
                               {rsvping[event.id] ? '⏳' : rsvpd[event.id] ? '✅ Attending' : '📋 RSVP'}
                             </button>
-                          ) : !user ? (
+                          ) : null}
+                          {user && isApproved && rsvpd[event.id] && (
+                            <Link to={`/meal-ticket?event=${event.id}`} style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
+                              🎫 Meal Ticket
+                            </Link>
+                          )}
+                          {!user ? (
                             <Link to="/timeline" style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
                               🔐 Sign in to RSVP
                             </Link>
