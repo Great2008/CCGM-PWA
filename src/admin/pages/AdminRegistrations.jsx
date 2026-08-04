@@ -23,7 +23,7 @@ export default function AdminRegistrations() {
     setSelected(event); setLoadingRegs(true)
     const { data } = await supabaseAdmin
       .from('event_registrations')
-      .select('*, profiles(display_name,full_name,email,avatar_url)')
+      .select('*, profiles!user_id(display_name,full_name,email,avatar_url)')
       .eq('event_id', event.id)
       .order('registered_at', { ascending: false })
     setRegs(data||[]); setLoadingRegs(false)
