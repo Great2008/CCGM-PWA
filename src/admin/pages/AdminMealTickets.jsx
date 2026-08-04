@@ -49,6 +49,8 @@ export default function AdminMealTickets() {
   const streamRef = useRef(null)
   const rafRef    = useRef(null)
   const jsQRRef   = useRef(null)
+  const showToastRef = useRef(showToast)
+  useEffect(() => { showToastRef.current = showToast })
 
   // Load the events list
   useEffect(() => {
@@ -87,11 +89,11 @@ export default function AdminMealTickets() {
     } catch (e) {
       // offline fallback: use cached roster
       const cached = localStorage.getItem(cacheKey)
-      if (cached) { setRoster(JSON.parse(cached)); showToast('Offline — using cached roster', 'error') }
-      else showToast('Could not load roster (offline, no cache yet)', 'error')
+      if (cached) { setRoster(JSON.parse(cached)); showToastRef.current('Offline — using cached roster', 'error') }
+      else showToastRef.current('Could not load roster — check the meal_checkins migration has been run', 'error')
     }
     setLoadingRoster(false)
-  }, [showToast])
+  }, []) // intentionally no deps: showToast is read via ref so this never changes identity
 
   useEffect(() => { if (eventId) loadRoster(eventId) }, [eventId, loadRoster])
 
@@ -112,7 +114,10 @@ export default function AdminMealTickets() {
           if (idx > -1) remaining.splice(idx, 1)
         }
       }
-      if (!cancelled) { setQueue(remaining); saveQueue(remaining) }
+      if (!cancelled) {
+        // only update state if something actually changed, to avoid re-triggering this effect pointlessly
+        if (remaining.length !== queue.length) { setQueue(remaining); saveQueue(remaining) }
+      }
     })()
     return () => { cancelled = true }
   }, [online, queue])
