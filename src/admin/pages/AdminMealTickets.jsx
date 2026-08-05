@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useAdmin } from '../AdminApp'
 import supabaseAdmin from '../../lib/supabase'
 import PageHeader from '../components/PageHeader'
@@ -9,6 +9,24 @@ const SLOTS = [
 ]
 const QUEUE_KEY = 'ccgm_meal_checkin_queue'
 const todayStr  = () => new Date().toISOString().slice(0, 10)
+
+// Computes the labeled conference days (Day 1, Day 2, ...) from an event's
+// date → end_date range. Falls back to a single day if there's no end_date.
+function getConferenceDays(ev) {
+  if (!ev?.date) return []
+  const start = new Date(ev.date + 'T00:00:00')
+  const end = ev.end_date ? new Date(ev.end_date + 'T00:00:00') : start
+  if (isNaN(start) || isNaN(end) || end < start) return [{ day: 1, date: ev.date }]
+  const days = []
+  const d = new Date(start)
+  let i = 1
+  while (d <= end) {
+    days.push({ day: i, date: d.toISOString().slice(0, 10) })
+    d.setDate(d.getDate() + 1)
+    i++
+  }
+  return days
+}
 
 function loadQueue() {
   try { return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]') } catch { return [] }
@@ -26,10 +44,12 @@ function qrDataUrl(text, size = 220) {
 }
 
 export default function AdminMealTickets() {
-  const { showToast, adminUser } = useAdmin()
+  const { showToast, adminUser, logAction } = useAdmin()
   const [events, setEvents]       = useState([])
   const [eventId, setEventId]     = useState('')
   const selectedEvent = events.find(e => e.id === eventId)
+  const confDays = useMemo(() => getConferenceDays(selectedEvent), [selectedEvent])
+  const today = todayStr()
   const [roster, setRoster]       = useState([])       // cached registrations for offline lookup
   const [loading, setLoading]     = useState(true)
   const [loadingRoster, setLoadingRoster] = useState(false)
@@ -56,7 +76,7 @@ export default function AdminMealTickets() {
 
   // Load the events list
   useEffect(() => {
-    supabaseAdmin.from('events').select('id,title,date,requires_payment').order('date', { ascending: false })
+    supabaseAdmin.from('events').select('id,title,date,end_date,requires_payment').order('date', { ascending: false })
       .then(({ data }) => { setEvents(data || []); setLoading(false) })
   }, [])
 
@@ -82,11 +102,13 @@ export default function AdminMealTickets() {
 
       const { data: ci } = await supabaseAdmin
         .from('meal_checkins')
-        .select('registration_id, slot, checked_in_at')
+        .select('registration_id, meal_date, slot, checked_in_at')
         .eq('event_id', id)
-        .eq('meal_date', todayStr())
       const map = {}
-      ;(ci || []).forEach(c => { map[c.registration_id] = { ...map[c.registration_id], [c.slot]: c.checked_in_at } })
+      ;(ci || []).forEach(c => {
+        map[c.registration_id] = map[c.registration_id] || {}
+        map[c.registration_id][c.meal_date] = { ...map[c.registration_id][c.meal_date], [c.slot]: c.checked_in_at }
+      })
       setCheckins(map)
     } catch (e) {
       console.error('Meal roster load failed:', e)
@@ -125,26 +147,29 @@ export default function AdminMealTickets() {
     return () => { cancelled = true }
   }, [online, queue])
 
-  const markMeal = async (reg, slot) => {
+  const markMeal = async (reg, dateStr, slot) => {
     if (selectedEvent?.requires_payment && !reg.payment_confirmed) {
       showToast('Payment not confirmed yet — confirm payment before serving this ticket', 'error')
       return
     }
-    const already = checkins[reg.id]?.[slot]
+    const dayInfo = confDays.find(d => d.date === dateStr)
+    const dayLabel = dayInfo ? `Day ${dayInfo.day}` : dateStr
+    const already = checkins[reg.id]?.[dateStr]?.[slot]
     if (already) {
-      if (!window.confirm(`Already marked ${slot} at ${new Date(already).toLocaleTimeString()}. Mark again?`)) return
+      if (!window.confirm(`Already marked ${dayLabel} ${slot} at ${new Date(already).toLocaleTimeString()}. Mark again?`)) return
     }
     const ts = new Date().toISOString()
-    setCheckins(c => ({ ...c, [reg.id]: { ...c[reg.id], [slot]: ts } }))
+    setCheckins(c => ({ ...c, [reg.id]: { ...c[reg.id], [dateStr]: { ...c[reg.id]?.[dateStr], [slot]: ts } } }))
 
     const record = {
-      tmp_id: `${reg.id}-${slot}-${Date.now()}`,
+      tmp_id: `${reg.id}-${dateStr}-${slot}-${Date.now()}`,
       registration_id: reg.id, event_id: eventId, user_id: reg.user_id,
-      meal_date: todayStr(), slot, checked_in_by: adminUser?.id,
+      meal_date: dateStr, slot, checked_in_by: adminUser?.id,
     }
     if (!online) {
       const q = [...queue, record]; setQueue(q); saveQueue(q)
       showToast('Saved offline — will sync later')
+      logAction('meal_checkin', `${dayLabel} ${slot} marked for ${displayName(reg)} — ${selectedEvent?.title || 'event'} (offline, queued)`, displayName(reg))
       return
     }
     const { error } = await supabaseAdmin.from('meal_checkins').insert({
@@ -156,7 +181,8 @@ export default function AdminMealTickets() {
       const q = [...queue, record]; setQueue(q); saveQueue(q)
       showToast('Could not save — queued for retry', 'error')
     } else {
-      showToast(`✅ ${slot === 'breakfast' ? 'Breakfast' : 'Dinner'} marked`)
+      logAction('meal_checkin', `${dayLabel} ${slot} marked for ${displayName(reg)} — ${selectedEvent?.title || 'event'}`, displayName(reg))
+      showToast(`✅ ${dayLabel} ${slot === 'breakfast' ? 'Breakfast' : 'Dinner'} marked`)
     }
   }
 
@@ -199,6 +225,7 @@ export default function AdminMealTickets() {
     setSelected(data)
     setTicketReg(data)
     showToast(`✅ ${data.guest_name} registered`)
+    logAction('meal_walkin_register', `Registered walk-in "${data.guest_name}"${data.guest_phone ? ' ('+data.guest_phone+')' : ''}${walkinPaid ? ' — paid at registration' : ''} for ${selectedEvent?.title || 'event'}`, data.guest_name)
   }
 
   const confirmPayment = async (reg) => {
@@ -213,6 +240,7 @@ export default function AdminMealTickets() {
     })
     setSelected(updated)
     showToast(`✅ Payment confirmed for ${displayName(reg)}`)
+    logAction('meal_payment_confirm', `Confirmed payment for ${displayName(reg)} — ${selectedEvent?.title || 'event'}`, displayName(reg))
   }
 
   // ── Camera scanning ─────────────────────────────────────────────
@@ -409,7 +437,6 @@ export default function AdminMealTickets() {
 
           {selected && (() => {
             const p = selected.profiles || {}
-            const c = checkins[selected.id] || {}
             return (
               <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '2px solid var(--brand-light)', boxShadow: 'var(--shadow-sm)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
@@ -427,14 +454,27 @@ export default function AdminMealTickets() {
                     <button onClick={() => confirmPayment(selected)} className="btn btn-primary" style={{ fontSize: '0.85rem' }}>✅ Confirm Payment Received</button>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    {SLOTS.map(s => (
-                      <button key={s.id} onClick={() => markMeal(selected, s.id)}
-                        style={{ flex: 1, minWidth: 140, padding: '14px 10px', borderRadius: 12, border: '2px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.9rem',
-                          borderColor: c[s.id] ? '#bbf7d0' : '#e2e8f0', background: c[s.id] ? '#f0fdf4' : 'white', color: c[s.id] ? '#16a34a' : 'var(--brand-deep)' }}>
-                        {s.label}{c[s.id] ? ` ✅ ${new Date(c[s.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
-                      </button>
-                    ))}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {confDays.map(({ day, date }) => {
+                      const dayCheckins = checkins[selected.id]?.[date] || {}
+                      const isToday = date === today
+                      return (
+                        <div key={date} style={{ border: isToday ? '2px solid var(--brand-light)' : '1.5px solid #e2e8f0', borderRadius: 12, padding: 12, background: isToday ? 'var(--brand-pale)' : '#fafafa' }}>
+                          <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 8 }}>
+                            Day {day} · {date}{isToday ? ' · Today' : ''}
+                          </div>
+                          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                            {SLOTS.map(s => (
+                              <button key={s.id} onClick={() => markMeal(selected, date, s.id)}
+                                style={{ flex: 1, minWidth: 130, padding: '12px 10px', borderRadius: 10, border: '2px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.85rem',
+                                  borderColor: dayCheckins[s.id] ? '#bbf7d0' : '#e2e8f0', background: dayCheckins[s.id] ? '#f0fdf4' : 'white', color: dayCheckins[s.id] ? '#16a34a' : 'var(--brand-deep)' }}>
+                                {s.label}{dayCheckins[s.id] ? ` ✅ ${new Date(dayCheckins[s.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
