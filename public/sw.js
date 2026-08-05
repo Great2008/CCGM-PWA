@@ -1,13 +1,13 @@
-// CCG World Service Worker v11 — Full Offline PWA + Push Notifications + Sabbath/Devotional API Cache + BG Image Cache
-const CACHE = 'ccgworld-v11'
-const API_CACHE = 'ccgworld-api-v2'
+// CCG World Service Worker v12 — Full Offline PWA + Push Notifications + Sabbath/Devotional/Programme API Cache + BG Image Cache
+const CACHE = 'ccgworld-v12'
+const API_CACHE = 'ccgworld-api-v3'
 const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
-  '/notifications',
+  '/notifications', '/programme',
   // Precache WebP logos for instant display
   '/logo.webp', '/logo-sm.webp', '/logo-splash.webp',
 ]
@@ -82,8 +82,11 @@ self.addEventListener('fetch', e => {
     const isSabbath    = url.pathname.includes('sabbath_lessons')
     const isDevotional = url.pathname.includes('posts') && url.search.includes('devotional')
     const isHymnal     = url.pathname.includes('hymns')
+    const isProgramme  = url.pathname.includes('programme_days') || url.pathname.includes('programme_sessions') ||
+                          url.pathname.includes('programme_agenda_items') || url.pathname.includes('programmes') ||
+                          url.pathname.includes('programme_rsvps')
 
-    if (isSabbath || isDevotional || isHymnal) {
+    if (isSabbath || isDevotional || isHymnal || isProgramme) {
       e.respondWith((async () => {
         const apiCache = await caches.open(API_CACHE)
         const cachedRes = await apiCache.match(request.url)

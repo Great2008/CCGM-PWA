@@ -394,9 +394,6 @@ function SessionCard({ session, agenda, isRsvpd, count, loading, user, onRsvp })
           )}
         </div>
 
-        {/* Divider */}
-        <div style={{ width:2, alignSelf:'stretch', background:'#e2e8f0', borderRadius:2, flexShrink:0, minHeight:40 }} />
-
         {/* Content */}
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ fontWeight:700, color:'var(--brand-deep)', fontSize:'1rem', marginBottom:4, lineHeight:1.3 }}>
