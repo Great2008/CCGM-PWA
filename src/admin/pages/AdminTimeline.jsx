@@ -3,6 +3,7 @@ import { useAdmin } from '../AdminApp'
 import { useTable } from '../useSupabaseAdmin'
 import supabaseAdmin from '../../lib/supabase'
 import { Confirm } from '../components/CrudShell'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 function timeAgo(ts) {
   const d = Math.floor((Date.now() - new Date(ts)) / 1000)
@@ -38,6 +39,7 @@ function PostsTab() {
   const [delId, setDelId]       = useState(null)
   const [saving, setSaving]     = useState(false)
   const [selected, setSelected] = useState(null)
+  const isMobile = useIsMobile()
 
   const filtered = rows.filter(p => {
     const matchF = filter === 'all' || p.post_type === filter
@@ -109,8 +111,8 @@ function PostsTab() {
           style={{width:'100%',padding:'9px 14px 9px 38px',borderRadius:30,border:'1.5px solid #e2e8f0',fontFamily:'var(--font-body)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}} />
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:selected ? '1fr 360px' : '1fr',gap:20,alignItems:'start'}}>
-        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+      <div style={{display:'grid',gridTemplateColumns:(selected && !isMobile) ? '1fr 360px' : '1fr',gap:20,alignItems:'start'}}>
+        <div style={{display:(isMobile && selected)?'none':'flex',flexDirection:'column',gap:8}}>
           {filtered.length === 0 && <div style={{background:'white',borderRadius:14,padding:'40px',textAlign:'center',color:'var(--text-light)'}}>No posts found.</div>}
           {filtered.map(post => {
             const tc = TYPE_COLORS[post.post_type] || 'var(--brand-light)'
@@ -204,6 +206,7 @@ function TopicsTab() {
   const [delTopicId, setDelTopicId]       = useState(null)
   const [selectedTopic, setSelectedTopic] = useState(null)
   const [saving, setSaving]               = useState(false)
+  const isMobile = useIsMobile()
 
   const loadTopics = async () => {
     setLoading(true)
@@ -279,8 +282,8 @@ function TopicsTab() {
           style={{width:'100%',padding:'9px 14px 9px 38px',borderRadius:30,border:'1.5px solid #e2e8f0',fontFamily:'var(--font-body)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}} />
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:selectedTopic ? '1fr 360px' : '1fr',gap:20,alignItems:'start'}}>
-        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+      <div style={{display:'grid',gridTemplateColumns:(selectedTopic && !isMobile) ? '1fr 360px' : '1fr',gap:20,alignItems:'start'}}>
+        <div style={{display:(isMobile && selectedTopic)?'none':'flex',flexDirection:'column',gap:8}}>
           {filteredTopics.length === 0 && <div style={{background:'white',borderRadius:14,padding:'40px',textAlign:'center',color:'var(--text-light)'}}>No topics found.</div>}
           {filteredTopics.map(topic => {
             const catColor = TOPIC_CATEGORY_COLORS[topic.category] || '#64748b'
@@ -372,6 +375,7 @@ function ReportsTab() {
   const [selected, setSelected]           = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
   const [confirmAction, setConfirmAction] = useState(null)
+  const isMobile = useIsMobile()
 
   const REASON_COLORS = {
     'Spam or irrelevant content':            '#f97316',
@@ -538,10 +542,10 @@ function ReportsTab() {
         </div>
       )}
 
-      <div style={{display:'grid',gridTemplateColumns:selected ? '1fr 380px' : '1fr',gap:20,alignItems:'start'}}>
+      <div style={{display:'grid',gridTemplateColumns:(selected && !isMobile) ? '1fr 380px' : '1fr',gap:20,alignItems:'start'}}>
 
         {/* Report list */}
-        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        <div style={{display:(isMobile && selected)?'none':'flex',flexDirection:'column',gap:10}}>
           {filtered.map(item => {
             const post       = item.latest?.post
             const author     = post?.author

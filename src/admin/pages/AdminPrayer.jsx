@@ -3,6 +3,7 @@ import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import supabase from '../../lib/supabase'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const SC = { new:{bg:'#eff6ff',text:'#1d4ed8',label:'New'}, praying:{bg:'#dcfce7',text:'#166534',label:'Praying'}, answered:{bg:'#fef9c3',text:'#854d0e',label:'Answered'}, closed:{bg:'#f5f5f5',text:'#6b7280',label:'Closed'} }
 
@@ -13,6 +14,7 @@ export default function AdminPrayer() {
   const [wallItems, setWallItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
+  const isMobile = useIsMobile()
   const [note, setNote]       = useState('')
   const [saving, setSaving]   = useState(false)
   const [filter, setFilter]   = useState('all')
@@ -110,7 +112,8 @@ export default function AdminPrayer() {
         ))}
       </div>
       {filtered.length===0&&<AdminCard><div style={{ textAlign:'center', padding:'40px 20px', color:'var(--text-light)' }}>No requests here.</div></AdminCard>}
-      <div style={{ display:'grid', gridTemplateColumns:selected?'1fr 360px':'1fr', gap:20, alignItems:'start' }}>
+      <div style={{ display:'grid', gridTemplateColumns:(selected && !isMobile)?'1fr 360px':'1fr', gap:20, alignItems:'start' }}>
+        {!(isMobile && selected) && (
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {filtered.map(item=>{
             const sc=SC[item.status||'new']||SC.new
@@ -128,8 +131,9 @@ export default function AdminPrayer() {
             )
           })}
         </div>
+        )}
         {selected&&(
-          <div style={{ position:'sticky', top:20 }}>
+          <div style={{ position:isMobile?'static':'sticky', top:20 }}>
             <AdminCard>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>
                 <h3 style={{ margin:0, color:'var(--brand-deep)', fontSize:'1rem' }}>{selected.name||'Anonymous'}</h3>

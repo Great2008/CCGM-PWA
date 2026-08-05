@@ -3,6 +3,7 @@ import { useAdmin } from '../AdminApp'
 import { useTable } from '../useSupabaseAdmin'
 import supabaseAdmin from '../../lib/supabase'
 import { Confirm } from '../components/CrudShell'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 // ── App roles (permissions) ────────────────────────────────────────────────
 const APP_ROLES = [
@@ -45,6 +46,7 @@ export default function AdminMembers() {
   const [search, setSearch]   = useState('')
   const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
   const [selected, setSelected] = useState(null)
+  const isMobile = useIsMobile()
   const [saving, setSaving]   = useState(false)
 
   const pendingPosts = members.filter(m => m.pending_church_post && !m.suspended)
@@ -311,10 +313,10 @@ export default function AdminMembers() {
 
       {/* Two-pane */}
       {tab !== 'pending_posts' && (
-      <div className="members-pane" style={{ display: 'grid', gridTemplateColumns: selected ? 'minmax(0,1fr) min(340px,38%)' : '1fr', gap: 20, alignItems: 'start' }}>
+      <div className="members-pane" style={{ display: 'grid', gridTemplateColumns: (selected && !isMobile) ? 'minmax(0,1fr) min(340px,38%)' : '1fr', gap: 20, alignItems: 'start' }}>
 
         {/* List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: (isMobile && selected) ? 'none' : 'flex', flexDirection: 'column', gap: 8 }}>
           {list.length === 0 && (
             <div style={{ background: 'white', borderRadius: 14, padding: '40px 20px', textAlign: 'center', color: 'var(--text-light)' }}>
               {tab === 'suspended' ? '🎉 No suspended members' : 'No members found.'}
@@ -355,7 +357,7 @@ export default function AdminMembers() {
 
         {/* Detail pane */}
         {selected && (
-          <div style={{ position: 'sticky', top: 20 }}>
+          <div style={{ position: isMobile ? 'static' : 'sticky', top: 20 }}>
             <div style={{ background: 'white', borderRadius: 14, boxShadow: '0 2px 16px rgba(0,0,0,0.09)', overflow: 'hidden' }}>
               {/* Header */}
               <div style={{ background: selected.suspended ? 'linear-gradient(135deg,#7f1d1d,#dc2626)' : 'linear-gradient(135deg,var(--brand-deep),var(--brand-mid))', padding: '24px 20px', textAlign: 'center', position: 'relative' }}>

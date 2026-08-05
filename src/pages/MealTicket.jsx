@@ -98,16 +98,19 @@ export default function MealTicket() {
             {paymentConfirmed ? (
               <img src={qrDataUrl(`MEAL-${regId}`)} alt="Meal ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #f1f5f9' }} />
             ) : (
-              <div style={{ width: 220, height: 220, margin: '0 auto', borderRadius: 12, background: '#fffbeb', border: '1.5px solid #fde68a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 16, boxSizing: 'border-box' }}>
-                <span style={{ fontSize: '2rem' }}>🔒</span>
-                <span style={{ fontSize: '0.85rem', color: '#92400e', fontWeight: 700, textAlign: 'center' }}>Awaiting payment confirmation</span>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <img src={qrDataUrl(`MEAL-${regId}`)} alt="Meal ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #fde68a' }} />
+                <div style={{ marginTop: 10, background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: 10, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                  <span>⏳</span>
+                  <span style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: 700 }}>Payment pending — show this to staff to confirm</span>
+                </div>
               </div>
             )}
 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: 18, lineHeight: 1.6 }}>
               {paymentConfirmed
                 ? 'Present this code at breakfast and dinner during the conference. One scan per meal, per day.'
-                : 'This event requires payment before your ticket becomes active. See the registration desk to confirm your payment.'}
+                : 'Present this code at the registration desk to confirm your payment. Meals can\'t be marked until payment is confirmed.'}
             </p>
 
             {(() => {
