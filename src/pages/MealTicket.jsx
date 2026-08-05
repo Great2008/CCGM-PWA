@@ -8,6 +8,24 @@ function qrDataUrl(text, size = 240) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=ffffff&color=0a2612&margin=10`
 }
 
+// Computes the labeled conference days (Day 1, Day 2, ...) from an event's
+// date → end_date range. Falls back to a single day if there's no end_date.
+function getConferenceDays(ev) {
+  if (!ev?.date) return []
+  const start = new Date(ev.date + 'T00:00:00')
+  const end = ev.end_date ? new Date(ev.end_date + 'T00:00:00') : start
+  if (isNaN(start) || isNaN(end) || end < start) return [{ day: 1, date: ev.date }]
+  const days = []
+  const d = new Date(start)
+  let i = 1
+  while (d <= end) {
+    days.push({ day: i, date: d.toISOString().slice(0, 10) })
+    d.setDate(d.getDate() + 1)
+    i++
+  }
+  return days
+}
+
 export default function MealTicket() {
   const [params] = useSearchParams()
   const eventId = params.get('event')
@@ -21,7 +39,7 @@ export default function MealTicket() {
   useEffect(() => {
     if (!user || !eventId) { setStatus('error'); return }
     (async () => {
-      const { data: ev } = await supabase.from('events').select('id,title,date,time,location,requires_payment').eq('id', eventId).single()
+      const { data: ev } = await supabase.from('events').select('id,title,date,end_date,time,location,requires_payment').eq('id', eventId).single()
       const { data: reg } = await supabase.from('event_registrations').select('id,payment_confirmed').eq('event_id', eventId).eq('user_id', user.id).single()
       if (!ev) { setStatus('error'); return }
       setEvent(ev)
@@ -92,19 +110,34 @@ export default function MealTicket() {
                 : 'This event requires payment before your ticket becomes active. See the registration desk to confirm your payment.'}
             </p>
 
-            {history.length > 0 && (
-              <div style={{ marginTop: 26, textAlign: 'left', borderTop: '1.5px solid #f1f5f9', paddingTop: 18 }}>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Meal History</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {history.map((h, i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-mid)', background: '#f8fafc', padding: '8px 12px', borderRadius: 8 }}>
-                      <span>{h.slot === 'breakfast' ? '🌅 Breakfast' : '🌙 Dinner'} · {h.meal_date}</span>
-                      <span style={{ color: '#16a34a', fontWeight: 700 }}>✅ {new Date(h.checked_in_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    </div>
-                  ))}
+            {(() => {
+              const days = getConferenceDays(event)
+              const map = {}
+              history.forEach(h => { map[h.meal_date] = { ...map[h.meal_date], [h.slot]: h.checked_in_at } })
+              return (
+                <div style={{ marginTop: 26, textAlign: 'left', borderTop: '1.5px solid #f1f5f9', paddingTop: 18 }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Meal History</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {days.map(({ day, date }) => (
+                      <div key={date}>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: 4 }}>Day {day} · {date}</div>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          {['breakfast', 'dinner'].map(slot => {
+                            const ts = map[date]?.[slot]
+                            return (
+                              <div key={slot} style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem', padding: '7px 10px', borderRadius: 8, background: ts ? '#f0fdf4' : '#f8fafc', color: ts ? '#16a34a' : 'var(--text-light)' }}>
+                                <span>{slot === 'breakfast' ? '🌅' : '🌙'} {slot === 'breakfast' ? 'Breakfast' : 'Dinner'}</span>
+                                <span>{ts ? `✅ ${new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '—'}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            })()}
           </div>
         )}
       </div>
