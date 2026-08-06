@@ -4,6 +4,7 @@ import { useEventsContent } from '../hooks/useContent'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
+import { ShareButtonLight } from '../components/ShareButton'
 
 export default function Events() {
   const { data: events, loading } = useEventsContent()
@@ -28,6 +29,13 @@ export default function Events() {
       })
     return () => { cancelled = true }
   }, [user, events])
+
+  // If someone opens a shared event link (#event-<id>), scroll to that card once loaded
+  useEffect(() => {
+    if (!events.length || !window.location.hash) return
+    const el = document.querySelector(window.location.hash)
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200)
+  }, [events])
 
   const handleRsvp = async (event) => {
     if (!user || !isApproved) return
@@ -101,7 +109,7 @@ export default function Events() {
               {filtered.length > 0 ? (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))', gap: 26 }}>
                   {filtered.map(event => (
-                    <div key={event.id} className="card">
+                    <div key={event.id} id={`event-${event.id}`} className="card">
                       {event.image ? (
                         <div style={{ position: 'relative', height: 210, overflow: 'hidden' }}>
                           <img src={event.image} alt={event.title}
@@ -182,6 +190,12 @@ export default function Events() {
                               External Reg →
                             </a>
                           )}
+                          <ShareButtonLight
+                            title={event.title}
+                            text={[event.title, event.date && `📅 ${event.date}`, event.location && `📍 ${event.location}`].filter(Boolean).join(' · ')}
+                            url={`${window.location.origin}/events#event-${event.id}`}
+                            style={{ marginLeft: 'auto' }}
+                          />
                         </div>
                         {rsvpError[event.id] && (
                           <div style={{ marginTop: 8, fontSize: '0.76rem', color: '#dc2626' }}>⚠️ {rsvpError[event.id]}</div>
