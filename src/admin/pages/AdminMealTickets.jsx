@@ -76,7 +76,7 @@ export default function AdminMealTickets() {
 
   // Load the events list
   useEffect(() => {
-    supabaseAdmin.from('events').select('id,title,date,end_date,requires_payment').order('date', { ascending: false })
+    supabaseAdmin.from('events').select('id,title,date,end_date,requires_payment').eq('meal_tickets_enabled', true).order('date', { ascending: false })
       .then(({ data }) => { setEvents(data || []); setLoading(false) })
   }, [])
 
@@ -345,7 +345,9 @@ export default function AdminMealTickets() {
 
       {!eventId ? (
         <div style={{ background: 'white', borderRadius: 16, padding: 60, textAlign: 'center', border: '1.5px solid #e2e8f0', color: 'var(--text-light)' }}>
-          Select an event to begin checking in meal tickets
+          {events.length === 0
+            ? 'No events have meal tickets enabled yet. Turn it on for an event from Events → edit event.'
+            : 'Select an event to begin checking in meal tickets'}
         </div>
       ) : loadingRoster ? (
         <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-light)' }}>Loading roster ({roster.length} cached)...</div>

@@ -251,7 +251,7 @@ export default function Programme() {
 
           {/* Day tabs — anchored to bottom of hero */}
           {days.length > 0 && (
-            <div style={{ display:'flex', gap:0, overflowX:'auto', justifyContent:'center', flexWrap:'nowrap', marginBottom:0 }}>
+            <div style={{ display:'flex', gap:0, overflowX:'auto', justifyContent:'flex-start', flexWrap:'nowrap', marginBottom:0 }}>
               {days.map((day, idx) => (
                 <button
                   key={day.id}

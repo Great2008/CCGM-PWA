@@ -167,7 +167,7 @@ export default function Events() {
                               {rsvping[event.id] ? '⏳' : rsvpd[event.id] ? '✅ Attending' : '📋 RSVP'}
                             </button>
                           ) : null}
-                          {user && isApproved && rsvpd[event.id] && (
+                          {user && isApproved && rsvpd[event.id] && event.meal_tickets_enabled && (
                             <Link to={`/meal-ticket?event=${event.id}`} style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
                               🎫 Meal Ticket
                             </Link>

@@ -30,7 +30,7 @@ export default function MealTicket() {
   const [params] = useSearchParams()
   const eventId = params.get('event')
   const { user, isApproved } = useAuth()
-  const [status, setStatus]   = useState('loading') // loading | ready | not-registered | error
+  const [status, setStatus]   = useState('loading') // loading | ready | not-registered | error | disabled
   const [event, setEvent]     = useState(null)
   const [regId, setRegId]     = useState(null)
   const [paymentConfirmed, setPaymentConfirmed] = useState(true)
@@ -39,10 +39,11 @@ export default function MealTicket() {
   useEffect(() => {
     if (!user || !eventId) { setStatus('error'); return }
     (async () => {
-      const { data: ev } = await supabase.from('events').select('id,title,date,end_date,time,location,requires_payment').eq('id', eventId).single()
+      const { data: ev } = await supabase.from('events').select('id,title,date,end_date,time,location,requires_payment,meal_tickets_enabled').eq('id', eventId).single()
       const { data: reg } = await supabase.from('event_registrations').select('id,payment_confirmed').eq('event_id', eventId).eq('user_id', user.id).single()
       if (!ev) { setStatus('error'); return }
       setEvent(ev)
+      if (!ev.meal_tickets_enabled) { setStatus('disabled'); return }
       if (!reg) { setStatus('not-registered'); return }
       setRegId(reg.id)
       setPaymentConfirmed(!ev.requires_payment || reg.payment_confirmed)
@@ -73,6 +74,14 @@ export default function MealTicket() {
           <div>
             <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>⚠️</div>
             <p style={{ color: 'var(--text-mid)' }}>Couldn't load this ticket. Make sure you followed a valid link.</p>
+          </div>
+        )}
+
+        {status === 'disabled' && (
+          <div>
+            <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🍽️</div>
+            <p style={{ color: 'var(--text-mid)', marginBottom: 16 }}><strong>{event?.title}</strong> doesn't use meal tickets.</p>
+            <Link to="/events" className="btn btn-primary">Back to Events</Link>
           </div>
         )}
 
