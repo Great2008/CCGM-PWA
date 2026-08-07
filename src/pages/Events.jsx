@@ -194,9 +194,10 @@ export default function Events() {
                           )}
                           <ShareButtonLight
                             title={event.title}
-                            text={[event.title, event.date && `📅 ${event.date}`, event.location && `📍 ${event.location}`].filter(Boolean).join(' · ')}
+                            text={`${event.title} is coming up on ${event.date}${event.location ? ` at ${event.location}` : ''}.`}
                             url={`${window.location.origin}/events#event-${event.id}`}
                             imageUrl={event.image_url}
+                            suffix="See details on CCG World"
                             style={{ marginLeft: 'auto' }}
                           />
                         </div>
