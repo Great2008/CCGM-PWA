@@ -1,4 +1,4 @@
-// supabase/functions/send-newsletter/index.ts
+// supabase/functions/send-rsvp-confirmation/index.ts
 // Self-contained — no cross-file imports, so this can be deployed by
 // pasting the whole file into the Supabase Dashboard's Edge Function editor.
 //
@@ -167,25 +167,34 @@ const CORS = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: CORS })
+function formatDate(iso: string): string {
+  try {
+    return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    })
+  } catch {
+    return iso
   }
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
 
   try {
     const {
-      subject,
-      greeting  = 'Dear {name},',
-      body,
-      signature = 'God bless you,\nCCG World Admin Team',
-      footer    = 'You are receiving this because you subscribed on CCG World.',
-      recipients,   // Array of { email: string, name?: string }
-      attachments = [] as EmailAttachment[],
+      email,
+      name,
+      eventTitle,
+      eventDate,      // ISO date, e.g. "2026-09-01"
+      eventTime,      // optional, e.g. "9:00 AM"
+      venue,
+      registrationId,
+      eventUrl,
     } = await req.json()
 
-    if (!subject || !body || !recipients?.length) {
+    if (!email || !name || !eventTitle || !eventDate || !registrationId) {
       return new Response(
-        JSON.stringify({ error: 'subject, body, and recipients are required' }),
+        JSON.stringify({ error: 'email, name, eventTitle, eventDate, and registrationId are required' }),
         { status: 400, headers: { ...CORS, 'Content-Type': 'application/json' } }
       )
     }
@@ -196,7 +205,6 @@ serve(async (req) => {
     const smtpPassword = Deno.env.get('SMTP_PASSWORD')
     const fromEmail    = Deno.env.get('SMTP_FROM_EMAIL')
     const fromName     = Deno.env.get('SMTP_FROM_NAME') || 'CCG World'
-
     if (!smtpHost || !smtpLogin || !smtpPassword || !fromEmail) {
       return new Response(
         JSON.stringify({ error: 'SMTP_HOST, SMTP_LOGIN, SMTP_PASSWORD, and SMTP_FROM_EMAIL secrets must all be set' }),
@@ -204,57 +212,111 @@ serve(async (req) => {
       )
     }
 
-    const buildHtml = (name: string) => `
+    const prettyDate = formatDate(eventDate)
+    const dateLine = eventTime ? `${prettyDate} · ${eventTime}` : prettyDate
+
+    const subject = `🎟️ Your RSVP is Confirmed — ${eventTitle}`
+
+    const html = `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#f8fafc;">
   <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-    <div style="background:linear-gradient(135deg,#0f1f3d,#1a3a6b);padding:36px;text-align:center;">
-      <div style="color:#f59e0b;font-size:1.6rem;font-weight:900;letter-spacing:3px;font-family:Georgia,serif;">CCG WORLD</div>
-      <div style="color:rgba(255,255,255,0.55);font-size:0.7rem;letter-spacing:4px;margin-top:6px;font-family:Arial,sans-serif;">CHRISTIAN CHURCH OF GOD MISSION</div>
+
+    <div style="background:linear-gradient(135deg,#0a2612,#16653a);padding:36px;text-align:center;">
+      <div style="color:#f59e0b;font-size:1.1rem;font-weight:900;letter-spacing:1px;margin-bottom:8px;">🎟️ YOUR RSVP IS CONFIRMED</div>
+      <div style="color:rgba(255,255,255,0.6);font-size:0.7rem;letter-spacing:4px;font-family:Arial,sans-serif;">CCG WORLD · CHRISTIAN CHURCH OF GOD MISSION</div>
     </div>
+
     <div style="padding:40px 36px;font-family:Georgia,serif;">
-      <p style="color:#1e293b;margin:0 0 22px;font-size:1rem;">${greeting.replace('{name}', name)}</p>
-      ${body.split('\n\n').map((p: string) =>
-        `<p style="color:#334155;line-height:1.85;margin:0 0 18px;font-size:0.97rem;">${p.replace(/\n/g, '<br/>')}</p>`
-      ).join('')}
-      <div style="margin-top:36px;padding-top:24px;border-top:2px solid #f1f5f9;">
-        ${signature.split('\n').map((l: string) =>
-          `<p style="color:#1e293b;margin:0 0 4px;font-size:0.95rem;">${l}</p>`
-        ).join('')}
+      <p style="color:#1e293b;margin:0 0 20px;font-size:1rem;">Dear ${name},</p>
+      <p style="color:#334155;line-height:1.85;margin:0 0 18px;font-size:0.97rem;">
+        Thank you for registering for <strong>${eventTitle}</strong>.
+      </p>
+      <p style="color:#334155;line-height:1.85;margin:0 0 30px;font-size:0.97rem;">
+        We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.
+      </p>
+
+      <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:26px 24px;margin-bottom:30px;">
+        <div style="color:#166534;font-size:0.72rem;font-weight:700;letter-spacing:2px;margin-bottom:12px;">✨ EVENT DETAILS</div>
+        <div style="color:#0a2612;font-size:1.1rem;font-weight:700;margin-bottom:16px;">${eventTitle}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;color:#334155;">
+          <tr><td style="padding:5px 0;width:120px;">📅 Date:</td><td style="padding:5px 0;font-weight:600;">${dateLine}</td></tr>
+          ${venue ? `<tr><td style="padding:5px 0;">📍 Venue:</td><td style="padding:5px 0;font-weight:600;">${venue}</td></tr>` : ''}
+          <tr><td style="padding:5px 0;">🎟️ Status:</td><td style="padding:5px 0;font-weight:700;color:#16a34a;">RSVP CONFIRMED</td></tr>
+        </table>
+        <div style="margin-top:18px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:0.85rem;color:#64748b;">
+          <div>Attendee: <strong style="color:#1e293b;">${name}</strong></div>
+          <div style="margin-top:4px;">Registration ID: <code style="color:#1e293b;">${registrationId}</code></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:30px;">
+        <div style="color:#166534;font-size:0.72rem;font-weight:700;letter-spacing:2px;margin-bottom:10px;">🙏 GET READY FOR AN ENCOUNTER</div>
+        <p style="color:#334155;line-height:1.85;margin:0 0 14px;font-size:0.95rem;">
+          Prepare your heart for a powerful time of worship, fellowship, teaching, prayer, inspiration, and an encounter with Jesus.
+        </p>
+        <p style="color:#334155;line-height:1.85;margin:0;font-size:0.95rem;">
+          Your registration has been successfully recorded. Please keep this email for your records and have your registration details available when attending the event.
+        </p>
+      </div>
+
+      ${eventUrl ? `
+      <div style="text-align:center;margin-bottom:30px;">
+        <a href="${eventUrl}" style="display:inline-block;background:#16653a;color:#fff;text-decoration:none;padding:12px 28px;border-radius:30px;font-family:Arial,sans-serif;font-weight:700;font-size:0.85rem;">View Event on CCG World</a>
+      </div>` : ''}
+
+      <div style="text-align:center;border-top:2px solid #f1f5f9;padding-top:26px;">
+        <p style="color:#1e293b;font-weight:700;margin:0 0 10px;font-size:0.98rem;">WE LOOK FORWARD TO WELCOMING YOU!</p>
+        <p style="color:#64748b;line-height:1.8;margin:0 0 6px;font-size:0.9rem;">Come expectant. Come prepared. Come ready to encounter Jesus.</p>
+        ${venue ? `<p style="color:#64748b;margin:0;font-size:0.9rem;">See you at ${venue}! 🙌</p>` : ''}
       </div>
     </div>
-    <div style="background:#f8fafc;padding:20px 36px;text-align:center;border-top:1px solid #e2e8f0;">
-      <p style="color:#94a3b8;font-size:0.72rem;margin:0;font-family:Arial,sans-serif;">${footer}</p>
+
+    <div style="background:#f8fafc;padding:22px 36px;text-align:center;border-top:1px solid #e2e8f0;">
+      <p style="color:#1e293b;font-weight:700;margin:0 0 2px;font-size:0.82rem;font-family:Arial,sans-serif;">Christian Church Of God Mission (CCG)</p>
+      <p style="color:#94a3b8;font-size:0.72rem;margin:0;font-family:Arial,sans-serif;">God First</p>
     </div>
   </div>
 </body>
 </html>`
 
-    let delivered = 0
-    const errors: string[] = []
+    const text = [
+      `Dear ${name},`,
+      ``,
+      `🎟️ YOUR RSVP IS CONFIRMED`,
+      ``,
+      `Thank you for registering for ${eventTitle}.`,
+      `We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.`,
+      ``,
+      `✨ EVENT DETAILS`,
+      eventTitle,
+      `📅 Date: ${dateLine}`,
+      venue ? `📍 Venue: ${venue}` : '',
+      `🎟️ Status: RSVP CONFIRMED`,
+      ``,
+      `Attendee: ${name}`,
+      `Registration ID: ${registrationId}`,
+      ``,
+      `🙏 GET READY FOR AN ENCOUNTER`,
+      `Prepare your heart for a powerful time of worship, fellowship, teaching, prayer, inspiration, and an encounter with Jesus.`,
+      `Your registration has been successfully recorded. Please keep this email for your records.`,
+      ``,
+      eventUrl ? `View Event on CCG World: ${eventUrl}` : '',
+      ``,
+      `WE LOOK FORWARD TO WELCOMING YOU!`,
+      `Come expectant. Come prepared. Come ready to encounter Jesus.`,
+      venue ? `See you at ${venue}! 🙌` : '',
+      ``,
+      `Christian Church Of God Mission (CCG)`,
+      `God First`,
+    ].filter(Boolean).join('\n')
 
-    for (const recipient of recipients) {
-      const name    = recipient.name || 'Member'
-      const toEmail = recipient.email
-      try {
-        await sendSmtpEmail({
-          host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword,
-          fromEmail, fromName, to: toEmail, subject,
-          html: buildHtml(name),
-          text: `${greeting.replace('{name}', name)}\n\n${body}\n\n${signature}\n\n---\n${footer}`,
-          attachments,
-        })
-        delivered++
-      } catch (err) {
-        errors.push(`${toEmail}: ${err.message}`)
-      }
-      await new Promise(r => setTimeout(r, 150)) // avoid Gmail rate limits
-    }
+    await sendSmtpEmail({ host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword, fromEmail, fromName, to: email, subject, html, text })
 
     return new Response(
-      JSON.stringify({ success: true, delivered, failed: errors.length, errors: errors.slice(0, 5), total: recipients.length }),
+      JSON.stringify({ success: true }),
       { headers: { ...CORS, 'Content-Type': 'application/json' } }
     )
 
