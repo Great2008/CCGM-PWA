@@ -23,9 +23,16 @@ export default function AdminEmail() {
   const [waMsg, setWaMsg]         = useState('')
   const [subSearch, setSubSearch] = useState('')
   const [removingId, setRemovingId] = useState(null)
+  const [recipientSource, setRecipientSource] = useState('subscribers') // 'subscribers' | 'event'
+  const [rsvpEvents, setRsvpEvents] = useState([])
+  const [selectedEventId, setSelectedEventId] = useState('')
+  const [eventRecipients, setEventRecipients] = useState([])
+  const [loadingEventRecipients, setLoadingEventRecipients] = useState(false)
+  const [attachments, setAttachments] = useState([]) // {name, type, size, base64}
 
   const emailSubs = subs.filter(s => s.wants_email && s.active && s.email)
   const waSubs    = subs.filter(s => s.wants_whatsapp && s.active && s.whatsapp)
+  const recipients = recipientSource === 'subscribers' ? emailSubs : eventRecipients
 
   useEffect(() => {
     supabaseAdmin
@@ -33,7 +40,30 @@ export default function AdminEmail() {
       .select('*')
       .order('subscribed_at', { ascending: false })
       .then(({ data }) => { setSubs(data || []); setLoading(false) })
+    supabaseAdmin.from('events').select('id,title,date').order('date', { ascending: false })
+      .then(({ data }) => setRsvpEvents(data || []))
   }, [])
+
+  // Pull recipient emails from an event's registrations — both app users
+  // (via their profile) and guests (via their guest_email).
+  useEffect(() => {
+    if (!selectedEventId) { setEventRecipients([]); return }
+    setLoadingEventRecipients(true)
+    supabaseAdmin.from('event_registrations')
+      .select('is_guest, guest_name, guest_email, profiles!user_id(email, full_name, display_name)')
+      .eq('event_id', selectedEventId)
+      .then(({ data, error }) => {
+        if (error) { showToast('Could not load RSVP list: ' + error.message, 'error'); setEventRecipients([]); setLoadingEventRecipients(false); return }
+        const list = (data || [])
+          .map(r => r.is_guest
+            ? { email: r.guest_email, name: r.guest_name || 'Guest' }
+            : { email: r.profiles?.email, name: r.profiles?.display_name || r.profiles?.full_name || 'Member' }
+          )
+          .filter(r => r.email)
+        setEventRecipients(list)
+        setLoadingEventRecipients(false)
+      })
+  }, [selectedEventId])
 
   const F = k => ({ value: form[k] || '', onChange: e => setForm(f => ({ ...f, [k]: e.target.value })) })
 
@@ -59,10 +89,10 @@ export default function AdminEmail() {
     if (!form.subject.trim() || !form.body.trim()) {
       showToast('Please fill in subject and body', 'error'); return
     }
-    if (emailSubs.length === 0) {
-      showToast('No email subscribers found', 'error'); return
+    if (recipients.length === 0) {
+      showToast(recipientSource === 'event' ? 'No RSVPs with an email found for this event' : 'No email subscribers found', 'error'); return
     }
-    if (!window.confirm(`Send this email to ${emailSubs.length} subscribers?`)) return
+    if (!window.confirm(`Send this email to ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}?`)) return
     setSending(true)
     try {
       const { error } = await supabaseAdmin.functions.invoke('send-newsletter', {
@@ -72,28 +102,30 @@ export default function AdminEmail() {
           body: form.body,
           signature: form.signature,
           footer: form.footer,
-          recipients: emailSubs.map(s => ({ email: s.email, name: s.name || 'Member' })),
+          recipients: recipients.map(s => ({ email: s.email, name: s.name || 'Member' })),
+          attachments: attachments.map(a => ({ filename: a.name, contentType: a.type, base64: a.base64 })),
         },
       })
       if (error) throw error
       await supabaseAdmin.from('email_logs').insert({
         subject: form.subject, body: form.body,
-        recipients: emailSubs.length,
-        recipient_emails: emailSubs.map(s => s.email),
+        recipients: recipients.length,
+        recipient_emails: recipients.map(s => s.email),
         sent_at: new Date().toISOString(), status: 'sent',
       })
-      logAction('email_sent', `Newsletter sent to ${emailSubs.length} subscribers: ${subject}`, subject); showToast(`✅ Email sent to ${emailSubs.length} subscribers!`)
+      logAction('email_sent', `Email sent to ${recipients.length} recipients (${recipientSource === 'event' ? 'event RSVPs' : 'newsletter subscribers'}): ${form.subject}`, form.subject); showToast(`✅ Email sent to ${recipients.length} recipients!`)
       setForm(f => ({ ...f, subject: '', body: '' }))
+      setAttachments([])
     } catch {
-      if (emailSubs.length <= 50) {
-        const emails  = emailSubs.map(s => s.email).join(',')
+      if (recipients.length <= 50) {
+        const emails  = recipients.map(s => s.email).join(',')
         const subject = encodeURIComponent(form.subject)
         const body    = encodeURIComponent(
           form.greeting.replace('{name}', 'Member') + '\n\n' + form.body +
           '\n\n' + form.signature + '\n\n---\n' + form.footer
         )
         window.open(`mailto:${emails}?subject=${subject}&body=${body}`)
-        showToast(`Opened Gmail with ${emailSubs.length} recipients`)
+        showToast(`Opened Gmail with ${recipients.length} recipients`)
       } else {
         showToast('Edge Function not configured yet — see setup notice above', 'error')
       }
@@ -177,13 +209,40 @@ export default function AdminEmail() {
       {/* ── EMAIL TAB ── */}
       {tab === 0 && (
         <AdminCard style={{ maxWidth: 720 }}>
-          {emailSubs.length === 0 ? (
+          {/* Recipient source */}
+          <div style={{ marginBottom: 18 }}>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+              <button onClick={() => setRecipientSource('subscribers')} className={recipientSource === 'subscribers' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
+                👥 Newsletter Subscribers ({emailSubs.length})
+              </button>
+              <button onClick={() => setRecipientSource('event')} className={recipientSource === 'event' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
+                🎟️ Event RSVPs
+              </button>
+            </div>
+            {recipientSource === 'event' && (
+              <select value={selectedEventId} onChange={e => setSelectedEventId(e.target.value)}
+                style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: '0.85rem', boxSizing: 'border-box' }}>
+                <option value="">Select event...</option>
+                {rsvpEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title} ({ev.date})</option>)}
+              </select>
+            )}
+          </div>
+
+          {recipients.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>
               <div style={{ fontSize: '3rem', marginBottom: 12 }}>✉️</div>
-              <div style={{ fontWeight: 700, marginBottom: 8 }}>No email subscribers yet</div>
-              <p style={{ fontSize: '0.85rem', maxWidth: 340, margin: '0 auto' }}>
-                Subscribers appear here when users sign up on the Blog page.
-              </p>
+              {recipientSource === 'subscribers' ? (
+                <>
+                  <div style={{ fontWeight: 700, marginBottom: 8 }}>No email subscribers yet</div>
+                  <p style={{ fontSize: '0.85rem', maxWidth: 340, margin: '0 auto' }}>Subscribers appear here when users sign up on the Blog page.</p>
+                </>
+              ) : !selectedEventId ? (
+                <div style={{ fontWeight: 700 }}>Select an event above to load its RSVPs</div>
+              ) : loadingEventRecipients ? (
+                <div>Loading RSVPs...</div>
+              ) : (
+                <div style={{ fontWeight: 700 }}>No RSVPs with an email found for this event</div>
+              )}
             </div>
           ) : (
             <>
@@ -200,7 +259,7 @@ export default function AdminEmail() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-mid)' }}>
-                  Sending to <strong style={{ color: 'var(--brand-deep)' }}>{emailSubs.length}</strong> subscribers
+                  Sending to <strong style={{ color: 'var(--brand-deep)' }}>{recipients.length}</strong> {recipientSource === 'event' ? 'RSVPs' : 'subscribers'}
                 </span>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button className="btn btn-outline-blue" onClick={() => setPreview(p => !p)} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
@@ -245,6 +304,40 @@ export default function AdminEmail() {
                       <label>Footer</label>
                       <textarea {...F('footer')} rows={3} style={{ resize: 'vertical', fontSize: '0.88rem' }} />
                     </div>
+                  </div>
+
+                  <div className="form-group" style={{ margin: 0 }}>
+                    <label>Attachments (optional)</label>
+                    <input type="file" multiple onChange={async (e) => {
+                      const files = Array.from(e.target.files || [])
+                      const currentSize = attachments.reduce((s, a) => s + a.size, 0)
+                      const newSize = files.reduce((s, f) => s + f.size, 0)
+                      if (currentSize + newSize > 15 * 1024 * 1024) {
+                        showToast('Attachments too large — keep total under 15MB', 'error'); e.target.value = ''; return
+                      }
+                      const read = file => new Promise((resolve, reject) => {
+                        const r = new FileReader()
+                        r.onload = () => resolve({ name: file.name, type: file.type || 'application/octet-stream', size: file.size, base64: r.result.split(',')[1] })
+                        r.onerror = reject
+                        r.readAsDataURL(file)
+                      })
+                      try {
+                        const newAttachments = await Promise.all(files.map(read))
+                        setAttachments(a => [...a, ...newAttachments])
+                      } catch { showToast('Could not read one of the files', 'error') }
+                      e.target.value = ''
+                    }} />
+                    {attachments.length > 0 && (
+                      <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {attachments.map((a, i) => (
+                          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem', background: '#f8fafc', padding: '6px 12px', borderRadius: 8 }}>
+                            <span>📎 {a.name} ({(a.size / 1024).toFixed(0)}KB)</span>
+                            <button onClick={() => setAttachments(list => list.filter((_, idx) => idx !== i))} style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontWeight: 700 }}>✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <small style={{ color: 'var(--text-light)', fontSize: '0.74rem' }}>Same attachment(s) sent to every recipient. Total kept under 15MB.</small>
                   </div>
                 </div>
               )}

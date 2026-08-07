@@ -31,6 +31,7 @@ serve(async (req) => {
       signature = 'God bless you,\nCCG World Admin Team',
       footer    = 'You are receiving this because you subscribed on CCG World.',
       recipients,   // Array of { email: string, name?: string }
+      attachments = [], // Array of { filename: string, contentType: string, base64: string }
     } = await req.json()
 
     if (!subject || !body || !recipients?.length) {
@@ -85,6 +86,10 @@ serve(async (req) => {
 </body>
 </html>`
 
+    // Wraps a base64 string at 76 chars/line per RFC 2045 — some mail
+    // servers are lenient about this, but it's cheap to just do it right.
+    const wrapBase64 = (b64: string) => b64.match(/.{1,76}/g)?.join('\r\n') || b64
+
     // Send emails via Gmail SMTP
     // Deno supports native TCP — we use raw SMTP over TLS
     let delivered = 0
@@ -97,27 +102,64 @@ serve(async (req) => {
       const plainText = `${greeting.replace('{name}', name)}\n\n${body}\n\n${signature}\n\n---\n${footer}`
 
       try {
-        // Build RFC 2822 MIME message
-        const boundary = `boundary_${Date.now()}_${Math.random().toString(36).slice(2)}`
-        const message  = [
-          `From: CCG World <${gmailUser}>`,
-          `To: ${toEmail}`,
-          `Subject: ${subject}`,
-          `MIME-Version: 1.0`,
-          `Content-Type: multipart/alternative; boundary="${boundary}"`,
-          ``,
-          `--${boundary}`,
+        // Build RFC 2822 MIME message. With no attachments, keep the simpler
+        // multipart/alternative-only structure (fewer moving parts for the
+        // common case). With attachments, wrap that in an outer
+        // multipart/mixed and append each file as its own part.
+        const altBoundary = `alt_${Date.now()}_${Math.random().toString(36).slice(2)}`
+        const altBody = [
+          `--${altBoundary}`,
           `Content-Type: text/plain; charset=UTF-8`,
           ``,
           plainText,
           ``,
-          `--${boundary}`,
+          `--${altBoundary}`,
           `Content-Type: text/html; charset=UTF-8`,
           ``,
           html,
           ``,
-          `--${boundary}--`,
+          `--${altBoundary}--`,
         ].join('\r\n')
+
+        let message: string
+        if (attachments.length > 0) {
+          const mixedBoundary = `mixed_${Date.now()}_${Math.random().toString(36).slice(2)}`
+          const attachmentParts = attachments.map((att: { filename: string; contentType: string; base64: string }) => [
+            `--${mixedBoundary}`,
+            `Content-Type: ${att.contentType || 'application/octet-stream'}; name="${att.filename}"`,
+            `Content-Transfer-Encoding: base64`,
+            `Content-Disposition: attachment; filename="${att.filename}"`,
+            ``,
+            wrapBase64(att.base64),
+            ``,
+          ].join('\r\n')).join('')
+
+          message = [
+            `From: CCG World <${gmailUser}>`,
+            `To: ${toEmail}`,
+            `Subject: ${subject}`,
+            `MIME-Version: 1.0`,
+            `Content-Type: multipart/mixed; boundary="${mixedBoundary}"`,
+            ``,
+            `--${mixedBoundary}`,
+            `Content-Type: multipart/alternative; boundary="${altBoundary}"`,
+            ``,
+            altBody,
+            ``,
+            attachmentParts,
+            `--${mixedBoundary}--`,
+          ].join('\r\n')
+        } else {
+          message = [
+            `From: CCG World <${gmailUser}>`,
+            `To: ${toEmail}`,
+            `Subject: ${subject}`,
+            `MIME-Version: 1.0`,
+            `Content-Type: multipart/alternative; boundary="${altBoundary}"`,
+            ``,
+            altBody,
+          ].join('\r\n')
+        }
 
         // Connect to Gmail SMTP over TLS (port 465)
         const conn = await Deno.connectTls({

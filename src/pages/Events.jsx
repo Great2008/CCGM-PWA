@@ -14,6 +14,11 @@ export default function Events() {
   const [rsvpError, setRsvpError] = useState({})
   const [lightbox, setLightbox] = useState(null) // { src, title } | null
   const { user, isApproved } = useAuth()
+  const [guestFormOpen, setGuestFormOpen] = useState({})   // event.id -> bool
+  const [guestForm, setGuestForm] = useState({})           // event.id -> {name,email,phone}
+  const [guestSubmitting, setGuestSubmitting] = useState({})
+  const [guestDone, setGuestDone] = useState({})           // event.id -> bool
+  const [guestError, setGuestError] = useState({})
 
   // Load the user's existing registrations so the button reflects real DB state
   // on page load / refresh, instead of always starting as "not RSVP'd".
@@ -37,6 +42,27 @@ export default function Events() {
     const el = document.querySelector(window.location.hash)
     if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200)
   }, [events])
+
+  const submitGuestRsvp = async (event) => {
+    const g = guestForm[event.id] || {}
+    const name = (g.name || '').trim()
+    const email = (g.email || '').trim()
+    const phone = (g.phone || '').trim()
+    if (!name) { setGuestError(e => ({ ...e, [event.id]: 'Name is required' })); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setGuestError(e => ({ ...e, [event.id]: 'Enter a valid email' })); return }
+    setGuestError(e => ({ ...e, [event.id]: null }))
+    setGuestSubmitting(s => ({ ...s, [event.id]: true }))
+    const { error } = await supabase.from('event_registrations').insert({
+      event_id: event.id, is_guest: true, guest_name: name, guest_email: email, guest_phone: phone || null,
+    })
+    setGuestSubmitting(s => ({ ...s, [event.id]: false }))
+    if (error) {
+      // 23505 = unique violation — this email already RSVP'd for this event
+      setGuestError(e => ({ ...e, [event.id]: error.code === '23505' ? "You're already registered with this email" : error.message }))
+      return
+    }
+    setGuestDone(d => ({ ...d, [event.id]: true }))
+  }
 
   const handleRsvp = async (event) => {
     if (!user || !isApproved) return
@@ -183,10 +209,21 @@ export default function Events() {
                             </Link>
                           )}
                           {!user ? (
-                            <Link to="/timeline" style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
-                              🔐 Sign in to RSVP
-                            </Link>
+                            guestDone[event.id] ? (
+                              <span style={{ padding:'9px 20px', borderRadius:30, background:'#f0fdf4', color:'#16a34a', fontWeight:700, fontSize:'0.82rem', border:'1.5px solid #bbf7d0' }}>
+                                ✅ You're on the list
+                              </span>
+                            ) : (
+                              <button onClick={() => setGuestFormOpen(o => ({ ...o, [event.id]: !o[event.id] }))} style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', border:'1.5px solid #bfdbfe', cursor:'pointer', fontFamily:'var(--font-body)' }}>
+                                📋 RSVP as Guest
+                              </button>
+                            )
                           ) : null}
+                          {!user && (
+                            <Link to="/timeline" style={{ padding:'9px 14px', color:'var(--text-light)', fontWeight:600, fontSize:'0.78rem', textDecoration:'underline', alignSelf:'center' }}>
+                              or sign in
+                            </Link>
+                          )}
                           {event.registration_url && (
                             <a href={event.registration_url} target="_blank" rel="noreferrer" style={{ padding:'9px 20px', borderRadius:30, background:'#f8fafc', color:'var(--text-mid)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #e2e8f0' }}>
                               External Reg →
@@ -203,6 +240,29 @@ export default function Events() {
                         </div>
                         {rsvpError[event.id] && (
                           <div style={{ marginTop: 8, fontSize: '0.76rem', color: '#dc2626' }}>⚠️ {rsvpError[event.id]}</div>
+                        )}
+                        {!user && guestFormOpen[event.id] && !guestDone[event.id] && (
+                          <div style={{ marginTop: 14, padding: 16, borderRadius: 12, background: '#f8fafc', border: '1.5px solid #e2e8f0' }}>
+                            <input placeholder="Your name" value={guestForm[event.id]?.name || ''}
+                              onChange={e => setGuestForm(f => ({ ...f, [event.id]: { ...f[event.id], name: e.target.value } }))}
+                              style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: '0.85rem', marginBottom: 8, boxSizing: 'border-box' }} />
+                            <input placeholder="Email (required)" type="email" value={guestForm[event.id]?.email || ''}
+                              onChange={e => setGuestForm(f => ({ ...f, [event.id]: { ...f[event.id], email: e.target.value } }))}
+                              style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: '0.85rem', marginBottom: 8, boxSizing: 'border-box' }} />
+                            <input placeholder="Phone (optional)" value={guestForm[event.id]?.phone || ''}
+                              onChange={e => setGuestForm(f => ({ ...f, [event.id]: { ...f[event.id], phone: e.target.value } }))}
+                              style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: '0.85rem', marginBottom: 10, boxSizing: 'border-box' }} />
+                            {guestError[event.id] && <div style={{ fontSize: '0.78rem', color: '#dc2626', marginBottom: 8 }}>⚠️ {guestError[event.id]}</div>}
+                            <button onClick={() => submitGuestRsvp(event)} disabled={guestSubmitting[event.id]}
+                              style={{ padding: '9px 20px', borderRadius: 30, background: 'var(--brand-mid)', color: 'white', fontWeight: 700, fontSize: '0.82rem', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                              {guestSubmitting[event.id] ? 'Submitting...' : 'Confirm RSVP'}
+                            </button>
+                          </div>
+                        )}
+                        {!user && guestDone[event.id] && (
+                          <div style={{ marginTop: 10, fontSize: '0.8rem', color: '#16a34a' }}>
+                            We've got you down for this one. Keep an eye on your email for updates.
+                          </div>
                         )}
                       </div>
                     </div>
