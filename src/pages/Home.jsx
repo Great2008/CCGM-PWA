@@ -228,9 +228,9 @@ export default function Home() {
             <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:22}}>
               {upcomingEvents.map(event=>(
                 <div key={event.id} className="card">
-                  {event.image ? (
+                  {event.image_url ? (
                     <div style={{position:'relative',overflow:'hidden',height:170}}>
-                      <img src={event.image} alt={event.title} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
+                      <img src={event.image_url} alt={event.title} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
                         onMouseEnter={e=>e.target.style.transform='scale(1.06)'}
                         onMouseLeave={e=>e.target.style.transform='scale(1)'} />
                       {event.category && <div style={{position:'absolute',top:12,left:12}}><span className="tag">{event.category}</span></div>}
