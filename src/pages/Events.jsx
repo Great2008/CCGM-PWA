@@ -13,7 +13,7 @@ export default function Events() {
   const [rsvping, setRsvping] = useState({})
   const [rsvpError, setRsvpError] = useState({})
   const [lightbox, setLightbox] = useState(null) // { src, title } | null
-  const { user, isApproved } = useAuth()
+  const { user, profile, isApproved } = useAuth()
   const [guestFormOpen, setGuestFormOpen] = useState({})   // event.id -> bool
   const [guestForm, setGuestForm] = useState({})           // event.id -> {name,email,phone}
   const [guestSubmitting, setGuestSubmitting] = useState({})
@@ -43,6 +43,23 @@ export default function Events() {
     if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200)
   }, [events])
 
+  // Fire-and-forget — a failed confirmation email should never block or
+  // visibly break the RSVP flow itself.
+  const sendRsvpConfirmation = ({ email, name, event, registrationId }) => {
+    if (!email) return
+    supabase.functions.invoke('send-rsvp-confirmation', {
+      body: {
+        email, name,
+        eventTitle: event.title,
+        eventDate: event.date,
+        eventTime: event.time || null,
+        venue: event.location || null,
+        registrationId,
+        eventUrl: `${window.location.origin}/events#event-${event.id}`,
+      },
+    }).catch(err => console.warn('RSVP confirmation email failed to send:', err))
+  }
+
   const submitGuestRsvp = async (event) => {
     const g = guestForm[event.id] || {}
     const name = (g.name || '').trim()
@@ -52,9 +69,9 @@ export default function Events() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setGuestError(e => ({ ...e, [event.id]: 'Enter a valid email' })); return }
     setGuestError(e => ({ ...e, [event.id]: null }))
     setGuestSubmitting(s => ({ ...s, [event.id]: true }))
-    const { error } = await supabase.from('event_registrations').insert({
+    const { data, error } = await supabase.from('event_registrations').insert({
       event_id: event.id, is_guest: true, guest_name: name, guest_email: email, guest_phone: phone || null,
-    })
+    }).select('id').single()
     setGuestSubmitting(s => ({ ...s, [event.id]: false }))
     if (error) {
       // 23505 = unique violation — this email already RSVP'd for this event
@@ -62,6 +79,7 @@ export default function Events() {
       return
     }
     setGuestDone(d => ({ ...d, [event.id]: true }))
+    sendRsvpConfirmation({ email, name, event, registrationId: data.id })
   }
 
   const handleRsvp = async (event) => {
@@ -74,9 +92,18 @@ export default function Events() {
       if (!error) setRsvpd(r=>({...r,[event.id]:false}))
       else { console.error('Un-RSVP failed:', error); setRsvpError(r=>({...r,[event.id]:error.message})) }
     } else {
-      const { error } = await supabase.from('event_registrations').insert({ event_id:event.id, user_id:user.id })
+      const { data, error } = await supabase.from('event_registrations').insert({ event_id:event.id, user_id:user.id }).select('id').single()
       // 23505 = unique violation — a row already exists (state was just out of sync), treat as success
-      if (!error || error.code === '23505') setRsvpd(r=>({...r,[event.id]:true}))
+      if (!error || error.code === '23505') {
+        setRsvpd(r=>({...r,[event.id]:true}))
+        if (!error && data) {
+          sendRsvpConfirmation({
+            email: user.email,
+            name: profile?.display_name || profile?.full_name || 'Member',
+            event, registrationId: data.id,
+          })
+        }
+      }
       else { console.error('RSVP failed:', error.message, error.code, error.details, error.hint); setRsvpError(r=>({...r,[event.id]:error.message})) }
     }
     setRsvping(r=>({...r,[event.id]:false}))
