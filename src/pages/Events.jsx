@@ -12,6 +12,7 @@ export default function Events() {
   const [rsvpd, setRsvpd] = useState({})
   const [rsvping, setRsvping] = useState({})
   const [rsvpError, setRsvpError] = useState({})
+  const [lightbox, setLightbox] = useState(null) // { src, title } | null
   const { user, isApproved } = useAuth()
 
   // Load the user's existing registrations so the button reflects real DB state
@@ -113,7 +114,8 @@ export default function Events() {
                       {event.image_url ? (
                         <div style={{ position: 'relative', height: 210, overflow: 'hidden' }}>
                           <img src={event.image_url} alt={event.title}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                            onClick={() => setLightbox({ src: event.image_url, title: event.title })}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', cursor: 'zoom-in' }}
                             onMouseEnter={e => e.target.style.transform = 'scale(1.07)'}
                             onMouseLeave={e => e.target.style.transform = 'scale(1)'} />
                           <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 6 }}>
@@ -194,6 +196,7 @@ export default function Events() {
                             title={event.title}
                             text={[event.title, event.date && `📅 ${event.date}`, event.location && `📍 ${event.location}`].filter(Boolean).join(' · ')}
                             url={`${window.location.origin}/events#event-${event.id}`}
+                            imageUrl={event.image_url}
                             style={{ marginLeft: 'auto' }}
                           />
                         </div>
@@ -233,6 +236,20 @@ export default function Events() {
       </section>
 
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
+
+      {lightbox && (
+        <div onClick={() => setLightbox(null)} style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 16px', cursor: 'zoom-out',
+        }}>
+          <button onClick={() => setLightbox(null)} style={{
+            position: 'absolute', top: 16, right: 16, width: 40, height: 40, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', fontSize: '1.3rem', cursor: 'pointer',
+          }}>✕</button>
+          <img src={lightbox.src} alt={lightbox.title} onClick={e => e.stopPropagation()}
+            style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: 10, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', cursor: 'default' }} />
+        </div>
+      )}
     </>
   )
 }
