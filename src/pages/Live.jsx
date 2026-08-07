@@ -280,7 +280,6 @@ function LiveChat({ isLive }) {
 export default function Live() {
   const [settings, setSettings] = useState(null)
   const [loading, setLoading]   = useState(true)
-  const [activeTab, setActiveTab] = useState('youtube')
 
   useEffect(() => {
     getSiteSetting('live').then(value => { setSettings(value || null); setLoading(false) })
@@ -294,7 +293,15 @@ export default function Live() {
     return () => supabase.removeChannel(sub)
   }, [])
 
-  const isLive      = settings?.isLive
+  // A stream flagged "live" for longer than any real service plausibly runs is
+  // almost certainly just a moderator who forgot to switch it off — auto-correct
+  // rather than trust the flag forever. Old data with no liveStartedAt (saved
+  // before this check existed) is treated as live, so we don't hide a
+  // currently-real stream just because it predates this field.
+  const STALE_AFTER_MS = 6 * 60 * 60 * 1000 // 6 hours
+  const isLive = !!settings?.isLive && (
+    !settings?.liveStartedAt || (Date.now() - new Date(settings.liveStartedAt).getTime()) < STALE_AFTER_MS
+  )
   const ytUrl       = settings?.youtubeUrl || ''
   const fbUrl       = settings?.facebookUrl || ''
   const title       = settings?.liveTitle || 'Live Service'
@@ -306,17 +313,14 @@ export default function Live() {
   const hasFB = !!fbUrl
   const hasTT = !!ttUrl
   const ytId = ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|live\/|embed\/))([^?&\s]+)/)?.[1]
-  const ytEmbed = ytId ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0` : null
-  const fbEmbed = fbUrl ? `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(fbUrl)}&width=800&show_text=false&autoplay=true` : null
-  // TikTok live embed — extract video/live ID
-  const ttId = ttUrl.match(/tiktok\.com\/@[^/]+\/(?:video|live)\/([0-9]+)/)?.[1]
-  const ttUser = ttUrl.match(/tiktok\.com\/@([^/\?]+)/)?.[1]
-  // TikTok embeds via their oembed iframe
-  const ttEmbed = ttId
-    ? `https://www.tiktok.com/embed/v2/${ttId}`
-    : ttUser
-    ? `https://www.tiktok.com/embed/@${ttUser}/live`
-    : null
+  // No forced autoplay=1 — most browsers block unmuted autoplay anyway (so it
+  // was likely silently failing), and forcing audio the instant the page opens
+  // isn't great UX regardless. Let people tap play themselves.
+  const ytEmbed = ytId ? `https://www.youtube.com/embed/${ytId}?rel=0` : null
+  // Facebook and TikTok are not embedded — their iframes are known-unreliable
+  // (Facebook's video plugin gets blocked by mobile browsers' third-party
+  // cookie restrictions; TikTok has no officially supported live embed at
+  // all). Both link out to their own players instead — see the render below.
 
   if (loading) return (
     <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--brand-deep)',color:'white',flexDirection:'column',gap:16}}>
@@ -348,34 +352,29 @@ export default function Live() {
           {description && isLive && (
             <p style={{color:'rgba(255,255,255,0.7)',fontSize:'1rem',margin:'0 auto 24px',lineHeight:1.7,maxWidth:560}}>{description}</p>
           )}
-          {isLive && hasYT && hasFB && (
-            <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:24}}>
-              {[['youtube','▶ YouTube'],['facebook','📘 Facebook']].map(([id,label])=>(
-                <button key={id} onClick={()=>setActiveTab(id)} style={{padding:'9px 24px',borderRadius:30,border:'1.5px solid',borderColor:activeTab===id?'white':'rgba(255,255,255,0.25)',background:activeTab===id?'white':'transparent',color:activeTab===id?'var(--brand-deep)':'white',fontWeight:700,fontSize:'0.85rem',cursor:'pointer',fontFamily:'var(--font-body)',transition:'all 0.2s'}}>{label}</button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
       <div className="container" style={{maxWidth:900,padding:'32px 5% 80px'}}>
-        {isLive && (hasYT || hasFB) && (
-          <div style={{marginBottom:40}}>
+        {isLive && hasYT && (
+          <div style={{marginBottom:hasFB||hasTT?24:40}}>
             <div style={{position:'relative',paddingBottom:'56.25%',height:0,borderRadius:16,overflow:'hidden',boxShadow:'0 24px 64px rgba(0,0,0,0.3)',border:'2px solid #dc2626'}}>
-              {(activeTab==='youtube'||(!hasFB&&activeTab!=='tiktok')) && ytEmbed && (
-                <iframe src={ytEmbed} title="Live Stream" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} />
-              )}
-              {(activeTab==='facebook'||!hasYT) && fbEmbed && (
-                <iframe src={fbEmbed} title="Live Stream - Facebook" allow="autoplay;clipboard-write;encrypted-media;picture-in-picture;web-share" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} />
-              )}
-              {activeTab==='tiktok' && ttEmbed && (
-                <iframe src={ttEmbed} title="Live Stream - TikTok" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} sandbox="allow-scripts allow-same-origin allow-popups" />
-              )}
+              <iframe src={ytEmbed} title="Live Stream" allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowFullScreen style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}} />
             </div>
-            <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:16,flexWrap:'wrap'}}>
-              {ytUrl && <a href={ytUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#ff0000',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>▶ Watch on YouTube</a>}
-              {fbUrl && <a href={fbUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#1877f2',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>📘 Watch on Facebook</a>}
-              {ttUrl && <a href={ttUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#010101',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>♪ Watch on TikTok</a>}
+          </div>
+        )}
+
+        {isLive && (hasFB || hasTT) && (
+          <div style={{marginBottom:40}}>
+            {!hasYT && (
+              <div style={{textAlign:'center',marginBottom:16,color:'var(--text-mid)',fontSize:'0.9rem'}}>
+                📡 We're live — watch on the platform below
+              </div>
+            )}
+            <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
+              {!hasYT && ytUrl && <a href={ytUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#ff0000',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>▶ Watch on YouTube</a>}
+              {fbUrl && <a href={fbUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#1877f2',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>📘 Watch Live on Facebook</a>}
+              {ttUrl && <a href={ttUrl} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:6,padding:'8px 20px',borderRadius:30,background:'#010101',color:'white',fontWeight:700,fontSize:'0.82rem',textDecoration:'none'}}>♪ Watch Live on TikTok</a>}
             </div>
           </div>
         )}

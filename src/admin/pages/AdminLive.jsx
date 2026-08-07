@@ -49,8 +49,15 @@ export default function AdminLive() {
   const save = async () => {
     setSaving(true)
     const wasLive = savedLive
+    // Stamp when the stream actually started, so the public page can auto-detect
+    // a stale "live" flag (e.g. a moderator forgot to turn it off) without any
+    // extra admin workflow — see Live.jsx's staleness check.
+    const payload = { ...data }
+    if (data.isLive && !wasLive) payload.liveStartedAt = new Date().toISOString()
+    if (!data.isLive) payload.liveStartedAt = null
     try {
-      await setContent('live', data)
+      await setContent('live', payload)
+      setData(payload)
       showToast('Live settings saved!'); logAction(data.isLive && !wasLive ? 'live_started' : !data.isLive && wasLive ? 'live_ended' : 'live_updated', data.isLive ? 'Stream set to LIVE' : 'Stream set to offline', null)
       // Auto-send push notification when going live
       if (data.isLive && !wasLive) {
