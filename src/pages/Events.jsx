@@ -110,9 +110,9 @@ export default function Events() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))', gap: 26 }}>
                   {filtered.map(event => (
                     <div key={event.id} id={`event-${event.id}`} className="card">
-                      {event.image ? (
+                      {event.image_url ? (
                         <div style={{ position: 'relative', height: 210, overflow: 'hidden' }}>
-                          <img src={event.image} alt={event.title}
+                          <img src={event.image_url} alt={event.title}
                             style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                             onMouseEnter={e => e.target.style.transform = 'scale(1.07)'}
                             onMouseLeave={e => e.target.style.transform = 'scale(1)'} />
