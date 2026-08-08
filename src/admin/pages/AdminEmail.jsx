@@ -51,6 +51,7 @@ export default function AdminEmail() {
     if (logSearch && !`${l.recipient_email} ${l.recipient_name} ${l.subject}`.toLowerCase().includes(logSearch.toLowerCase())) return false
     return true
   })
+  const emailSubs = subs.filter(s => s.wants_email && s.active && s.email)
   const waSubs    = subs.filter(s => s.wants_whatsapp && s.active && s.whatsapp)
   const recipients = recipientSource === 'subscribers' ? emailSubs : eventRecipients
 
