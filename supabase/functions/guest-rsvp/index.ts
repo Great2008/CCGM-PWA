@@ -1,4 +1,23 @@
-
+// supabase/functions/guest-rsvp/index.ts
+// Handles public (no-login) guest RSVPs server-side, using the service role
+// key — which bypasses RLS entirely, since this is trusted server code, not
+// a public client. This replaces having the browser insert directly into
+// event_registrations as `anon`, which was tangled up in several interacting
+// RLS policies. Also sends the confirmation email in the same request.
+//
+// Self-contained — no cross-file imports, so this can be deployed by pasting
+// the whole file into the Supabase Dashboard's Edge Function editor.
+//
+// Required Supabase Secrets (dashboard → Edge Functions → Secrets):
+//   SMTP_HOST        = smtp-relay.brevo.com
+//   SMTP_PORT        = 587
+//   SMTP_LOGIN       = your SMTP login
+//   SMTP_PASSWORD    = your SMTP key / app password
+//   SMTP_FROM_EMAIL  = the address you verified as a sender
+//   SMTP_FROM_NAME   = CCG World   (optional)
+//
+// SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are auto-injected by Supabase
+// into every edge function — nothing to add for those two.
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -8,7 +27,8 @@ const CORS = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-
+// ── Inlined SMTP sender (see send-newsletter/send-rsvp-confirmation for the
+// same code — duplicated on purpose for phone-paste deployability) ────────
 interface EmailAttachment { filename: string; contentType: string; base64: string }
 interface SendEmailOptions {
   host: string; port: number; login: string; password: string
@@ -139,6 +159,7 @@ serve(async (req) => {
     // Best-effort confirmation email — the RSVP itself already succeeded above,
     // so an email failure here shouldn't turn into an error response.
     let emailSent = false
+    let emailError: string | null = null
     try {
       const smtpHost = Deno.env.get('SMTP_HOST')
       const smtpPort = Number(Deno.env.get('SMTP_PORT') || '587')
@@ -211,13 +232,30 @@ serve(async (req) => {
 
         await sendSmtpEmail({ host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword, fromEmail, fromName, to: cleanEmail, subject, html, text })
         emailSent = true
+      } else {
+        emailError = 'SMTP secrets not fully configured'
       }
     } catch (emailErr) {
+      emailError = emailErr.message
       console.warn('RSVP confirmation email failed:', emailErr.message)
     }
 
+    // Log the delivery attempt regardless of outcome — this is what makes
+    // "why didn't this email arrive" answerable from the admin panel instead
+    // of digging through Supabase's function logs.
+    try {
+      await supabase.from('email_delivery_logs').insert({
+        source: 'guest-rsvp',
+        recipient_email: cleanEmail,
+        recipient_name: cleanName,
+        subject: `🎟️ Your RSVP is Confirmed — ${event.title}`,
+        success: emailSent,
+        error_message: emailError,
+      })
+    } catch (_) { /* logging itself failing should never break the RSVP flow */ }
+
     return new Response(
-      JSON.stringify({ success: true, registrationId: reg.id, emailSent }),
+      JSON.stringify({ success: true, registrationId: reg.id, emailSent, emailError }),
       { headers: { ...CORS, 'Content-Type': 'application/json' } }
     )
 

@@ -11,6 +11,7 @@
 //   SMTP_FROM_NAME   = CCG World   (optional)
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 // ── Inlined SMTP sender (kept duplicated across functions on purpose — this
 // project is maintained from a phone, and pasting one self-contained file
@@ -232,12 +233,14 @@ serve(async (req) => {
 </body>
 </html>`
 
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
     let delivered = 0
     const errors: string[] = []
 
     for (const recipient of recipients) {
       const name    = recipient.name || 'Member'
       const toEmail = recipient.email
+      let sendError: string | null = null
       try {
         await sendSmtpEmail({
           host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword,
@@ -248,9 +251,16 @@ serve(async (req) => {
         })
         delivered++
       } catch (err) {
+        sendError = err.message
         errors.push(`${toEmail}: ${err.message}`)
       }
-      await new Promise(r => setTimeout(r, 150)) // avoid Gmail rate limits
+      try {
+        await supabase.from('email_delivery_logs').insert({
+          source: 'send-newsletter', recipient_email: toEmail, recipient_name: name,
+          subject, success: !sendError, error_message: sendError,
+        })
+      } catch (_) { /* logging itself failing should never abort the batch */ }
+      await new Promise(r => setTimeout(r, 150)) // avoid rate limits
     }
 
     return new Response(

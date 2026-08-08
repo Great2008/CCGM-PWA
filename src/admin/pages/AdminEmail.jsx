@@ -4,7 +4,7 @@ import supabaseAdmin from '../../lib/supabase'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 
-const TABS = ['✉️ Email', '💬 WhatsApp', '👥 Subscribers']
+const TABS = ['✉️ Email', '💬 WhatsApp', '👥 Subscribers', '📋 Delivery Logs']
 
 export default function AdminEmail() {
   const { showToast, logAction } = useAdmin()
@@ -29,8 +29,28 @@ export default function AdminEmail() {
   const [eventRecipients, setEventRecipients] = useState([])
   const [loadingEventRecipients, setLoadingEventRecipients] = useState(false)
   const [attachments, setAttachments] = useState([]) // {name, type, size, base64}
+  const [deliveryLogs, setDeliveryLogs] = useState([])
+  const [loadingLogs, setLoadingLogs] = useState(false)
+  const [logFilter, setLogFilter] = useState('all') // 'all' | 'failed' | 'sent'
+  const [logSearch, setLogSearch] = useState('')
 
-  const emailSubs = subs.filter(s => s.wants_email && s.active && s.email)
+  useEffect(() => {
+    if (tab !== 3) return
+    setLoadingLogs(true)
+    supabaseAdmin.from('email_delivery_logs').select('*').order('created_at', { ascending: false }).limit(300)
+      .then(({ data, error }) => {
+        if (error) showToast('Could not load delivery logs: ' + error.message, 'error')
+        setDeliveryLogs(data || [])
+        setLoadingLogs(false)
+      })
+  }, [tab])
+
+  const filteredLogs = deliveryLogs.filter(l => {
+    if (logFilter === 'failed' && l.success) return false
+    if (logFilter === 'sent' && !l.success) return false
+    if (logSearch && !`${l.recipient_email} ${l.recipient_name} ${l.subject}`.toLowerCase().includes(logSearch.toLowerCase())) return false
+    return true
+  })
   const waSubs    = subs.filter(s => s.wants_whatsapp && s.active && s.whatsapp)
   const recipients = recipientSource === 'subscribers' ? emailSubs : eventRecipients
 
@@ -465,6 +485,65 @@ export default function AdminEmail() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+        </AdminCard>
+      )}
+
+      {tab === 3 && (
+        <AdminCard>
+          <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+            <input
+              value={logSearch}
+              onChange={e => setLogSearch(e.target.value)}
+              placeholder="🔍 Search email, name, or subject..."
+              style={{ flex: '1 1 220px', padding: '9px 14px', borderRadius: 30, border: '1.5px solid #e2e8f0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', outline: 'none' }}
+            />
+            <div style={{ display: 'flex', gap: 6 }}>
+              {[['all', 'All'], ['failed', '❌ Failed'], ['sent', '✅ Sent']].map(([id, label]) => (
+                <button key={id} onClick={() => setLogFilter(id)} style={{
+                  padding: '7px 14px', borderRadius: 20, border: '1.5px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 700,
+                  borderColor: logFilter === id ? 'var(--brand-mid)' : '#e2e8f0',
+                  background: logFilter === id ? 'var(--brand-mid)' : 'white',
+                  color: logFilter === id ? 'white' : 'var(--text-mid)',
+                }}>{label}</button>
+              ))}
+            </div>
+          </div>
+
+          {loadingLogs ? (
+            <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-light)' }}>Loading...</div>
+          ) : filteredLogs.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-light)' }}>
+              {deliveryLogs.length === 0 ? 'No email delivery attempts logged yet.' : 'No logs match this filter.'}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {filteredLogs.map(l => (
+                <div key={l.id} style={{
+                  padding: '12px 16px', borderRadius: 10, border: '1.5px solid', fontSize: '0.85rem',
+                  borderColor: l.success ? '#bbf7d0' : '#fecaca', background: l.success ? '#f0fdf4' : '#fef2f2',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                    <div>
+                      <span style={{ fontWeight: 700, color: 'var(--brand-deep)' }}>{l.recipient_name || 'Unknown'}</span>
+                      <span style={{ color: 'var(--text-light)' }}> · {l.recipient_email}</span>
+                    </div>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-light)', whiteSpace: 'nowrap' }}>
+                      {new Date(l.created_at).toLocaleString()}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-mid)', marginTop: 4 }}>
+                    <code style={{ background: 'rgba(0,0,0,0.06)', padding: '1px 6px', borderRadius: 4, fontSize: '0.72rem' }}>{l.source}</code>
+                    {l.subject && <span> · {l.subject}</span>}
+                  </div>
+                  {l.success ? (
+                    <div style={{ marginTop: 6, color: '#16a34a', fontWeight: 700, fontSize: '0.78rem' }}>✅ Delivered</div>
+                  ) : (
+                    <div style={{ marginTop: 6, color: '#dc2626', fontWeight: 700, fontSize: '0.78rem' }}>❌ {l.error_message || 'Failed — no error message captured'}</div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </AdminCard>

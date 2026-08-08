@@ -11,6 +11,7 @@
 //   SMTP_FROM_NAME   = CCG World   (optional)
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 // ── Inlined SMTP sender (kept duplicated across functions on purpose — this
 // project is maintained from a phone, and pasting one self-contained file
@@ -313,7 +314,31 @@ serve(async (req) => {
       `God First`,
     ].filter(Boolean).join('\n')
 
-    await sendSmtpEmail({ host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword, fromEmail, fromName, to: email, subject, html, text })
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
+    let sendError: string | null = null
+    try {
+      await sendSmtpEmail({ host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword, fromEmail, fromName, to: email, subject, html, text })
+    } catch (err) {
+      sendError = err.message
+    }
+
+    try {
+      await supabase.from('email_delivery_logs').insert({
+        source: 'send-rsvp-confirmation',
+        recipient_email: email,
+        recipient_name: name,
+        subject,
+        success: !sendError,
+        error_message: sendError,
+      })
+    } catch (_) { /* logging itself failing should never break the response */ }
+
+    if (sendError) {
+      return new Response(
+        JSON.stringify({ error: sendError }),
+        { status: 500, headers: { ...CORS, 'Content-Type': 'application/json' } }
+      )
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
