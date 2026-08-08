@@ -69,17 +69,18 @@ export default function Events() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setGuestError(e => ({ ...e, [event.id]: 'Enter a valid email' })); return }
     setGuestError(e => ({ ...e, [event.id]: null }))
     setGuestSubmitting(s => ({ ...s, [event.id]: true }))
-    const { data, error } = await supabase.from('event_registrations').insert({
-      event_id: event.id, is_guest: true, guest_name: name, guest_email: email, guest_phone: phone || null,
-    }).select('id').single()
+    const { data, error } = await supabase.functions.invoke('guest-rsvp', {
+      body: { eventId: event.id, name, email, phone },
+    })
     setGuestSubmitting(s => ({ ...s, [event.id]: false }))
-    if (error) {
-      // 23505 = unique violation — this email already RSVP'd for this event
-      setGuestError(e => ({ ...e, [event.id]: error.code === '23505' ? "You're already registered with this email" : error.message }))
+    // supabase-js surfaces non-2xx responses as `error`, with the function's
+    // own JSON body (our {error: message}) available on error.context
+    if (error || data?.error) {
+      const message = data?.error || error?.message || 'Something went wrong — please try again'
+      setGuestError(e => ({ ...e, [event.id]: message }))
       return
     }
     setGuestDone(d => ({ ...d, [event.id]: true }))
-    sendRsvpConfirmation({ email, name, event, registrationId: data.id })
   }
 
   const handleRsvp = async (event) => {
