@@ -274,13 +274,10 @@ export default function AdminEmail() {
           ) : (
             <>
               <div style={{ background: '#fffbeb', border: '1.5px solid #fcd34d', borderRadius: 12, padding: '14px 18px', marginBottom: 18, fontSize: '0.82rem', color: '#92400e' }}>
-                <strong>⚙️ Gmail Setup</strong> — Add these secrets to your Supabase Edge Function dashboard:
                 <code style={{ display: 'block', marginTop: 6, background: 'rgba(0,0,0,0.06)', padding: '6px 10px', borderRadius: 6, lineHeight: 1.8 }}>
-                  GMAIL_USER = yourname@gmail.com<br />
-                  GMAIL_APP_PASSWORD = xxxx-xxxx-xxxx-xxxx
-                </code>
+                 </code>
                 <span style={{ display: 'block', marginTop: 6 }}>
-                  Generate an App Password at <strong>myaccount.google.com → Security → 2-Step Verification → App passwords</strong>
+                  
                 </span>
               </div>
 
