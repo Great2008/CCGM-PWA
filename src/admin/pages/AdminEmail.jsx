@@ -116,7 +116,7 @@ export default function AdminEmail() {
     if (!window.confirm(`Send this email to ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}?`)) return
     setSending(true)
     try {
-      const { error } = await supabaseAdmin.functions.invoke('send-newsletter', {
+      const { data, error } = await supabaseAdmin.functions.invoke('send-newsletter', {
         body: {
           subject: form.subject,
           greeting: form.greeting,
@@ -128,16 +128,29 @@ export default function AdminEmail() {
         },
       })
       if (error) throw error
+      const delivered = data?.delivered ?? recipients.length
+      const failed = data?.failed ?? 0
       await supabaseAdmin.from('email_logs').insert({
         subject: form.subject, body: form.body,
         recipients: recipients.length,
         recipient_emails: recipients.map(s => s.email),
-        sent_at: new Date().toISOString(), status: 'sent',
+        sent_at: new Date().toISOString(), status: failed > 0 ? 'partial' : 'sent',
       })
-      logAction('email_sent', `Email sent to ${recipients.length} recipients (${recipientSource === 'event' ? 'event RSVPs' : 'newsletter subscribers'}): ${form.subject}`, form.subject); showToast(`✅ Email sent to ${recipients.length} recipients!`)
+      logAction('email_sent', `Email sent to ${delivered}/${recipients.length} recipients (${recipientSource === 'event' ? 'event RSVPs' : 'newsletter subscribers'}): ${form.subject}`, form.subject)
+      if (failed === 0) {
+        showToast(`✅ Email sent to ${delivered} recipients!`)
+      } else if (delivered === 0) {
+        showToast(`❌ Failed to send to all ${failed} recipients — check Delivery Logs`, 'error')
+      } else {
+        showToast(`⚠️ Sent to ${delivered}, failed for ${failed} — check Delivery Logs`, 'error')
+      }
       setForm(f => ({ ...f, subject: '', body: '' }))
       setAttachments([])
-    } catch {
+    } catch (err) {
+      // All recipients failed at the SMTP level (edge function reachable,
+      // but every send failed) vs. the function being unreachable entirely
+      // are different problems — check Delivery Logs either way for the
+      // real per-recipient reason instead of guessing here.
       if (recipients.length <= 50) {
         const emails  = recipients.map(s => s.email).join(',')
         const subject = encodeURIComponent(form.subject)
@@ -146,9 +159,9 @@ export default function AdminEmail() {
           '\n\n' + form.signature + '\n\n---\n' + form.footer
         )
         window.open(`mailto:${emails}?subject=${subject}&body=${body}`)
-        showToast(`Opened Gmail with ${recipients.length} recipients`)
+        showToast(`Could not send via SMTP (opened your email app instead) — check 📋 Delivery Logs for why`, 'error')
       } else {
-        showToast('Edge Function not configured yet — see setup notice above', 'error')
+        showToast('Could not send — check 📋 Delivery Logs for the reason', 'error')
       }
     }
     setSending(false)
