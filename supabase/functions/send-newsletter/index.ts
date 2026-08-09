@@ -204,7 +204,7 @@ serve(async (req) => {
       subject,
       greeting  = 'Dear {name},',
       body,
-      signature = 'God bless you,\nCCG World Admin Team',
+      signature = 'God first always. God bless you.\nOne Family. One Faith. One Mission.\nCCG World.',
       footer    = 'You are receiving this because you subscribed on CCG World.',
       recipients,   // Array of { email: string, name?: string }
       attachments = [] as EmailAttachment[],
@@ -231,30 +231,22 @@ serve(async (req) => {
       )
     }
 
-    const buildHtml = (name: string) => `
-<!DOCTYPE html>
+    const buildHtml = (name: string) => `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f8fafc;">
-  <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-    <div style="background:linear-gradient(135deg,#0f1f3d,#1a3a6b);padding:36px;text-align:center;">
-      <div style="color:#f59e0b;font-size:1.6rem;font-weight:900;letter-spacing:3px;font-family:Georgia,serif;">CCG WORLD</div>
-      <div style="color:rgba(255,255,255,0.55);font-size:0.7rem;letter-spacing:4px;margin-top:6px;font-family:Arial,sans-serif;">CHRISTIAN CHURCH OF GOD MISSION</div>
-    </div>
-    <div style="padding:40px 36px;font-family:Georgia,serif;">
-      <p style="color:#1e293b;margin:0 0 22px;font-size:1rem;">${greeting.replace('{name}', name)}</p>
-      ${body.split('\n\n').map((p: string) =>
-        `<p style="color:#334155;line-height:1.85;margin:0 0 18px;font-size:0.97rem;">${p.replace(/\n/g, '<br/>')}</p>`
+<body style="margin:0;padding:0;background:#ffffff;">
+  <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;color:#1f2937;">
+    <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${greeting.replace('{name}', name)}</p>
+    ${body.split('\n\n').map((p: string) =>
+      `<p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${p.replace(/\n/g, '<br/>')}</p>`
+    ).join('')}
+    <div style="margin-top:24px;">
+      ${signature.split('\n').map((l: string) =>
+        `<p style="font-size:0.95rem;line-height:1.6;margin:0;">${l}</p>`
       ).join('')}
-      <div style="margin-top:36px;padding-top:24px;border-top:2px solid #f1f5f9;">
-        ${signature.split('\n').map((l: string) =>
-          `<p style="color:#1e293b;margin:0 0 4px;font-size:0.95rem;">${l}</p>`
-        ).join('')}
-      </div>
     </div>
-    <div style="background:#f8fafc;padding:20px 36px;text-align:center;border-top:1px solid #e2e8f0;">
-      <p style="color:#94a3b8;font-size:0.72rem;margin:0;font-family:Arial,sans-serif;">${footer}</p>
-    </div>
+    <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;" />
+    <p style="font-size:0.75rem;color:#9ca3af;margin:0;">${footer}</p>
   </div>
 </body>
 </html>`

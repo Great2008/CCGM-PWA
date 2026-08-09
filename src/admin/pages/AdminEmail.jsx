@@ -17,7 +17,7 @@ export default function AdminEmail() {
     subject:   '',
     greeting:  'Dear {name},',
     body:      '',
-    signature: 'God bless you,\nCCG World Admin Team',
+    signature: 'God first always. God bless you.\nOne Family. One Faith. One Mission.\nCCG World.',
     footer:    'You are receiving this because you subscribed on CCG World.',
   })
   const [waMsg, setWaMsg]         = useState('')
@@ -89,21 +89,14 @@ export default function AdminEmail() {
   const F = k => ({ value: form[k] || '', onChange: e => setForm(f => ({ ...f, [k]: e.target.value })) })
 
   const buildHtml = (name = 'Member') => `
-    <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#fff;">
-      <div style="background:linear-gradient(135deg,#0f1f3d,#1a3a6b);padding:32px;text-align:center;">
-        <div style="color:#f59e0b;font-size:1.5rem;font-weight:900;letter-spacing:2px;">CCG WORLD</div>
-        <div style="color:rgba(255,255,255,0.6);font-size:0.75rem;letter-spacing:3px;margin-top:4px;">CHRISTIAN CHURCH OF GOD MISSION</div>
+    <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:8px 4px;color:#1f2937;">
+      <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${form.greeting.replace('{name}', name)}</p>
+      ${form.body.split('\n\n').map(p => `<p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${p.replace(/\n/g, '<br/>')}</p>`).join('')}
+      <div style="margin-top:24px;">
+        ${form.signature.split('\n').map(l => `<p style="font-size:0.95rem;line-height:1.6;margin:0;">${l}</p>`).join('')}
       </div>
-      <div style="padding:40px 36px;">
-        <p style="color:#1e293b;margin:0 0 20px;">${form.greeting.replace('{name}', name)}</p>
-        ${form.body.split('\n\n').map(p => `<p style="color:#334155;line-height:1.8;margin:0 0 18px;">${p.replace(/\n/g, '<br/>')}</p>`).join('')}
-        <div style="margin-top:32px;padding-top:24px;border-top:1px solid #e2e8f0;">
-          ${form.signature.split('\n').map(l => `<p style="color:#1e293b;margin:0;">${l}</p>`).join('')}
-        </div>
-      </div>
-      <div style="background:#f8fafc;padding:20px 36px;text-align:center;">
-        <p style="color:#94a3b8;font-size:0.75rem;margin:0;">${form.footer}</p>
-      </div>
+      <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;" />
+      <p style="font-size:0.75rem;color:#9ca3af;margin:0;">${form.footer}</p>
     </div>`
 
   const handleSendEmail = async () => {

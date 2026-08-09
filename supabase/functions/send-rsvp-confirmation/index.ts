@@ -244,67 +244,23 @@ serve(async (req) => {
 
     const subject = `🎟️ Your RSVP is Confirmed — ${eventTitle}`
 
-    const html = `
-<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f8fafc;">
-  <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-
-    <div style="background:linear-gradient(135deg,#0a2612,#16653a);padding:36px;text-align:center;">
-      <div style="color:#f59e0b;font-size:1.1rem;font-weight:900;letter-spacing:1px;margin-bottom:8px;">🎟️ YOUR RSVP IS CONFIRMED</div>
-      <div style="color:rgba(255,255,255,0.6);font-size:0.7rem;letter-spacing:4px;font-family:Arial,sans-serif;">CCG WORLD · CHRISTIAN CHURCH OF GOD MISSION</div>
-    </div>
-
-    <div style="padding:40px 36px;font-family:Georgia,serif;">
-      <p style="color:#1e293b;margin:0 0 20px;font-size:1rem;">Dear ${name},</p>
-      <p style="color:#334155;line-height:1.85;margin:0 0 18px;font-size:0.97rem;">
-        Thank you for registering for <strong>${eventTitle}</strong>.
-      </p>
-      <p style="color:#334155;line-height:1.85;margin:0 0 30px;font-size:0.97rem;">
-        We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.
-      </p>
-
-      <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:26px 24px;margin-bottom:30px;">
-        <div style="color:#166534;font-size:0.72rem;font-weight:700;letter-spacing:2px;margin-bottom:12px;">✨ EVENT DETAILS</div>
-        <div style="color:#0a2612;font-size:1.1rem;font-weight:700;margin-bottom:16px;">${eventTitle}</div>
-        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;color:#334155;">
-          <tr><td style="padding:5px 0;width:120px;">📅 Date:</td><td style="padding:5px 0;font-weight:600;">${dateLine}</td></tr>
-          ${venue ? `<tr><td style="padding:5px 0;">📍 Venue:</td><td style="padding:5px 0;font-weight:600;">${venue}</td></tr>` : ''}
-          <tr><td style="padding:5px 0;">🎟️ Status:</td><td style="padding:5px 0;font-weight:700;color:#16a34a;">RSVP CONFIRMED</td></tr>
-        </table>
-        <div style="margin-top:18px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:0.85rem;color:#64748b;">
-          <div>Attendee: <strong style="color:#1e293b;">${name}</strong></div>
-          <div style="margin-top:4px;">Registration ID: <code style="color:#1e293b;">${registrationId}</code></div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:30px;">
-        <div style="color:#166534;font-size:0.72rem;font-weight:700;letter-spacing:2px;margin-bottom:10px;">🙏 GET READY FOR AN ENCOUNTER</div>
-        <p style="color:#334155;line-height:1.85;margin:0 0 14px;font-size:0.95rem;">
-          Prepare your heart for a powerful time of worship, fellowship, teaching, prayer, inspiration, and an encounter with Jesus.
-        </p>
-        <p style="color:#334155;line-height:1.85;margin:0;font-size:0.95rem;">
-          Your registration has been successfully recorded. Please keep this email for your records and have your registration details available when attending the event.
-        </p>
-      </div>
-
-      ${eventUrl ? `
-      <div style="text-align:center;margin-bottom:30px;">
-        <a href="${eventUrl}" style="display:inline-block;background:#16653a;color:#fff;text-decoration:none;padding:12px 28px;border-radius:30px;font-family:Arial,sans-serif;font-weight:700;font-size:0.85rem;">View Event on CCG World</a>
-      </div>` : ''}
-
-      <div style="text-align:center;border-top:2px solid #f1f5f9;padding-top:26px;">
-        <p style="color:#1e293b;font-weight:700;margin:0 0 10px;font-size:0.98rem;">WE LOOK FORWARD TO WELCOMING YOU!</p>
-        <p style="color:#64748b;line-height:1.8;margin:0 0 6px;font-size:0.9rem;">Come expectant. Come prepared. Come ready to encounter Jesus.</p>
-        ${venue ? `<p style="color:#64748b;margin:0;font-size:0.9rem;">See you at ${venue}! 🙌</p>` : ''}
-      </div>
-    </div>
-
-    <div style="background:#f8fafc;padding:22px 36px;text-align:center;border-top:1px solid #e2e8f0;">
-      <p style="color:#1e293b;font-weight:700;margin:0 0 2px;font-size:0.82rem;font-family:Arial,sans-serif;">Christian Church Of God Mission (CCG)</p>
-      <p style="color:#94a3b8;font-size:0.72rem;margin:0;font-family:Arial,sans-serif;">God First</p>
-    </div>
+<body style="margin:0;padding:0;background:#ffffff;">
+  <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;color:#1f2937;">
+    <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">Dear ${name},</p>
+    <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">Thank you for registering for <strong>${eventTitle}</strong>. We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.</p>
+    <p style="font-size:0.95rem;line-height:1.6;margin:24px 0 4px;"><strong>${eventTitle}</strong></p>
+    <p style="font-size:0.9rem;line-height:1.6;margin:0;color:#4b5563;">Date: ${dateLine}</p>
+    ${venue ? `<p style="font-size:0.9rem;line-height:1.6;margin:0;color:#4b5563;">Venue: ${venue}</p>` : ''}
+    <p style="font-size:0.9rem;line-height:1.6;margin:0;color:#4b5563;">Status: RSVP Confirmed</p>
+    <p style="font-size:0.9rem;line-height:1.6;margin:0 0 24px;color:#4b5563;">Registration ID: ${registrationId}</p>
+    <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">Prepare your heart for a powerful time of worship, fellowship, teaching, prayer, inspiration, and an encounter with Jesus. Please keep this email for your records.</p>
+    ${eventUrl ? `<p style="font-size:0.95rem;margin:24px 0;"><a href="${eventUrl}" style="color:#2563eb;">View Event on CCG World</a></p>` : ''}
+    <p style="font-size:0.95rem;line-height:1.6;margin:24px 0 0;">We look forward to welcoming you${venue ? ` at ${venue}` : ''}.</p>
+    <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;" />
+    <p style="font-size:0.75rem;color:#9ca3af;margin:0;line-height:1.6;">God first always. God bless you.<br/>One Family. One Faith. One Mission.<br/>CCG World.</p>
   </div>
 </body>
 </html>`
@@ -312,32 +268,24 @@ serve(async (req) => {
     const text = [
       `Dear ${name},`,
       ``,
-      `🎟️ YOUR RSVP IS CONFIRMED`,
+      `Thank you for registering for ${eventTitle}. We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.`,
       ``,
-      `Thank you for registering for ${eventTitle}.`,
-      `We are delighted to confirm your attendance and look forward to welcoming you to this special gathering.`,
-      ``,
-      `✨ EVENT DETAILS`,
       eventTitle,
-      `📅 Date: ${dateLine}`,
-      venue ? `📍 Venue: ${venue}` : '',
-      `🎟️ Status: RSVP CONFIRMED`,
-      ``,
-      `Attendee: ${name}`,
+      `Date: ${dateLine}`,
+      venue ? `Venue: ${venue}` : '',
+      `Status: RSVP Confirmed`,
       `Registration ID: ${registrationId}`,
       ``,
-      `🙏 GET READY FOR AN ENCOUNTER`,
       `Prepare your heart for a powerful time of worship, fellowship, teaching, prayer, inspiration, and an encounter with Jesus.`,
-      `Your registration has been successfully recorded. Please keep this email for your records.`,
+      `Please keep this email for your records.`,
       ``,
       eventUrl ? `View Event on CCG World: ${eventUrl}` : '',
       ``,
-      `WE LOOK FORWARD TO WELCOMING YOU!`,
-      `Come expectant. Come prepared. Come ready to encounter Jesus.`,
-      venue ? `See you at ${venue}! 🙌` : '',
+      `We look forward to welcoming you${venue ? ` at ${venue}` : ''}.`,
       ``,
-      `Christian Church Of God Mission (CCG)`,
-      `God First`,
+      `God first always. God bless you.`,
+      `One Family. One Faith. One Mission.`,
+      `CCG World.`,
     ].filter(Boolean).join('\n')
 
     const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
