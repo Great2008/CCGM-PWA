@@ -117,46 +117,72 @@ export async function sendSmtpEmail(opts: SendEmailOptions): Promise<void> {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
 
-  const readLine = async (c: Deno.Conn): Promise<string> => {
-    const buf = new Uint8Array(1024)
-    await c.read(buf)
-    return decoder.decode(buf).trim()
+  // Buffered line reader — accumulates bytes across multiple read() calls
+  // until a full \r\n-terminated line is available. A single read() can
+  // return a partial line, several lines at once, or anything in between —
+  // SMTP servers routinely send multi-line responses (EHLO's capability
+  // list in particular) in one burst, and naively assuming "one read() =
+  // one line" causes responses to silently get misaligned by one step,
+  // which showed up as auth appearing to fail on the *prompt* for the
+  // password rather than the actual result.
+  let buffer = ''
+  const readLine = async (): Promise<string> => {
+    while (true) {
+      const idx = buffer.indexOf('\r\n')
+      if (idx !== -1) {
+        const line = buffer.slice(0, idx)
+        buffer = buffer.slice(idx + 2)
+        return line
+      }
+      const chunk = new Uint8Array(4096)
+      const n = await conn.read(chunk)
+      if (n === null) throw new Error('SMTP connection closed unexpectedly')
+      buffer += decoder.decode(chunk.subarray(0, n))
+    }
   }
-  const send = async (c: Deno.Conn, cmd: string) => { await c.write(encoder.encode(cmd + '\r\n')) }
+  // Consumes a full (possibly multi-line) SMTP response — continuation
+  // lines are formatted "250-text", the final line "250 text".
+  const readResponse = async (): Promise<string> => {
+    let line = await readLine()
+    while (line.length >= 4 && line[3] === '-') line = await readLine()
+    return line
+  }
+  const send = async (cmd: string) => { await conn.write(encoder.encode(cmd + '\r\n')) }
 
   try {
-    await readLine(conn) // 220 greeting
-    await send(conn, `EHLO ccgworld.org`)
-    await readLine(conn) // 250 capabilities
+    await readResponse() // 220 greeting
+    await send(`EHLO ccgworld.org`)
+    await readResponse() // 250 capabilities
 
     if (port !== 465) {
       // STARTTLS handshake, then upgrade the plain socket to TLS and
       // re-introduce ourselves (SMTP requires a fresh EHLO after upgrading).
-      await send(conn, 'STARTTLS')
-      const starttlsResp = await readLine(conn)
+      await send('STARTTLS')
+      const starttlsResp = await readResponse()
       if (!starttlsResp.startsWith('220')) throw new Error(`STARTTLS rejected: ${starttlsResp}`)
       conn = await Deno.startTls(conn as Deno.TcpConn, { hostname: host })
-      await send(conn, `EHLO ccgworld.org`)
-      await readLine(conn) // 250 capabilities (post-TLS)
+      buffer = '' // discard anything buffered pre-upgrade — required after STARTTLS
+      await send(`EHLO ccgworld.org`)
+      await readResponse() // 250 capabilities (post-TLS)
     }
 
-    await send(conn, 'AUTH LOGIN')
-    await readLine(conn) // 334 Username:
-    await send(conn, btoa(login))
-    await readLine(conn) // 334 Password:
-    await send(conn, btoa(password))
-    const authResult = await readLine(conn)
+    await send('AUTH LOGIN')
+    await readResponse() // 334 Username:
+    await send(btoa(login))
+    await readResponse() // 334 Password:
+    await send(btoa(password))
+    const authResult = await readResponse()
     if (!authResult.startsWith('235')) throw new Error(`Auth failed: ${authResult}`)
 
-    await send(conn, `MAIL FROM:<${opts.fromEmail}>`)
-    await readLine(conn)
-    await send(conn, `RCPT TO:<${to}>`)
-    await readLine(conn)
-    await send(conn, 'DATA')
-    await readLine(conn)
-    await send(conn, message + '\r\n.')
-    await readLine(conn)
-    await send(conn, 'QUIT')
+    await send(`MAIL FROM:<${opts.fromEmail}>`)
+    await readResponse()
+    await send(`RCPT TO:<${to}>`)
+    await readResponse()
+    await send('DATA')
+    await readResponse()
+    await send(message + '\r\n.')
+    await readResponse()
+    await send('QUIT')
   } finally {
     conn.close()
   }
