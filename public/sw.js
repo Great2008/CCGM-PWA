@@ -1,13 +1,13 @@
-// CCG World Service Worker v13 — Full Offline PWA + Push Notifications + Sabbath/Devotional/Programme/Events API Cache + BG Image Cache
-const CACHE = 'ccgworld-v13'
-const API_CACHE = 'ccgworld-api-v4'
+// CCG World Service Worker v14 — Full Offline PWA + Push Notifications + Sabbath/Devotional/Programme/Events/Newsletter API Cache + BG Image Cache
+const CACHE = 'ccgworld-v14'
+const API_CACHE = 'ccgworld-api-v5'
 const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
-  '/notifications', '/programme', '/meal-ticket',
+  '/notifications', '/programme', '/meal-ticket', '/newsletter',
   // Precache WebP logos for instant display
   '/logo.webp', '/logo-sm.webp', '/logo-splash.webp',
 ]
@@ -90,8 +90,9 @@ self.addEventListener('fetch', e => {
     const isEvents      = url.pathname.includes('/events') ||
                            url.pathname.includes('event_registrations') ||
                            url.pathname.includes('meal_checkins')
+    const isNewsletters = url.pathname.includes('/newsletters')
 
-    if (isSabbath || isDevotional || isHymnal || isProgramme || isEvents) {
+    if (isSabbath || isDevotional || isHymnal || isProgramme || isEvents || isNewsletters) {
       e.respondWith((async () => {
         const apiCache = await caches.open(API_CACHE)
         const cachedRes = await apiCache.match(request.url)

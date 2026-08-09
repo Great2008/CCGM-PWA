@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import supabase from '../lib/supabase'
 import ShareButton, { ShareButtonLight } from '../components/ShareButton'
-import NewsletterSignup from '../components/NewsletterSignup'
 import SEO from '../components/SEO'
 
 const CACHE_KEY = 'ccgworld_blog'
@@ -229,7 +229,12 @@ export default function Blog() {
               background: 'linear-gradient(135deg, var(--brand-mid) 0%, var(--brand-deep) 100%)',
               borderRadius: 20, padding: '50px 40px', textAlign: 'center',
             }}>
-              <NewsletterSignup />
+              <p style={{ color: 'rgba(255,255,255,0.85)', marginBottom: 18, fontSize: '0.95rem' }}>
+                Want announcements and updates straight to your inbox?
+              </p>
+              <Link to="/newsletter" style={{ display: 'inline-block', padding: '12px 28px', borderRadius: 30, background: 'white', color: 'var(--brand-deep)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' }}>
+                📰 Visit the Newsletter
+              </Link>
             </div>
           )}
         </div>

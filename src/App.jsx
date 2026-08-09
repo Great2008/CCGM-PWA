@@ -24,6 +24,7 @@ const About        = lazy(() => import('./pages/About'))
 const Contact      = lazy(() => import('./pages/Contact'))
 const Gallery      = lazy(() => import('./pages/Gallery'))
 const Blog         = lazy(() => import('./pages/Blog'))
+const Newsletter   = lazy(() => import('./pages/Newsletter'))
 const Bible        = lazy(() => import('./pages/Bible'))
 const Hymnal       = lazy(() => import('./pages/Hymnal'))
 const Devotional   = lazy(() => import('./pages/Devotional'))
@@ -81,6 +82,7 @@ function AppInner() {
           <Route path="/contact"    element={<Contact />} />
           <Route path="/gallery"    element={<Gallery />} />
           <Route path="/blog"       element={<Blog />} />
+          <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/bible"      element={<Bible />} />
           <Route path="/hymnal"     element={<Hymnal />} />
           <Route path="/devotional" element={<Devotional />} />

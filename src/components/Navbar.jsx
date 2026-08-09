@@ -42,6 +42,7 @@ const NAV_LINKS = [
   { to:'/studio',   label:'🎬 Studio' },
   { to:'/about',    label:'ℹ️About' },
   { to:'/blog',     label:'🧑‍💻Blog' },
+  { to:'/newsletter', label:'📰 Newsletter' },
   { to:'/gallery',  label:'🖼️Gallery' },
   { to:'/sabbath-school', label:'📖 Sabbath' },
   { to:'/find-church', label:'⛪ Find Church' },

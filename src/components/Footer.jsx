@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Links */}
           <div>
             <h2 style={{ fontFamily:'var(--font-display)', fontSize:'1rem', marginBottom:16, color:'var(--gold)' }}>Navigate</h2>
-            {[['/', 'Home'],['/sermons','Sermons'],['/events','Events'],['/about','About'],['/blog','Blog'],['/bible','📖 Bible'],['/hymnal','🎵 Hymnal'],['/devotional','🌅 Devotional'],['/timeline','💬 Timeline'],['/gallery','Gallery']].map(([to,label])=>(
+            {[['/', 'Home'],['/sermons','Sermons'],['/events','Events'],['/about','About'],['/blog','Blog'],['/newsletter','Newsletter'],['/bible','📖 Bible'],['/hymnal','🎵 Hymnal'],['/devotional','🌅 Devotional'],['/timeline','💬 Timeline'],['/gallery','Gallery']].map(([to,label])=>(
               <Link key={to} to={to} style={{ display:'block', color:'rgba(255,255,255,0.62)', fontSize:'0.86rem', marginBottom:6, transition:'color 0.2s' }}
               onMouseEnter={e=>e.target.style.color='white'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,0.62)'}>→ {label}</Link>
             ))}

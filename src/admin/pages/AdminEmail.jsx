@@ -29,6 +29,7 @@ export default function AdminEmail() {
   const [eventRecipients, setEventRecipients] = useState([])
   const [loadingEventRecipients, setLoadingEventRecipients] = useState(false)
   const [attachments, setAttachments] = useState([]) // {name, type, size, base64}
+  const [publishToArchive, setPublishToArchive] = useState(true)
   const [deliveryLogs, setDeliveryLogs] = useState([])
   const [loadingLogs, setLoadingLogs] = useState(false)
   const [logFilter, setLogFilter] = useState('all') // 'all' | 'failed' | 'sent'
@@ -130,6 +131,10 @@ export default function AdminEmail() {
         sent_at: new Date().toISOString(), status: failed > 0 ? 'partial' : 'sent',
       })
       logAction('email_sent', `Email sent to ${delivered}/${recipients.length} recipients (${recipientSource === 'event' ? 'event RSVPs' : 'newsletter subscribers'}): ${form.subject}`, form.subject)
+      if (publishToArchive && delivered > 0) {
+        const { error: archiveErr } = await supabaseAdmin.from('newsletters').insert({ subject: form.subject, body: form.body })
+        if (archiveErr) showToast('Sent, but could not publish to archive: ' + archiveErr.message, 'error')
+      }
       if (failed === 0) {
         showToast(`✅ Email sent to ${delivered} recipients!`)
       } else if (delivered === 0) {
@@ -239,10 +244,10 @@ export default function AdminEmail() {
           {/* Recipient source */}
           <div style={{ marginBottom: 18 }}>
             <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-              <button onClick={() => setRecipientSource('subscribers')} className={recipientSource === 'subscribers' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
+              <button onClick={() => { setRecipientSource('subscribers'); setPublishToArchive(true) }} className={recipientSource === 'subscribers' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
                 👥 Newsletter Subscribers ({emailSubs.length})
               </button>
-              <button onClick={() => setRecipientSource('event')} className={recipientSource === 'event' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
+              <button onClick={() => { setRecipientSource('event'); setPublishToArchive(false) }} className={recipientSource === 'event' ? 'btn btn-blue' : 'btn btn-outline-blue'} style={{ fontSize: '0.82rem', padding: '8px 16px' }}>
                 🎟️ Event RSVPs
               </button>
             </div>
@@ -274,10 +279,13 @@ export default function AdminEmail() {
           ) : (
             <>
               <div style={{ background: '#fffbeb', border: '1.5px solid #fcd34d', borderRadius: 12, padding: '14px 18px', marginBottom: 18, fontSize: '0.82rem', color: '#92400e' }}>
+                <strong>⚙️ Gmail Setup</strong> — Add these secrets to your Supabase Edge Function dashboard:
                 <code style={{ display: 'block', marginTop: 6, background: 'rgba(0,0,0,0.06)', padding: '6px 10px', borderRadius: 6, lineHeight: 1.8 }}>
-                 </code>
+                  GMAIL_USER = yourname@gmail.com<br />
+                  GMAIL_APP_PASSWORD = xxxx-xxxx-xxxx-xxxx
+                </code>
                 <span style={{ display: 'block', marginTop: 6 }}>
-                  
+                  Generate an App Password at <strong>myaccount.google.com → Security → 2-Step Verification → App passwords</strong>
                 </span>
               </div>
 
@@ -363,6 +371,11 @@ export default function AdminEmail() {
                     )}
                     <small style={{ color: 'var(--text-light)', fontSize: '0.74rem' }}>Same attachment(s) sent to every recipient. Total kept under 15MB.</small>
                   </div>
+
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-mid)' }}>
+                    <input type="checkbox" checked={publishToArchive} onChange={e => setPublishToArchive(e.target.checked)} />
+                    📰 Also publish this to the public Newsletter archive at /newsletter
+                  </label>
                 </div>
               )}
             </>
