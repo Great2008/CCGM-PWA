@@ -263,9 +263,14 @@ serve(async (req) => {
       await new Promise(r => setTimeout(r, 150)) // avoid rate limits
     }
 
+    // Report real failure at the HTTP level too — not just inside the JSON
+    // body — so a caller that only checks "was there an error" (which is the
+    // normal way to use supabase.functions.invoke) can't mistake "every
+    // single recipient failed" for success.
+    const allFailed = recipients.length > 0 && delivered === 0
     return new Response(
-      JSON.stringify({ success: true, delivered, failed: errors.length, errors: errors.slice(0, 5), total: recipients.length }),
-      { headers: { ...CORS, 'Content-Type': 'application/json' } }
+      JSON.stringify({ success: !allFailed, delivered, failed: errors.length, errors: errors.slice(0, 5), total: recipients.length }),
+      { status: allFailed ? 502 : 200, headers: { ...CORS, 'Content-Type': 'application/json' } }
     )
 
   } catch (err) {
