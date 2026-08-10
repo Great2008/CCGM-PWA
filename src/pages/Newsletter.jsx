@@ -3,6 +3,7 @@ import supabase from '../lib/supabase'
 import { ShareButtonLight } from '../components/ShareButton'
 import NewsletterSignup from '../components/NewsletterSignup'
 import SEO from '../components/SEO'
+import { parseBlocks, renderInline } from '../lib/textFormat'
 
 const CACHE_KEY = 'ccgworld_newsletters'
 
@@ -11,6 +12,7 @@ async function loadNewsletters() {
     const { data, error } = await supabase
       .from('newsletters')
       .select('*')
+      .eq('published', true)
       .order('published_at', { ascending: false })
     if (error) throw error
     try { localStorage.setItem(CACHE_KEY, JSON.stringify(data ?? [])) } catch {}
@@ -24,17 +26,26 @@ async function loadNewsletters() {
   }
 }
 
+// Mirrors the admin preview and the email rendering — same shared parser,
+// so a newsletter looks identical everywhere it appears.
 function renderBody(body) {
   if (!body) return null
   return (
     <div style={{ fontSize: '0.95rem', color: 'var(--text-dark)', lineHeight: 1.9 }}>
-      {body.split('\n\n').map((para, i) => (
-        <p key={i} style={{ marginBottom: 16 }}>{para.split('\n').map((line, j) => (
-          <span key={j}>{line}{j < para.split('\n').length - 1 && <br />}</span>
-        ))}</p>
+      {parseBlocks(body).map((para, i) => (
+        /^##/.test(para)
+          ? <h3 key={i} style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', margin: '26px 0 10px', borderBottom: '2px solid var(--brand-pale)', paddingBottom: 5 }}>{renderInline(para.replace(/^##\s*/, ''))}</h3>
+          : /^#/.test(para)
+          ? <h4 key={i} style={{ color: 'var(--brand-light)', fontSize: '1.02rem', margin: '18px 0 6px', fontWeight: 700 }}>{renderInline(para.replace(/^#\s*/, ''))}</h4>
+          : <p key={i} style={{ marginBottom: 16 }}>{renderInline(para)}</p>
       ))}
     </div>
   )
+}
+
+function previewText(body) {
+  const firstPara = parseBlocks(body).find(b => !/^#/.test(b))
+  return firstPara || ''
 }
 
 export default function Newsletter() {
@@ -99,7 +110,7 @@ export default function Newsletter() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               {newsletters.map(n => {
                 const isOpen = expanded === n.id
-                const preview = n.body.split('\n\n')[0]
+                const preview = previewText(n.body)
                 return (
                   <div key={n.id} style={{ background: 'white', borderRadius: 16, padding: '28px 32px', boxShadow: 'var(--shadow-sm)' }}>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginBottom: 8 }}>
@@ -109,7 +120,7 @@ export default function Newsletter() {
                       {n.subject}
                     </h2>
                     {isOpen ? renderBody(n.body) : (
-                      <p style={{ color: 'var(--text-mid)', lineHeight: 1.8, fontSize: '0.95rem' }}>{preview}</p>
+                      <p style={{ color: 'var(--text-mid)', lineHeight: 1.8, fontSize: '0.95rem' }}>{renderInline(preview)}</p>
                     )}
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: 18 }}>
                       <button className="btn btn-green" onClick={() => setExpanded(isOpen ? null : n.id)}>

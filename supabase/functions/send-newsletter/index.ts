@@ -194,6 +194,59 @@ const CORS = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Markdown-lite -> HTML for email bodies (## heading, # sub-heading,
+// **bold**, *italic*) — mirrors src/lib/textFormat.jsx's parser so a
+// newsletter's body renders the same way in the email as it does on the
+// public /newsletter page and in the admin preview. HTML-escapes first to
+// avoid a subject/body containing "<" or "&" breaking the email markup.
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+function renderInlineHtml(str: string): string {
+  if (!str) return ''
+  return escapeHtml(str)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+}
+function parseBlocksLite(text: string): string[] {
+  if (!text) return []
+  const lines = text.split('\n')
+  const blocks: string[] = []
+  let paraLines: string[] = []
+  const flushPara = () => {
+    const joined = paraLines.join(' ').trim()
+    if (joined) blocks.push(joined)
+    paraLines = []
+  }
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (/^##/.test(trimmed) && trimmed.length > 2) { flushPara(); blocks.push(trimmed) }
+    else if (/^#/.test(trimmed) && trimmed.length > 1 && !trimmed.startsWith('##')) { flushPara(); blocks.push(trimmed) }
+    else if (trimmed === '') { flushPara() }
+    else { paraLines.push(trimmed) }
+  }
+  flushPara()
+  return blocks.filter(Boolean)
+}
+function renderMarkdownLiteToHtml(text: string): string {
+  return parseBlocksLite(text).map(block => {
+    if (/^##/.test(block)) {
+      return `<h3 style="font-family:Georgia,serif;color:#166534;font-size:1.1rem;margin:24px 0 8px;border-bottom:2px solid #d1fae5;padding-bottom:4px;">${renderInlineHtml(block.replace(/^##\s*/, ''))}</h3>`
+    }
+    if (/^#/.test(block)) {
+      return `<h4 style="color:#16a34a;font-size:1rem;margin:18px 0 6px;font-weight:700;">${renderInlineHtml(block.replace(/^#\s*/, ''))}</h4>`
+    }
+    return `<p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;color:#1f2937;">${renderInlineHtml(block)}</p>`
+  }).join('')
+}
+
+function stripMarkdownLite(str: string): string {
+  return str
+    .split('\n').map(l => l.replace(/^##?\s*/, '')).join('\n')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: CORS })
@@ -237,9 +290,7 @@ serve(async (req) => {
 <body style="margin:0;padding:0;background:#ffffff;">
   <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;color:#1f2937;">
     <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${greeting.replace('{name}', name)}</p>
-    ${body.split('\n\n').map((p: string) =>
-      `<p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">${p.replace(/\n/g, '<br/>')}</p>`
-    ).join('')}
+    ${renderMarkdownLiteToHtml(body)}
     <div style="margin-top:24px;">
       ${signature.split('\n').map((l: string) =>
         `<p style="font-size:0.95rem;line-height:1.6;margin:0;">${l}</p>`
@@ -264,7 +315,7 @@ serve(async (req) => {
           host: smtpHost, port: smtpPort, login: smtpLogin, password: smtpPassword,
           fromEmail, fromName, to: toEmail, subject,
           html: buildHtml(name),
-          text: `${greeting.replace('{name}', name)}\n\n${body}\n\n${signature}\n\n---\n${footer}`,
+          text: `${greeting.replace('{name}', name)}\n\n${stripMarkdownLite(body)}\n\n${signature}\n\n---\n${footer}`,
           attachments,
         })
         delivered++

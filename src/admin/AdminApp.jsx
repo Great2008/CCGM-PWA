@@ -15,6 +15,7 @@ import AdminLive     from './pages/AdminLive'
 import AdminSabbath  from './pages/AdminSabbath'
 import AdminAnalytics from './pages/AdminAnalytics'
 import AdminEmail    from './pages/AdminEmail'
+import AdminNewsletter from './pages/AdminNewsletter'
 import AdminRegistrations from './pages/AdminRegistrations'
 import AdminMealTickets from './pages/AdminMealTickets'
 import AdminNotifications from './pages/AdminNotifications'
@@ -49,7 +50,8 @@ const NAV = [
   ['live',      '📡', 'Live Stream'],
   ['sabbath',    '📖', 'Sabbath School'],
   ['analytics',  '📊', 'Analytics'],
-  ['email',      '✉️', 'Bulk Email'],
+  ['newsletter',  '📰', 'Newsletter'],
+  ['email',      '✉️', 'Email Blast'],
   ['registrations','📋','Registrations'],
   ['meal-tickets', '🍽️', 'Meal Tickets'],
   ['notifications','🔔','Push Notifications'],
@@ -62,7 +64,7 @@ const NAV = [
   ['letters',     '✉️', 'Letter Writer'],
   ['maintenance', '🚧', 'Maintenance Mode'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, registrations:AdminRegistrations, 'meal-tickets':AdminMealTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, 'meal-tickets':AdminMealTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)

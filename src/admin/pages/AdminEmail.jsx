@@ -29,7 +29,6 @@ export default function AdminEmail() {
   const [eventRecipients, setEventRecipients] = useState([])
   const [loadingEventRecipients, setLoadingEventRecipients] = useState(false)
   const [attachments, setAttachments] = useState([]) // {name, type, size, base64}
-  const [publishToArchive, setPublishToArchive] = useState(true)
   const [deliveryLogs, setDeliveryLogs] = useState([])
   const [loadingLogs, setLoadingLogs] = useState(false)
   const [logFilter, setLogFilter] = useState('all') // 'all' | 'failed' | 'sent'
@@ -131,10 +130,6 @@ export default function AdminEmail() {
         sent_at: new Date().toISOString(), status: failed > 0 ? 'partial' : 'sent',
       })
       logAction('email_sent', `Email sent to ${delivered}/${recipients.length} recipients (${recipientSource === 'event' ? 'event RSVPs' : 'newsletter subscribers'}): ${form.subject}`, form.subject)
-      if (publishToArchive && delivered > 0) {
-        const { error: archiveErr } = await supabaseAdmin.from('newsletters').insert({ subject: form.subject, body: form.body })
-        if (archiveErr) showToast('Sent, but could not publish to archive: ' + archiveErr.message, 'error')
-      }
       if (failed === 0) {
         showToast(`✅ Email sent to ${delivered} recipients!`)
       } else if (delivered === 0) {
@@ -372,10 +367,9 @@ export default function AdminEmail() {
                     <small style={{ color: 'var(--text-light)', fontSize: '0.74rem' }}>Same attachment(s) sent to every recipient. Total kept under 15MB.</small>
                   </div>
 
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-mid)' }}>
-                    <input type="checkbox" checked={publishToArchive} onChange={e => setPublishToArchive(e.target.checked)} />
-                    📰 Also publish this to the public Newsletter archive at /newsletter
-                  </label>
+                  <div style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', borderRadius: 10, padding: '10px 16px', fontSize: '0.8rem', color: '#075985' }}>
+                    💡 For a public newsletter issue (published to /newsletter, formatted like Sabbath School), use the <strong>Newsletter</strong> page in the sidebar instead — this Email tab is for one-off blasts that aren't meant to be archived.
+                  </div>
                 </div>
               )}
             </>
