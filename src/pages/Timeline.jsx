@@ -5,6 +5,7 @@ import { auditLog } from '../lib/auditLog'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { ShareButtonLight } from '../components/ShareButton'
+import { APP_URL } from '../lib/config'
 
 const POST_TYPES = [
   { id:'update',    label:'📝 Update',    color:'var(--brand-light)' },
@@ -438,8 +439,8 @@ function TopicCard({ topic, currentUserId, onDelete, onOpen }) {
         </span>
         <ShareButtonLight
           title={topic.title}
-          text={topic.body}
-          url={`${window.location.origin}/timeline?topic=${topic.id}`}
+          text={`${APP_URL}/timeline?topic=${topic.id}\n\n${topic.body}`}
+          includeLink={false}
           label="Share"
           style={{fontSize:'0.72rem', padding:'5px 12px'}}
         />
@@ -566,8 +567,8 @@ function TopicDetailModal({ topic, currentUserId, onClose, onTopicUpdated, membe
                 style={{background:'rgba(15,31,61,0.06)',border:'none',borderRadius:8,cursor:'pointer',fontSize:'1rem',color:'var(--text-light)',padding:'6px 10px'}}>✕</button>
               <ShareButtonLight
                 title={topic.title}
-                text={topic.body}
-                url={`${window.location.origin}/timeline?topic=${topic.id}`}
+                text={`${APP_URL}/timeline?topic=${topic.id}\n\n${topic.body}`}
+                includeLink={false}
                 label="Share"
                 style={{fontSize:'0.7rem', padding:'5px 11px'}}
               />

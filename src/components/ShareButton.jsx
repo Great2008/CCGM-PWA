@@ -42,7 +42,7 @@ async function tryBuildImageFile(imageUrl) {
   }
 }
 
-export default function ShareButton({ title, text, url, imageUrl, label = 'Share', variant = 'full', suffix = 'Read more on CCG World', style: extraStyle = {} }) {
+export default function ShareButton({ title, text, url, imageUrl, label = 'Share', variant = 'full', suffix = 'Read more on CCG World', includeLink = true, style: extraStyle = {} }) {
   const [copied, setCopied] = useState(false)
   const [sharing, setSharing] = useState(false)
 
@@ -51,9 +51,9 @@ export default function ShareButton({ title, text, url, imageUrl, label = 'Share
   const baseShareData = {
     title: title || 'CCG World',
     text: text
-      ? `${text}\n\n${suffix}`
+      ? (includeLink ? `${text}\n\n${suffix}` : text)
       : 'Check this out on CCG World',
-    url: shareUrl,
+    ...(includeLink ? { url: shareUrl } : {}),
   }
 
   const handleShare = async (e) => {
@@ -70,8 +70,9 @@ export default function ShareButton({ title, text, url, imageUrl, label = 'Share
       if (navigator.share) {
         await navigator.share(shareData)
       } else {
-        // Desktop fallback — copy link to clipboard
-        await navigator.clipboard.writeText(shareUrl)
+        // Desktop fallback — copy link to clipboard, or the text itself
+        // when there's no link to share (includeLink === false).
+        await navigator.clipboard.writeText(includeLink ? shareUrl : (text || baseShareData.text))
         setCopied(true)
         setTimeout(() => setCopied(false), 2500)
       }
@@ -80,7 +81,7 @@ export default function ShareButton({ title, text, url, imageUrl, label = 'Share
       if (err.name !== 'AbortError') {
         // Last resort fallback
         try {
-          await navigator.clipboard.writeText(shareUrl)
+          await navigator.clipboard.writeText(includeLink ? shareUrl : (text || baseShareData.text))
           setCopied(true)
           setTimeout(() => setCopied(false), 2500)
         } catch {}
@@ -122,15 +123,15 @@ export default function ShareButton({ title, text, url, imageUrl, label = 'Share
 /**
  * ShareButtonLight — for use on white/light backgrounds (cards, detail panes)
  */
-export function ShareButtonLight({ title, text, url, imageUrl, label = 'Share', suffix = 'Read more on CCG World', style: extraStyle = {} }) {
+export function ShareButtonLight({ title, text, url, imageUrl, label = 'Share', suffix = 'Read more on CCG World', includeLink = true, style: extraStyle = {} }) {
   const [copied, setCopied] = useState(false)
   const [sharing, setSharing] = useState(false)
 
   const shareUrl = url || window.location.href
   const baseShareData = {
     title: title || 'CCG World',
-    text: text ? `${text}\n\n${suffix}` : 'Check this out on CCG World',
-    url: shareUrl,
+    text: text ? (includeLink ? `${text}\n\n${suffix}` : text) : 'Check this out on CCG World',
+    ...(includeLink ? { url: shareUrl } : {}),
   }
 
   const handleShare = async (e) => {
@@ -144,14 +145,14 @@ export function ShareButtonLight({ title, text, url, imageUrl, label = 'Share', 
       if (navigator.share) {
         await navigator.share(shareData)
       } else {
-        await navigator.clipboard.writeText(shareUrl)
+        await navigator.clipboard.writeText(includeLink ? shareUrl : (text || baseShareData.text))
         setCopied(true)
         setTimeout(() => setCopied(false), 2500)
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
         try {
-          await navigator.clipboard.writeText(shareUrl)
+          await navigator.clipboard.writeText(includeLink ? shareUrl : (text || baseShareData.text))
           setCopied(true)
           setTimeout(() => setCopied(false), 2500)
         } catch {}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
 import ShareButton from '../components/ShareButton'
 import SEO from '../components/SEO'
+import { APP_URL } from '../lib/config'
 
 const CACHE_KEY     = 'ccgworld_devotionals'
 const BOOKMARKS_KEY = 'ccgworld_dev_bookmarks'
@@ -479,7 +480,8 @@ export default function Devotional() {
                       </button>
                       <ShareButton
                         title={selected.title}
-                        text={selected.excerpt || selected.title}
+                        text={`${APP_URL}/devotional\n\n${selected.title}`}
+                        includeLink={false}
                         style={{
                           borderRadius: '10px 10px 0 0',
                           borderColor: 'rgba(255,255,255,0.25)',

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
 import { ShareButtonLight } from '../components/ShareButton'
+import { APP_URL } from '../lib/config'
 
 export default function Events() {
   const { data: events, loading } = useEventsContent()
@@ -55,7 +56,7 @@ export default function Events() {
         eventTime: event.time || null,
         venue: event.location || null,
         registrationId,
-        eventUrl: `${window.location.origin}/events#event-${event.id}`,
+        eventUrl: `${APP_URL}/events#event-${event.id}`,
       },
     }).catch(err => console.warn('RSVP confirmation email failed to send:', err))
   }
@@ -259,10 +260,9 @@ export default function Events() {
                           )}
                           <ShareButtonLight
                             title={event.title}
-                            text={`${event.title} is coming up on ${event.date}${event.location ? ` at ${event.location}` : ''}.`}
-                            url={`${window.location.origin}/events#event-${event.id}`}
+                            text={`${APP_URL}/events#event-${event.id}\n\n${event.title} is coming up on ${event.date}${event.location ? ` at ${event.location}` : ''}.`}
+                            includeLink={false}
                             imageUrl={event.image_url}
-                            suffix="See details on CCG World"
                             style={{ marginLeft: 'auto' }}
                           />
                         </div>
