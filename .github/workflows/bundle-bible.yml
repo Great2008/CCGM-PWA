@@ -1,0 +1,33 @@
+name: Bundle Bible Data
+
+# Manually triggered from the Actions tab (works fine from GitHub's mobile
+# app/web UI — no terminal needed). Run this once; the KJV text doesn't
+# change, so there's no need to re-run it on every build. Re-run only if
+# the source data or the transform script itself is ever updated.
+on:
+  workflow_dispatch:
+
+jobs:
+  bundle-bible:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch and transform Bible data
+        run: node scripts/transform-bible.mjs
+
+      - name: Commit bundled data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/kjv-bible.json
+          git diff --cached --quiet && echo "No changes to commit" || git commit -m "chore: bundle KJV Bible data"
+          git push
