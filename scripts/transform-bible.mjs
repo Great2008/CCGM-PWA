@@ -6,7 +6,7 @@
 //
 // Run via `node scripts/transform-bible.mjs` — only ever needs Node's built-in
 // fetch (Node 18+), no dependencies to install. Intended to be run by the
-// bundle-bible.yml GitHub Actions workflow, not manually from a phone.
+// bundle-bible.yml GitHub Actions workflow.
 
 const SOURCE_URL = 'https://cdn.jsdelivr.net/gh/thiagobodruk/bible@master/json/en_kjv.json'
 const OUTPUT_PATH = new URL('../public/data/kjv-bible.json', import.meta.url)

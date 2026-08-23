@@ -99,9 +99,8 @@ export default function Bible() {
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
   }, [])
 
-  // Load the bundled Bible on mount — works offline too, since for the native
-  // app this file ships inside the app bundle itself, and for the web PWA
-  // it's cached by the service worker after the first successful fetch.
+  // Load the bundled Bible on mount — works offline too, since it's cached
+  // by the service worker after the first successful fetch.
   useEffect(() => {
     if (cacheStatus === 'idle') {
       setCacheStatus('loading')
@@ -144,7 +143,6 @@ export default function Bible() {
         .then(data => {
           const v = data.verses || []
           setVerses(v)
-          try { localStorage.setItem(key, JSON.stringify(v)) } catch {}
           setLoading(false)
         })
         .catch(() => { setError('Could not load chapter.'); setLoading(false) })
@@ -204,7 +202,7 @@ export default function Bible() {
   const statusBadge = cacheStatus === 'done'
     ? { label: '✅ Full Bible Cached — 100% Offline', color: 'rgba(74,184,102,0.25)', text: '#a8e6b8', border: 'rgba(74,184,102,0.4)' }
     : cacheStatus === 'loading'
-    ? { label: '⏳ Loading Bible...', color: 'rgba(255,200,0,0.2)', text: '#ffe066', border: 'rgba(255,200,0,0.4)' }
+    ? { label: '⏳ Downloading Bible...', color: 'rgba(255,200,0,0.2)', text: '#ffe066', border: 'rgba(255,200,0,0.4)' }
     : { label: '☁️ Connect to cache Bible offline', color: 'rgba(255,150,50,0.2)', text: '#ffcc88', border: 'rgba(255,150,50,0.4)' }
 
   return (
