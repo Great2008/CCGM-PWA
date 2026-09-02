@@ -55,6 +55,7 @@ const OFFLINE_LINKS = [
   { to:'/bible',          label:'📖 Bible',          sub:'Full KJV offline' },
   { to:'/hymnal',         label:'🎵 Hymnal',          sub:'Songs & lyrics' },
   { to:'/devotional',     label:'🌅 Daily Word',      sub:'365 devotionals' },
+  { to:'/podcast',        label:'🎙 Daily Podcast',   sub:'1-5 min episodes' },
   { to:'/sabbath-school', label:'📚 Sabbath School',  sub:'Weekly lessons' },
 ]
 

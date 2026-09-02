@@ -6,6 +6,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import AdminSermons   from './pages/AdminSermons'
 import AdminEvents    from './pages/AdminEvents'
 import AdminBlog      from './pages/AdminBlog'
+import AdminPodcast   from './pages/AdminPodcast'
 import AdminGallery   from './pages/AdminGallery'
 import AdminHomepage  from './pages/AdminHomepage'
 import AdminPrayer    from './pages/AdminPrayer'
@@ -42,6 +43,7 @@ const NAV = [
   ['events',    '📅', 'Events'],
   ['programme', '📅', 'Programme'],
   ['blog',      '✍️', 'Blog & Devotionals'],
+  ['podcast',   '🎙', 'Daily Podcast'],
   ['gallery',   '🖼', 'Gallery'],
   ['homepage',  '🏠', 'Homepage'],
   ['prayer',    '🙏', 'Prayer Requests'],
@@ -64,7 +66,7 @@ const NAV = [
   ['letters',     '✉️', 'Letter Writer'],
   ['maintenance', '🚧', 'Maintenance Mode'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, 'meal-tickets':AdminMealTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, podcast:AdminPodcast, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, 'meal-tickets':AdminMealTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
