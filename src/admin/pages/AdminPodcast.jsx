@@ -20,6 +20,30 @@ function StatusBadge({ status }) {
   )
 }
 
+// supabase-js only gives a generic "non-2xx status code" message on
+// fnError; the actual reason is in the response body it wrapped.
+async function extractFnErrorMessage(fnError) {
+  try {
+    const text = await fnError.context.text()
+    try {
+      const json = JSON.parse(text)
+      if (json?.error) return json.error
+    } catch { /* not JSON */ }
+    if (text) return text
+  } catch { /* no readable body */ }
+  return fnError.message || 'Edge Function error'
+}
+
+async function invokeGenerate(episodeId) {
+  const { data, error: fnError } = await supabaseAdmin.functions.invoke('generate-daily-podcast', {
+    body: { episode_id: episodeId },
+  })
+  if (fnError) throw new Error(await extractFnErrorMessage(fnError))
+  if (data?.error) throw new Error(data.error)
+  if (data?.skipped) throw new Error(data.reason || 'Generation was skipped')
+  return data
+}
+
 export default function AdminPodcast() {
   const [episodes, setEpisodes] = useState([])
   const [loading, setLoading] = useState(true)
@@ -78,12 +102,7 @@ export default function AdminPodcast() {
     setGenerating(true)
     setPreview(null)
     try {
-      const { data, error: fnError } = await supabaseAdmin.functions.invoke('generate-daily-podcast', {
-        body: { episode_id: savedRow.id },
-      })
-      if (fnError) throw fnError
-      if (data?.error) throw new Error(data.error)
-      if (data?.skipped) throw new Error(data.reason || 'Generation was skipped')
+      const data = await invokeGenerate(savedRow.id)
       setPreview({ audio_url: data.url, duration_seconds: data.seconds })
       load()
     } catch (e) {
@@ -97,11 +116,7 @@ export default function AdminPodcast() {
     setGenerating(true)
     setGenError('')
     try {
-      const { data, error: fnError } = await supabaseAdmin.functions.invoke('generate-daily-podcast', {
-        body: { episode_id: form.id },
-      })
-      if (fnError) throw fnError
-      if (data?.error) throw new Error(data.error)
+      const data = await invokeGenerate(form.id)
       setPreview({ audio_url: data.url, duration_seconds: data.seconds })
       load()
     } catch (e) {
