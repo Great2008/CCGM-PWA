@@ -33,7 +33,7 @@ export default function Podcast() {
 
   return (
     <div>
-      <SEO title="A Moment a Day" description="A short daily scripted podcast — 1 to 5 minutes." path="/podcast" />
+      <SEO title="A Moment a Day" description="A short daily  podcast — 1 to 5 minutes." path="/podcast" />
 
       <style>{`
         @media(max-width:768px){
@@ -52,7 +52,7 @@ export default function Podcast() {
           🎙 A Moment a Day
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.85)', margin: '0 auto', maxWidth: 480, fontSize: '0.95rem' }}>
-          A short scripted word for your day — 1 to 5 minutes.
+          A short word for your day — 1 to 5 minutes.
         </p>
         {episodes.length > 0 && (
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600, marginTop: 18 }}>
