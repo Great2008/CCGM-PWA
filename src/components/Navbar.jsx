@@ -56,7 +56,7 @@ const OFFLINE_LINKS = [
   { to:'/hymnal',         label:'🎵 Hymnal',          sub:'Songs & lyrics' },
   { to:'/devotional',     label:'🌅 Daily Word',      sub:'365 devotionals' },
   { to:'/podcast',        label:'🎙 A Moment a Day', sub:'1-5 min episodes' },
-  { to:'/sabbath-school', label:'📚 Sabbath School',  sub:'Weekly lessons' },
+  { to:'/divine-service', label:'🛐 Divine Service',  sub:'Sabbath, sermons & more' },
 ]
 
 export default function Navbar() {

@@ -29,6 +29,8 @@ const Bible        = lazy(() => import('./pages/Bible'))
 const Hymnal       = lazy(() => import('./pages/Hymnal'))
 const Devotional   = lazy(() => import('./pages/Devotional'))
 const Podcast      = lazy(() => import('./pages/Podcast'))
+const DivineService   = lazy(() => import('./pages/DivineService'))
+const TenCommandments = lazy(() => import('./pages/TenCommandments'))
 const Timeline     = lazy(() => import('./pages/Timeline'))
 const Live         = lazy(() => import('./pages/Live'))
 const SabbathSchool  = lazy(() => import('./pages/SabbathSchool'))
@@ -89,6 +91,8 @@ function AppInner() {
           <Route path="/hymnal"     element={<Hymnal />} />
           <Route path="/devotional" element={<Devotional />} />
           <Route path="/podcast"    element={<Podcast />} />
+          <Route path="/divine-service"   element={<DivineService />} />
+          <Route path="/ten-commandments" element={<TenCommandments />} />
           <Route path="/timeline"   element={<Timeline />} />
           <Route path="/live"       element={<Live />} />
           <Route path="/sabbath-school" element={<SabbathSchool />} />
