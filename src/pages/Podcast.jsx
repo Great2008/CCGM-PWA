@@ -93,7 +93,7 @@ export default function Podcast() {
                     onClick={() => setShowScript(s => ({ ...s, [ep.id]: !s[ep.id] }))}
                     style={{ padding: 0, border: 'none', background: 'none', color: 'var(--brand-light)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
                   >
-                    {showScript[ep.id] ? 'Hide script' : 'Read script'}
+                    {showScript[ep.id] ? 'Close' : 'Read Along'}
                   </button>
                   <ShareButton title={`${ep.title} — A Moment a Day`} url={`${APP_URL}/podcast`} variant="icon-only" />
                 </div>
