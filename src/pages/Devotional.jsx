@@ -480,7 +480,7 @@ export default function Devotional() {
                       </button>
                       <ShareButton
                         title={selected.title}
-                        text={`${APP_URL}/devotional\n\n${selected.title}`}
+                        text={`"${(selected.title || '').toUpperCase()}"\nRead Today's Devotional on CCG World\n\n🌐${APP_URL}/devotional`}
                         includeLink={false}
                         style={{
                           borderRadius: '10px 10px 0 0',
