@@ -1,13 +1,13 @@
 // CCG World Service Worker v15 — Full Offline PWA + Push Notifications + Sabbath/Devotional/Programme/Events/Newsletter API Cache + BG Image Cache + Bundled Bible
-const CACHE = 'ccgworld-v15'
-const API_CACHE = 'ccgworld-api-v5'
+const CACHE = 'ccgworld-v16'
+const API_CACHE = 'ccgworld-api-v6'
 const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
 
 const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
-  '/notifications', '/programme', '/meal-ticket', '/newsletter',
+  '/notifications', '/programme', '/meal-ticket', '/newsletter', '/divine-service', '/ten-commandments'
   // Precache WebP logos for instant display
   '/logo.webp', '/logo-sm.webp', '/logo-splash.webp',
 ]
