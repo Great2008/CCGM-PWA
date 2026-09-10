@@ -3,8 +3,7 @@ import supabase from '../lib/supabase'
 
 /**
  * NewsletterSignup
- * Collects email + optional WhatsApp number.
- * Saves to `newsletter_subscribers` Supabase table.
+ * Collects email address. Saves to `newsletter_subscribers` Supabase table.
  *
  * Props:
  *   dark  — use on dark/gradient backgrounds (default true)
@@ -14,8 +13,6 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
   const [step, setStep]       = useState('form')   // 'form' | 'success' | 'error'
   const [loading, setLoading] = useState(false)
   const [email, setEmail]     = useState('')
-  const [phone, setPhone]     = useState('')
-  const [wantWA, setWantWA]   = useState(false)
   const [errMsg, setErrMsg]   = useState('')
 
   const textColor   = dark ? 'white'                  : 'var(--brand-deep)'
@@ -27,13 +24,9 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
   const handleSubmit = async () => {
     setErrMsg('')
     const trimEmail = email.trim()
-    const trimPhone = phone.trim().replace(/\s+/g, '')
 
     if (!trimEmail || !trimEmail.includes('@')) {
       setErrMsg('Please enter a valid email address.'); return
-    }
-    if (wantWA && !trimPhone) {
-      setErrMsg('Please enter your WhatsApp number or uncheck WhatsApp delivery.'); return
     }
 
     setLoading(true)
@@ -42,9 +35,9 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
         .from('newsletter_subscribers')
         .upsert({
           email: trimEmail.toLowerCase(),
-          whatsapp: wantWA ? trimPhone : null,
+          whatsapp: null,
           wants_email: true,
-          wants_whatsapp: wantWA,
+          wants_whatsapp: false,
           subscribed_at: new Date().toISOString(),
           active: true,
         }, { onConflict: 'email' })
@@ -71,9 +64,7 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
         You're subscribed!
       </div>
       <p style={{ color: subColor, fontSize: '0.88rem', lineHeight: 1.7, maxWidth: 360, margin: '0 auto' }}>
-        {wantWA
-          ? "You'll receive devotionals by email and a WhatsApp message when new content is posted."
-          : "You'll receive daily devotionals straight to your inbox."}
+        You'll receive daily devotionals straight to your inbox.
       </p>
     </div>
   )
@@ -105,44 +96,6 @@ export default function NewsletterSignup({ dark = true, title = 'Get Daily Devot
             fontFamily: 'var(--font-body)', boxSizing: 'border-box',
           }}
         />
-
-        {/* WhatsApp toggle */}
-        <button
-          onClick={() => setWantWA(w => !w)}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 10,
-            padding: '10px 18px', borderRadius: 40,
-            border: `1.5px solid ${wantWA ? '#25D366' : inputBorder}`,
-            background: wantWA ? 'rgba(37,211,102,0.12)' : inputBg,
-            color: wantWA ? '#25D366' : subColor,
-            fontSize: '0.85rem', fontWeight: 600,
-            cursor: 'pointer', fontFamily: 'var(--font-body)',
-            transition: 'all 0.2s', textAlign: 'left',
-          }}
-        >
-          <span style={{ fontSize: '1.1rem' }}>💬</span>
-          <span style={{ flex: 1 }}>
-            {wantWA ? 'WhatsApp delivery enabled ✓' : 'Also receive updates on WhatsApp (optional)'}
-          </span>
-        </button>
-
-        {/* WhatsApp number field */}
-        {wantWA && (
-          <input
-            type="tel"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            placeholder="📱  WhatsApp number (e.g. +2348012345678)"
-            style={{
-              width: '100%', padding: '13px 18px', borderRadius: 40,
-              border: `1.5px solid #25D366`,
-              background: 'rgba(37,211,102,0.08)',
-              color: inputColor,
-              fontSize: '0.92rem', outline: 'none',
-              fontFamily: 'var(--font-body)', boxSizing: 'border-box',
-            }}
-          />
-        )}
 
         {/* Error */}
         {errMsg && (

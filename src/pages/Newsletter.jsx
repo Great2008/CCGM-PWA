@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import supabase from '../lib/supabase'
 import { ShareButtonLight } from '../components/ShareButton'
 import { APP_URL } from '../lib/config'
@@ -53,16 +53,27 @@ export default function Newsletter() {
   const [newsletters, setNewsletters] = useState([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(null)
+  const subscribeRef = useRef(null)
 
   useEffect(() => {
     loadNewsletters().then(data => { setNewsletters(data); setLoading(false) })
   }, [])
 
+  // Supports linking straight to the signup form via /newsletter#subscribe
+  useEffect(() => {
+    if (window.location.hash === '#subscribe') {
+      const t = setTimeout(() => {
+        subscribeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
+      return () => clearTimeout(t)
+    }
+  }, [])
+
   return (
     <>
       <SEO
-        title="Newsletter"
-        description="Read past newsletters from CCG World, and subscribe to get future issues straight to your inbox."
+        title="The Chronicle"
+        description="Read past issues of the CCG World Chronicle, and subscribe to get future issues straight to your inbox."
         path="/newsletter"
       />
       <div style={{
@@ -71,7 +82,7 @@ export default function Newsletter() {
       }}>
         <span className="section-label" style={{ color: 'var(--gold)' }}>Stay Connected</span>
         <h1 style={{ fontFamily: 'var(--font-display)', color: 'white', fontSize: 'clamp(2rem, 5vw, 3.2rem)', marginBottom: 16 }}>
-          Newsletter
+          The Chronicle
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.8)', maxWidth: 520, margin: '0 auto', lineHeight: 1.8 }}>
           Announcements, updates, and encouragement from CCG World — read past issues below, or subscribe to get the next one by email.
@@ -82,12 +93,12 @@ export default function Newsletter() {
         <div className="container" style={{ maxWidth: 720 }}>
 
           {/* Subscribe */}
-          <div style={{
+          <div ref={subscribeRef} style={{
             marginBottom: 64,
             background: 'linear-gradient(135deg, var(--brand-mid) 0%, var(--brand-deep) 100%)',
             borderRadius: 20, padding: '50px 40px', textAlign: 'center',
           }}>
-            <NewsletterSignup />
+            <NewsletterSignup title="Subscribe to The Chronicle" />
           </div>
 
           {loading && (
@@ -125,7 +136,7 @@ export default function Newsletter() {
                     )}
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: 18 }}>
                       <button className="btn btn-green" onClick={() => setExpanded(isOpen ? null : n.id)}>
-                        {isOpen ? 'Show Less ↑' : 'Read Full Newsletter →'}
+                        {isOpen ? 'Show Less ↑' : 'Read Full Issue →'}
                       </button>
                       <ShareButtonLight title={n.subject} text={`${APP_URL}/newsletter#newsletter-${n.id}\n\n${n.subject}`} includeLink={false} />
                     </div>
