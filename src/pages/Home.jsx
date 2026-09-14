@@ -71,7 +71,7 @@ export default function Home() {
         <div style={{position:'relative',maxWidth:780,width:'100%'}}>
           <div style={{display:'inline-block',border:'1px solid var(--gold)',color:'var(--gold)',padding:'6px 24px',borderRadius:30,fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:28}}>🌐 CCG World</div>
           <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(2rem,6vw,4.4rem)',color:'white',lineHeight:1.12,marginBottom:20,textShadow:'0 2px 24px rgba(0,0,0,0.3)'}}>
-            Welcome to<br /><em style={{fontStyle:'italic',color:'var(--gold)'}}>Christian Church<br />Of God Mission</em>
+            Welcome to<br /><em style={{fontStyle:'italic',color:'var(--gold)'}}>CCG World</em>
           </h1>
           <p style={{fontSize:'clamp(0.95rem,2vw,1.1rem)',color:'rgba(255,255,255,0.88)',lineHeight:1.8,maxWidth:540,margin:'0 auto 40px'}}>
             {hp.hero.subtitle}
