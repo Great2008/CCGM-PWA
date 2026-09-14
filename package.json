@@ -37,7 +37,8 @@
     "react-router-dom": "^6.26.2",
     "jspdf": "^2.5.1",
     "pdfjs-dist": "^4.4.168",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "edge-tts-universal": "^1.4.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
