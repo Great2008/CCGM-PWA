@@ -18,13 +18,13 @@ export default function Footer() {
               </div>
             </div>
             <p style={{ fontSize:'0.88rem', color:'rgba(255,255,255,0.62)', lineHeight:1.8 }}>
-              A Spirit-filled community committed to worship, growth, and service in the name of Jesus Christ.
+              A Christian community committed to worship, growth, and service in the name of Jesus Christ.
             </p>
           </div>
           {/* Links */}
           <div>
             <h2 style={{ fontFamily:'var(--font-display)', fontSize:'1rem', marginBottom:16, color:'var(--gold)' }}>Navigate</h2>
-            {[['/', 'Home'],['/sermons','Sermons'],['/events','Events'],['/about','About'],['/blog','Blog'],['/newsletter','Newsletter'],['/bible','📖 Bible'],['/hymnal','🎵 Hymnal'],['/devotional','🌅 Devotional'],['/timeline','💬 Timeline'],['/gallery','Gallery']].map(([to,label])=>(
+            {[['/', 'Home'],['/sermons','Sermons'],['/events','Events'],['/about','About'],['/blog','Blog'],['/newsletter','📰 The Chronicle'],['/bible','📖 Bible'],['/hymnal','🎵 Hymnal'],['/devotional','🌅 Devotional'],['/timeline','💬 Timeline'],['/gallery','Gallery']].map(([to,label])=>(
               <Link key={to} to={to} style={{ display:'block', color:'rgba(255,255,255,0.62)', fontSize:'0.86rem', marginBottom:6, transition:'color 0.2s' }}
               onMouseEnter={e=>e.target.style.color='white'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,0.62)'}>→ {label}</Link>
             ))}
