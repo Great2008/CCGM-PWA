@@ -28,6 +28,7 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter]   = useState('All')
   const [lightbox, setLightbox] = useState(null)
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     loadGallery().then(data => { setImages(data); setLoading(false) })
@@ -150,29 +151,63 @@ export default function Gallery() {
       </section>
 
       {/* Lightbox */}
-      {lightbox && (
-        <div onClick={() => setLightbox(null)} style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', zIndex: 9999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
-        }}>
-          <div onClick={e => e.stopPropagation()} style={{ maxWidth: 900, width: '100%' }}>
-            <img
-              src={lightbox.url || lightbox.src}
-              alt={lightbox.caption || lightbox.title || ''}
-              style={{ width: '100%', borderRadius: 12, boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, flexWrap: 'wrap', gap: 12 }}>
-              <p style={{ color: 'white', fontFamily: 'var(--font-display)', fontSize: '1.1rem', margin: 0 }}>
-                {lightbox.caption || lightbox.title || ''}
-              </p>
-              <button onClick={() => setLightbox(null)} style={{
-                background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
-                color: 'white', padding: '8px 20px', borderRadius: 30, cursor: 'pointer', fontSize: '0.88rem',
-              }}>✕ Close</button>
+      {lightbox && (() => {
+        const imgUrl = lightbox.url || lightbox.src
+        const handleDownload = async () => {
+          setDownloading(true)
+          try {
+            const res = await fetch(imgUrl)
+            const blob = await res.blob()
+            const blobUrl = URL.createObjectURL(blob)
+            const ext = (imgUrl.split('.').pop() || 'jpg').split('?')[0].slice(0, 4)
+            const name = (lightbox.caption || lightbox.title || 'ccgworld-photo').replace(/[^a-z0-9]+/gi, '-').toLowerCase()
+            const a = document.createElement('a')
+            a.href = blobUrl
+            a.download = `${name}.${ext}`
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            URL.revokeObjectURL(blobUrl)
+          } catch {
+            // Cross-origin fetch blocked or failed — fall back to opening the
+            // image directly so the person can still long-press/save it.
+            window.open(imgUrl, '_blank')
+          } finally {
+            setDownloading(false)
+          }
+        }
+
+        return (
+          <div onClick={() => setLightbox(null)} style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+          }}>
+            <div onClick={e => e.stopPropagation()} style={{ maxWidth: 900, width: '100%' }}>
+              <img
+                src={imgUrl}
+                alt={lightbox.caption || lightbox.title || ''}
+                style={{ width: '100%', borderRadius: 12, boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, flexWrap: 'wrap', gap: 12 }}>
+                <p style={{ color: 'white', fontFamily: 'var(--font-display)', fontSize: '1.1rem', margin: 0 }}>
+                  {lightbox.caption || lightbox.title || ''}
+                </p>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button onClick={handleDownload} disabled={downloading} style={{
+                    background: 'var(--brand-light, #16a34a)', border: 'none',
+                    color: 'white', padding: '8px 20px', borderRadius: 30, cursor: 'pointer', fontSize: '0.88rem',
+                    fontWeight: 600, opacity: downloading ? 0.7 : 1,
+                  }}>{downloading ? 'Downloading…' : '⬇ Download'}</button>
+                  <button onClick={() => setLightbox(null)} style={{
+                    background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
+                    color: 'white', padding: '8px 20px', borderRadius: 30, cursor: 'pointer', fontSize: '0.88rem',
+                  }}>✕ Close</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
     </>

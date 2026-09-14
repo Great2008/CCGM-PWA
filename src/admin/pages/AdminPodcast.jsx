@@ -34,10 +34,20 @@ async function extractFnErrorMessage(fnError) {
   return fnError.message || 'Edge Function error'
 }
 
-async function invokeGenerate(episodeId) {
-  const { data, error: fnError } = await supabaseAdmin.functions.invoke('generate-daily-podcast', {
-    body: { episode_id: episodeId },
+function withTimeout(promise, ms, message) {
+  let timer
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(message)), ms)
   })
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
+async function invokeGenerate(episodeId) {
+  const { data, error: fnError } = await withTimeout(
+    supabaseAdmin.functions.invoke('generate-daily-podcast', { body: { episode_id: episodeId } }),
+    45000,
+    "Generation timed out after 45s — the TTS provider likely hung without responding. Try again, or it may need a different provider."
+  )
   if (fnError) throw new Error(await extractFnErrorMessage(fnError))
   if (data?.error) throw new Error(data.error)
   if (data?.skipped) throw new Error(data.reason || 'Generation was skipped')
