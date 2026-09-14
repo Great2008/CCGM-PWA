@@ -18,7 +18,7 @@ export default function About() {
           About Our Church
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.85)', maxWidth: 560, margin: '0 auto', lineHeight: 1.8, fontSize: '1.05rem' }}>
-          Rooted in the Word, growing in grace, reaching the world.
+          Rooted in the Word, thriving in grace, reaching the world.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function About() {
               </p>
               <div className="about-values-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 {[
-                  ['🙏', 'Authentic Worship', 'Encountering God through Spirit-filled praise'],
+                  ['🙏', 'Authentic Worship', 'Encountering God through praise'],
                   ['📖', 'Biblical Teaching', 'Sound doctrine rooted in Scripture'],
                   ['🤝', 'Community', 'Life-giving fellowship and brotherhood'],
                   ['🌍', 'Outreach', 'Serving and reaching our city for Christ'],

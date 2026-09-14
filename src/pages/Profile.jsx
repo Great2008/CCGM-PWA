@@ -489,7 +489,7 @@ export default function Profile() {
                   <p style={{ fontSize: '0.84rem', color: 'var(--text-mid)', marginBottom: 14, lineHeight: 1.6 }}>
                     {profile?.church_title
                       ? 'Request a change to your church post. Brother and Sister are instant — ordained titles require admin approval.'
-                      : 'Select your church post. Brother and Sister are assigned immediately — ordained titles require admin approval.'
+                      : 'Select your church post. Brother and Sister are assigned immediately — other titles require approval.'
                     }
                   </p>
                   <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>

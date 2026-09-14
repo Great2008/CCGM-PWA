@@ -57,7 +57,7 @@ export default function Contact() {
         <span className="section-label">Get In Touch</span>
         <h1 style={{ fontFamily:'var(--font-display)', fontWeight:900, fontSize:'clamp(2rem,5vw,3.2rem)', color:'white', margin:'8px 0 16px' }}>Contact Us</h1>
         <p style={{ color:'rgba(255,255,255,0.75)', fontSize:'clamp(0.95rem,1.8vw,1.1rem)', maxWidth:520, margin:'0 auto', lineHeight:1.8 }}>
-          Reach out for prayer, information, or just to say hello. Our team will respond within 24 hours.
+          Reach out for prayer, information, or just to say hello. Our team will respond within a reasonable period.
         </p>
       </div>
 
