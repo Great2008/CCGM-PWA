@@ -20,6 +20,20 @@ function StatusBadge({ status }) {
   )
 }
 
+// supabase-js only gives a generic "non-2xx status code" message on
+// fnError; the actual reason is in the response body it wrapped.
+async function extractFnErrorMessage(fnError) {
+  try {
+    const text = await fnError.context.text()
+    try {
+      const json = JSON.parse(text)
+      if (json?.error) return json.error
+    } catch { /* not JSON */ }
+    if (text) return text
+  } catch { /* no readable body */ }
+  return fnError.message || 'Edge Function error'
+}
+
 function withTimeout(promise, ms, message) {
   let timer
   const timeout = new Promise((_, reject) => {
@@ -29,21 +43,13 @@ function withTimeout(promise, ms, message) {
 }
 
 async function invokeGenerate(episodeId) {
-  const { data: { session } } = await supabaseAdmin.auth.getSession()
-  const res = await withTimeout(
-    fetch('/api/generate-daily-podcast', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.access_token || ''}`,
-      },
-      body: JSON.stringify({ episode_id: episodeId }),
-    }),
+  const { data, error: fnError } = await withTimeout(
+    supabaseAdmin.functions.invoke('generate-daily-podcast', { body: { episode_id: episodeId } }),
     45000,
     "Generation timed out after 45s — the TTS provider likely hung without responding. Try again, or it may need a different provider."
   )
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
+  if (fnError) throw new Error(await extractFnErrorMessage(fnError))
+  if (data?.error) throw new Error(data.error)
   if (data?.skipped) throw new Error(data.reason || 'Generation was skipped')
   return data
 }
