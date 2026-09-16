@@ -32,22 +32,12 @@ function weekLabel(monday) {
   return `Week of ${monday.toLocaleDateString('en-US', opt)} – ${sunday.toLocaleDateString('en-US', opt)}`
 }
 
-// Groups episodes into Monday-start weeks, newest week first
-function groupByWeek(episodes) {
-  const map = new Map()
-  for (const ep of episodes) {
-    const monday = getMonday(ep.episode_date)
-    const key = monday.toISOString().slice(0, 10)
-    if (!map.has(key)) map.set(key, { monday, items: [] })
-    map.get(key).items.push(ep)
-  }
-  return [...map.values()].sort((a, b) => b.monday - a.monday)
-}
-
 export default function Podcast() {
   const [episodes, setEpisodes] = useState([])
   const [loading, setLoading] = useState(true)
   const [showScript, setShowScript] = useState({})
+  const [search, setSearch] = useState('')
+  const [weekFilter, setWeekFilter] = useState('all')
 
   useEffect(() => {
     let active = true
@@ -62,7 +52,20 @@ export default function Podcast() {
     return () => { active = false }
   }, [])
 
-  const weekGroups = groupByWeek(episodes)
+  // Build the "All Weeks" dropdown options (key = Monday's ISO date)
+  const weekOptions = [...new Map(
+    episodes.map(ep => {
+      const monday = getMonday(ep.episode_date)
+      const key = monday.toISOString().slice(0, 10)
+      return [key, { key, monday }]
+    })
+  ).values()].sort((a, b) => b.monday - a.monday)
+
+  const filtered = episodes.filter(ep => {
+    const matchSearch = !search || (ep.title || '').toLowerCase().includes(search.toLowerCase())
+    const matchWeek = weekFilter === 'all' || getMonday(ep.episode_date).toISOString().slice(0, 10) === weekFilter
+    return matchSearch && matchWeek
+  })
 
   return (
     <div>
@@ -89,75 +92,96 @@ export default function Podcast() {
         </p>
       </div>
 
-      {/* All episodes — one clean list, most recent first */}
+      {/* All episodes — searchable, filterable by week */}
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '28px 16px 60px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.3rem', margin: '0 0 16px' }}>
+          All Episodes
+        </h2>
+
+        <input
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search episodes..."
+          style={{
+            width: '100%', boxSizing: 'border-box', padding: '12px 16px', marginBottom: 10,
+            borderRadius: 10, border: '1.5px solid var(--brand-pale)', fontSize: '0.92rem',
+            fontFamily: 'var(--font-body)', outline: 'none',
+          }}
+        />
+        <select
+          value={weekFilter}
+          onChange={e => setWeekFilter(e.target.value)}
+          style={{
+            width: '100%', boxSizing: 'border-box', padding: '12px 16px', marginBottom: 20,
+            borderRadius: 10, border: '1.5px solid var(--brand-pale)', fontSize: '0.92rem',
+            fontFamily: 'var(--font-body)', color: 'var(--text-dark, #1e293b)', background: 'white',
+          }}
+        >
+          <option value="all">All Weeks</option>
+          {weekOptions.map(({ key, monday }) => (
+            <option key={key} value={key}>{weekLabel(monday)}</option>
+          ))}
+        </select>
+
         {loading && <p>Loading…</p>}
 
-        {!loading && episodes.length === 0 && (
-          <p style={{ color: '#64748b', textAlign: 'center' }}>No episodes yet — check back soon.</p>
+        {!loading && filtered.length === 0 && (
+          <p style={{ color: '#64748b', textAlign: 'center' }}>No episodes match.</p>
         )}
 
-        <div style={{ display: 'grid', gap: 32 }}>
-          {weekGroups.map(({ monday, items }) => (
-            <div key={monday.toISOString()}>
-              <h2 style={{
-                fontFamily: 'var(--font-display)', color: 'var(--brand-deep)',
-                fontSize: '1rem', margin: '0 0 12px', paddingBottom: 8,
-                borderBottom: '2px solid var(--brand-pale)',
+        <div style={{ display: 'grid', gap: 12 }}>
+          {filtered.map(ep => {
+            const isToday = ep.episode_date === TODAY_STR
+            return (
+              <div key={ep.id} style={{
+                borderRadius: 14, padding: '16px 16px',
+                background: isToday ? 'var(--brand-pale)' : 'white',
+                border: isToday ? 'none' : '1px solid #e2e8f0',
+                borderLeft: isToday ? '4px solid var(--brand-light)' : '1px solid #e2e8f0',
               }}>
-                {weekLabel(monday)}
-              </h2>
-              <div style={{ display: 'grid', gap: 12 }}>
-                {items.map(ep => {
-                  const isToday = ep.episode_date === TODAY_STR
-                  return (
-                    <div key={ep.id} style={{ border: '1px solid #e2e8f0', borderRadius: 14, padding: '16px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>{fmt(ep.episode_date)}</span>
-                        {isToday && (
-                          <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--brand-deep)', background: 'var(--brand-pale)', padding: '2px 8px', borderRadius: 20 }}>
-                            TODAY
-                          </span>
-                        )}
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--brand-deep)', marginBottom: 10 }}>
-                        {ep.title}
-                      </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--brand-light)', fontWeight: 600 }}>{fmt(ep.episode_date)}</span>
+                  {isToday && (
+                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'white', background: '#f59e0b', padding: '3px 12px', borderRadius: 20 }}>
+                      NOW
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--brand-deep)', marginBottom: 10 }}>
+                  {ep.title}
+                </div>
 
-                      {ep.audio_url ? (
-                        <audio controls preload="none" src={ep.audio_url} style={{ width: '100%' }} />
-                      ) : (
-                        <div style={{ fontSize: '0.8rem', color: '#92400e', background: '#fef3c7', padding: '8px 12px', borderRadius: 8 }}>
-                          {isToday ? "Today's audio is still being prepared — check back shortly." : 'Audio unavailable'}
-                        </div>
-                      )}
+                {ep.audio_url ? (
+                  <audio controls preload="none" src={ep.audio_url} style={{ width: '100%' }} />
+                ) : (
+                  <div style={{ fontSize: '0.8rem', color: '#92400e', background: '#fef3c7', padding: '8px 12px', borderRadius: 8 }}>
+                    {isToday ? "Today's audio is still being prepared — check back shortly." : 'Audio unavailable'}
+                  </div>
+                )}
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 10 }}>
-                        <button
-                          onClick={() => setShowScript(s => ({ ...s, [ep.id]: !s[ep.id] }))}
-                          style={{ padding: 0, border: 'none', background: 'none', color: 'var(--brand-light)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
-                        >
-                          {showScript[ep.id] ? 'Hide script' : 'Read script'}
-                        </button>
-                        <ShareButton
-                          title={ep.title}
-                          text={`🎙 "${(ep.title || '').toUpperCase()}"\n\nListen on CCG World:\n🌐${APP_URL}/podcast`}
-                          includeLink={false}
-                          variant="icon-only"
-                        />
-                      </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 10 }}>
+                  <button
+                    onClick={() => setShowScript(s => ({ ...s, [ep.id]: !s[ep.id] }))}
+                    style={{ padding: 0, border: 'none', background: 'none', color: 'var(--brand-light)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    {showScript[ep.id] ? 'Hide script' : 'Read script'}
+                  </button>
+                  <ShareButton
+                    title={ep.title}
+                    text={`🎙 "${(ep.title || '').toUpperCase()}"\n\nListen on CCG World:\n🌐${APP_URL}/podcast`}
+                    includeLink={false}
+                    variant="icon-only"
+                  />
+                </div>
 
-                      {showScript[ep.id] && (
-                        <p style={{ marginTop: 12, lineHeight: 1.8, color: 'var(--text-dark, #1e293b)', whiteSpace: 'pre-wrap', fontSize: '0.92rem' }}>
-                          {ep.script}
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
+                {showScript[ep.id] && (
+                  <p style={{ marginTop: 12, lineHeight: 1.8, color: 'var(--text-dark, #1e293b)', whiteSpace: 'pre-wrap', fontSize: '0.92rem' }}>
+                    {ep.script}
+                  </p>
+                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
