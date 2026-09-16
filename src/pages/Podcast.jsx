@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from '../lib/supabase'
-import ShareButton from '../components/ShareButton'
+import { ShareButtonLight } from '../components/ShareButton'
 import SEO from '../components/SEO'
 import { APP_URL } from '../lib/config'
 
@@ -166,11 +166,12 @@ export default function Podcast() {
                   >
                     {showScript[ep.id] ? 'Hide script' : 'Read script'}
                   </button>
-                  <ShareButton
+                  <ShareButtonLight
                     title={ep.title}
-                    text={`🎙 "${(ep.title || '').toUpperCase()}"\n\nListen on CCG World:\n🌐${APP_URL}/podcast`}
+                    text={`🎙 " *${(ep.title || '').toUpperCase()}* "\n\nListen to " *A Moment A Day* " on CCG World:\n🌐${APP_URL}/podcast`}
                     includeLink={false}
-                    variant="icon-only"
+                    label=""
+                    style={{ padding: '6px 10px' }}
                   />
                 </div>
 
