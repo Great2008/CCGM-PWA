@@ -1,17 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>
-window.addEventListener('error', function(e) {
-  document.body.innerHTML = '<pre style="color:red;background:white;padding:20px;white-space:pre-wrap;font-size:13px;position:fixed;inset:0;overflow:auto;z-index:99999;">ERROR: ' + e.message + '\n\n' + (e.error && e.error.stack || '(no stack trace)') + '</pre>';
-});
-window.addEventListener('unhandledrejection', function(e) {
-  var reason = e.reason;
-  var text = (reason && (reason.stack || reason.message)) || String(reason);
-  document.body.innerHTML = '<pre style="color:red;background:white;padding:20px;white-space:pre-wrap;font-size:13px;position:fixed;inset:0;overflow:auto;z-index:99999;">UNHANDLED REJECTION: ' + text + '</pre>';
-});
-</script>
-    
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
