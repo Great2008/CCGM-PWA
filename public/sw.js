@@ -1,7 +1,3 @@
-// CCG World Service Worker v17 — Full Offline PWA + Push Notifications + Sabbath/Devotional/Programme/Events/Newsletter API Cache + BG Image Cache + Bundled Bible
-// v17: fixed a missing comma in PRECACHE that broke the SW's syntax entirely,
-// meaning it silently failed to register (and offline mode never worked) on
-// v15/v16. Also added /divine-service and /ten-commandments to PRECACHE.
 const CACHE = 'ccgworld-v17'
 const API_CACHE = 'ccgworld-api-v6'
 const BG_CACHE = 'ccgworld-bg-v1'  // Hero background images from Unsplash — cache-first, permanent
