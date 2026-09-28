@@ -164,7 +164,7 @@ export default function Podcast() {
                     onClick={() => setShowScript(s => ({ ...s, [ep.id]: !s[ep.id] }))}
                     style={{ padding: 0, border: 'none', background: 'none', color: 'var(--brand-light)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
                   >
-                    {showScript[ep.id] ? 'Hide script' : 'Read script'}
+                    {showScript[ep.id] ? 'Collapse' : 'Read Along'}
                   </button>
                   <ShareButtonLight
                     title={ep.title}
