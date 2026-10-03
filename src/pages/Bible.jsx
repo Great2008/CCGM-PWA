@@ -153,7 +153,26 @@ export default function Bible() {
 
   useEffect(() => { loadChapter(selBook, selChapter) }, [selBook.id, selChapter])
 
-  const handleBook = book => { setSelBook(book); setSelChapter(1); setBookOpen(false); setHighlightVerse(null) }
+  const [jumpChapter, setJumpChapter] = useState('')
+  const [jumpVerse, setJumpVerse] = useState('')
+
+  const handleBook = book => {
+    setSelBook(book); setSelChapter(1); setBookOpen(false); setHighlightVerse(null)
+    setJumpChapter(''); setJumpVerse('')
+  }
+
+  const handleJump = () => {
+    const ch = parseInt(jumpChapter, 10)
+    if (!ch || ch < 1 || ch > selBook.chapters) return
+    const v = parseInt(jumpVerse, 10)
+    if (v && v > 0) {
+      goToVerse(selBook.id, ch, v)
+    } else {
+      setSelChapter(ch)
+      setHighlightVerse(null)
+    }
+    setJumpChapter(''); setJumpVerse('')
+  }
 
   const goToVerse = (bookId, ch, v) => {
     const book = KJV_BOOKS.find(b => b.id === bookId)
@@ -294,6 +313,27 @@ export default function Bible() {
                       })}
                     </div>
                   )}
+                </div>
+                <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: 14, marginBottom: 12 }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-light)', marginBottom: 10 }}>Go to Chapter : Verse</div>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <input
+                      type="number" inputMode="numeric" min={1} max={selBook.chapters}
+                      value={jumpChapter} onChange={e => setJumpChapter(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleJump()}
+                      placeholder="Ch."
+                      style={{ width: 0, flex: 1, minWidth: 0, padding: '8px 6px', borderRadius: 7, border: '1.5px solid #eee', fontSize: '0.85rem', textAlign: 'center', fontFamily: 'var(--font-body)' }}
+                    />
+                    <span style={{ color: 'var(--text-light)', fontWeight: 700 }}>:</span>
+                    <input
+                      type="number" inputMode="numeric" min={1}
+                      value={jumpVerse} onChange={e => setJumpVerse(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleJump()}
+                      placeholder="Vs. (optional)"
+                      style={{ width: 0, flex: 1.4, minWidth: 0, padding: '8px 6px', borderRadius: 7, border: '1.5px solid #eee', fontSize: '0.85rem', textAlign: 'center', fontFamily: 'var(--font-body)' }}
+                    />
+                    <button onClick={handleJump} className="btn btn-green" style={{ padding: '8px 14px', fontSize: '0.8rem', flexShrink: 0 }}>Go</button>
+                  </div>
                 </div>
                 <div style={{ background: 'var(--white, white)', borderRadius: 14, boxShadow: 'var(--shadow-sm)', padding: 14, marginBottom: 12 }}>
                   <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-light)', marginBottom: 10 }}>Chapter</div>
