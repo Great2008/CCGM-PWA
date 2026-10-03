@@ -7982,212 +7982,201 @@ const SACRED_SONGS = [
   },
   
   {
-    "id": 627,
-    "number": 627,
-    "title": "Anywhere With Jesus",
-    "author": "Jessie H. Brown",
+    "id": 617,
+    "number": 617,
+    "title": "Christian, Walk Carefully",
+    "author": "",
     "verses": [
-      "Anywhere with Jesus I can safely go,\nAnywhere He leads me in this world below;\nAnywhere without Him, dearest joys would fade;\nAnywhere with Jesus I am not afraid.",
-      "Anywhere with Jesus I am not alone,\nOther friends may fail me, He is still my own;\nThough His hand may lead me over dreary ways,\nAnywhere with Jesus is a house of praise.",
-      "Anywhere with Jesus over land and sea,\nTelling souls in darkness of salvation free;\nReady as He summons me to go or stay,\nAnywhere with Jesus when He points the way."
-    ],
-    "chorus": "Anywhere! Anywhere! Fear I cannot know;\nAnywhere with Jesus I can safely go."
-  },
-  {
-    "id": 642,
-    "number": 642,
-    "title": "Trust And Obey",
-    "author": "John H. Sammis",
-    "verses": [
-      "When we walk with the Lord\nIn the light of His Word,\nWhat a glory He sheds on our way!\nWhile we do His good will,\nHe abides with us still,\nAnd with all who will trust and obey.",
-      "Not a burden we bear,\nNot a sorrow we share,\nBut our toil He doth richly repay;\nNot a grief or a loss,\nNot a frown or a cross,\nBut is blessed if we trust and obey.",
-      "But we never can prove\nThe delights of His love\nUntil all on the altar we lay;\nFor the favour He shows,\nFor the joy He bestows,\nAre for them who will trust and obey.",
-      "Then in fellowship sweet\nWe will sit at His feet,\nOr we'll walk by His side in the way;\nWhat He says we will do,\nWhere He sends we will go;\nNever fear, only trust and obey."
-    ],
-    "chorus": "Trust and obey,\nFor there's no other way\nTo be happy in Jesus,\nBut to trust and obey."
-  },
-  {
-    "id": 680,
-    "number": 680,
-    "title": "Stand Up Stand Up For Jesus",
-    "author": "George Duffield Jr.",
-    "verses": [
-      "Stand up, stand up for Jesus,\nYe soldiers of the cross!\nLift high His royal banner,\nIt must not suffer loss:\nFrom victory unto victory\nHis army He shall lead,\nTill every foe is vanquished\nAnd Christ is Lord indeed.",
-      "Stand up, stand up for Jesus,\nThe trumpet call obey;\nForth to the mighty conflict\nIn this His glorious day.\nYe that are brave now serve Him\nAgainst unnumbered foes;\nLet courage rise with danger\nAnd strength to strength oppose.",
-      "Stand up, stand up for Jesus,\nStand in His strength alone;\nThe arm of flesh will fail you,\nYe dare not trust your own.\nPut on the Gospel armour,\nEach piece put on with prayer;\nWhere duty calls, or danger,\nBe never wanting there.",
-      "Stand up, stand up for Jesus,\nThe strife will not be long;\nThis day the noise of battle,\nThe next the victor's song!\nTo him that overcometh\nA crown of life shall be;\nHe with the King of glory\nShall reign eternally."
+      "Christian, walk carefully: danger is near!\nOn in thy journey with trembling and fear;\nSnares from without, and temptations within,\nSeek to entice thee once more into sin.",
+      "Christian, walk cheerfully through the fierce storm,\nDark though the sky with its threats of alarm;\nSoon will the clouds and the tempest be o'er,\nThen with thy Saviour thou'lt rest evermore.",
+      "Christian, walk prayerfully: oft wilt thou fall,\nIf thou forget on thy Saviour to call:\nSafe thou shalt walk through each trial and care,\nIf thou art clad in the armour of prayer.",
+      "Christian, walk hopefully: sorrow and pain\nCease when the haven of rest thou shalt gain:\nThen from the lips of the Judge, thy reward—\n\"Enter thou into the joy of thy Lord.\""
     ],
     "chorus": ""
   },
   {
-    "id": 698,
-    "number": 698,
-    "title": "Yield Not To Temptation",
-    "author": "Horatio R. Palmer",
+    "id": 618,
+    "number": 618,
+    "title": "Yielded to God, My Body, Soul, and Spirit",
+    "author": "",
     "verses": [
-      "Yield not to temptation, for yielding is sin;\nEach victory will help you some other to win;\nFight manfully onward, dark passions subdue;\nLook ever to Jesus—He'll carry you through.",
-      "Shun evil companions, bad language disdain;\nGod's name hold in reverence, nor take it in vain;\nBe thoughtful and earnest, kindhearted and true;\nLook ever to Jesus—He'll carry you through.",
-      "To him that o'ercometh God giveth a crown;\nThrough faith we shall conquer, though often cast down;\nHe who is our Saviour our strength will renew;\nLook ever to Jesus—He'll carry you through."
-    ],
-    "chorus": "Ask the Saviour to help you,\nComfort, strengthen and keep you;\nHe is willing to aid you,\nHe will carry you through."
-  },
-  {
-    "id": 706,
-    "number": 706,
-    "title": "Onward Christian Soldiers",
-    "author": "Sabine Baring-Gould",
-    "verses": [
-      "Onward, Christian soldiers,\nMarching as to war,\nWith the cross of Jesus\nGoing on before!\nChrist, the royal Master,\nLeads against the foe;\nForward into battle\nSee His banners go!",
-      "At the sign of triumph\nSatan's host doth flee;\nOn then, Christian soldiers,\nOn to victory!\nHell's foundations quiver\nAt the shout of praise;\nBrothers, lift your voices,\nLoud your anthems raise.",
-      "Like a mighty army\nMoves the Church of God;\nBrothers, we are treading\nWhere the saints have trod;\nWe are not divided,\nAll one body we,\nOne in hope and doctrine,\nOne in charity.",
-      "Crowns and thrones may perish,\nKingdoms rise and wane,\nBut the Church of Jesus\nConstant will remain;\nGates of hell can never\n'Gainst that Church prevail;\nWe have Christ's own promise,\nAnd that cannot fail.",
-      "Onward, then, ye people,\nJoin our happy throng,\nBlend with ours your voices\nIn the triumph song;\nGlory, laud, and honour\nUnto Christ the King;\nThis through countless ages\nMen and angels sing."
-    ],
-    "chorus": "Onward, Christian soldiers,\nMarching as to war,\nWith the cross of Jesus\nGoing on before!"
-  },
-  {
-    "id": 745,
-    "number": 745,
-    "title": "Count Your Blessings",
-    "author": "Johnson Oatman Jr.",
-    "verses": [
-      "When upon life's billows you are tempest-tossed,\nWhen you are discouraged, thinking all is lost,\nCount your many blessings, name them one by one,\nAnd it will surprise you what the Lord hath done.",
-      "Are you ever burdened with a load of care?\nDoes the cross seem heavy you are called to bear?\nCount your many blessings, every doubt will fly,\nAnd you will keep singing as the days go by.",
-      "When you look at others with their lands and gold,\nThink that Christ has promised you His wealth untold;\nCount your many blessings—money cannot buy\nYour reward in heaven, nor your home on high.",
-      "So, amid the conflict whether great or small,\nDo not be disheartened, God is over all;\nCount your many blessings, angels will attend,\nHelp and comfort give you to your journey's end."
-    ],
-    "chorus": "Count your blessings, name them one by one,\nCount your blessings, see what God hath done!\nCount your blessings, name them one by one,\nAnd it will surprise you what the Lord hath done."
-  },
-  {
-    "id": 757,
-    "number": 757,
-    "title": "Bringing In The Sheaves",
-    "author": "Knowles Shaw",
-    "verses": [
-      "Sowing in the morning, sowing seeds of kindness,\nSowing in the noontide and the dewy eve;\nWaiting for the harvest, and the time of reaping,\nWe shall come rejoicing, bringing in the sheaves.",
-      "Sowing in the sunshine, sowing in the shadows,\nFearing neither clouds nor winter's chilling breeze;\nBy and by the harvest, and the labour ended,\nWe shall come rejoicing, bringing in the sheaves.",
-      "Going forth with weeping, sowing for the Master,\nThough the loss sustained our spirit often grieves;\nWhen our weeping's over, He will bid us welcome,\nWe shall come rejoicing, bringing in the sheaves."
-    ],
-    "chorus": "Bringing in the sheaves, bringing in the sheaves,\nWe shall come rejoicing, bringing in the sheaves;\nBringing in the sheaves, bringing in the sheaves,\nWe shall come rejoicing, bringing in the sheaves."
-  },
-  {
-    "id": 814,
-    "number": 814,
-    "title": "Rescue The Perishing",
-    "author": "Fanny J. Crosby",
-    "verses": [
-      "Rescue the perishing, care for the dying,\nSnatch them in pity from sin and the grave;\nWeep o'er the erring one, lift up the fallen,\nTell them of Jesus the mighty to save.",
-      "Though they are slighting Him, still He is waiting,\nWaiting the penitent child to receive;\nPlead with them earnestly, plead with them gently;\nHe will forgive if they only believe.",
-      "Down in the human heart, crushed by the tempter,\nFeelings lie buried that grace can restore;\nTouched by a loving heart, wakened by kindness,\nChords that were broken will vibrate once more.",
-      "Rescue the perishing, duty demands it;\nStrength for thy labour the Lord will provide;\nBack to the narrow way patiently win them;\nTell the poor wand'rer a Saviour has died."
-    ],
-    "chorus": "Rescue the perishing,\nCare for the dying;\nJesus is merciful,\nJesus will save."
-  },
-  {
-    "id": 875,
-    "number": 875,
-    "title": "I Will Sing The Wondrous Story",
-    "author": "Francis H. Rowley",
-    "verses": [
-      "I will sing the wondrous story\nOf the Christ who died for me,\nHow He left His home in glory\nFor the cross of Calvary.",
-      "I was lost, but Jesus found me,\nFound the sheep that went astray,\nThrew His loving arms around me,\nDrew me back into His way.",
-      "I was bruised but Jesus healed me,\nFaint was I from many a fall,\nSight was gone, and fears possessed me,\nBut He freed me from them all.",
-      "Days of darkness still come o'er me,\nSorrow's path I often tread;\nBut the Saviour still is with me,\nBy His hand I'm safely led.",
-      "He will keep me till the river\nRolls its waters at my feet;\nThen He'll bear me safely over,\nWhere the loved ones I shall meet."
-    ],
-    "chorus": "Yes, I'll sing the wondrous story\nOf the Christ who died for me,\nSing it with the saints in glory,\nGathered by the crystal sea."
-  },
-  {
-    "id": 894,
-    "number": 894,
-    "title": "Amazing Grace",
-    "author": "John Newton",
-    "verses": [
-      "Amazing grace! how sweet the sound\nThat saved a wretch like me!\nI once was lost, but now am found,\nWas blind, but now I see.",
-      "'Twas grace that taught my heart to fear,\nAnd grace my fears relieved;\nHow precious did that grace appear\nThe hour I first believed!",
-      "Through many dangers, toils and snares\nI have already come;\n'Tis grace hath brought me safe thus far,\nAnd grace will lead me home.",
-      "The Lord has promised good to me,\nHis word my hope secures;\nHe will my shield and portion be\nAs long as life endures.",
-      "When we've been there ten thousand years,\nBright shining as the sun,\nWe've no less days to sing God's praise\nThan when we first begun."
+      "Yielded to God, my body, soul, and spirit,\nOh, what rejoicing fills my peaceful breast!\nAll, all is well: no doubt nor fear disturbs me,\nWhile on His promise now alone I rest.",
+      "Yielded to God, reposing 'neath His shadow,\nSunshine and gladness round my pathway fall;\nYielded to God, whose love dispels all sorrow,\nHe is my Refuge, and my All in All.",
+      "Yielded to God, my life and its devotion,\nYielded the service of each day and year;\nOh, what a peace pervades my every feeling!\nOh, what sweet visions on my sight appear!",
+      "Yielded to God, and in His holy keeping\nMy heart His temple evermore shall be;\nYielded to God, in willing consecration,\nBlessed Redeemer, I am lost in Thee."
     ],
     "chorus": ""
   },
   {
-    "id": 873,
-    "number": 873,
-    "title": "Blessed Assurance",
-    "author": "Fanny J. Crosby",
+    "id": 619,
+    "number": 619,
+    "title": "On Thee My Heart Is Resting",
+    "author": "",
     "verses": [
-      "Blessed assurance, Jesus is mine!\nO what a foretaste of glory divine!\nHeir of salvation, purchase of God,\nBorn of His Spirit, washed in His blood.",
-      "Perfect submission, perfect delight,\nVisions of rapture now burst on my sight;\nAngels descending bring from above\nEchoes of mercy, whispers of love.",
-      "Perfect submission, all is at rest,\nI in my Saviour am happy and blest;\nWatching and waiting, looking above,\nFilled with His goodness, lost in His love."
-    ],
-    "chorus": "This is my story, this is my song,\nPraising my Saviour all the day long;\nThis is my story, this is my song,\nPraising my Saviour all the day long."
-  },
-  {
-    "id": 901,
-    "number": 901,
-    "title": "It Is Well With My Soul",
-    "author": "Horatio G. Spafford",
-    "verses": [
-      "When peace like a river attendeth my way,\nWhen sorrows like sea billows roll;\nWhatever my lot, Thou hast taught me to say,\nIt is well, it is well with my soul.",
-      "Though Satan should buffet, though trials should come,\nLet this blest assurance control,\nThat Christ hath regarded my helpless estate,\nAnd hath shed His own blood for my soul.",
-      "My sin—O the bliss of this glorious thought!—\nMy sin, not in part but the whole,\nIs nailed to the cross and I bear it no more,\nPraise the Lord, praise the Lord, O my soul!",
-      "And, Lord, haste the day when my faith shall be sight,\nThe clouds be rolled back as a scroll;\nThe trump shall resound and the Lord shall descend,\nEven so, it is well with my soul."
-    ],
-    "chorus": "It is well, it is well\nWith my soul, with my soul;\nIt is well, it is well with my soul."
-  },
-  {
-    "id": 964,
-    "number": 964,
-    "title": "The Sweet By And By",
-    "author": "S. Fillmore Bennett",
-    "verses": [
-      "There's a land that is fairer than day,\nAnd by faith we can see it afar;\nFor the Father waits over the way\nTo prepare us a dwelling place there.",
-      "We shall sing on that beautiful shore\nThe melodious songs of the blest;\nAnd our spirits shall sorrow no more,\nNot a sigh for the blessing of rest.",
-      "To our bountiful Father above,\nWe will offer our tribute of praise\nFor the glorious gift of His love\nAnd the blessings that hallow our days."
-    ],
-    "chorus": "In the sweet by and by,\nWe shall meet on that beautiful shore;\nIn the sweet by and by,\nWe shall meet on that beautiful shore."
-  },
-  {
-    "id": 1079,
-    "number": 1079,
-    "title": "Jesus Saves",
-    "author": "Priscilla J. Owens",
-    "verses": [
-      "We have heard the joyful sound:\nJesus saves! Jesus saves!\nSpread the tidings all around:\nJesus saves! Jesus saves!\nBear the news to every land,\nClimb the steeps and cross the waves;\nOnward! 'tis our Lord's command;\nJesus saves! Jesus saves!",
-      "Waft it on the rolling tide:\nJesus saves! Jesus saves!\nTell to sinners far and wide:\nJesus saves! Jesus saves!\nSing, ye islands of the sea,\nEcho back, ye ocean caves;\nEarth shall keep her jubilee:\nJesus saves! Jesus saves!",
-      "Sing above the battle strife,\nJesus saves! Jesus saves!\nBy His death and endless life,\nJesus saves! Jesus saves!\nSing it softly through the gloom,\nWhen the heart for mercy craves;\nSing in triumph o'er the tomb:\nJesus saves! Jesus saves!",
-      "Give the winds a mighty voice,\nJesus saves! Jesus saves!\nLet the nations now rejoice:\nJesus saves! Jesus saves!\nShout salvation full and free,\nHighest hills and deepest caves;\nThis our song of victory:\nJesus saves! Jesus saves!"
+      "On Thee my heart is resting!\nAh, this is rest indeed!\nWhat else, Almighty Saviour,\nCan a poor sinner need?\nThy light is all my wisdom,\nThy love is all my stay;\nOur Father's home in glory\nDraws nearer every day.",
+      "My guilt is great, but greater\nThe mercy Thou dost give;\nThyself, a spotless Offering,\nHast died that I should live.\nWith Thee, my soul unfettered\nHas risen from the dust;\nThy blood is all my treasure,\nThy Word is all my trust.",
+      "Through me, Thou gentle Master,\nThy purposes fulfil!\nI yield myself for ever\nTo Thy most holy will.\nWhat though I be but weakness,\nMy strength is not in me;\nThe poorest of Thy people\nHas all things, having Thee.",
+      "When clouds are darkest round me,\nThou, Lord, art then most near,\nMy drooping faith to quicken,\nMy weary soul to cheer.\nSafe nestling in Thy bosom,\nI gaze upon Thy face;\nIn vain my foes would drive me\nFrom Thee, my hiding-place.",
+      "'Tis Thou hast made me happy,\n'Tis Thou hast set me free;\nTo whom shall I give glory\nFor ever, but to Thee?\nOf earthly love and blessing\nShould every stream run dry,\nThy grace shall still be with me,\nThy grace, to live and die!"
     ],
     "chorus": ""
   },
-    {
-    "id": 1134,
-    "number": 1134,
-    "title": "There Is A Green Hill Far Away",
-    "author": "Cecil Frances Alexander",
-    "verses": [
-      "There is a green hill far away,\nOutside a city wall,\nWhere the dear Lord was crucified,\nWho died to save us all.",
-      "We may not know, we cannot tell\nWhat pains He had to bear;\nBut we believe it was for us\nHe hung and suffered there.",
-      "He died that we might be forgiven,\nHe died to make us good,\nThat we might go at last to heaven,\nSaved by His precious blood.",
-      "There was no other good enough\nTo pay the price of sin;\nHe only could unlock the gate\nOf heaven, and let us in.",
-      "Oh, dearly, dearly has He loved!\nAnd we must love Him too,\nAnd trust in His redeeming blood,\nAnd try His works to do."
-    ],
-    "chorus": " "
-  },
   {
-    "id": 1155,
-    "number": 1155,
-    "title": "Jesus Loves Me",
-    "author": "Anna B. Warner",
+    "id": 620,
+    "number": 620,
+    "title": "It Passeth Knowledge, That Dear Love of Thine",
+    "author": "",
     "verses": [
-      "Jesus loves me! this I know,\nFor the Bible tells me so;\nLittle ones to Him belong;\nThey are weak, but He is strong.",
-      "Jesus loves me! He who died\nHeaven's gate to open wide;\nHe will wash away my sin,\nLet His little child come in.",
-      "Jesus loves me! He will stay\nClose beside me all the way;\nThou hast bled and died for me,\nI will henceforth live for Thee.",
-      "Jesus loves me! loves me still,\nThough I'm very weak and ill;\nFrom His shining throne on high,\nComes to watch me where I lie."
+      "It passeth knowledge, that dear love of Thine,\nMy Jesus, Saviour; yet this soul of mine\nWould of Thy love, in all its breadth and length,\nIts height and depth, its everlasting strength,\nKnow more and more.",
+      "It passeth telling, that dear love of Thine,\nMy Jesus, Saviour; yet these lips of mine\nWould fain proclaim to sinners far and near\nA love which can remove all guilty fear,\nAnd love beget.",
+      "It passeth praises, that dear love of Thine,\nMy Jesus, Saviour; yet this heart of mine\nWould sing that love, so full, so rich, so free,\nWhich brings a rebel sinner, such as me,\nNigh unto God.",
+      "But though I cannot sing, or tell, or know\nThe fulness of Thy love, while here below,\nMy empty vessel I may freely bring:\nO Thou, who art of love the living spring,\nMy vessel fill.",
+      "I am an empty vessel—not one thought,\nOr look of love, I ever to Thee brought;\nYet I may come, and come again to Thee,\nWith this, the empty sinner's only plea—\nThou lovest me.",
+      "Oh, fill me, Jesus, Saviour, with Thy love!\nLead, lead me to the living fount above;\nThither may I, in simple faith, draw nigh,\nAnd never to another fountain fly,\nBut unto Thee.",
+      "And when my Jesus face to face I see,\nWhen at His lofty throne I bow the knee,\nThen of His love, in all its breadth and length,\nIts height and depth, its everlasting strength,\nMy soul shall sing,"
     ],
-    "chorus": "Yes, Jesus loves me!\nYes, Jesus loves me!\nYes, Jesus loves me!\nThe Bible tells me so."
+    "chorus": ""
   },
+  
+  {
+  "id": 621,
+  "number": 621,
+  "title": "I Gave My Life for Thee",
+  "author": "",
+  "verses": [
+    "I gave My life for thee;\nMy precious blood I shed,\nThat thou might'st ransomed be,\nAnd quickened from the dead.\nI gave My life for thee:\nWhat hast thou given for Me?",
+    "I spent long years for thee\nIn weariness and woe,\nThat an eternity\nOf joy thou mightest know.\nI spent long years for thee:\nHast thou spent one for Me?",
+    "My Father's home of light,\nMy rainbow-circled throne,\nI left for earthly night,\nFor wanderings sad and lone.\nI left it all for thee:\nHast thou left aught for Me?",
+    "I suffered much for thee—\nMore than thy tongue can tell,\nOf bitterest agony—\nTo rescue thee from hell.\nI suffered much for thee:\nWhat canst thou bear for Me?",
+    "And I have brought to thee,\nDown from My home above,\nSalvation full and free,\nMy pardon and My love.\nGreat gifts I brought to thee:\nWhat hast thou brought to Me?",
+    "Oh, let thy life be given,\nThy years for Him be spent;\nWorld-fetters all be riven,\nAnd joy with suffering blent.\nBring thou thy worthless all:\nFollow thy Saviour's call."
+  ],
+  "chorus": ""
+},
+{
+  "id": 622,
+  "number": 622,
+  "title": "Thy Life Was Given for Me",
+  "author": "",
+  "verses": [
+    "Thy life was given for me!\nThy blood, O Lord, was shed\nThat I might ransomed be,\nAnd quickened from the dead.\nThy life was given for me:\nWhat have I given for Thee?",
+    "Long years were spent for me\nIn weariness and woe,\nThat through eternity\nThy glory I might know.\nLong years were spent for me:\nHave I spent one for Thee?",
+    "Thy Father's home of light,\nThy rainbow-circled throne,\nWere left for earthly night,\nFor wanderings sad and lone.\nYea, all was left for me:\nHave I left aught for Thee?",
+    "Thou, Lord, hast borne for me\nMore than my tongue can tell\nOf bitterest agony,\nTo rescue me from hell.\nThou sufferedst all for me:\nWhat have I borne for Thee?",
+    "And Thou hast brought to me,\nDown from Thy home above,\nSalvation full and free,\nThy pardon and Thy love.\nGreat gifts Thou broughtest me:\nWhat have I brought to Thee?",
+    "Oh, let my life be given,\nMy years for Thee be spent;\nWorld-fetters all be riven,\nAnd joy with suffering blent:\nTo Thee my all I bring,\nMy Saviour and my King!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 623,
+  "number": 623,
+  "title": "Not I, but Christ, Be Honoured",
+  "author": "",
+  "verses": [
+    "\"Not I, but Christ,\" be honoured,\nloved, exalted;\n\"Not I, but Christ,\" be seen, be\nknown, be heard;\n\"Not I, but Christ,\" in every look and action;\n\"Not I, but Christ,\" in every\nthought and word.",
+    "\"Not I, but Christ,\" to gently soothe in sorrow;\n\"Not I, but Christ,\" to wipe the falling tear;\n\"Not I, but Christ,\" to lift the weary burden;\n\"Not I, but Christ,\" to hush away all fear.",
+    "\"Not I, but Christ,\" in lowly, silent labour;\n\"Not I, but Christ,\" in humble, earnest toil;\nChrist, only Christ! no show, no ostentation;\nChrist, none but Christ, the gatherer of the spoil.",
+    "Christ, only Christ, ere long will fill\nmy vision;\nGlory excelling, soon, full soon, I'll see—\nChrist, only Christ, my every wish fulfilling—\nChrist, only Christ, my All in All to be."
+  ],
+  "chorus": ""
+},
+{
+  "id": 624,
+  "number": 624,
+  "title": "Oh, the Bitter Shame and Sorrow",
+  "author": "",
+  "verses": [
+    "Oh, the bitter shame and sorrow,\nThat a time could ever be,\nWhen I let the Saviour's pity\nPlead in vain; and proudly answered,\n\"All of self, and none of Thee!\"",
+    "Yet He found me; I beheld Him\nBleeding on the accursed tree:\nHeard Him pray: \"Forgive them,\nFather!\"\nAnd my wistful heart said faintly,\n\"Some of self, and some of Thee!\"",
+    "Day by day His tender mercy,\nHealing, helping, full and free;\nSweet and strong, and ah! so patient,\nBrought me lower, while I whispered,\n\"Less of self, and more of Thee!\"",
+    "Higher than the highest heavens,\nDeeper than the deepest sea,\nLord, Thy love at last hath conquered;\nGrant me now my supplication—\n\"None of self, and all of Thee!\""
+  ],
+  "chorus": ""
+},
+{
+  "id": 625,
+  "number": 625,
+  "title": "Thou Sweet Beloved Will of God",
+  "author": "",
+  "verses": [
+    "Thou sweet beloved will of God,\nMy anchor ground, my fortress hill,\nMy spirit's silent fair abode,\nIn Thee I hide me, and am still.",
+    "O will, that wiliest good alone,\nLead thou the way, thou guidest best:\nA little child, I follow on,\nAnd trusting, lean upon thy breast.",
+    "Thy beautiful sweet will, my God,\nHolds fast in its sublime embrace\nMy captive will, a gladsome bird,\nPrisoned in such a realm of grace.",
+    "Within this place of certain good\nLove evermore expands her wings,\nOr nestling in Thy perfect choice,\nAbides lyric with what it brings.",
+    "Oh, lightest burden, sweetest yoke!\nIt lifts, it bears my happy soul,\nIt giveth wings to this poor heart;\nMy freedom is Thy grand control.",
+    "Upon God's will I lay me down,\nAs child upon its mother's breast;\nNo silken couch, nor softest bed,\nCould ever give me such deep rest.",
+    "Thy wonderful grand will, my God,\nWith triumph now I make it mine;\nAnd faith shall cry a joyous, Yes!\nTo every dear command of Thine."
+  ],
+  "chorus": ""
+},
+
+{
+  "id": 626,
+  "number": 626,
+  "title": "Something Every Heart Is Loving",
+  "author": "",
+  "verses": [
+    "Something every heart is loving;\nIf not Jesus, none can rest:\nLord, my heart to Thee is given—\nTake it, for it loves Thee best.",
+    "Thus I cast the world behind me,\nJesus most beloved shall be;\nBeauteous more than all things beauteous,\nHe alone is joy to me.",
+    "Bright with all eternal radiance\nIs the glory of Thy face;\nThou art loving, sweet, and tender,\nFull of pity, full of grace.",
+    "When I hated, Thou didst love me,\nShedd'st for me Thy precious blood;\nStill Thou lovest, lovest ever:\nShall I not love Thee, my God?",
+    "Keep my heart still faithful to Thee,\nThat my earthly life may be\nBut a shadow to that glory\nOf my hidden life in Thee!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 627,
+  "number": 627,
+  "title": "Anywhere with Jesus I Can Safely Go",
+  "author": "",
+  "verses": [
+    "Anywhere with Jesus I can safely go!\nAnywhere He leads me in this world below!\nAnywhere without Him dearest joys\nwould fade—\nAnywhere with Jesus, I am not afraid!",
+    "Anywhere! anywhere! I fear I cannot know;\nAnywhere with Jesus I can safely go!"
+  ],
+  "chorus": ""
+},
+{
+  "id": 628,
+  "number": 628,
+  "title": "Abiding, Oh, So Wondrous Sweet",
+  "author": "",
+  "verses": [
+    "Abiding, oh, so wondrous sweet!\nI'm resting at the Saviour's feet;\nI trust in Him; I'm satisfied,\nI'm resting in the Crucified!",
+    "He speaks, and by His word is given\nHis peace, a rich foretaste of heaven;\nNot as the world, He peace doth give:\n'Tis through this hope my soul shall live.",
+    "I live, but through His grace alone;\nBy whom the mighty work is done;\nDead to myself, alive to Him,\nI count all loss His rest to win.",
+    "Now rest, my heart, the work is done,\nI'm saved by faith through Christ the Son!\nLet every power my soul employ\nTo tell the world my peace and joy."
+  ],
+  "chorus": "Abi—ding, abi—ding,\nOh, how wondrous sweet!\nI'm rest—ing, rest—ing\nAt the Saviour's feet."
+},
+{
+  "id": 629,
+  "number": 629,
+  "title": "Precious Saviour, I Will Praise Thee",
+  "author": "",
+  "verses": [
+    "Precious Saviour, I will praise Thee,\nThine, and only Thine, I am;\nFor the cleansing blood has reached me;\nGlory, glory to the Lamb!",
+    "Long my yearning heart was trying\nTo enjoy this perfect rest;\nBut when I gave over \"trying,\"\nSimply trusting, I was blest.",
+    "I am trusting every moment\nIn the precious blood applied;\nCalmly resting at the fountain,\nDwelling at my Saviour's side.",
+    "Consecrated to Thy service,\nI would live and die for Thee,\nGladly tell the wondrous story\nOf salvation full and free."
+  ],
+  "chorus": "Glory, glory, Jesus saves me!\nBlessed be His holy name;\nFor the cleansing blood has reached me,\nHallelujah to the Lamb!"
+},
+{
+  "id": 630,
+  "number": 630,
+  "title": "Alas! and Did My Saviour Bleed",
+  "author": "",
+  "verses": [
+    "Alas! and did my Saviour bleed?\nAnd did my Sovereign die?\nWould He devote that sacred head\nFor such a worm as I?",
+    "Was it for crimes that I had done\nHe groaned upon the tree?\nAmazing pity! grace unknown!\nAnd love beyond degree!",
+    "Well might the sun in darkness hide,\nAnd shut his glories in,\nWhen Christ, the mighty Maker, died\nFor man, the creature's sin.",
+    "Thus might I hide my blushing face\nWhilst His dear cross appears,\nDissolve my heart in thankfulness,\nAnd melt mine eyes to tears.",
+    "But drops of grief can ne'er repay\nThe debt of love I owe:\nHere, Lord, I give myself away;\n'Tis all that I can do."
+  ],
+  "chorus": "Help me, dear Saviour, Thee to own,\nAnd ever faithful be;\nAnd when Thou sittest on Thy throne,\nO Lord, remember me."
+},
+
 ];
 
 export default SACRED_SONGS;
