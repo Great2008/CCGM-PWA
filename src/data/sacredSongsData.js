@@ -8176,6 +8176,453 @@ const SACRED_SONGS = [
   ],
   "chorus": "Help me, dear Saviour, Thee to own,\nAnd ever faithful be;\nAnd when Thou sittest on Thy throne,\nO Lord, remember me."
 },
+  {
+    "number": 631,
+    "title": "There is a Light, a blessed Light",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "There is a Light, a blessed Light,\nThat comes from God above;\nAnd in the face of Christ the Lord\nReflects the Father's love.\n\nLet us walk ... in the Light! . . .\nEver walk in the Light of God;\nLet us walk ... in the Light! . . .\nEver walk in the Light of God."
+      },
+      {
+        "verse": 2,
+        "text": "There is a Light, a glorious Light,\nThat falls upon our way;\nAnd brighter shineth as we go,\nTill lost in perfect day."
+      },
+      {
+        "verse": 3,
+        "text": "There is a Light, a holy Light,\nBy which we now behold\nThe jasper walls, the pearly gates,\nAnd streets of shining gold."
+      },
+      {
+        "verse": 4,
+        "text": "O blessed, blessed holy Light,\nTo all so freely given;\nShine forth, shine forth, O Light of Life,\nAnd guide us safe to heaven."
+      }
+    ]
+  },
+  {
+    "number": 632,
+    "title": "More love to Thee, O Christ",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "More love to Thee, O Christ,\nMore love to Thee;\nHear Thou the prayer I make\nOn bended knee;\nThis is my earnest plea----\nMore love, O Christ, to Thee,\nMore love to Thee!\nMore love to Thee!"
+      },
+      {
+        "verse": 2,
+        "text": "Once earthly joy I craved,\nSought peace and rest;\nNow Thee alone I seek,\nGive what is best:\nThis all my prayer shall be----\nMore love, O Christ, to Thee,\nMore love to Thee!"
+      },
+      {
+        "verse": 3,
+        "text": "Let sorrow do its work,\nSend grief and pain;\nSweet are Thy messengers,\nSweet their refrain,\nWhen they can sing with me---\nMore love, O Christ, to Thee,\nMore love to Thee!"
+      },
+      {
+        "verse": 4,
+        "text": "Then shall my latest breath\nWhisper Thy praise;\nThis be the parting cry\nMy heart shall raise----\nThis still its prayer shall be----\nMore love, O Christ, to Thee,\nMore love to Thee!"
+      }
+    ]
+  },
+  {
+    "number": 633,
+    "title": "Love, that wilt not let me go",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Love, that wilt not let me go,\nI rest my weary soul in Thee;\nI give Thee back the life I owe,\nThat in Thine ocean depths its flow\nMay richer, fuller be."
+      },
+      {
+        "verse": 2,
+        "text": "O Light, that followest all my way,\nI yield my flickering torch to Thee;\nMy heart restores its borrowed ray,\nThat in Thy sunshine's blaze its day\nMay brighter, fairer be."
+      },
+      {
+        "verse": 3,
+        "text": "O Joy, that seekest me through pain,\nI cannot close my heart to Thee;\nI trace the rainbow through the rain,\nAnd feel the promise is not vain\nThat morn shall tearless be."
+      },
+      {
+        "verse": 4,
+        "text": "O cross, that liftest up my head,\nI dare not ask to fly from thee;\nI lay in dust life's glory dead,\nAnd from the ground there blossoms\nLife that shall endless be."
+      }
+    ]
+  },
+  {
+    "number": 634,
+    "title": "Saviour! Thy dying love",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Saviour! Thy dying love\nThou gavest me,\nNor should I aught withhold,\nMy Lord, from Thee;\nIn love my soul would bow,\nMy heart fulfil its vow,\nSome offering bring Thee now,\nSomething for Thee."
+      },
+      {
+        "verse": 2,
+        "text": "At the blest mercy-seat,\nPleading for me,\nMy feeb'e faith looks up,\nJesus, to Thee:\nHelp me the cross to bear,\nThy wondrous love declare,\nSome song to raise, or prayer,\nSomething for Thee."
+      },
+      {
+        "verse": 3,
+        "text": "Give me a faithful heart----\nLikeness to Thee,----\nThat each departing day\nHenceforth may see\nSome work of love begun,\nSome deed of kindness done,\nSome wanderer sought and won,\nSomething for Thee."
+      },
+      {
+        "verse": 4,
+        "text": "All that I am and have----\nThy gifts so free---\nIn joy, in grief, through life,\nO Lord, for Thee!\nAnd when Thy face I see,\nMy ransomed soul shall be,\nThrough all eternity,\nSomething for Thee."
+      }
+    ]
+  },
+  {
+    "number": 635,
+    "title": "Jesus! I am resting, resting",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Jesus! I am resting, resting\nIn the joy of what Thou art;\nI am finding out the greatness\nOf Thy loving heart.\nThou hast bid me gaze upon Thee,\nAnd Thy beauty fills my soul;\nFor, by Thy transforming power\nThou hast made me whole."
+      },
+      {
+        "verse": 2,
+        "text": "Oh, how great Thy loving-kindness,\nVaster, broader than the sea!\nOh, how marvellous Thy goodness,\nLavished all on me!\nYes, I rest in Thee, Beloved,\nKnow what wealth of grace is Thine,\nKnow Thy certainty of promise,\nAnd have made it mine."
+      },
+      {
+        "verse": 3,
+        "text": "Simply trusting Thee, Lord Jesus,\nI behold Thee as Thou art,\nAnd Thy love so pure, so changeless,\nSatisfies my heart----\nSatisfies its deepest longings,\nMeets, supplies its every need,\nCompasseth me round with blessings:\nThine is love indeed!"
+      },
+      {
+        "verse": 4,
+        "text": "Ever lift Thy face upon me,\nAs I work and wait for Thee;\nResting 'neath Thy smile, Lord Jesus,\nEarth's dark shadows flee.\nBrightness of my Father's glory,\nSunshine of my Father's face,\nKeep me ever trusting, resting;\nFill me with Thy grace!"
+      }
+    ],
+    "chorus": "Jesus! I am resting, resting in the joy of what Thou art;\nI am finding out the greatness of Thy loving heart."
+  },
+  {
+    "number": 636,
+    "title": "Help me, O Lord, the God of my salvation",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Help me, O Lord, the God of my salvation!\nI have no hope, no refuge but in Thee;\nHelp me to make this perfect consecration,\nIn life or death Thine evermore to be."
+      },
+      {
+        "verse": 2,
+        "text": "Help me, O Lord, to keep my pledge unbroken!\nGuard Thou my ways, my thoughts, my tongue, my heart;\nHelp me to trust the word which Thou hast spoken,\nThat from Thy paths my feet may ne'er depart."
+      },
+      {
+        "verse": 3,
+        "text": "Help me, O Lord, when sore temptations press me!\nOh, lift the clouds that hide Thee from my sight!\nHelp me, O Lord, when anxious cares distress me,\nTo look beyond, where all is calm and bright."
+      },
+      {
+        "verse": 4,
+        "text": "Help me, O Lord! My strength is only weakness;\nThine, Thine the power by which alone I live;\nHelp me each day to bear the cross with meekness,\nTill Thou at last the promised crown shalt give."
+      }
+    ]
+  },
+  {
+    "number": 637,
+    "title": "My spirit, soul, and body",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "My spirit, soul, and body,\nJesus, I give to Thee,\nA consecrated offering,\nThine evermore to be.\nMy all is on the altar;\nLord, I am all Thine own;\nOh, may my faith ne'er falter!\nLord, keep me Thine alone."
+      },
+      {
+        "verse": 2,
+        "text": "O Jesus, mighty Saviour!\nI trust in Thy great name,\nI look for Thy salvation,\nThy promise now I claim.\nNow, Lord, I yield my members,\nFrom sin's dominion free,\nFor warfare and for triumph,\nAs weapons unto Thee."
+      },
+      {
+        "verse": 3,
+        "text": "Oh, blissful self-surrender,\nTo live, my Lord, by Thee!\nNow, Son of God, my Saviour,\nLive out Thy life in me.\nI'm Thine, O blessed Jesus,\nWashed in Thy precious blood,\nSealed by Thy Holy Spirit,\nA sacrifice to God."
+      }
+      ]
+  },
+  {
+    "number": 638,
+    "title": "Lord, for to-morrow and its needs",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Lord, for to-morrow and its needs\nI do not pray;\nKeep me, my God, from stain of sin----\nJust for to-day."
+      },
+      {
+        "verse": 2,
+        "text": "Let me do faithfully Thy work,\nAnd duly pray;\nLet me be kind in word and deed,\nJust for to-day."
+      },
+      {
+        "verse": 3,
+        "text": "Let me no wrong or idle word,\nUnthinking, say:\nSet Thou a seal upon my lips---\nJust for to-day."
+      },
+      {
+        "verse": 4,
+        "text": "So for to-morrow and its needs\nI do not pray;\nBut keep me, guide me, hold me, Lord---\nJust for to-day."
+      }
+    ]
+  },
+  {
+    "number": 639,
+    "title": "Closer, Lord, to Thee I cling",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "Closer, Lord, to Thee I cling,\nCloser still to Thee;\nSafe beneath Thy sheltering wing\nI would ever be;\nRude the blast of doubt and sin,\nFierce assaults without, within:\nHelp me, Lord, the battle win---\nCloser, Lord, to Thee!"
+      },
+      {
+        "verse": 2,
+        "text": "Closer yet, O Lord, my Rock,\nRefuge of my soul;\nDread I not the tempest shock,\nThough the billows roll:\nWildest storm cannot alarm,\nFor to me can come no harm,\nLeaning on Thy loving arm----\nCloser, Lord, to Thee!"
+      },
+      {
+        "verse": 3,
+        "text": "Closer still, my Help, my Stay,\nCloser, closer still;\nMeekly there I learn to say,\n\"Father, not my will!\"\nLearn that in affliction's hour,\nWhen the clouds of sorrow lour,\nLove directs Thy hand of power---\nCloser, Lord to Thee!"
+      },
+      {
+        "verse": 4,
+        "text": "Closer, Lord, to Thee I come,\nLight of life divine;\nThrough the ever blessed Son,\nJoy and peace are mine;\nLet me in Thy love abide,\nKeep me ever near Thy side,\nIn the \"Rock of Ages\" hide---\nCloser, Lord, to Thee!"
+      }
+    ]
+  },
+  {
+    "number": 640,
+    "title": "I would not ask for earthly store",
+    "verses": [
+      {
+        "verse": 1,
+        "text": "I would not ask for earthly store---\nThou wilt my need supply;\nBut I would covet, more and more,\nThe clear and single eye,\nTo see my duty face to face,\nAnd trust Thee, Lord, for daily grace."
+      },
+      {
+        "verse": 2,
+        "text": "I care not for the empty show\nThat thoughtless worldlings see;\nBut gladly do the best I know,\nAnd leave the rest with Thee;---\nWell satisfied that sweet reward\nIs sure to those who trust the Lord."
+      },
+      {
+        "verse": 3,
+        "text": "Whate'er the crosses mine shall be,\nI would not dare to shun;\nBut only ask to live for Thee,\nAnd that Thy will be done;\nThy will, O Lord, be mine each day,\nWhile pressing on my homeward way."
+      },
+      {
+        "verse": 4,
+        "text": "And when at last, my labour o'er,\nI cross the narrow sea,\nGrant, Lord, that on the other shore\nMy soul may dwell with Thee;\nAnd learn what here I cannot know,\nWhy Thou hast ever loved me so."
+      }
+    ],
+    "chorus": "Then shall my heart keep singing,\nWhile to the cross I cling;\nFor rest is sweet at Jesus' feet,\nWhile homeward faith keeps winging,\nWhile homeward faith keeps winging."
+  },
+  {
+  "number": 641,
+  "title": "I am trusting Thee, Lord Jesus",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "I am trusting Thee, Lord Jesus,\nTrusting only Thee!\nTrusting Thee for full salvation,\nGreat and free."
+    },
+    {
+      "verse": 2,
+      "text": "I am trusting Thee for pardon,\nAt Thy feet I bow;\nFor Thy grace and tender mercy,\nTrusting now."
+    },
+    {
+      "verse": 3,
+      "text": "I am trusting Thee for cleansing\nIn the crimson flood;\nTrusting Thee to make me holy\nBy Thy blood."
+    },
+    {
+      "verse": 4,
+      "text": "I am trusting Thee for power,\nThine can never fail;\nWords which Thou Thyself shalt give me,\nMust prevail."
+    },
+    {
+      "verse": 5,
+      "text": "I am trusting Thee, Lord Jesus;\nNever let me fall;\nI am trusting Thee for ever\nAnd for all!"
+    }
+  ],
+  "chorus": "I am trusting,\nTrusting only Thee!\nI am trusting, trusting,\nTrusting only Thee!"
+},
+{
+  "number": 642,
+  "title": "When we walk with the Lord",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "When we walk with the Lord\nIn the light of His Word,\nWhat a glory He sheds on our way!\nWhile we do His good will,\nHe abides with us still,\nAnd with all who will trust and obey."
+    },
+    {
+      "verse": 2,
+      "text": "Not a shadow can rise,\nNot a cloud in the skies,\nBut His smile quickly drives it away;\nNot a doubt nor a fear,\nNot a sigh nor a tear,\nCan abide while we trust and obey."
+    },
+    {
+      "verse": 3,
+      "text": "Not a burden we bear,\nNot a sorrow we share,\nBut our toil He doth richly repay;\nNot a grief nor a loss,\nNot a frown nor a cross,\nBut is blest if we trust and obey."
+    },
+    {
+      "verse": 4,
+      "text": "But we never can prove\nThe delights of His love,\nUntil all on the altar we lay;\nFor the favour He shows,\nAnd the joy He bestows,\nAre for them who will trust and obey."
+    },
+    {
+      "verse": 5,
+      "text": "Then in fellowship sweet\nWe will sit at His feet,\nOr we'll walk by His side in the way;\nWhat He says we will do,\nWhere He sends we will go,\nNever fear, only trust and obey."
+    }
+  ],
+  "chorus": "Trust and obey, for there's no other way\nTo be happy in Jesus but to trust and obey."
+},
+{
+  "number": 643,
+  "title": "Jesus redeemed and made me whole",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "Jesus redeemed and made me whole,\nI can forget Him never;\nOut of the depths He brought my soul;\nNow I am His for ever."
+    },
+    {
+      "verse": 2,
+      "text": "Great is the love of Christ my King,\nLove that no power can sever;\nJoyful and glad my tongue shall sing\nPraise to His name for ever."
+    },
+    {
+      "verse": 3,
+      "text": "If on the Lord my care I cast,\nHe will forsake me never;\nFirm on the Rock of Ages fast\nI shall abide for ever."
+    },
+    {
+      "verse": 4,
+      "text": "He has prepared a home for me\nOver the silent river;\nThere with the blest I soon shall be,\nThere I shall dwell for ever."
+    }
+  ],
+  "chorus": "I'm holding on, I'm holding on,\nDaily in grace I'm growing;\nFast to the Rock I'm holding on,\nPeace to my heart is flowing."
+},
+{
+  "number": 644,
+  "title": "In the shadow of His wings",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "In the shadow of His wings\nThere is rest, sweet rest;\nThere is rest from care and labour,\nThere is rest for friend and neighbour:\nIn the shadow of His wings\nThere is rest, sweet rest;\nIn the shadow of His wings\nThere is rest."
+    },
+    {
+      "verse": 2,
+      "text": "In the shadow of His wings\nThere is peace, sweet peace;\nPeace that passeth understanding,\nPeace, sweet peace, that knows no ending;\nIn the shadow of His wings\nThere is peace, sweet peace;\nIn the shadow of His wings\nThere is peace."
+    },
+    {
+      "verse": 3,
+      "text": "In the shadow of His wings\nThere is joy, glad joy;\nThere is joy to tell the story,\nJoy exceeding, full of glory:\nIn the shadow of His wings\nThere is joy, glad joy;\nIn the shadow of His wings\nThere is joy."
+    }
+  ],
+  "chorus": "There is rest! there is peace!\nThere is joy! in the shadow of His wings.\nThere is rest! there is peace!\nThere is joy! in the shadow of His wings."
+},
+{
+  "number": 645,
+  "title": "I have learnt a heavenly secret",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "I have learnt a heavenly secret,\nYet I know not how or where;\nBut I know 'tis sweet and precious,\nEver true, and glad, and fair;\nAnd that God in heaven reveals it\nTo all whose ears can hear."
+    },
+    {
+      "verse": 2,
+      "text": "And I know that ere I learnt it\nOft my way was lone and hard;\nAnd anon in life's glad music\nThere was always that which jarred.\nAnd a hidden, dreary discord\nThat all its sweetness marred."
+    },
+    {
+      "verse": 3,
+      "text": "But my harp of life was lifted\nBy the Lord, who knew the range\nOf its many strings who made it,\nAnd He struck a keynote strange:\nAt the touch of Christ my Master\nI heard the music change."
+    },
+    {
+      "verse": 4,
+      "text": "Then no more it failed and faltered,\nAnd no longer sobbed and strove;\nBut it seemed to soar and mingle\nWith the song of heaven above;\nFor the pierced hand of Jesus\nHad struck the keynote----Love."
+    },
+    {
+      "verse": 5,
+      "text": "All thy heart's long-prisoned music\nLet the Master's hand set free----\nLet Him whisper now His secret,\nAs He whispered once to me:\n\"Child, My love's the golden keynote\nOf all My will for thee!\""
+    }
+  ]
+},
+{
+  "number": 646,
+  "title": "Jesus, Beloved of my heart",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "Jesus, Beloved of my heart,\nThy grace I earnestly implore;\nOh, if Thou wilt the gift impart,\nI'll use it but to love Thee more."
+    },
+    {
+      "verse": 2,
+      "text": "The brightest forms of earthly love\nAre dull beside Thine own to me;\nWith wistful eyes I look above,\nAnd wonder when Thy face I'll see."
+    },
+    {
+      "verse": 3,
+      "text": "Though Paradise has many joys,\nAnd flowers of beauty fair to see,\nNot gates of pearl nor angel's voice\nShall thrill my soul like love of Thee."
+    },
+    {
+      "verse": 4,
+      "text": "Without Thee no celestial light\nShall shine to make my soul lyric;\nBut with Thee this sad earth is bright,\nAnd glows with joy from heaven lent."
+    }
+  ],
+  "chorus": "Let others dream of jewelled walls,\nOf golden cities fair to see;\nNo glorious scene my soul enthralls,\nWhere'er Thou art is heaven for me."
+},
+{
+  "number": 647,
+  "title": "Oh, what fellowship",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "Oh, what fellowship; oh, what joy is mine,\nResting in the everlasting arms!\nOh, what blessedness; oh, what peace divine,\nResting in the everlasting arms!"
+    },
+    {
+      "verse": 2,
+      "text": "Oh, how safe am I in this pilgrim way,\nResting in the everlasting arms!\nOh, how bright the path grows from day to day,\nResting in the everlasting arms!"
+    },
+    {
+      "verse": 3,
+      "text": "What have I to dread, what have I to fear,\nResting in the everlasting arms?\nI have perfect peace with my Saviour near,\nResting in the everlasting arms!"
+    }
+  ],
+  "chorus": "Resting, resting,\nSafe and secure from all alarms;\nResting, resting,\nResting in the everlasting arms!"
+},
+{
+  "number": 648,
+  "title": "The love that Jesus had for me",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "The love that Jesus had for me,\nTo suffer on the cruel tree,\nThat I a ransomed soul might be,\nIs more than tongue can tell!"
+    },
+    {
+      "verse": 2,
+      "text": "The bitter sorrow that He bore,\nAnd oh, that crown of thorns He wore,\nThat I might live for evermore,\nIs more than tongue can tell!"
+    },
+    {
+      "verse": 3,
+      "text": "The peace I have in Him, my Lord,\nWho pleads before the throne of God,\nThe merit of His precious blood,\nIs more than tongue can tell!"
+    },
+    {
+      "verse": 4,
+      "text": "The joy that comes when He is near,\nThe rest He gives, so free from fear,\nThe hope in Him, so bright and clear,\nIs more than tongue can tell!"
+    }
+  ],
+  "chorus": "His love is more than tongue can tell!\nHis love is more than tongue can tell!\nThe love that Jesus had for me\nIs more than tongue can tell!"
+},
+{
+  "number": 649,
+  "title": "I know I love Thee better, Lord",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "I know I love Thee better, Lord,\nThan any earthly joy;\nFor Thou hast given me the peace\nWhich nothing can destroy."
+    },
+    {
+      "verse": 2,
+      "text": "I know that Thou art nearer still\nThan any earthly throng;\nAnd sweeter is the thought of Thee\nThan any lovely song."
+    },
+    {
+      "verse": 3,
+      "text": "Thou hast put gladness in my heart;\nThen may I well be glad!\nWithout the secret of Thy love,\nI could not but be sad."
+    },
+    {
+      "verse": 4,
+      "text": "O Saviour, precious Saviour, mine!\nWhat will Thy presence be,\nIf such a life of joy can crown\nOur walk on earth with Thee!"
+    }
+  ],
+  "chorus": "The half has never yet been told,\nOf love so full and free!\nThe half has never yet been told,\nThe blood----it cleanseth me!"
+},
+{
+  "number": 650,
+  "title": "Ring the bells of heaven! there is joy to-day",
+  "verses": [
+    {
+      "verse": 1,
+      "text": "Ring the bells of heaven! there is joy to-day,\nFor a soul returning from the wild!\nSee! the Father meets him out upon the way,\nWelcoming His weary, wandering child."
+    },
+    {
+      "verse": 2,
+      "text": "Ring the bells of heaven! there is joy to-day,\nFor the wanderer now is reconciled;\nYes, a soul is rescued from his sinful way,\nAnd is born anew a ransomed child."
+    },
+    {
+      "verse": 3,
+      "text": "Ring the bells of heaven! spread the feast to-day!\nAngels, swell the glad, triumphant strain!\nTell the joyful tidings, bear it far away!\nFor a precious soul is born again."
+    }
+  ],
+  "chorus": "Glory! glory! how the angels sing;\nGlory! glory! how the loud harps ring!\n'Tis the ransomed army, like a mighty sea,\nPealing forth the anthem of the free."
+},
 
 ];
 
