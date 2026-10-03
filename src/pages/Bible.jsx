@@ -153,6 +153,16 @@ export default function Bible() {
 
   useEffect(() => { loadChapter(selBook, selChapter) }, [selBook.id, selChapter])
 
+  // Scroll to the highlighted verse once its chapter has finished loading
+  useEffect(() => {
+    if (highlightVerse == null || loading) return
+    const el = document.getElementById(`verse-${highlightVerse}`)
+    if (el) {
+      const t = setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80)
+      return () => clearTimeout(t)
+    }
+  }, [highlightVerse, loading, verses])
+
   const [jumpChapter, setJumpChapter] = useState('')
   const [jumpVerse, setJumpVerse] = useState('')
 
@@ -363,7 +373,7 @@ export default function Bible() {
                 {loading && <div style={{ textAlign: 'center', padding: 60, color: 'var(--text-light)' }}><div style={{ fontSize: '2rem', marginBottom: 10 }}>📖</div>Loading...</div>}
                 {error && <div style={{ background: '#fff9f0', border: '1px solid #ffd', borderRadius: 10, padding: '18px 20px', color: '#885500', lineHeight: 1.7 }}>📵 {error}</div>}
                 {!loading && !error && verses.map(v => (
-                  <p key={v.verse} style={{
+                  <p key={v.verse} id={`verse-${v.verse}`} style={{
                     fontSize, lineHeight: 1.95, marginBottom: 10, color: 'var(--text-dark)',
                     background: highlightVerse === v.verse ? 'var(--green-pale)' : 'transparent',
                     borderRadius: 6, padding: highlightVerse === v.verse ? '4px 8px' : '0',
