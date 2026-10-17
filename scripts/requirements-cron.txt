@@ -1,0 +1,4 @@
+requests>=2.32
+pywebpush>=2.0.0
+google-auth>=2.30
+edge-tts>=6.1.12

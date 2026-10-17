@@ -1,0 +1,46 @@
+name: Scheduled Jobs
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # dispatch scheduled notifications (GitHub's minimum is 5 min)
+    - cron: '0 3 * * *'     # daily podcast audio, 03:00 UTC -- match your old pg_cron time
+  workflow_dispatch:         # run manually from the Actions tab on your phone
+    inputs:
+      job:
+        description: 'Which job to run'
+        type: choice
+        options: [dispatch, podcast]
+        default: dispatch
+
+concurrency:
+  group: cron-${{ github.event.schedule || inputs.job }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/requirements-cron.txt
+
+      - run: pip install -r scripts/requirements-cron.txt
+
+      - name: Run job
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ "${{ github.event.schedule }}" = "0 3 * * *" ]; then JOB=podcast
+          elif [ -n "${{ inputs.job }}" ]; then JOB="${{ inputs.job }}"
+          else JOB=dispatch; fi
+          python scripts/cron_jobs.py "$JOB"
