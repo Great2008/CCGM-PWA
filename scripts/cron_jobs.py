@@ -126,7 +126,24 @@ def send_webpush(sub: dict, payload: dict) -> tuple[bool, str]:
         return False, str(e)
 
 
+def send_via_edge(subs: list[dict], payload: dict) -> dict:
+    """Delegate to the existing Supabase `send-push` edge function, which already
+    holds the VAPID + Firebase secrets (and cleans up expired subscriptions)."""
+    r = requests.post(
+        f"{SUPABASE_URL}/functions/v1/send-push", headers=HEADERS,
+        json={"subscriptions": subs, "payload": payload}, timeout=120,
+    )
+    body = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+    if not r.ok:
+        raise RuntimeError(body.get("error") or f"send-push failed ({r.status_code})")
+    return {"delivered": body.get("delivered", 0), "failed": body.get("failed", 0),
+            "expired": body.get("expired", 0)}
+
+
 def send_to_all(subs: list[dict], payload: dict) -> dict:
+    # No VAPID key in GitHub secrets -> use the edge function instead.
+    if not VAPID_PRIVATE_KEY:
+        return send_via_edge(subs, payload)
     delivered = failed = 0
     expired = []
     for sub in subs:
