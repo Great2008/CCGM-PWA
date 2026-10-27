@@ -50,8 +50,7 @@ export default function FindChurch() {
             border: '1.5px solid #e2e8f0',
             background: 'var(--brand-pale)',
           }}>
-            <iframe
-              src="https://www.google.com/maps/d/u/1/embed?mid=1tWza1b6vxcVuFD40QnrYNpY66a0qb0E&ehbc=2E312F&noprof=1"
+            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1tWza1b6vxcVuFD40QnrYNpY66a0qb0E&ehbc=2E312F&noprof=1"
               width="100%"
               height="520"
               style={{ border: 'none', display: 'block' }}
