@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import { invokeApi } from '../lib/api'
 import { auditLog } from '../lib/auditLog'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
@@ -1400,7 +1401,7 @@ export default function Timeline() {
       const authorName = reportPost.profiles?.display_name || reportPost.profiles?.full_name || 'Member'
       auditLog('suspend', reason_text, authorName)
       try {
-        await supabase.functions.invoke('send-suspension-email', {
+        await invokeApi('send-suspension-email', {
           body: { type: 'auto_suspension_admin_alert', authorName, postBody: reportPost.body?.slice(0, 120), reportCount: count, adminPanelUrl: 'https://ccgm-pwa.vercel.app/admin' }
         })
       } catch(_) {}

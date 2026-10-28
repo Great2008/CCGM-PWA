@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useEventsContent } from '../hooks/useContent'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
+import { invokeApi } from '../lib/api'
 import SEO from '../components/SEO'
 import { ShareButtonLight } from '../components/ShareButton'
 import { APP_URL } from '../lib/config'
@@ -48,7 +49,7 @@ export default function Events() {
   // visibly break the RSVP flow itself.
   const sendRsvpConfirmation = ({ email, name, event, registrationId }) => {
     if (!email) return
-    supabase.functions.invoke('send-rsvp-confirmation', {
+    invokeApi('send-rsvp-confirmation', {
       body: {
         email, name,
         eventTitle: event.title,
@@ -70,7 +71,7 @@ export default function Events() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setGuestError(e => ({ ...e, [event.id]: 'Enter a valid email' })); return }
     setGuestError(e => ({ ...e, [event.id]: null }))
     setGuestSubmitting(s => ({ ...s, [event.id]: true }))
-    const { data, error } = await supabase.functions.invoke('guest-rsvp', {
+    const { data, error } = await invokeApi('guest-rsvp', {
       body: { eventId: event.id, name, email, phone },
     })
     setGuestSubmitting(s => ({ ...s, [event.id]: false }))
@@ -233,8 +234,8 @@ export default function Events() {
                             </button>
                           ) : null}
                           {user && isApproved && rsvpd[event.id] && event.meal_tickets_enabled && (
-                            <Link to={`/meal-ticket?event=${event.id}`} style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
-                              🎫 Meal Ticket
+                            <Link to={`/ticket?event=${event.id}`} style={{ padding:'9px 20px', borderRadius:30, background:'var(--brand-pale)', color:'var(--brand-light)', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', border:'1.5px solid #bfdbfe' }}>
+                              🎫 Ticket
                             </Link>
                           )}
                           {!user ? (

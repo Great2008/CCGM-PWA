@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import supabaseAdmin from '../../lib/supabase'
+import { invokeApi } from '../../lib/api'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 
@@ -109,7 +110,7 @@ export default function AdminEmail() {
     if (!window.confirm(`Send this email to ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}?`)) return
     setSending(true)
     try {
-      const { data, error } = await supabaseAdmin.functions.invoke('send-newsletter', {
+      const { data, error } = await invokeApi('send-newsletter', {
         body: {
           subject: form.subject,
           greeting: form.greeting,
@@ -152,7 +153,7 @@ export default function AdminEmail() {
           '\n\n' + form.signature + '\n\n---\n' + form.footer
         )
         window.open(`mailto:${emails}?subject=${subject}&body=${body}`)
-        showToast(`Could not send via SMTP (opened your email app instead) — check 📋 Delivery Logs for why`, 'error')
+        showToast(`Could not send email (opened your email app instead) — check 📋 Delivery Logs for why`, 'error')
       } else {
         showToast('Could not send — check 📋 Delivery Logs for the reason', 'error')
       }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAdmin } from '../AdminApp'
 import { useTable } from '../useSupabaseAdmin'
 import supabaseAdmin from '../../lib/supabase'
+import { invokeApi } from '../../lib/api'
 import { Confirm } from '../components/CrudShell'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -174,7 +175,7 @@ export default function AdminMembers() {
       const untilStr = expiresAt
         ? new Date(expiresAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
         : null
-      await supabaseAdmin.functions.invoke('send-suspension-email', {
+      await invokeApi('send-suspension-email', {
         body: {
           type: 'suspension',
           email: selected.email,
@@ -219,7 +220,7 @@ export default function AdminMembers() {
         sent_at: new Date().toISOString(),
         user_id: selected.id,
       })
-      await supabaseAdmin.functions.invoke('send-suspension-email', {
+      await invokeApi('send-suspension-email', {
         body: {
           type: 'reinstatement',
           email: selected.email,

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import { getAll, insert, update, remove } from '../supabase'
 import supabaseAdmin from '../../lib/supabase'
+import { invokeApi } from '../../lib/api'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { parseBlocks, renderInline } from '../../lib/textFormat'
@@ -109,7 +110,7 @@ export default function AdminNewsletter() {
       if (recipients.length === 0) {
         showToast('Published — but there are no active email subscribers to send to yet', 'error')
       } else {
-        const { data: sendResult, error: sendError } = await supabaseAdmin.functions.invoke('send-newsletter', {
+        const { data: sendResult, error: sendError } = await invokeApi('send-newsletter', {
           body: {
             subject: payload.subject, body: payload.body,
             greeting: DEFAULT_GREETING, signature: DEFAULT_SIGNATURE, footer: DEFAULT_FOOTER,
