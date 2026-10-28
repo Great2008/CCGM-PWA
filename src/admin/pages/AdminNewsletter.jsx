@@ -118,7 +118,7 @@ export default function AdminNewsletter() {
           },
         })
         if (sendError) {
-          showToast('Published, but the email send failed — check 📋 Delivery Logs in Newsletter admin', 'error')
+          showToast(`Published, but the email send failed: ${sendError.message}`, 'error')
         } else {
           const delivered = sendResult?.delivered ?? recipients.length
           const failed = sendResult?.failed ?? 0

@@ -153,9 +153,9 @@ export default function AdminEmail() {
           '\n\n' + form.signature + '\n\n---\n' + form.footer
         )
         window.open(`mailto:${emails}?subject=${subject}&body=${body}`)
-        showToast(`Could not send email (opened your email app instead) — check 📋 Delivery Logs for why`, 'error')
+        showToast(`Could not send email: ${err.message} (opened your email app instead)`, 'error')
       } else {
-        showToast('Could not send — check 📋 Delivery Logs for the reason', 'error')
+        showToast(`Could not send: ${err.message}`, 'error')
       }
     }
     setSending(false)
