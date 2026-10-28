@@ -53,7 +53,7 @@ async function drawHeader(pdf, type, date, ourRef, yourRef) {
     pdf.setFont('helvetica', 'italic'); pdf.setFontSize(9.5); pdf.setTextColor(...CCGWORLD_GREEN)
     pdf.text('Official Digital Correspondence', bannerX, 82)
     pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10); pdf.setTextColor(20,20,20)
-    pdf.text('ccgm-pwa.vercel.app', bannerX, 96)
+    pdf.text('www.ccgworld.name.ng', bannerX, 96)
 
     pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(...CCGWORLD_GREEN)
     pdf.text('CCG World', pageW - marginX, 84, { align: 'right' })

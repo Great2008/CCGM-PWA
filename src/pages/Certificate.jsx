@@ -157,7 +157,7 @@ function fmtBirthday(iso) {
   } catch(_) { return '' }
 }
 
-const APP_URL = 'https://ccgm-pwa.vercel.app'
+const APP_URL = 'https://www.ccgworld.name.ng'
 const ORDAINED = ['Deacon','Deaconess','Elder','Evangelist','Prophet','Pastor','Apostle']
 
 // ── PDF render helper (dynamic import so it only loads when needed) ────────────
@@ -457,7 +457,7 @@ export default function Certificate() {
     ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '19px Georgia, serif'
     ctx.fillText('CCG Mission — Re-established 1st October, 1954', W/2, 144)
     ctx.fillStyle = '#fbbf24'; ctx.font = '16px Georgia, serif'
-    ctx.fillText('ccgm-pwa.vercel.app', W/2, 174)
+    ctx.fillText('www.ccgworld.name.ng', W/2, 174)
 
     ctx.fillStyle = '#d97706'; ctx.fillRect(36,226,W-72,3)
 
@@ -582,7 +582,7 @@ export default function Certificate() {
     ctx.fillStyle = 'rgba(255,255,255,0.78)'; ctx.font = '16px Georgia, serif'
     ctx.fillText('CCG Mission — Re-established 1st October, 1954', W/2, 154)
     ctx.fillStyle = '#fbbf24'; ctx.font = '14px Georgia, serif'
-    ctx.fillText('ccgm-pwa.vercel.app', W/2, 178)
+    ctx.fillText('www.ccgworld.name.ng', W/2, 178)
     ctx.fillStyle = '#d97706'; ctx.fillRect(34,224,W-68,2)
 
     ctx.textAlign = 'left'; ctx.fillStyle = '#374151'; ctx.font = 'italic 17px Georgia, serif'
@@ -823,7 +823,7 @@ export default function Certificate() {
     ctx.fillStyle = '#0a2612'; ctx.font = 'bold 17px Georgia, serif'
     ctx.fillText(certId, W/2, H-34)
     ctx.fillStyle = '#9ca3af'; ctx.font = '9px Georgia, serif'
-    ctx.fillText('ccgm-pwa.vercel.app', W/2, H-14)
+    ctx.fillText('www.ccgworld.name.ng', W/2, H-14)
 
     setIdDone(true)
     setTimeout(() => { if (idImgRef.current) idImgRef.current.src = canvas.toDataURL('image/png') }, 50)

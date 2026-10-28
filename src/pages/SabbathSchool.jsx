@@ -397,7 +397,7 @@ export default function SabbathSchool() {
                     )}
                     <button
                       onClick={async () => {
-                        const msg = `Join us this Sabbath! We're studying "${selected.title}" — read along on CCG World.\n\nhttps://ccgm-pwa.vercel.app/sabbath-school`
+                        const msg = `Join us this Sabbath! We're studying "${selected.title}" — read along on CCG World.\n\nhttps://www.ccgworld.name.ng/sabbath-school`
                         if (navigator.share) {
                           try {
                             await navigator.share({ text: msg })

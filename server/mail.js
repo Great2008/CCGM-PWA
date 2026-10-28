@@ -10,7 +10,7 @@
 //   ADMIN_ALERT_EMAIL     where auto-suspension alerts are sent
 import { createClient } from '@supabase/supabase-js'
 
-export const APP_URL = process.env.APP_URL || 'https://ccgm-pwa.vercel.app'
+export const APP_URL = process.env.APP_URL || 'https://www.ccgworld.name.ng'
 export const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 // ── HTTP plumbing ────────────────────────────────────────────────────────────

@@ -104,7 +104,7 @@ export default function NotFound() {
 
       {/* Footer text */}
       <p style={{ position: 'absolute', bottom: 20, color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem', fontFamily: 'sans-serif' }}>
-        CCG World · ccgm-pwa.vercel.app
+        CCG World · www.ccgworld.name.ng
       </p>
     </div>
   )

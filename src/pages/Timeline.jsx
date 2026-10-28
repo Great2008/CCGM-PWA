@@ -1402,7 +1402,7 @@ export default function Timeline() {
       auditLog('suspend', reason_text, authorName)
       try {
         await invokeApi('send-suspension-email', {
-          body: { type: 'auto_suspension_admin_alert', authorName, postBody: reportPost.body?.slice(0, 120), reportCount: count, adminPanelUrl: 'https://ccgm-pwa.vercel.app/admin' }
+          body: { type: 'auto_suspension_admin_alert', authorName, postBody: reportPost.body?.slice(0, 120), reportCount: count, adminPanelUrl: 'https://www.ccgworld.name.ng/admin' }
         })
       } catch(_) {}
     }

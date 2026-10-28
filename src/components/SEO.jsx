@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
 const SITE_NAME = 'CCG World'
-const SITE_URL  = 'https://ccgm-pwa.vercel.app'
+const SITE_URL  = 'https://www.ccgworld.name.ng'
 const DEFAULT_IMAGE = `${SITE_URL}/icon-512.png`
 const DEFAULT_DESC  = 'Christian Church Of God Mission — God First. Bible, Hymnal, Daily Devotionals, Sermons, Live Services & more.'
 

@@ -185,7 +185,7 @@ export default function Verify() {
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--brand-deep)', fontSize: '0.88rem' }}>Christian Church of God Mission</div>
                 <div style={{ color: 'var(--text-light)', fontSize: '0.8rem', marginTop: 2 }}>
-                  Re-established 1st October, 1954 · ccgm-pwa.vercel.app
+                  Re-established 1st October, 1954 · www.ccgworld.name.ng
                 </div>
               </div>
             </div>
