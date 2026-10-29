@@ -99,7 +99,7 @@ export default function AdminApp() {
   useEffect(() => {
     if (!authed) return
     const check = async () => {
-      const { count } = await supabase.from('studio_items').select('*', { count: 'exact', head: true }).eq('status', 'pending')
+      const { count } = await supabase.from('studio_submissions').select('*', { count: 'exact', head: true }).eq('status', 'pending')
       setPendingCount(count || 0)
     }
     check()

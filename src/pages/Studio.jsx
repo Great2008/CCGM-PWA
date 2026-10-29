@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import supabase from '../lib/supabase'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { invokeApi } from '../lib/api'
 import SEO from '../components/SEO'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -32,6 +35,20 @@ const fmtViews = (n) => {
 const fetchVideos   = () => fetch('/api/youtube/videos').then(r => r.json())
 const fetchPlaylists= () => fetch('/api/youtube/playlists').then(r => r.json())
 const fetchLive     = () => fetch('/api/youtube/live').then(r => r.json())
+
+// Approved member suggestions come from the privacy-safe `studio_community` view
+// (it hides names unless the member agreed to be credited).
+const fetchCommunity = async () => {
+  const { data, error } = await supabase.from('studio_community').select('*')
+    .order('published_at', { ascending:false }).limit(100)
+  if (error) throw new Error(error.message)
+  return { items: (data || []).map(r => ({
+    id: r.video_id, title: r.title, description: r.description, category: r.category,
+    sharedBy: r.shared_by, community: true, type: 'video',
+    thumbnail: `https://i.ytimg.com/vi/${r.video_id}/hqdefault.jpg`,
+    publishedAt: r.published_at,
+  })) }
+}
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
@@ -130,6 +147,12 @@ function VideoCard({ item, onPlay }) {
           {item.views && item.publishedAt && <span style={{ fontSize:'0.72rem', color:'var(--text-light,#64748b)' }}>·</span>}
           {item.publishedAt && <span style={{ fontSize:'0.72rem', color:'var(--text-light,#64748b)' }}>{fmt(item.publishedAt)}</span>}
         </div>
+        {item.community && (
+          <div style={{ marginTop:6, fontSize:'0.72rem', color:'var(--text-light,#64748b)' }}>
+            🤝 Shared by {item.sharedBy || 'a member'}
+            {item.category && item.category !== 'other' ? ` · ${CATEGORY_LABEL[item.category] || ''}` : ''}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -223,6 +246,7 @@ function EmptyState({ tab }) {
     videos: { icon:'🎬', text:'No videos found. Check your internet connection and try gain.' },
     playlists: { icon:'📂', text:'No playlists found on this channel.' },
     live: { icon:'📡', text:'No live streams active right now.' },
+    community: { icon:'🤝', text:'No community videos yet. Be the first to suggest one!' },
   }
   const { icon, text } = msgs[tab] || msgs.videos
   return (
@@ -262,19 +286,225 @@ function SkeletonGrid() {
   )
 }
 
+// ─── Community suggestions ──────────────────────────────────
+
+const CATEGORY_OPTIONS = [
+  ['sermon','Sermon'], ['teaching','Teaching'], ['worship','Worship / Music'],
+  ['testimony','Testimony'], ['other','Other'],
+]
+const CATEGORY_LABEL = Object.fromEntries(CATEGORY_OPTIONS)
+
+const STATUS_STYLE = {
+  pending:  { bg:'#fef3c7', fg:'#92400e', label:'⏳ Waiting for review' },
+  approved: { bg:'#dcfce7', fg:'#166534', label:'✅ Live on Studio' },
+  rejected: { bg:'#fee2e2', fg:'#991b1b', label:'Not approved' },
+}
+
+const previewIdOf = (s) => (s || '').match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/)?.[1] || null
+
+const labelStyle = { display:'block', fontSize:'0.74rem', fontWeight:700, color:'var(--text-mid,#475569)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }
+const inputStyle = { width:'100%', padding:'11px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontFamily:'var(--font-body)', fontSize:'0.9rem', outline:'none', boxSizing:'border-box', background:'white', color:'var(--text-dark,#0f172a)' }
+
+function ModalShell({ onClose, children }) {
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [onClose])
+  return (
+    <div onClick={onClose} style={{ position:'fixed', inset:0, zIndex:9998, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', padding:16, animation:'studio-fadein 0.2s ease' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width:'100%', maxWidth:520, maxHeight:'90vh', overflowY:'auto', background:'var(--surface,#fff)', borderRadius:18, boxShadow:'0 24px 70px rgba(0,0,0,0.4)' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function SignInPrompt({ suspended, onClose }) {
+  return (
+    <ModalShell onClose={onClose}>
+      <div style={{ padding:'32px 28px', textAlign:'center' }}>
+        <div style={{ fontSize:'2.6rem', marginBottom:10 }}>{suspended ? '🚫' : '🎬'}</div>
+        <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep,#0a2612)', margin:'0 0 10px', fontSize:'1.2rem' }}>
+          {suspended ? 'Suggestions are paused' : 'Sign in to suggest a video'}
+        </h3>
+        <p style={{ color:'var(--text-mid,#475569)', fontSize:'0.9rem', lineHeight:1.65, margin:'0 0 22px' }}>
+          {suspended
+            ? 'Your account is currently suspended, so you can’t suggest videos right now.'
+            : 'Members of the CCG World community can suggest videos for the Studio page. Join or sign in on the Timeline page, then come back here.'}
+        </p>
+        {!suspended && (
+          <Link to="/timeline" className="btn btn-gold" style={{ display:'inline-block', padding:'11px 26px', marginBottom:12 }}>🌐 Sign In / Join</Link>
+        )}
+        <div><button onClick={onClose} style={{ background:'none', border:'none', color:'var(--text-light,#64748b)', cursor:'pointer', fontWeight:600, fontSize:'0.85rem' }}>Close</button></div>
+      </div>
+    </ModalShell>
+  )
+}
+
+function SuggestModal({ user, onClose }) {
+  const [view, setView]               = useState('form')   // 'form' | 'mine'
+  const [url, setUrl]                 = useState('')
+  const [title, setTitle]             = useState('')
+  const [description, setDescription] = useState('')
+  const [category, setCategory]       = useState('sermon')
+  const [showName, setShowName]       = useState(true)
+  const [submitting, setSubmitting]   = useState(false)
+  const [error, setError]             = useState('')
+  const [done, setDone]               = useState(false)
+  const [mine, setMine]               = useState(null)
+
+  const loadMine = useCallback(async () => {
+    const { data } = await supabase.from('studio_submissions')
+      .select('id,video_id,title,status,category,admin_note,created_at')
+      .eq('user_id', user.id).order('created_at', { ascending:false }).limit(30)
+    setMine(data || [])
+  }, [user.id])
+
+  useEffect(() => { loadMine() }, [loadMine])
+
+  const vid = previewIdOf(url)
+  const canSubmit = !!vid && !submitting
+
+  const submit = async () => {
+    setError(''); setSubmitting(true)
+    const { error: err } = await invokeApi('studio-submit', { body: { url: url.trim(), title: title.trim(), description: description.trim(), category, showName } })
+    setSubmitting(false)
+    if (err) { setError(err.message || 'Something went wrong. Please try again.'); return }
+    setDone(true); loadMine()
+  }
+
+  const again = () => { setUrl(''); setTitle(''); setDescription(''); setCategory('sermon'); setError(''); setDone(false); setView('form') }
+
+  const tabBtn = (id, text) => (
+    <button onClick={() => setView(id)} style={{
+      flex:1, padding:'11px 8px', border:'none', background:'none', cursor:'pointer',
+      fontFamily:'var(--font-body)', fontWeight:700, fontSize:'0.82rem',
+      color: view===id ? 'var(--brand-mid,#1d4ed8)' : 'var(--text-light,#64748b)',
+      borderBottom: view===id ? '2.5px solid var(--brand-mid,#1d4ed8)' : '2.5px solid transparent',
+    }}>{text}</button>
+  )
+
+  return (
+    <ModalShell onClose={onClose}>
+      <div style={{ padding:'22px 24px 0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <h3 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep,#0a2612)', margin:0, fontSize:'1.2rem' }}>➕ Suggest a Video</h3>
+        <button onClick={onClose} aria-label="Close" style={{ background:'#f1f5f9', border:'none', borderRadius:8, width:32, height:32, cursor:'pointer', fontSize:'1rem' }}>✕</button>
+      </div>
+      <div style={{ display:'flex', margin:'12px 24px 0', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
+        {tabBtn('form', 'New suggestion')}
+        {tabBtn('mine', `My suggestions${mine?.length ? ` (${mine.length})` : ''}`)}
+      </div>
+
+      {view === 'form' && !done && (
+        <div style={{ padding:'20px 24px 24px' }}>
+          <p style={{ margin:'0 0 16px', fontSize:'0.82rem', color:'var(--text-light,#64748b)', lineHeight:1.6 }}>
+            Share a YouTube video you think the community would be blessed by. Our team reviews every suggestion before it appears.
+          </p>
+
+          <div style={{ marginBottom:14 }}>
+            <label style={labelStyle}>YouTube link *</label>
+            <input style={inputStyle} value={url} onChange={e => setUrl(e.target.value)} placeholder="https://youtu.be/…" inputMode="url" autoCapitalize="none" autoCorrect="off" />
+          </div>
+
+          {vid && (
+            <div style={{ marginBottom:14, borderRadius:10, overflow:'hidden', aspectRatio:'16/9', background:'#0f172a' }}>
+              <img src={`https://i.ytimg.com/vi/${vid}/hqdefault.jpg`} alt="Video preview" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+            </div>
+          )}
+
+          <div style={{ marginBottom:14 }}>
+            <label style={labelStyle}>Title (optional)</label>
+            <input style={inputStyle} value={title} onChange={e => setTitle(e.target.value)} maxLength={100} placeholder="Leave blank to use the YouTube title" />
+          </div>
+
+          <div style={{ marginBottom:14 }}>
+            <label style={labelStyle}>Category</label>
+            <select style={inputStyle} value={category} onChange={e => setCategory(e.target.value)}>
+              {CATEGORY_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+          </div>
+
+          <div style={{ marginBottom:14 }}>
+            <label style={labelStyle}>Why share this? (optional)</label>
+            <textarea style={{ ...inputStyle, minHeight:80, resize:'vertical' }} value={description} onChange={e => setDescription(e.target.value)} maxLength={500} placeholder="A sentence or two about what it is and who it’s for" />
+          </div>
+
+          <label style={{ display:'flex', alignItems:'center', gap:10, marginBottom:18, fontSize:'0.85rem', color:'var(--text-mid,#475569)', cursor:'pointer' }}>
+            <input type="checkbox" checked={showName} onChange={e => setShowName(e.target.checked)} style={{ width:18, height:18 }} />
+            Credit me by name on the Studio page
+          </label>
+
+          {error && (
+            <div style={{ background:'#fee2e2', color:'#991b1b', borderRadius:10, padding:'10px 14px', fontSize:'0.84rem', lineHeight:1.5, marginBottom:14 }}>{error}</div>
+          )}
+
+          <button onClick={submit} disabled={!canSubmit} style={{
+            width:'100%', padding:'13px', borderRadius:12, border:'none', fontWeight:800, fontSize:'0.95rem',
+            fontFamily:'var(--font-body)', color:'white', cursor: canSubmit ? 'pointer' : 'not-allowed',
+            background: canSubmit ? 'linear-gradient(135deg,var(--brand-base,#16a34a),var(--brand-mid,#1d4ed8))' : '#9ca3af',
+          }}>{submitting ? '⏳ Checking your video…' : 'Submit for review'}</button>
+        </div>
+      )}
+
+      {view === 'form' && done && (
+        <div style={{ padding:'32px 24px 28px', textAlign:'center' }}>
+          <div style={{ fontSize:'3rem', marginBottom:10 }}>🙏</div>
+          <h4 style={{ fontFamily:'var(--font-display)', color:'var(--brand-deep,#0a2612)', margin:'0 0 8px', fontSize:'1.15rem' }}>Thank you for sharing!</h4>
+          <p style={{ color:'var(--text-mid,#475569)', fontSize:'0.9rem', lineHeight:1.65, margin:'0 0 22px' }}>
+            Your suggestion is with our team. We’ll email you as soon as there’s a decision, and you can follow its status under “My suggestions”.
+          </p>
+          <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
+            <button onClick={again} style={{ padding:'10px 20px', borderRadius:10, border:'1.5px solid #e2e8f0', background:'white', fontWeight:700, cursor:'pointer' }}>Suggest another</button>
+            <button onClick={onClose} style={{ padding:'10px 20px', borderRadius:10, border:'none', background:'var(--brand-mid,#1d4ed8)', color:'white', fontWeight:700, cursor:'pointer' }}>Done</button>
+          </div>
+        </div>
+      )}
+
+      {view === 'mine' && (
+        <div style={{ padding:'8px 24px 24px' }}>
+          {mine === null && <div style={{ textAlign:'center', padding:28, color:'var(--text-light,#64748b)' }}>⏳ Loading…</div>}
+          {mine && mine.length === 0 && (
+            <div style={{ textAlign:'center', padding:'32px 8px', color:'var(--text-light,#64748b)', fontSize:'0.88rem' }}>You haven’t suggested anything yet.</div>
+          )}
+          {mine && mine.map(m => {
+            const st = STATUS_STYLE[m.status] || STATUS_STYLE.pending
+            return (
+              <div key={m.id} style={{ display:'flex', gap:12, padding:'14px 0', borderBottom:'1px solid #f0f4fa' }}>
+                <img src={`https://i.ytimg.com/vi/${m.video_id}/default.jpg`} alt="" style={{ width:80, height:45, objectFit:'cover', borderRadius:6, flexShrink:0 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontWeight:700, fontSize:'0.86rem', color:'var(--text-dark,#0f172a)', lineHeight:1.35, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{m.title}</div>
+                  <span style={{ display:'inline-block', marginTop:5, background:st.bg, color:st.fg, fontSize:'0.7rem', fontWeight:700, padding:'2px 8px', borderRadius:6 }}>{st.label}</span>
+                  {m.status === 'rejected' && m.admin_note && (
+                    <div style={{ marginTop:5, fontSize:'0.76rem', color:'var(--text-mid,#475569)', lineHeight:1.5 }}>Reason: {m.admin_note}</div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </ModalShell>
+  )
+}
+
 // ─── Main component ──────────────────────────────────────────────────────────
 
-const TABS = ['videos', 'playlists', 'live']
-const TAB_LABELS = { videos:'Videos', playlists:'Playlists', live:'🔴 Live' }
+const TABS = ['videos', 'playlists', 'community', 'live']
+const TAB_LABELS = { videos:'Videos', playlists:'Playlists', community:'🤝 Community', live:'🔴 Live' }
 
 export default function Studio() {
   const [tab, setTab]         = useState('videos')
-  const [data, setData]       = useState({ videos:null, playlists:null, live:null })
-  const [loading, setLoading] = useState({ videos:false, playlists:false, live:false })
-  const [error, setError]     = useState({ videos:false, playlists:false, live:false })
+  const [data, setData]       = useState({ videos:null, playlists:null, community:null, live:null })
+  const [loading, setLoading] = useState({ videos:false, playlists:false, community:false, live:false })
+  const [error, setError]     = useState({ videos:false, playlists:false, community:false, live:false })
   const [pins, setPins]       = useState([])   // admin-pinned items from Supabase
   const [playing, setPlaying] = useState(null) // item in modal
   const [search, setSearch]   = useState('')
+  const { user, profile } = useAuth()
+  const [showSuggest, setShowSuggest] = useState(false)
+  const [showSignIn, setShowSignIn]   = useState(false)
+  const openSuggest = () => { (user && !profile?.suspended) ? setShowSuggest(true) : setShowSignIn(true) }
 
   // Load admin pins from Supabase
   useEffect(() => {
@@ -288,7 +518,7 @@ export default function Studio() {
     setLoading(l => ({ ...l, [t]:true }))
     setError(e => ({ ...e, [t]:false }))
     try {
-      const fetchers = { videos:fetchVideos, playlists:fetchPlaylists, live:fetchLive }
+      const fetchers = { videos:fetchVideos, playlists:fetchPlaylists, community:fetchCommunity, live:fetchLive }
       const result = await fetchers[t]()
       if (result.error) throw new Error(result.error)
       setData(d => ({ ...d, [t]:result.items || [] }))
@@ -387,7 +617,11 @@ export default function Studio() {
             ))}
           </div>
           {/* Search */}
-          <div style={{ padding:'8px 0' }}>
+          <div style={{ padding:'8px 0', display:'flex', gap:10, alignItems:'center', flexWrap:'wrap' }}>
+            <button onClick={openSuggest} style={{
+              padding:'8px 16px', borderRadius:30, border:'none', cursor:'pointer', whiteSpace:'nowrap',
+              background:'var(--gold,#f59e0b)', color:'#1a1a1a', fontWeight:800, fontSize:'0.8rem', fontFamily:'var(--font-body)',
+            }}>➕ Suggest a video</button>
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search…"
@@ -407,6 +641,12 @@ export default function Studio() {
             <span style={{ color:'white', fontWeight:700, fontSize:'0.9rem' }}>
               {data.live.length} stream{data.live.length > 1 ? 's' : ''} currently live
             </span>
+          </div>
+        )}
+
+        {tab === 'community' && (
+          <div style={{ background:'rgba(22,163,74,0.08)', border:'1px solid rgba(22,163,74,0.2)', borderRadius:12, padding:'12px 18px', marginBottom:24, fontSize:'0.85rem', color:'var(--text-mid,#475569)', lineHeight:1.6 }}>
+            🤝 Videos suggested by members of our community and reviewed by our team before they appear here.
           </div>
         )}
 
@@ -432,6 +672,9 @@ export default function Studio() {
           </div>
         )}
       </div>
+
+      {showSuggest && user && <SuggestModal user={user} onClose={() => setShowSuggest(false)} />}
+      {showSignIn && <SignInPrompt suspended={!!(user && profile?.suspended)} onClose={() => setShowSignIn(false)} />}
 
       {/* Player modal */}
       {playing && <PlayerModal item={playing} onClose={() => setPlaying(null)} />}
