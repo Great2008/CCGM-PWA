@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from '../../lib/supabase'
+import { PasswordInput } from '../../components/PasswordField'
 
 export default function AdminLogin({ onLogin }) {
   const [email, setEmail]     = useState('')
@@ -432,7 +433,7 @@ export default function AdminLogin({ onLogin }) {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group"><label>Email</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="admin@ccgworld.org" required autoFocus /></div>
-          <div className="form-group"><label>Password</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required /></div>
+          <div className="form-group"><label>Password</label><PasswordInput value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" autoComplete="current-password" required /></div>
           {err&&<div style={{ background:'#fff5f5', border:'1px solid #fecaca', borderRadius:8, padding:'10px 14px', color:'#dc2626', fontSize:'0.85rem', marginBottom:16 }}>❌ {err}</div>}
           <button type="submit" className="btn btn-blue" style={{ width:'100%', justifyContent:'center', padding:'13px' }} disabled={loading}>
             {loading ? '⏳ Signing in...' : '🔐 Sign In'}

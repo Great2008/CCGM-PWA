@@ -3,6 +3,9 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
+import { PasswordInput, PasswordStrength, MatchHint } from '../components/PasswordField'
+import DeleteAccountPanel from '../components/DeleteAccountPanel'
+import { validatePassword } from '../lib/passwordRules'
 
 function timeAgo(ts) {
   const d = Math.floor((Date.now() - new Date(ts)) / 1000)
@@ -195,7 +198,8 @@ export default function Profile() {
 
   const handlePasswordChange = async () => {
     if (pwForm.next !== pwForm.confirm) { setPwMsg('Passwords do not match.'); return }
-    if (pwForm.next.length < 8) { setPwMsg('Password must be at least 8 characters.'); return }
+    const pwRuleErr = validatePassword(pwForm.next)
+    if (pwRuleErr) { setPwMsg(pwRuleErr); return }
     setPwSaving(true); setPwMsg('')
     const { error } = await supabase.auth.updateUser({ password: pwForm.next })
     if (error) setPwMsg(error.message)
@@ -647,8 +651,16 @@ export default function Profile() {
             <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.15rem', marginBottom: 20, paddingBottom: 12, borderBottom: '1px solid var(--brand-pale)' }}>🔐 Change Password</h2>
               <div style={{ display: 'grid', gap: 14, maxWidth: 400 }}>
-                <Field label="New Password" value={pwForm.next} onChange={v => setPwForm(f => ({ ...f, next: v }))} type="password" placeholder="At least 8 characters" />
-                <Field label="Confirm New Password" value={pwForm.confirm} onChange={v => setPwForm(f => ({ ...f, confirm: v }))} type="password" placeholder="Repeat new password" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>New Password</label>
+                  <PasswordInput style={PW_INPUT_STYLE} value={pwForm.next} onChange={e => setPwForm(f => ({ ...f, next: e.target.value }))} placeholder="Create a new password" autoComplete="new-password" />
+                  <PasswordStrength password={pwForm.next} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Confirm New Password</label>
+                  <PasswordInput style={PW_INPUT_STYLE} value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))} placeholder="Repeat new password" autoComplete="new-password" />
+                  <MatchHint password={pwForm.next} confirm={pwForm.confirm} />
+                </div>
               </div>
               {pwMsg && (
                 <div style={{ marginTop: 14, padding: '10px 16px', borderRadius: 10, background: pwMsg.startsWith('✅') ? '#f0fdf4' : '#fef2f2', border: `1px solid ${pwMsg.startsWith('✅') ? '#bbf7d0' : '#fecaca'}`, color: pwMsg.startsWith('✅') ? '#059669' : '#dc2626', fontSize: '0.85rem' }}>
@@ -719,28 +731,7 @@ export default function Profile() {
             <div style={{ background: '#fff5f5', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1.5px solid #fecaca' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', color: '#dc2626', fontSize: '1.15rem', marginBottom: 8 }}>⚠️ Danger Zone</h2>
               <p style={{ color: '#7f1d1d', fontSize: '0.85rem', marginBottom: 18, lineHeight: 1.6 }}>Deleting your account is permanent and cannot be undone. All your posts, prayers, and data will be removed.</p>
-              {!deleteConfirm ? (
-                <button
-                  onClick={() => setDeleteConfirm(true)}
-                  style={{ padding: '10px 24px', borderRadius: 40, border: '1.5px solid #fca5a5', background: 'transparent', color: '#dc2626', fontWeight: 700, fontSize: '0.84rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}
-                >Delete My Account</button>
-              ) : (
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '0.85rem', color: '#dc2626', fontWeight: 600 }}>Are you sure? This cannot be undone.</span>
-                  <button
-                    onClick={async () => {
-                      await supabase.auth.admin?.deleteUser(user.id).catch(() => {})
-                      await signOut()
-                      navigate('/')
-                    }}
-                    style={{ padding: '9px 22px', borderRadius: 40, background: '#dc2626', border: 'none', color: 'white', fontWeight: 700, fontSize: '0.84rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}
-                  >Yes, delete</button>
-                  <button
-                    onClick={() => setDeleteConfirm(false)}
-                    style={{ padding: '9px 22px', borderRadius: 40, border: '1.5px solid #e2e8f0', background: 'transparent', color: 'var(--text-mid)', fontWeight: 600, fontSize: '0.84rem', fontFamily: 'var(--font-body)', cursor: 'pointer' }}
-                  >Cancel</button>
-                </div>
-              )}
+              <DeleteAccountPanel onDeleted={async () => { try { await signOut() } catch (_) {} navigate('/') }} />
             </div>
           </div>
         )}
@@ -755,6 +746,8 @@ export default function Profile() {
 }
 
 // ── Reusable field component ──
+const PW_INPUT_STYLE = { width: '100%', boxSizing: 'border-box', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', color: 'var(--text-dark)' }
+
 function Field({ label, value, onChange, placeholder, type = 'text' }) {
   const [focused, setFocused] = useState(false)
   return (

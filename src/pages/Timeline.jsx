@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import { invokeApi } from '../lib/api'
+import { PasswordInput, PasswordStrength, MatchHint } from '../components/PasswordField'
+import ForgotPassword from '../components/ForgotPassword'
+import { checkPassword } from '../lib/passwordRules'
 import { auditLog } from '../lib/auditLog'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
@@ -929,7 +932,7 @@ function AuthModal({ onClose }) {
 
   const handleCredsNext = async e => {
     e.preventDefault(); setErr('')
-    if (pass.length < 6) { setErr('Password must be at least 6 characters.'); return }
+    if (!checkPassword(pass).allMet) { setErr('Please choose a password that meets all the requirements listed below.'); return }
     if (pass !== confirm) { setErr('Passwords do not match.'); return }
     setStep(2)
   }
@@ -1002,12 +1005,16 @@ function AuthModal({ onClose }) {
     <div style={overlay} onClick={e => { if (e.target === e.currentTarget) onClose() }}>
       <div style={card}>
         <button onClick={onClose} style={{position:'absolute',top:14,right:16,background:'none',border:'none',cursor:'pointer',fontSize:'1.2rem',color:'var(--text-light)',lineHeight:1}}>✕</button>
+        {mode === 'forgot' && (
+          <ForgotPassword initialEmail={email} onBack={()=>{setMode('signin');setErr('')}} onDone={onClose} />
+        )}
         {mode === 'signin' && (
           <>
             <Header title="Welcome Back" sub="Sign in to your CCG World account" />
             <form onSubmit={handleSignIn}>
               <div style={{marginBottom:14}}><label style={label}>Email</label><input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
-              <div style={{marginBottom:20}}><label style={label}>Password</label><input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
+              <div style={{marginBottom:6}}><label style={label}>Password</label><PasswordInput style={inputStyle} autoComplete="current-password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
+              <div style={{textAlign:'right',marginBottom:16}}><button type="button" onClick={()=>{setMode('forgot');setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.8rem',fontWeight:700,fontFamily:'var(--font-body)',padding:0}}>Forgot password?</button></div>
               <ErrBox />
               <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:16}} disabled={loading}>{loading ? '⏳ Signing in…' : 'Sign In →'}</button>
             </form>
@@ -1021,8 +1028,8 @@ function AuthModal({ onClose }) {
 
             <form onSubmit={handleCredsNext}>
               <div style={{marginBottom:14}}><label style={label}>Email</label><input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
-              <div style={{marginBottom:14}}><label style={label}>Password</label><input style={inputStyle} type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="Min 6 characters" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
-              <div style={{marginBottom:20}}><label style={label}>Confirm Password</label><input style={inputStyle} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
+              <div style={{marginBottom:14}}><label style={label}>Password</label><PasswordInput style={inputStyle} value={pass} onChange={e=>setPass(e.target.value)} placeholder="Create a password" autoComplete="new-password" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /><PasswordStrength password={pass} /></div>
+              <div style={{marginBottom:20}}><label style={label}>Confirm Password</label><PasswordInput style={inputStyle} autoComplete="new-password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /><MatchHint password={pass} confirm={confirm} /></div>
               <ErrBox />
               <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:16}}>Continue →</button>
             </form>
