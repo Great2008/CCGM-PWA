@@ -352,6 +352,8 @@ function SuggestModal({ user, onClose }) {
   const [submitting, setSubmitting]   = useState(false)
   const [error, setError]             = useState('')
   const [done, setDone]               = useState(false)
+  const [agreed, setAgreed]           = useState(false)
+  const [showGuidelines, setShowGuidelines] = useState(false)
   const [mine, setMine]               = useState(null)
 
   const loadMine = useCallback(async () => {
@@ -364,7 +366,7 @@ function SuggestModal({ user, onClose }) {
   useEffect(() => { loadMine() }, [loadMine])
 
   const vid = previewIdOf(url)
-  const canSubmit = !!vid && !submitting
+  const canSubmit = !!vid && agreed && !submitting
 
   const submit = async () => {
     setError(''); setSubmitting(true)
@@ -433,6 +435,34 @@ function SuggestModal({ user, onClose }) {
           <label style={{ display:'flex', alignItems:'center', gap:10, marginBottom:18, fontSize:'0.85rem', color:'var(--text-mid,#475569)', cursor:'pointer' }}>
             <input type="checkbox" checked={showName} onChange={e => setShowName(e.target.checked)} style={{ width:18, height:18 }} />
             Credit me by name on the Studio page
+          </label>
+
+          <div style={{ background:'#f8fafc', border:'1px solid #e2e8f0', borderRadius:12, padding:'12px 14px', marginBottom:12 }}>
+            <div style={{ fontSize:'0.74rem', fontWeight:700, color:'var(--text-mid,#475569)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:6 }}>Guidelines</div>
+            <ul style={{ margin:0, paddingLeft:18, fontSize:'0.8rem', color:'var(--text-mid,#475569)', lineHeight:1.65 }}>
+              <li>Share videos that encourage faith: sermons, teaching, worship and testimonies.</li>
+              <li>The video must be public on YouTube, and be yours or from its original channel.</li>
+              <li>No promotion or selling, and nothing unkind or unsuitable for families.</li>
+            </ul>
+            <button type="button" onClick={() => setShowGuidelines(v => !v)} style={{ marginTop:8, background:'none', border:'none', padding:0, color:'var(--brand-mid,#1d4ed8)', fontWeight:700, fontSize:'0.78rem', cursor:'pointer' }}>
+              {showGuidelines ? 'Hide full guidelines ▴' : 'Read the full guidelines ▾'}
+            </button>
+            {showGuidelines && (
+              <ol style={{ margin:'10px 0 0', paddingLeft:20, fontSize:'0.8rem', color:'var(--text-mid,#475569)', lineHeight:1.65 }}>
+                <li><strong>Edifying and on-mission.</strong> Sermons, teachings, worship, testimonies and encouragement that fit the faith and values of CCG World.</li>
+                <li><strong>Public and playable.</strong> The video must be public on YouTube and allow embedding, or it can’t play here.</li>
+                <li><strong>Yours to share.</strong> Suggest your own videos or ones from the original channel. Please don’t suggest re-uploads of someone else’s content, especially music and full sermons.</li>
+                <li><strong>No promotion.</strong> No selling, fundraising or campaigning, and no advertising of products, ministries or businesses.</li>
+                <li><strong>Clean and kind.</strong> Nothing hateful, abusive, graphic or unsuitable for a family audience.</li>
+                <li><strong>Reviewed by our team.</strong> Every suggestion is reviewed before it appears. We may decline one, or take a video down later, if it no longer fits.</li>
+                <li><strong>Limits.</strong> Up to 3 suggestions waiting at a time and 5 per day. You’ll get an email with the decision.</li>
+              </ol>
+            )}
+          </div>
+
+          <label style={{ display:'flex', alignItems:'flex-start', gap:10, marginBottom:18, fontSize:'0.85rem', color:'var(--text-mid,#475569)', cursor:'pointer', lineHeight:1.5 }}>
+            <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} style={{ width:18, height:18, marginTop:1, flexShrink:0 }} />
+            I’ve read the guidelines and this video follows them
           </label>
 
           {error && (
