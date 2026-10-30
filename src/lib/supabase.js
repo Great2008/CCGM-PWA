@@ -8,6 +8,7 @@ export const supabase = createClient(URL, ANON, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    experimental: { passkey: true },   // Supabase passkeys (beta) - needs supabase-js 2.105.0+
   },
 })
 

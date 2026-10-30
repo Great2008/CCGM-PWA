@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext'
 import supabase from '../lib/supabase'
 import { PasswordInput, PasswordStrength, MatchHint } from '../components/PasswordField'
 import DeleteAccountPanel from '../components/DeleteAccountPanel'
+import PasskeyManager from '../components/PasskeyManager'
 import { validatePassword } from '../lib/passwordRules'
 
 function timeAgo(ts) {
@@ -673,6 +674,9 @@ export default function Profile() {
                 style={{ marginTop: 18, padding: '10px 28px', borderRadius: 40, background: (pwSaving || !pwForm.next) ? '#9ca3af' : 'var(--brand-mid)', color: 'white', fontWeight: 700, fontSize: '0.86rem', fontFamily: 'var(--font-body)', border: 'none', cursor: (pwSaving || !pwForm.next) ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}
               >{pwSaving ? 'Updating…' : 'Update Password'}</button>
             </div>
+
+            {/* Passkeys */}
+            <PasskeyManager />
 
             {/* Dark Mode */}
             <div style={{ background: 'var(--white, white)', borderRadius: 18, padding: 'clamp(20px,4vw,32px)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(15,31,61,0.06)' }}>

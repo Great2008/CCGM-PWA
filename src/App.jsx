@@ -7,6 +7,7 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
 import useMaintenanceMode from './hooks/useMaintenanceMode'
+import IdleGuard from './components/IdleGuard'
 
 // Lazy-load non-critical UI components — not needed for first paint
 const PushPrompt       = lazy(() => import('./components/PushPrompt'))
@@ -135,6 +136,7 @@ export default function App() {
     <HelmetProvider>
       <ThemeProvider>
         <AuthProvider>
+          <IdleGuard />
           <BrowserRouter>
             <AppInner />
           </BrowserRouter>

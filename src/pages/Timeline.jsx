@@ -5,6 +5,8 @@ import { invokeApi } from '../lib/api'
 import { PasswordInput, PasswordStrength, MatchHint } from '../components/PasswordField'
 import ForgotPassword from '../components/ForgotPassword'
 import { checkPassword } from '../lib/passwordRules'
+import { passkeysSupported, passkeyErrorMessage } from '../lib/passkeys'
+import { SHARED_DEVICE_KEY } from '../lib/sessionPolicy'
 import { auditLog } from '../lib/auditLog'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
@@ -903,6 +905,7 @@ function AuthModal({ onClose }) {
   const [resendCooldown, setResendCooldown] = useState(0)
   const [err, setErr]       = useState('')
   const [loading, setLoading] = useState(false)
+  const [shared, setShared]   = useState(() => { try { return localStorage.getItem(SHARED_DEVICE_KEY) === '1' } catch { return false } })
 
   useEffect(() => {
     supabase.from('church_branches').select('id,name,location').eq('active', true).order('name')
@@ -978,11 +981,26 @@ function AuthModal({ onClose }) {
     if (error) setErr(error.message); else setResendCooldown(60)
   }
 
+  // "Shared device" = sign out after a short period of inactivity (see lib/sessionPolicy.js)
+  const rememberSharedChoice = () => {
+    try { if (shared) localStorage.setItem(SHARED_DEVICE_KEY, '1'); else localStorage.removeItem(SHARED_DEVICE_KEY) } catch { /* ignore */ }
+  }
+
   const handleSignIn = async e => {
     e.preventDefault(); setErr(''); setLoading(true)
+    rememberSharedChoice()
     const error = await signIn(email, pass)
     if (error) setErr(error.message); else onClose()
     setLoading(false)
+  }
+
+  const handlePasskeySignIn = async () => {
+    setErr(''); setLoading(true)
+    rememberSharedChoice()
+    const { error } = await supabase.auth.signInWithPasskey()
+    setLoading(false)
+    if (error) { setErr(passkeyErrorMessage(error)); return }
+    onClose()
   }
 
   const overlay = { position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:16 }
@@ -1015,9 +1033,16 @@ function AuthModal({ onClose }) {
               <div style={{marginBottom:14}}><label style={label}>Email</label><input style={inputStyle} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
               <div style={{marginBottom:6}}><label style={label}>Password</label><PasswordInput style={inputStyle} autoComplete="current-password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required onFocus={e=>e.target.style.borderColor='var(--brand-base)'} onBlur={e=>e.target.style.borderColor='#e2e8f0'} /></div>
               <div style={{textAlign:'right',marginBottom:16}}><button type="button" onClick={()=>{setMode('forgot');setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontSize:'0.8rem',fontWeight:700,fontFamily:'var(--font-body)',padding:0}}>Forgot password?</button></div>
+              <label style={{display:'flex',alignItems:'flex-start',gap:8,marginBottom:14,fontSize:'0.8rem',color:'var(--text-mid)',cursor:'pointer',lineHeight:1.45}}><input type="checkbox" checked={shared} onChange={e=>setShared(e.target.checked)} style={{marginTop:2,flexShrink:0}} />This is a shared or public device. Sign me out after 15 minutes of inactivity.</label>
               <ErrBox />
               <button type="submit" className="btn btn-blue" style={{width:'100%',justifyContent:'center',padding:'12px',marginBottom:16}} disabled={loading}>{loading ? '⏳ Signing in…' : 'Sign In →'}</button>
             </form>
+            {passkeysSupported() && (
+              <>
+                <div style={{display:'flex',alignItems:'center',gap:10,margin:'0 0 14px'}}><div style={{flex:1,height:1,background:'#e2e8f0'}} /><span style={{fontSize:'0.72rem',color:'var(--text-light)',fontWeight:600}}>OR</span><div style={{flex:1,height:1,background:'#e2e8f0'}} /></div>
+                <button type="button" onClick={handlePasskeySignIn} disabled={loading} style={{width:'100%',padding:'12px',borderRadius:10,border:'1.5px solid #e2e8f0',background:'transparent',color:'var(--text-dark)',fontWeight:700,fontSize:'0.9rem',fontFamily:'var(--font-body)',cursor:'pointer',marginBottom:16}}>🔑 Sign in with a passkey</button>
+              </>
+            )}
             <div style={{textAlign:'center',fontSize:'0.84rem',color:'var(--text-light)'}}>Don't have an account?{' '}<button onClick={()=>{setMode('signup');setStep(1);setErr('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-light)',fontWeight:700,fontFamily:'var(--font-body)',fontSize:'0.84rem'}}>Sign Up</button></div>
           </>
         )}

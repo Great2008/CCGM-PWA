@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import supabase from '../../lib/supabase'
 import { PasswordInput } from '../../components/PasswordField'
+import { passkeysSupported, passkeyErrorMessage } from '../../lib/passkeys'
 
 export default function AdminLogin({ onLogin }) {
   const [email, setEmail]     = useState('')
@@ -36,11 +37,9 @@ export default function AdminLogin({ onLogin }) {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5) }
   }, [unlocking])
 
-  const handleSubmit = async e => {
-    e.preventDefault(); setErr(''); setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
-    if (error) { setErr(error.message); setLoading(false); return }
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
+  // Shared by password and passkey sign-in: only staff roles may enter the admin panel.
+  const finishLogin = async (userId) => {
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', userId).single()
     const allowed = ['super_admin', 'admin', 'moderator']
     if (!allowed.includes(profile?.role)) {
       await supabase.auth.signOut()
@@ -52,6 +51,20 @@ export default function AdminLogin({ onLogin }) {
     setLoading(false)
     setUnlocking(true)
     setUnlockPhase('opening')
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault(); setErr(''); setLoading(true)
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
+    if (error) { setErr(error.message); setLoading(false); return }
+    await finishLogin(data.user.id)
+  }
+
+  const handlePasskey = async () => {
+    setErr(''); setLoading(true)
+    const { data, error } = await supabase.auth.signInWithPasskey()
+    if (error) { setErr(passkeyErrorMessage(error)); setLoading(false); return }
+    await finishLogin(data.user.id)
   }
 
   const handleGoBack = () => {
@@ -439,6 +452,12 @@ export default function AdminLogin({ onLogin }) {
             {loading ? '⏳ Signing in...' : '🔐 Sign In'}
           </button>
         </form>
+        {passkeysSupported() && (
+          <button type="button" onClick={handlePasskey} disabled={loading}
+            style={{ width:'100%', marginTop:12, padding:'12px', borderRadius:10, border:'1.5px solid #e2e8f0', background:'transparent', color:'var(--text-dark)', fontWeight:700, fontSize:'0.9rem', fontFamily:'var(--font-body)', cursor:'pointer' }}>
+            🔑 Sign in with a passkey
+          </button>
+        )}
       </div>
     </div>
   )

@@ -2,6 +2,8 @@ import { useState, useEffect, createContext, useContext } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import supabase from '../lib/supabase'
 import AdminLogin     from './pages/AdminLogin'
+import IdleSignOut    from '../components/IdleSignOut'
+import { STAFF_IDLE_MS, WARN_MS } from '../lib/sessionPolicy'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminSermons   from './pages/AdminSermons'
 import AdminEvents    from './pages/AdminEvents'
@@ -126,7 +128,7 @@ export default function AdminApp() {
   }
 
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
-  if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />
+  if (!authed) return (<><AdminLogin onLogin={() => setAuthed(true)} /><IdleSignOut active={false} /></>)
 
   // Moderators see only moderation-relevant pages
   const isSuperAdmin = adminRole === 'super_admin'
@@ -142,6 +144,7 @@ export default function AdminApp() {
   const Page = PAGES[requestedPage] || (isFullAdmin ? AdminDashboard : AdminTimeline)
   return (
     <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin, logAction, adminUser }}>
+      <IdleSignOut active timeoutMs={STAFF_IDLE_MS} warnMs={WARN_MS} onSignOut={logout} />
       <div style={{ display:'flex', minHeight:'100vh', fontFamily:'var(--font-body)', background:'#f0f4fa' }}>
         {/* Mobile overlay */}
         {sideOpen&&<div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:99 }} onClick={()=>setSideOpen(false)} />}
