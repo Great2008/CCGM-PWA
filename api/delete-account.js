@@ -115,10 +115,11 @@ export default async function handler(req, res) {
     }
     if (warnings.length) console.warn('delete-account warnings for', uid, warnings)
 
-    // 5) Goodbye email (best effort)
+    // 5) Goodbye email. Awaited (a background send can be killed once the response goes out) and
+    //    deliberately NOT written to the delivery logs, so the deleted member's address isn't re-stored.
     if (email && emailConfigured()) {
       const name = escapeHtml(profile?.display_name || profile?.full_name || 'Member')
-      sendEmail({
+      await Promise.race([sendEmail({
         to: email,
         subject: 'Your CCG World account has been deleted',
         html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;background:#ffffff;"><div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;color:#1f2937;">
@@ -127,7 +128,7 @@ export default async function handler(req, res) {
 <p style="font-size:0.95rem;line-height:1.6;margin:0 0 16px;">If this wasn’t you, please contact us right away. You are always welcome to join again.</p>
 <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;"/><p style="font-size:0.75rem;color:#9ca3af;margin:0;line-height:1.6;">God first always. God bless you.<br/>One Family. One Faith. One Mission.<br/>CCG World.</p></div></body></html>`,
         text: `Dear ${profile?.display_name || profile?.full_name || 'Member'},\n\nThis is to confirm that your CCG World account and the information linked to it have been deleted, as you requested.\n\nIf this wasn’t you, please contact us right away. You are always welcome to join again.\n\nGod first always. God bless you.\nCCG World.`,
-      }).catch(() => {})
+      }), new Promise(r => setTimeout(r, 5000))]).catch(() => {})
     }
 
     return res.status(200).json({ success: true })

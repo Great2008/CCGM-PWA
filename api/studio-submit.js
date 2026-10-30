@@ -1,6 +1,6 @@
 // api/studio-submit.js — a signed-in member suggests a YouTube video for the Studio page.
 // Goes into the review queue as "pending"; nothing is public until staff approve it.
-import { cors, authenticate, serviceClient, emailConfigured, sendEmail, escapeHtml, APP_URL } from '../server/mail.js'
+import { cors, authenticate, serviceClient, emailConfigured, sendEmail, logDelivery, escapeHtml, APP_URL } from '../server/mail.js'
 
 export const config = { maxDuration: 20 }
 
@@ -100,18 +100,30 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: error.message })
     }
 
-    // Best-effort heads-up to the admin inbox; never affects the member's result.
+    // Heads-up to the admin inbox. This MUST be awaited: on Vercel the function can be frozen the moment
+    // the response is sent, which silently kills a fire-and-forget email. A failure here never affects
+    // the member's result, and it is written to Delivery Logs so you can see why.
     const adminTo = process.env.ADMIN_ALERT_EMAIL
-    if (adminTo && emailConfigured()) {
-      sendEmail({
-        to: adminTo,
-        subject: `🎬 New Studio suggestion: ${row.title}`,
-        html: `<p>${escapeHtml(submitterName)} suggested a video for the Studio page:</p>
+    const subject = `🎬 New Studio suggestion: ${row.title}`
+    let mailErr = null
+    if (!adminTo) mailErr = 'ADMIN_ALERT_EMAIL is not set'
+    else if (!emailConfigured()) mailErr = 'RESEND_API_KEY / RESEND_FROM_EMAIL not set'
+    else {
+      try {
+        await Promise.race([
+          sendEmail({
+            to: adminTo,
+            subject,
+            html: `<p>${escapeHtml(submitterName)} suggested a video for the Studio page:</p>
 <p><strong>${escapeHtml(row.title)}</strong> (${escapeHtml(row.category)})<br/>${escapeHtml(info.author_name || '')}</p>
 <p><a href="${row.url}">Watch on YouTube</a> · <a href="${APP_URL}/admin">Open the admin panel to review</a></p>`,
-        text: `${submitterName} suggested "${row.title}" (${row.category}).\n${row.url}\nReview it in the admin panel: ${APP_URL}/admin`,
-      }).catch(() => {})
+            text: `${submitterName} suggested "${row.title}" (${row.category}).\n${row.url}\nReview it in the admin panel: ${APP_URL}/admin`,
+          }),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('Email timed out')), 5000)),
+        ])
+      } catch (e) { mailErr = e.message }
     }
+    await logDelivery(sb, [{ source: 'studio-submit', recipient_email: adminTo || '(not set)', recipient_name: 'Admin', subject, success: !mailErr, error_message: mailErr }])
 
     return res.status(200).json({ success: true, submission: saved })
   } catch (e) {
