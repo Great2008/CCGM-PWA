@@ -78,7 +78,7 @@ export default function Home() {
           </p>
           <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
-            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
+            <Link to={hp.hero.ctaLink||'/divine-service'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
           </div>
 
           {/* Programme Banner — shown only when an active programme exists */}
