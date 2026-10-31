@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useAdmin } from '../AdminApp'
 import { getAll, insert, update, remove } from '../supabase'
+import supabaseClient from '../../lib/supabase'
+import { addSermonThumbnailToGallery } from '../galleryFromSermon'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { parseBlocks, renderInline } from '../../lib/textFormat'
@@ -203,7 +205,11 @@ export default function AdminSermons() {
       ? await update('sermons', id, rest)
       : await insert('sermons', rest)
     if (!error) {
-      showToast(id ? 'Sermon updated!' : 'Sermon added!')
+      // Every sermon thumbnail also goes into the Gallery (skipped if that image is already there)
+      const g = await addSermonThumbnailToGallery(supabaseClient, form)
+      if (g.status === 'added') logAction('gallery_add', 'Auto-added sermon thumbnail: ' + (form.title || ''), form.title || null)
+      const galleryNote = g.status === 'added' ? ' Thumbnail added to the Gallery.' : g.status === 'error' ? ` (Couldn’t add the thumbnail to the Gallery: ${g.message})` : ''
+      showToast((id ? 'Sermon updated!' : 'Sermon added!') + galleryNote, g.status === 'error' ? 'error' : 'success')
       logAction(id ? 'sermon_edit' : 'sermon_add', (id ? 'Updated' : 'Added') + ' sermon: ' + (form.title || ''), form.title || null)
       setForm(null); load()
     } else {

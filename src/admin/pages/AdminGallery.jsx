@@ -4,7 +4,7 @@ import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { getAll, insert, remove } from '../supabase'
 
-const CATS=['Worship','Events','Community','Outreach','Youth','Leadership','Baptism','Christmas','Easter']
+const CATS=['Worship','Events','Community','Outreach','Youth','Leadership','Baptism','Christmas','Easter','Sermons']
 
 export default function AdminGallery() {
   const { showToast, logAction } = useAdmin()

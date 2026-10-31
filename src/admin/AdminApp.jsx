@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react'
 import supabase from '../lib/supabase'
 import AdminLogin     from './pages/AdminLogin'
 import IdleSignOut    from '../components/IdleSignOut'
-import { STAFF_IDLE_MS, WARN_MS } from '../lib/sessionPolicy'
+import { STAFF_IDLE_MS, WARN_MS, ADMIN_REMEMBER_IN_TAB, ADMIN_UNLOCK_KEY } from '../lib/sessionPolicy'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminSermons   from './pages/AdminSermons'
 import AdminEvents    from './pages/AdminEvents'
@@ -81,20 +81,37 @@ export default function AdminApp() {
   const [adminRole, setAdminRole] = useState(null) // 'super_admin' | 'admin' | 'moderator'
   const [adminUser, setAdminUser] = useState(null) // { id, email }
 
+  // Entering the admin panel REQUIRES signing in (password or passkey), even for someone who is already
+  // signed in on the main site. After signing in, a refresh in the same tab does not ask again
+  // (ADMIN_REMEMBER_IN_TAB in lib/sessionPolicy.js); closing the tab or app does.
+  const clearUnlock = () => { try { sessionStorage.removeItem(ADMIN_UNLOCK_KEY) } catch { /* ignore */ } }
+
+  const enterAdmin = async (session) => {
+    if (!session?.user) return false
+    const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
+    if (!['super_admin', 'admin', 'moderator'].includes(p?.role)) return false
+    setAdminRole(p.role)
+    setAdminUser({ id: session.user.id, email: session.user.email })
+    try { if (ADMIN_REMEMBER_IN_TAB) sessionStorage.setItem(ADMIN_UNLOCK_KEY, session.user.id) } catch { /* ignore */ }
+    setAuthed(true)
+    return true
+  }
+
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session?.user) {
-        const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-        const role = p?.role
-        const allowed = ['super_admin', 'admin', 'moderator']
-        if (allowed.includes(role)) {
-          setAdminRole(role)
-          setAdminUser({ id: session.user.id, email: session.user.email })
-          setAuthed(true)
-        }
-      }
+      let unlocked = false
+      try { unlocked = !!session?.user && ADMIN_REMEMBER_IN_TAB && sessionStorage.getItem(ADMIN_UNLOCK_KEY) === session.user.id } catch { /* ignore */ }
+      if (unlocked) await enterAdmin(session)
       setChecking(false)
     })
+  }, [])
+
+  // If the session ends anywhere (idle sign-out, signing out in another tab), lock this panel too.
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((evt) => {
+      if (evt === 'SIGNED_OUT') { clearUnlock(); setAuthed(false); setAdminRole(null); setAdminUser(null) }
+    })
+    return () => subscription.unsubscribe()
   }, [])
 
   // Poll for pending studio submissions every 60s
@@ -110,7 +127,7 @@ export default function AdminApp() {
   }, [authed])
 
   const showToast = (msg, type='success') => { setToast({msg,type}); setTimeout(()=>setToast(null), 3500) }
-  const logout = () => { supabase.auth.signOut(); setAuthed(false) }
+  const logout = () => { clearUnlock(); supabase.auth.signOut(); setAuthed(false); setAdminRole(null); setAdminUser(null) }
 
   // ── Audit logging ─────────────────────────────────────────────
   const logAction = async (action, detail, targetName = null) => {
@@ -128,7 +145,7 @@ export default function AdminApp() {
   }
 
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
-  if (!authed) return (<><AdminLogin onLogin={() => setAuthed(true)} /><IdleSignOut active={false} /></>)
+  if (!authed) return (<><AdminLogin onLogin={async () => { const { data: { session } } = await supabase.auth.getSession(); await enterAdmin(session) }} /><IdleSignOut active={false} /></>)
 
   // Moderators see only moderation-relevant pages
   const isSuperAdmin = adminRole === 'super_admin'
