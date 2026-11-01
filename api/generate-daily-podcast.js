@@ -38,7 +38,7 @@
 export const config = { maxDuration: 60 }
 
 import { createClient } from '@supabase/supabase-js'
-import { UniversalEdgeTTS } from 'edge-tts-universal'
+import { synthesizeAll } from '../server/tts.js'
 
 const SUPABASE_URL      = process.env.SUPABASE_URL
 const SERVICE_ROLE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -68,26 +68,6 @@ function chunkText(text, maxLen) {
   }
   if (current.trim()) chunks.push(current.trim())
   return chunks
-}
-
-async function synthesizeChunk(text) {
-  const tts = new UniversalEdgeTTS(text, VOICE)
-  const result = await tts.synthesize()
-  const buf = Buffer.from(await result.audio.arrayBuffer())
-  if (buf.length < 100) {
-    throw new Error(`Edge TTS returned an empty/invalid audio chunk for: "${text.slice(0, 40)}..."`)
-  }
-  return buf
-}
-
-function concatMp3(chunks) {
-  return Buffer.concat(chunks)
-}
-
-function withTimeout(promise, ms, message) {
-  let timer
-  const timeout = new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(message)), ms) })
-  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
 // Verifies the caller is a logged-in admin by checking their Supabase
@@ -154,11 +134,8 @@ export default async function handler(req, res) {
     if (words.length > MAX_WORDS) script = words.slice(0, MAX_WORDS).join(' ') + '.'
 
     const chunks = chunkText(script, MAX_CHARS_PER_REQUEST)
-    const audioChunks = []
-    for (const chunk of chunks) {
-      audioChunks.push(await withTimeout(synthesizeChunk(chunk), 40000, 'TTS synthesis timed out after 40s for one chunk'))
-    }
-    const audio = concatMp3(audioChunks)
+    // Azure Speech first (if configured), Edge TTS as a retrying fallback. See server/tts.js
+    const audio = await synthesizeAll(chunks)
 
     const path = `${episode.id}.mp3`
     const { error: upErr } = await sb.storage

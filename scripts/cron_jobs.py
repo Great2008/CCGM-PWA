@@ -10,6 +10,7 @@ Runs on GitHub Actions (.github/workflows/cron.yml). All secrets come from
 environment variables (GitHub repo secrets) -- nothing is hardcoded.
 """
 import asyncio
+import html
 import json
 import os
 import re
@@ -230,15 +231,61 @@ def chunk_text(text: str, max_len: int) -> list[str]:
     return chunks
 
 
-async def synth(text: str) -> bytes:
+def _azure_configured() -> bool:
+    return bool(os.environ.get("AZURE_SPEECH_KEY") and os.environ.get("AZURE_SPEECH_REGION"))
+
+
+def synth_azure(text: str) -> bytes:
+    """Azure AI Speech (official, stable). Same voice as Edge TTS."""
+    region = os.environ["AZURE_SPEECH_REGION"].strip()
+    ssml = (f"<speak version='1.0' xml:lang='en-GB'><voice xml:lang='en-GB' name='{VOICE}'>"
+            f"{html.escape(text)}</voice></speak>")
+    r = requests.post(
+        f"https://{region}.tts.speech.microsoft.com/cognitiveservices/v1",
+        headers={"Ocp-Apim-Subscription-Key": os.environ["AZURE_SPEECH_KEY"].strip(),
+                 "Content-Type": "application/ssml+xml",
+                 "X-Microsoft-OutputFormat": "audio-24khz-96kbitrate-mono-mp3",
+                 "User-Agent": "ccgworld-podcast"},
+        data=ssml.encode("utf-8"), timeout=60,
+    )
+    if not r.ok:
+        raise RuntimeError(f"Azure Speech error {r.status_code}" + (" (check AZURE_SPEECH_KEY and region)" if r.status_code == 401 else ""))
+    if len(r.content) < 100:
+        raise RuntimeError("Azure Speech returned empty audio")
+    return r.content
+
+
+async def _edge_once(text: str) -> bytes:
     import edge_tts
     audio = b""
     async for part in edge_tts.Communicate(text, VOICE).stream():
         if part["type"] == "audio":
             audio += part["data"]
     if len(audio) < 100:
-        raise RuntimeError(f"Empty audio for chunk: {text[:40]}...")
+        raise RuntimeError("Edge TTS returned empty audio")
     return audio
+
+
+def synth_edge(text: str) -> bytes:
+    """Edge TTS (free, unofficial). Hangs and timeouts happen, so every try has a hard time limit."""
+    return asyncio.run(asyncio.wait_for(_edge_once(text), timeout=60))
+
+
+def synth_chunk(text: str) -> bytes:
+    """Azure first (if configured), then Edge TTS, with retries. Raises with a clear reason if all fail."""
+    plan = ([("Azure", synth_azure)] * 2 if _azure_configured() else []) + [("Edge TTS", synth_edge)] * 3
+    problems: list[str] = []
+    for name, fn in plan:
+        try:
+            return fn(text)
+        except Exception as e:  # noqa: BLE001
+            msg = f"{name}: {e or type(e).__name__}"
+            if msg not in problems:
+                problems.append(msg)
+            print(f"  TTS attempt failed -> {msg}")
+            time.sleep(2)
+    tip = "" if _azure_configured() else " | Tip: add AZURE_SPEECH_KEY and AZURE_SPEECH_REGION secrets for reliable audio."
+    raise RuntimeError("Couldn't generate audio. " + " | ".join(problems) + tip)
 
 
 def podcast(episode_id: str | None = None) -> None:
@@ -259,7 +306,7 @@ def podcast(episode_id: str | None = None) -> None:
     if len(words) > MAX_WORDS:
         script = " ".join(words[:MAX_WORDS]) + "."
 
-    audio = b"".join(asyncio.run(synth(c)) for c in chunk_text(script, MAX_CHARS))
+    audio = b"".join(synth_chunk(c) for c in chunk_text(script, MAX_CHARS))
 
     path = f"{ep['id']}.mp3"
     up = requests.post(
