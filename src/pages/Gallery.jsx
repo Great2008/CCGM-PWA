@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
+import GalleryCarousel from '../components/GalleryCarousel'
+import { filterGallery } from '../lib/galleryCarousel'
 
 const CACHE_KEY = 'ccgworld_gallery'
 
@@ -29,13 +33,30 @@ export default function Gallery() {
   const [filter, setFilter]   = useState('All')
   const [lightbox, setLightbox] = useState(null)
   const [downloading, setDownloading] = useState(false)
+  const [query, setQuery]     = useState('')
 
   useEffect(() => {
     loadGallery().then(data => { setImages(data); setLoading(false) })
   }, [])
 
+  // Scroll animations (AOS). Skipped for people who have "reduce motion" switched on.
+  useEffect(() => {
+    AOS.init({
+      duration: 700, easing: 'ease-out-cubic', once: true, offset: 40,
+      disable: () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+    })
+  }, [])
+
   const categories = ['All', ...new Set(images.map(i => i.category).filter(Boolean))]
-  const filtered = filter === 'All' ? images : images.filter(i => i.category === filter)
+  const filtered = filterGallery(images, filter, query)
+  const featured = images.filter(i => i.featured)
+  const searching = query.trim().length > 0
+
+  // New cards appear whenever the filter, search or photo list changes: tell AOS to look again.
+  useEffect(() => {
+    const t = setTimeout(() => AOS.refreshHard(), 60)
+    return () => clearTimeout(t)
+  }, [loading, filter, query, images.length])
 
   return (
     <>
@@ -87,6 +108,35 @@ export default function Gallery() {
           {/* Gallery */}
           {!loading && images.length > 0 && (
             <>
+              {/* Featured 3D carousel (hidden while searching or filtering, so results come first) */}
+              {featured.length > 0 && filter === 'All' && !searching && (
+                <GalleryCarousel items={featured} onOpen={setLightbox} />
+              )}
+
+              {/* Search by title */}
+              <form role="search" onSubmit={e => { e.preventDefault(); document.activeElement?.blur?.() }} style={{
+                display: 'flex', maxWidth: 520, margin: '0 auto 24px', background: 'white', border: '1.5px solid #e2e8f0',
+                borderRadius: 40, overflow: 'hidden', boxShadow: 'var(--shadow-sm)',
+              }}>
+                <input
+                  type="text" value={query} onChange={e => setQuery(e.target.value)} enterKeyHint="search"
+                  placeholder="Search photos by title…" aria-label="Search photos by title" autoComplete="off"
+                  style={{ flex: 1, minWidth: 0, border: 'none', outline: 'none', padding: '13px 20px', fontSize: '0.95rem', fontFamily: 'var(--font-body)', background: 'transparent', color: 'var(--text-dark)' }}
+                />
+                {query && (
+                  <button type="button" onClick={() => setQuery('')} aria-label="Clear search"
+                    style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '0 12px', color: 'var(--text-light)', fontSize: '1rem' }}>✕</button>
+                )}
+                <button type="submit" aria-label="Search" style={{
+                  border: 'none', background: 'var(--brand-mid)', color: 'white', padding: '0 22px', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', fontFamily: 'var(--font-body)',
+                }}>🔍 Search</button>
+              </form>
+              {searching && (
+                <p style={{ textAlign: 'center', color: 'var(--text-light)', fontSize: '0.85rem', margin: '-8px 0 24px' }}>
+                  {filtered.length} {filtered.length === 1 ? 'photo matches' : 'photos match'} “{query.trim()}”
+                </p>
+              )}
+
               {/* Category filters */}
               {categories.length > 1 && (
                 <div style={{ display: 'flex', gap: 10, marginBottom: 40, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -105,8 +155,8 @@ export default function Gallery() {
               {/* Masonry grid */}
               {filtered.length > 0 ? (
                 <div style={{ columns: '3 280px', gap: 18 }}>
-                  {filtered.map(img => (
-                    <div key={img.id} style={{ breakInside: 'avoid', marginBottom: 18, cursor: 'pointer' }}
+                  {filtered.map((img, idx) => (
+                    <div key={img.id} data-aos="fade-up" data-aos-delay={(idx % 3) * 90} style={{ breakInside: 'avoid', marginBottom: 18, cursor: 'pointer' }}
                       onClick={() => setLightbox(img)}>
                       <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 12 }}>
                         <img
@@ -142,7 +192,7 @@ export default function Gallery() {
               ) : (
                 <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-light)' }}>
                   <div style={{ fontSize: '3rem', marginBottom: 16 }}>🔍</div>
-                  <p>No photos in this category.</p>
+                  <p>{searching ? `No photos match “${query.trim()}”.` : 'No photos in this category.'}</p>
                 </div>
               )}
             </>
