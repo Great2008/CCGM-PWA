@@ -6,8 +6,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { carouselOffset, slideLook, MAX_VISIBLE } from '../lib/galleryCarousel'
 
 const arrow = (side) => ({
-  position: 'absolute', top: '50%', [side]: 8, transform: 'translateY(-50%)', zIndex: 30,
-  width: 60, height: 60, borderRadius: '50%', border: 'none', cursor: 'pointer',
+  position: 'absolute', top: '50%', [side]: 4, transform: 'translateY(-50%)', zIndex: 30,
+  width: 40, height: 40, borderRadius: '50%', border: 'none', cursor: 'pointer',
   background: 'rgba(255,255,255,0.92)', color: 'var(--brand-deep, #0a2612)', fontSize: '1.5rem', lineHeight: 1,
   boxShadow: '0 4px 14px rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center',
 })
@@ -61,7 +61,7 @@ export default function GalleryCarousel({ items, onOpen }) {
         onKeyDown={onKeyDown} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
         onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
         style={{
-          position: 'relative', height: 'clamp(250px, 52vw, 430px)', perspective: '1100px', overflow: 'hidden',
+          position: 'relative', height: 'clamp(300px, 74vw, 560px)', perspective: '1100px', overflow: 'hidden',
           touchAction: 'pan-y', outline: 'none', borderRadius: 24,
           background: 'radial-gradient(ellipse at 50% 85%, rgba(245,158,11,0.18), rgba(255,255,255,0) 65%), linear-gradient(180deg, var(--brand-pale, #ecfdf5), rgba(255,255,255,0.4))',
         }}
@@ -76,7 +76,7 @@ export default function GalleryCarousel({ items, onOpen }) {
               key={img.id} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${n}`}
               onClick={() => (centre ? onOpen(img) : setActive(i))}
               style={{
-                position: 'absolute', left: '50%', top: '50%', width: 'min(66%, 440px)', aspectRatio: '4 / 3',
+                position: 'absolute', left: '50%', top: '50%', width: 'min(80%, 560px)', aspectRatio: '4 / 3',
                 borderRadius: 16, overflow: 'hidden', cursor: 'pointer', background: '#0f172a',
                 boxShadow: centre ? '0 30px 60px rgba(0,0,0,0.38)' : '0 14px 30px rgba(0,0,0,0.22)',
                 ...look,

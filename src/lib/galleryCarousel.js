@@ -14,7 +14,7 @@ export const MAX_VISIBLE = 2   // how many slides to show on each side of the ce
 export function slideLook(offset, reduced = false) {
   const abs = Math.abs(offset)
   return {
-    transform: `translate(-50%, -50%) translateX(${offset * 56}%) translateZ(${-abs * 160}px) rotateY(${-offset * 34}deg) scale(${1 - abs * 0.06})`,
+    transform: `translate(-50%, -50%) translateX(${offset * 60}%) translateZ(${-abs * 160}px) rotateY(${-offset * 34}deg) scale(${1 - abs * 0.06})`,
     filter: abs === 0 ? 'none' : `blur(${abs * 1.6}px) brightness(${1 - abs * 0.12})`,
     zIndex: 10 - abs,
     transition: reduced ? 'none' : 'transform 0.6s cubic-bezier(.22,.8,.3,1), filter 0.6s ease',
