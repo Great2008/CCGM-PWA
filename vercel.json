@@ -3,6 +3,10 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/img/supa/:path*", "destination": "https://i.supaimg.com/:path*" },
+    { "source": "/img/ibb/:path*", "destination": "https://i.ibb.co/:path*" },
+    { "source": "/img/:path*", "destination": "https://gxetxqlzuipiymdmibpt.supabase.co/storage/v1/object/public/:path*" },
+    { "source": "/sitemap-images.xml", "destination": "/api/sitemap-images" },
     { "source": "/api/(.*)", "destination": "/api/index.py" },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ],
@@ -30,6 +34,12 @@
       "source": "/(.*\\.png)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=2592000" }
+      ]
+    },
+    {
+      "source": "/img/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
     },
     {

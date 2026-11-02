@@ -3,6 +3,7 @@ import { useAdmin } from '../AdminApp'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
 import { getAll, insert, update, remove } from '../supabase'
+import { looksLikeFilename, imageLinkProblem } from '../../lib/photoText'
 
 const CATS=['Worship','Events','Community','Outreach','Youth','Leadership','Baptism','Christmas','Easter','Sermons']
 
@@ -23,7 +24,10 @@ export default function AdminGallery() {
   const errText = (err) => /featured/i.test(err.message || '') ? 'Run the gallery SQL first: it adds the Featured option.' : err.message
 
   const handleSubmit = async e => {
-    e.preventDefault(); setSaving(true)
+    e.preventDefault()
+    const linkProblem = imageLinkProblem(form.url)
+    if (linkProblem) { showToast(linkProblem, 'error'); return }
+    setSaving(true)
     const row = { url:form.url, title:form.title, caption:form.caption, category:form.category, date:form.date||new Date().toISOString().split('T')[0], featured:!!form.featured }
     const editing = !!form.id
     const { error } = editing ? await update('gallery', form.id, row) : await insert('gallery', row)
@@ -50,11 +54,14 @@ export default function AdminGallery() {
   })
 
   const handleBulk = async () => {
-    const urls = bulk.split('\n').map(u=>u.trim()).filter(Boolean)
-    if (!urls.length) return
+    const all = bulk.split('\n').map(u=>u.trim()).filter(Boolean)
+    if (!all.length) return
+    const urls = all.filter(u => !imageLinkProblem(u))      // skip page links such as https://ibb.co/abc123
+    const skipped = all.length - urls.length
+    if (!urls.length) { showToast('None of those are direct image links. Each link must point at the picture itself (ending in .jpg, .png or .webp), not a web page.', 'error'); return }
     setSaving(true)
     await Promise.all(urls.map(url => insert('gallery', { url, date: new Date().toISOString().split('T')[0] })))
-    showToast(`${urls.length} photos added!`); setBulk(''); setShowBulk(false); load()
+    showToast(`${urls.length} photos added!` + (skipped ? ` ${skipped} skipped: those were page links, not direct image links.` : '')); setBulk(''); setShowBulk(false); load()
     setSaving(false)
   }
 
@@ -73,13 +80,29 @@ export default function AdminGallery() {
       <AdminCard style={{ maxWidth:600 }}>
         <form onSubmit={handleSubmit}>
           {form.url&&<img src={form.url} alt="" style={{ width:'100%', height:220, objectFit:'cover', borderRadius:10, marginBottom:16 }} onError={e=>e.target.style.display='none'} />}
-          <div className="form-group"><label>Image URL *</label><input {...F('url')} required placeholder="https://..." /></div>
-          <div className="form-group"><label>Title</label><input {...F('title')} placeholder="e.g. Easter Sunday 2025" /></div>
+          <div className="form-group"><label>Image URL *</label><input {...F('url')} required placeholder="https://…/photo.jpg" />
+            <div style={{ marginTop:6, fontSize:'0.76rem', color: imageLinkProblem(form.url) ? '#b45309' : 'var(--text-light)', lineHeight:1.5 }}>
+              {imageLinkProblem(form.url) ? '⚠️ ' + imageLinkProblem(form.url) : 'Use the direct link to the picture itself: it ends in .jpg, .png or .webp.'}
+            </div>
+          </div>
+          <div className="form-group"><label>Title</label><input {...F('title')} placeholder="e.g. Easter Sunday 2025" />
+            {looksLikeFilename(form.title) && <div style={{ marginTop:6, fontSize:'0.78rem', color:'#b45309' }}>⚠️ This looks like a file name. A short, real title helps people find the photo with the search box.</div>}
+          </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
             <div className="form-group"><label>Category</label><select value={form?.category||''} onChange={e=>setForm(f=>({...f,category:e.target.value}))} style={{ padding:'10px 14px', borderRadius:8, border:'1.5px solid #e2e8f0', width:'100%', fontFamily:'var(--font-body)' }}><option value="">Select</option>{CATS.map(c=><option key={c} value={c}>{c}</option>)}</select></div>
             <div className="form-group"><label>Date</label><input type="date" {...F('date')} /></div>
           </div>
-          <div className="form-group"><label>Caption</label><textarea {...F('caption')} rows={2} style={{ resize:'vertical' }} /></div>
+          <div className="form-group"><label>Caption <span style={{ fontWeight:400, color:'var(--text-light)' }}>(also the photo's description for Google and screen readers)</span></label>
+            <textarea {...F('caption')} rows={3} maxLength={200} style={{ resize:'vertical' }} placeholder="Say what is happening, who and where. e.g. Youth praise team leading worship at the Easter service, Lagos, April 2026" />
+            <div style={{ display:'flex', justifyContent:'space-between', gap:12, marginTop:6, fontSize:'0.76rem', color:'var(--text-light)' }}>
+              <span>{looksLikeFilename(form.caption)
+                ? <span style={{ color:'#b45309' }}>⚠️ This looks like a file name. Describe what is in the photo instead.</span>
+                : (form.caption||'').trim().length < 20
+                  ? 'Tip: aim for a full sentence: what, who, where, when.'
+                  : '✓ Good description'}</span>
+              <span>{(form.caption||'').length}/200</span>
+            </div>
+          </div>
           <label style={{ display:'flex', alignItems:'flex-start', gap:10, margin:'4px 0 18px', cursor:'pointer', fontSize:'0.88rem', color:'var(--text-mid)', lineHeight:1.5 }}>
             <input type="checkbox" checked={!!form.featured} onChange={e=>setForm(f=>({...f,featured:e.target.checked}))} style={{ width:18, height:18, marginTop:2, flexShrink:0 }} />
             <span>⭐ <strong>Feature this photo</strong><br /><span style={{ fontSize:'0.78rem', color:'var(--text-light)' }}>Featured photos appear in the 3D carousel at the top of the Gallery page.</span></span>
@@ -98,7 +121,7 @@ export default function AdminGallery() {
       <PageHeader icon="🖼" title="Gallery" subtitle={`${items.length} photos · ${items.filter(x=>x.featured).length} featured`}
         action={<div style={{ display:'flex', gap:10 }}><button className="btn btn-outline-blue" onClick={()=>setShowBulk(s=>!s)}>📋 Bulk Add</button><button className="btn btn-blue" onClick={()=>setForm({url:'',title:'',caption:'',category:'',date:'',featured:false})}>+ Add Photo</button></div>} />
       {showBulk&&<AdminCard style={{ marginBottom:24, maxWidth:600 }}>
-        <h3 style={{ margin:'0 0 12px', color:'var(--brand-deep)', fontSize:'1rem' }}>Bulk Add — one URL per line</h3>
+        <h3 style={{ margin:'0 0 12px', color:'var(--brand-deep)', fontSize:'1rem' }}>Bulk Add — one direct image link per line</h3>
         <textarea value={bulk} onChange={e=>setBulk(e.target.value)} rows={6} style={{ width:'100%', padding:12, borderRadius:8, border:'1.5px solid #e2e8f0', fontFamily:'monospace', fontSize:'0.85rem', resize:'vertical', boxSizing:'border-box' }} />
         <div style={{ display:'flex', gap:12, marginTop:12 }}>
           <button className="btn btn-blue" onClick={handleBulk} disabled={saving||!bulk.trim()}>{saving?'⏳...':'✅ Add All'}</button>
