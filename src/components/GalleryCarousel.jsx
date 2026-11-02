@@ -7,7 +7,7 @@ import { carouselOffset, slideLook, MAX_VISIBLE } from '../lib/galleryCarousel'
 
 const arrow = (side) => ({
   position: 'absolute', top: '50%', [side]: 8, transform: 'translateY(-50%)', zIndex: 30,
-  width: 44, height: 44, borderRadius: '50%', border: 'none', cursor: 'pointer',
+  width: 60, height: 60, borderRadius: '50%', border: 'none', cursor: 'pointer',
   background: 'rgba(255,255,255,0.92)', color: 'var(--brand-deep, #0a2612)', fontSize: '1.5rem', lineHeight: 1,
   boxShadow: '0 4px 14px rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center',
 })
