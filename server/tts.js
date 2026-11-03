@@ -1,17 +1,19 @@
 // server/tts.js — text-to-speech for the daily podcast.
 //
-// Provider order for every chunk of the script:
-//   1. Piper (self-hosted, MP3)             - used when PIPER_API_URL + PIPER_API_KEY are set
-//   2. Azure AI Speech (official, stable)   - used when AZURE_SPEECH_KEY + AZURE_SPEECH_REGION are set
-//   3. Edge TTS (free, unofficial)          - fallback. Microsoft's Read Aloud endpoint is known to time out
-//                                             or hang at times, so it is never relied on alone.
-// Azure/Edge use en-GB-ThomasNeural; Piper uses whatever voice the Piper server has loaded. Everything runs inside a time budget so the caller always
-// gets a clear error message instead of a bare Vercel timeout.
-const VOICE = 'en-GB-ThomasNeural'
+// Voices are tried in this order, and the whole episode uses ONE voice (never a mix):
+//   1. Piper      (your self-hosted API)  - when PIPER_API_URL + PIPER_API_KEY are set
+//   2. Azure AI Speech (official)         - when AZURE_SPEECH_KEY + AZURE_SPEECH_REGION are set
+//   3. Edge TTS   (free, unofficial)      - last resort; Microsoft's endpoint is known to hang at times
+// Everything runs inside a time budget so the caller always gets a clear message instead of a bare
+// Vercel timeout.
+const PIPER_PIECE_CHARS = 700    // small pieces: each is quick, and they are fetched in parallel
+const PIPER_PARALLEL = 3
+const VOICE = 'en-GB-ThomasNeural'   // Azure / Edge voice
 
 const escapeXml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
+export const piperConfigured = () => !!(process.env.PIPER_API_URL && process.env.PIPER_API_KEY)
 export const azureConfigured = () => !!(process.env.AZURE_SPEECH_KEY && process.env.AZURE_SPEECH_REGION)
 
 function withTimeout(promise, ms, message) {
@@ -20,22 +22,45 @@ function withTimeout(promise, ms, message) {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
-export const piperConfigured = () => !!(process.env.PIPER_API_URL && process.env.PIPER_API_KEY)
+// Split text into pieces of at most `max` characters, breaking at sentence ends where possible.
+export function splitText(text, max) {
+  const sentences = text.match(/[^.!?]+[.!?]+["')\]]*\s*|[^.!?]+$/g) || [text]
+  const pieces = []
+  let cur = ''
+  const push = () => { if (cur.trim()) pieces.push(cur.trim()); cur = '' }
+  for (let s of sentences) {
+    while (s.length > max) {                       // one huge sentence: cut at a space
+      let cut = s.lastIndexOf(' ', max)
+      if (cut < max * 0.5) cut = max
+      if (cur) push()
+      pieces.push(s.slice(0, cut).trim()); s = s.slice(cut)
+    }
+    if (cur.length + s.length > max) push()
+    cur += s
+  }
+  push()
+  return pieces.filter(Boolean)
+}
 
-async function piperChunk(text, timeoutMs) {
+// ── Piper (self-hosted) ──────────────────────────────────────────────────────
+async function piperPiece(text, timeoutMs) {
+  const base = process.env.PIPER_API_URL.trim().replace(/\/+$/, '')
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), timeoutMs)
   try {
-    const res = await fetch(`${process.env.PIPER_API_URL.trim().replace(/\/+$/, '')}/api/tts`, {
+    const res = await fetch(`${base}/api/tts`, {
       method: 'POST',
       signal: ctrl.signal,
-      headers: {
-        'x-api-key': process.env.PIPER_API_KEY.trim(),
-        'Content-Type': 'application/json',
-      },
+      headers: { 'x-api-key': process.env.PIPER_API_KEY.trim(), 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, format: 'mp3' }),
     })
-    if (!res.ok) throw new Error(`Piper error ${res.status}${res.status === 401 ? ' (check PIPER_API_KEY)' : ''}`)
+    if (!res.ok) {
+      let detail = ''
+      try { detail = (await res.json()).detail } catch { /* not JSON */ }
+      throw new Error(`Piper error ${res.status}${detail ? ': ' + String(detail).slice(0, 100) : ''}`)
+    }
+    const type = (res.headers.get('content-type') || '').toLowerCase()
+    if (type.includes('wav')) throw new Error('Piper sent WAV instead of MP3: update the Piper service’s main.py to the version with MP3 support')
     const buf = Buffer.from(await res.arrayBuffer())
     if (buf.length < 100) throw new Error('Piper returned empty audio')
     return buf
@@ -45,6 +70,40 @@ async function piperChunk(text, timeoutMs) {
   } finally { clearTimeout(timer) }
 }
 
+// Runs fn over items with limited parallelism, keeps the ORIGINAL ORDER, stops early on the first failure.
+async function mapLimit(items, limit, fn) {
+  const results = new Array(items.length)
+  let next = 0, failed = null
+  async function worker() {
+    while (!failed) {
+      const i = next++
+      if (i >= items.length) return
+      try { results[i] = await fn(items[i], i) } catch (e) { failed = failed || e; return }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  if (failed) throw failed
+  return results
+}
+
+async function piperAll(chunks, deadline) {
+  const pieces = chunks.flatMap(c => splitText(c, PIPER_PIECE_CHARS))
+  // Leave time at the end for the fallback voices if Piper turns out not to work.
+  const phaseEnd = Math.min(deadline - 12000, Date.now() + 38000)
+  const parts = await mapLimit(pieces, PIPER_PARALLEL, async (piece) => {
+    let last
+    for (let attempt = 0; attempt < 2; attempt++) {     // the first call after a quiet spell can be slow: try twice
+      const remaining = phaseEnd - Date.now()
+      if (remaining < 3000) break
+      try { return await piperPiece(piece, Math.min(30000, remaining)) }
+      catch (e) { last = e; await sleep(400) }
+    }
+    throw last || new Error('Piper ran out of time')
+  })
+  return Buffer.concat(parts)
+}
+
+// ── Azure Speech ─────────────────────────────────────────────────────────────
 async function azureChunk(text, timeoutMs) {
   const region = process.env.AZURE_SPEECH_REGION.trim()
   const ctrl = new AbortController()
@@ -71,6 +130,7 @@ async function azureChunk(text, timeoutMs) {
   } finally { clearTimeout(timer) }
 }
 
+// ── Edge TTS ─────────────────────────────────────────────────────────────────
 async function edgeChunk(text, timeoutMs) {
   const { UniversalEdgeTTS } = await import('edge-tts-universal')
   return withTimeout((async () => {
@@ -81,29 +141,32 @@ async function edgeChunk(text, timeoutMs) {
   })(), timeoutMs, `Edge TTS timed out after ${Math.round(timeoutMs / 1000)}s`)
 }
 
-// chunks: array of strings (each already small enough for one request). Returns one MP3 Buffer.
+// chunks: array of strings. Returns one MP3 Buffer.
 export async function synthesizeAll(chunks, { budgetMs = 52000 } = {}) {
   const deadline = Date.now() + budgetMs
-  const plan = [
-    ...(piperConfigured() ? [['Piper', piperChunk, 25000]] : []),
-    ...(azureConfigured() ? [['Azure', azureChunk, 20000], ['Azure', azureChunk, 20000]] : []),
-    ['Edge TTS', edgeChunk, 15000],
-    ['Edge TTS', edgeChunk, 15000],
-  ]
-  const parts = []
   const problems = new Set()
+
+  if (piperConfigured()) {
+    try { return await piperAll(chunks, deadline) }
+    catch (e) { problems.add(e.message) }
+  }
+
+  const plan = azureConfigured()
+    ? [['Azure', azureChunk, 20000], ['Azure', azureChunk, 20000], ['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000]]
+    : [['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000]]
+  const parts = []
 
   for (let i = 0; i < chunks.length; i++) {
     let audio = null
-    for (const [name, fn, perTry] of plan) {
+    for (const [, fn, perTry] of plan) {
       const remaining = deadline - Date.now()
       if (remaining < 4000) break
       try { audio = await fn(chunks[i], Math.min(perTry, remaining - 1000)); break }
       catch (e) { problems.add(e.message); await sleep(300) }
     }
     if (!audio) {
-      throw new Error(`Couldn’t generate audio for part ${i + 1} of ${chunks.length}. ${[...problems].join(' · ')}` +
-        (azureConfigured() ? '' : ' · Tip: add an Azure Speech key (AZURE_SPEECH_KEY and AZURE_SPEECH_REGION) for reliable audio.'))
+      const hint = (piperConfigured() || azureConfigured()) ? '' : ' · Tip: set up Piper (PIPER_API_URL and PIPER_API_KEY) or an Azure Speech key for reliable audio.'
+      throw new Error(`Couldn’t generate audio for part ${i + 1} of ${chunks.length}. ${[...problems].join(' · ')}${hint}`)
     }
     parts.push(audio)
   }

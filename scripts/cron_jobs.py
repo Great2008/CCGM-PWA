@@ -10,6 +10,7 @@ Runs on GitHub Actions (.github/workflows/cron.yml). All secrets come from
 environment variables (GitHub repo secrets) -- nothing is hardcoded.
 """
 import asyncio
+import concurrent.futures
 import html
 import json
 import os
@@ -231,6 +232,62 @@ def chunk_text(text: str, max_len: int) -> list[str]:
     return chunks
 
 
+def _piper_configured() -> bool:
+    return bool(os.environ.get("PIPER_API_URL") and os.environ.get("PIPER_API_KEY"))
+
+
+def synth_piper(text: str) -> bytes:
+    """Your self-hosted Piper API. Asks for MP3 (small); refuses WAV with a clear message."""
+    base = os.environ["PIPER_API_URL"].strip().rstrip("/")
+    r = requests.post(
+        f"{base}/api/tts",
+        headers={"x-api-key": os.environ["PIPER_API_KEY"].strip()},
+        json={"text": text, "format": "mp3"},
+        timeout=120,
+    )
+    if not r.ok:
+        try:
+            detail = str(r.json().get("detail", ""))[:100]
+        except Exception:  # noqa: BLE001
+            detail = ""
+        raise RuntimeError(f"Piper error {r.status_code}" + (f": {detail}" if detail else ""))
+    if "wav" in r.headers.get("content-type", "").lower():
+        raise RuntimeError("Piper sent WAV instead of MP3: update the Piper service's main.py to the version with MP3 support")
+    if len(r.content) < 100:
+        raise RuntimeError("Piper returned empty audio")
+    return r.content
+
+
+def _piper_piece(text: str) -> bytes:
+    """One small piece, tried up to 3 times (the first call after a quiet spell can be slow)."""
+    last: Exception | None = None
+    for attempt in range(3):
+        try:
+            return synth_piper(text)
+        except Exception as e:  # noqa: BLE001
+            last = e
+            print(f"  Piper attempt {attempt + 1} failed -> {e}")
+            time.sleep(3)
+    raise last  # type: ignore[misc]
+
+
+def synth_all(chunks: list[str]) -> bytes:
+    """Piper first (whole episode in ONE voice), then Azure / Edge TTS if Piper can't do it."""
+    piper_problem = ""
+    if _piper_configured():
+        pieces = [p for c in chunks for p in chunk_text(c, 700)]
+        try:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+                return b"".join(pool.map(_piper_piece, pieces))     # map() keeps the original order
+        except Exception as e:  # noqa: BLE001
+            piper_problem = f"Piper: {e} | "
+            print(f"  Piper could not finish the episode, trying the next voice. ({e})")
+    try:
+        return b"".join(synth_chunk(c) for c in chunks)
+    except RuntimeError as e:
+        raise RuntimeError(piper_problem + str(e)) from None
+
+
 def _azure_configured() -> bool:
     return bool(os.environ.get("AZURE_SPEECH_KEY") and os.environ.get("AZURE_SPEECH_REGION"))
 
@@ -284,7 +341,7 @@ def synth_chunk(text: str) -> bytes:
                 problems.append(msg)
             print(f"  TTS attempt failed -> {msg}")
             time.sleep(2)
-    tip = "" if _azure_configured() else " | Tip: add AZURE_SPEECH_KEY and AZURE_SPEECH_REGION secrets for reliable audio."
+    tip = "" if (_azure_configured() or _piper_configured()) else " | Tip: set up Piper (PIPER_API_URL, PIPER_API_KEY) or an Azure Speech key for reliable audio."
     raise RuntimeError("Couldn't generate audio. " + " | ".join(problems) + tip)
 
 
@@ -306,7 +363,7 @@ def podcast(episode_id: str | None = None) -> None:
     if len(words) > MAX_WORDS:
         script = " ".join(words[:MAX_WORDS]) + "."
 
-    audio = b"".join(synth_chunk(c) for c in chunk_text(script, MAX_CHARS))
+    audio = synth_all(chunk_text(script, MAX_CHARS))
 
     path = f"{ep['id']}.mp3"
     up = requests.post(
