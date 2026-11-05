@@ -54,7 +54,7 @@ export default function AdminEvents() {
             <div className="form-group" style={{ gridColumn:'1/-1' }}>
               <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}>
                 <input type="checkbox" checked={!!form.meal_tickets_enabled} onChange={e=>setForm(f=>({...f,meal_tickets_enabled:e.target.checked}))} />
-                🍽️ This event has meal tickets (breakfast/dinner check-in for participants)
+                🍽️ This event has tickets (breakfast/dinner check-in for participants)
               </label>
             </div>
             {form.meal_tickets_enabled && (
@@ -82,7 +82,7 @@ export default function AdminEvents() {
         <div style={{ fontWeight:700, color:'var(--brand-deep)', marginBottom:4 }}>{item.title}</div>
         <div style={{ fontSize:'0.82rem', color:'var(--text-mid)' }}>📅 {item.date}{item.time&&` · ⏰ ${item.time}`}{item.location&&` · 📍 ${item.location}`}</div>
         {item.category&&<span style={{ display:'inline-block', marginTop:6, fontSize:'0.7rem', background:'var(--brand-pale)', color:'var(--brand-light)', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>{item.category}</span>}
-        {item.meal_tickets_enabled&&<span style={{ display:'inline-block', marginTop:6, marginLeft:6, fontSize:'0.7rem', background:'#dcfce7', color:'#166534', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>🍽️ Meal Tickets</span>}
+        {item.meal_tickets_enabled&&<span style={{ display:'inline-block', marginTop:6, marginLeft:6, fontSize:'0.7rem', background:'#dcfce7', color:'#166534', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>🍽️ Tickets</span>}
         {item.requires_payment&&<span style={{ display:'inline-block', marginTop:6, marginLeft:6, fontSize:'0.7rem', background:'#fef3c7', color:'#92400e', padding:'2px 10px', borderRadius:20, fontWeight:700 }}>💰 Paid</span>}
       </div>
       <div style={{ display:'flex', gap:8 }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
@@ -46,7 +46,7 @@ const Guidelines     = lazy(() => import('./pages/Guidelines'))
 const NotFound       = lazy(() => import('./pages/NotFound'))
 const Verify         = lazy(() => import('./pages/Verify'))
 const Programme      = lazy(() => import('./pages/Programme'))
-const MealTicket      = lazy(() => import('./pages/MealTicket'))
+const Ticket          = lazy(() => import('./pages/Ticket'))
 
 function AppInner() {
   const { user } = useAuth()
@@ -106,7 +106,8 @@ function AppInner() {
           <Route path="/certificate"      element={<Certificate />} />
           <Route path="/verify"           element={<Verify />} />
           <Route path="/programme"        element={<Programme />} />
-          <Route path="/meal-ticket"      element={<MealTicket />} />
+          <Route path="/ticket"           element={<Ticket />} />
+          <Route path="/meal-ticket"      element={<LegacyTicketRedirect />} />
           <Route path="/guidelines"       element={<Guidelines />} />
           <Route path="*"                 element={<NotFound />} />
         </Routes>
@@ -123,6 +124,12 @@ function AppInner() {
       <Analytics />
     </>
   )
+}
+
+// Old links (emails, bookmarks, QR links) used /meal-ticket: send them to /ticket, keeping ?event=...
+function LegacyTicketRedirect() {
+  const { search } = useLocation()
+  return <Navigate to={`/ticket${search}`} replace />
 }
 
 export default function App() {

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useEventsContent } from '../hooks/useContent'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
-import { invokeApi } from '../lib/api'
 import SEO from '../components/SEO'
 import { ShareButtonLight } from '../components/ShareButton'
 import { APP_URL } from '../lib/config'
@@ -49,7 +48,7 @@ export default function Events() {
   // visibly break the RSVP flow itself.
   const sendRsvpConfirmation = ({ email, name, event, registrationId }) => {
     if (!email) return
-    invokeApi('send-rsvp-confirmation', {
+    supabase.functions.invoke('send-rsvp-confirmation', {
       body: {
         email, name,
         eventTitle: event.title,
@@ -71,7 +70,7 @@ export default function Events() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setGuestError(e => ({ ...e, [event.id]: 'Enter a valid email' })); return }
     setGuestError(e => ({ ...e, [event.id]: null }))
     setGuestSubmitting(s => ({ ...s, [event.id]: true }))
-    const { data, error } = await invokeApi('guest-rsvp', {
+    const { data, error } = await supabase.functions.invoke('guest-rsvp', {
       body: { eventId: event.id, name, email, phone },
     })
     setGuestSubmitting(s => ({ ...s, [event.id]: false }))
@@ -123,7 +122,7 @@ export default function Events() {
         path="/events"
       />
       <div style={{
-        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1600&q=80") center/cover no-repeat',
+        background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("/images/bg/events-hero.jpg") center/cover no-repeat',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',
       }}>
         <span className="section-label" style={{ color: 'var(--green-light)' }}>Stay Connected</span>

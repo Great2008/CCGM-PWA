@@ -43,7 +43,7 @@ function qrDataUrl(text, size = 220) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=ffffff&color=0a2612&margin=10`
 }
 
-export default function AdminMealTickets() {
+export default function AdminTickets() {
   const { showToast, adminUser, logAction } = useAdmin()
   const [events, setEvents]       = useState([])
   const [eventId, setEventId]     = useState('')
@@ -328,7 +328,7 @@ export default function AdminMealTickets() {
 
   return (
     <div>
-      <PageHeader icon="🍽️" title="Meal Tickets" subtitle="Check in participants at breakfast & dinner" />
+      <PageHeader icon="🍽️" title="Tickets" subtitle="Check in participants at breakfast & dinner" />
 
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
         <select value={eventId} onChange={e => { setEventId(e.target.value); setSelected(null) }}
@@ -346,8 +346,8 @@ export default function AdminMealTickets() {
       {!eventId ? (
         <div style={{ background: 'white', borderRadius: 16, padding: 60, textAlign: 'center', border: '1.5px solid #e2e8f0', color: 'var(--text-light)' }}>
           {events.length === 0
-            ? 'No events have meal tickets enabled yet. Turn it on for an event from Events → edit event.'
-            : 'Select an event to begin checking in meal tickets'}
+            ? 'No events have tickets enabled yet. Turn it on for an event from Events → edit event.'
+            : 'Select an event to begin checking in tickets'}
         </div>
       ) : loadingRoster ? (
         <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-light)' }}>Loading roster ({roster.length} cached)...</div>
@@ -402,7 +402,7 @@ export default function AdminMealTickets() {
           {ticketReg && (
             <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '2px solid #bbf7d0', marginBottom: 16, textAlign: 'center' }}>
               <div style={{ fontWeight: 700, color: '#16a34a', marginBottom: 8, fontSize: '0.9rem' }}>🎟️ Ticket ready for {ticketReg.guest_name}</div>
-              <img src={qrDataUrl(`MEAL-${ticketReg.id}`)} alt="Walk-in meal ticket QR" style={{ width: 180, height: 180, borderRadius: 10 }} />
+              <img src={qrDataUrl(`MEAL-${ticketReg.id}`)} alt="Walk-in ticket QR" style={{ width: 180, height: 180, borderRadius: 10 }} />
               <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 8 }}>Screenshot or print this for {ticketReg.guest_name} to present at meals — or just mark today's meal below now.</div>
               <button onClick={() => setTicketReg(null)} className="btn btn-outline-blue" style={{ fontSize: '0.8rem', marginTop: 10 }}>Done</button>
             </div>

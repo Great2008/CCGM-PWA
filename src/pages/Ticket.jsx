@@ -26,7 +26,7 @@ function getConferenceDays(ev) {
   return days
 }
 
-export default function MealTicket() {
+export default function Ticket() {
   const [params] = useSearchParams()
   const eventId = params.get('event')
   const { user, isApproved } = useAuth()
@@ -57,7 +57,7 @@ export default function MealTicket() {
   if (!user || !isApproved) {
     return (
       <div className="container" style={{ padding: '120px 5% 80px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-mid)' }}>Sign in to view your meal ticket.</p>
+        <p style={{ color: 'var(--text-mid)' }}>Sign in to view your ticket.</p>
         <Link to="/timeline" className="btn btn-primary" style={{ marginTop: 16 }}>Sign In</Link>
       </div>
     )
@@ -65,7 +65,7 @@ export default function MealTicket() {
 
   return (
     <>
-      <SEO title="Meal Ticket" description="Your digital meal ticket." path="/meal-ticket" />
+      <SEO title="Ticket" description="Your digital ticket." path="/ticket" />
       <div className="container" style={{ maxWidth: 480, padding: '110px 5% 80px', textAlign: 'center' }}>
 
         {status === 'loading' && <p style={{ color: 'var(--text-light)' }}>Loading your ticket...</p>}
@@ -80,7 +80,7 @@ export default function MealTicket() {
         {status === 'disabled' && (
           <div>
             <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🍽️</div>
-            <p style={{ color: 'var(--text-mid)', marginBottom: 16 }}><strong>{event?.title}</strong> doesn't use meal tickets.</p>
+            <p style={{ color: 'var(--text-mid)', marginBottom: 16 }}><strong>{event?.title}</strong> doesn't use tickets.</p>
             <Link to="/events" className="btn btn-primary">Back to Events</Link>
           </div>
         )}
@@ -98,17 +98,17 @@ export default function MealTicket() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
               <picture><source srcSet="/logo-sm.webp" type="image/webp" /><img src="/logo.webp" alt="CCG World" width={44} height={44} /></picture>
             </div>
-            <div className="section-label" style={{ marginBottom: 6 }}>Meal Ticket</div>
+            <div className="section-label" style={{ marginBottom: 6 }}>Ticket</div>
             <h1 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand-deep)', fontSize: '1.4rem', marginBottom: 4 }}>{event.title}</h1>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-light)', marginBottom: 22 }}>
               📅 {event.date}{event.time && ` · ${event.time}`}{event.location && ` · 📍 ${event.location}`}
             </div>
 
             {paymentConfirmed ? (
-              <img src={qrDataUrl(`MEAL-${regId}`)} alt="Meal ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #f1f5f9' }} />
+              <img src={qrDataUrl(`MEAL-${regId}`)} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #f1f5f9' }} />
             ) : (
               <div style={{ position: 'relative', display: 'inline-block' }}>
-                <img src={qrDataUrl(`MEAL-${regId}`)} alt="Meal ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #fde68a' }} />
+                <img src={qrDataUrl(`MEAL-${regId}`)} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #fde68a' }} />
                 <div style={{ marginTop: 10, background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: 10, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
                   <span>⏳</span>
                   <span style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: 700 }}>Payment pending — show this to staff to confirm</span>

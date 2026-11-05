@@ -20,7 +20,7 @@ import AdminAnalytics from './pages/AdminAnalytics'
 import AdminEmail    from './pages/AdminEmail'
 import AdminNewsletter from './pages/AdminNewsletter'
 import AdminRegistrations from './pages/AdminRegistrations'
-import AdminMealTickets from './pages/AdminMealTickets'
+import AdminTickets from './pages/AdminTickets'
 import AdminNotifications from './pages/AdminNotifications'
 import AdminStudio from './pages/AdminStudio'
 import AdminBulkMessage from './pages/AdminBulkMessage'
@@ -57,7 +57,7 @@ const NAV = [
   ['newsletter',  '📰', 'Newsletter'],
   ['email',      '✉️', 'Email Blast'],
   ['registrations','📋','Registrations'],
-  ['meal-tickets', '🍽️', 'Meal Tickets'],
+  ['tickets', '🍽️', 'Tickets'],
   ['notifications','🔔','Push Notifications'],
   ['branches',    '⛪', 'Church Branches'],
   ['bulk-message', '📣', 'Bulk Message'],
@@ -68,7 +68,7 @@ const NAV = [
   ['letters',     '✉️', 'Letter Writer'],
   ['maintenance', '🚧', 'Maintenance Mode'],
 ]
-const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, podcast:AdminPodcast, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, 'meal-tickets':AdminMealTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
+const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, podcast:AdminPodcast, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, tickets:AdminTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
@@ -153,7 +153,7 @@ export default function AdminApp() {
   const superAdminOnlyPages = ['maintenance', 'audit-log']
   const visibleNav   = isFullAdmin
     ? NAV.filter(([id]) => !superAdminOnlyPages.includes(id) || isSuperAdmin)
-    : NAV.filter(([id]) => ['timeline', 'prayer', 'meal-tickets'].includes(id))
+    : NAV.filter(([id]) => ['timeline', 'prayer', 'tickets'].includes(id))
 
   // Maintenance Mode and the Audit Log are super-admin only, even if someone
   // lands on the page directly (e.g. stale link) without it being in their nav.

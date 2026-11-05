@@ -12,7 +12,7 @@ A Progressive Web App for **Christian Church of God Mission**, built with React 
 4. [Database Setup](#database-setup)
 5. [Features — Public App](#features--public-app)
 6. [Features — Admin Panel](#features--admin-panel)
-7. [Meal Tickets — Deep Dive](#meal-tickets--deep-dive)
+7. [Tickets — Deep Dive](#tickets--deep-dive)
 8. [Roles & Permissions](#roles--permissions)
 9. [Offline Support (PWA)](#offline-support-pwa)
 10. [Mobile Apps (Capacitor)](#mobile-apps-capacitor)
@@ -89,14 +89,14 @@ supabase/
 
 ## Database Setup
 
-This repo assumes a **pre-existing base schema** (profiles, events, event_registrations, posts, sabbath_lessons, hymns, etc.) already set up in your Supabase project — that schema isn't tracked here. The files in `supabase/migrations/` are **incremental** additions layered on top of it, added over the course of building the Meal Tickets feature. Run them in the Supabase SQL editor, **in this order**:
+This repo assumes a **pre-existing base schema** (profiles, events, event_registrations, posts, sabbath_lessons, hymns, etc.) already set up in your Supabase project — that schema isn't tracked here. The files in `supabase/migrations/` are **incremental** additions layered on top of it, added over the course of building the Tickets feature. Run them in the Supabase SQL editor, **in this order**:
 
 | # | File | What it does |
 |---|---|---|
 | 1 | `meal_checkins.sql` | Creates the `meal_checkins` table (per-day, per-slot meal check-in records). Also loosens `event_registrations.user_id` to nullable and adds `is_guest`, `guest_name`, `guest_phone`, `registered_by` — enabling walk-in registrations for people without an app account. |
 | 2 | `self_registration_policy.sql` | Adds an RLS policy letting a signed-in user manage (insert/select/delete) their **own** `event_registrations` row. Without this, ordinary members can't RSVP — only staff (admin/moderator) can register people, since the walk-in policy added in step 1 is staff-only. |
-| 3 | `payment_gating.sql` | Adds `events.requires_payment` and `event_registrations.payment_confirmed` (+ who/when confirmed). Lets an event be flagged as needing payment before a meal ticket becomes usable. |
-| 4 | `meal_tickets_opt_in.sql` | Adds `events.meal_tickets_enabled` (default `false`). Meal tickets are **opt-in per event** — most events (a Sunday service, a one-off talk) don't need them; only enable this for residential/catering events like a conference. |
+| 3 | `payment_gating.sql` | Adds `events.requires_payment` and `event_registrations.payment_confirmed` (+ who/when confirmed). Lets an event be flagged as needing payment before a ticket becomes usable. |
+| 4 | `meal_tickets_opt_in.sql` | Adds `events.meal_tickets_enabled` (default `false`). Tickets are **opt-in per event** — most events (a Sunday service, a one-off talk) don't need them; only enable this for residential/catering events like a conference. |
 
 All migrations are written with `if not exists`-style guards where practical, so they're safe to re-run — except `create policy` statements, which Postgres has no `if not exists` form for; if one of those errors on re-run, it just means it's already applied.
 
@@ -113,7 +113,7 @@ If you're setting this up from scratch (not against the original church's existi
 - **Hymnal** — searchable hymn book
 - **Devotional** — daily devotional posts
 - **Sermons** — audio/video sermon library
-- **Events** — event listing, RSVP, meal ticket access (see below)
+- **Events** — event listing, RSVP, ticket access (see below)
 - **Programme** — multi-day conference agenda, day-by-day sessions, session RSVP
 - **Timeline** — social feed (posts, testimonies, prayer requests, comments)
 - **Prayer Wall** — public prayer requests + private prayer form
@@ -133,7 +133,7 @@ Reached via the admin login; sidebar visibility depends on role (see [Roles & Pe
 - **Analytics** — usage analytics
 - **Members / Member Directory** — member management, role assignment, suspension
 - **Registrations** — event RSVP list per event
-- **Meal Tickets** — see deep-dive below
+- **Tickets** — see deep-dive below
 - **Events / Programme** — event and conference-agenda CRUD
 - **Timeline moderation** — posts, topics, reports (3 tabs)
 - **Prayer** — prayer wall moderation + form requests
@@ -148,23 +148,23 @@ Reached via the admin login; sidebar visibility depends on role (see [Roles & Pe
 
 ---
 
-## Meal Tickets — Deep Dive
+## Tickets — Deep Dive
 
 Built for residential conferences (e.g. a multi-day youth conference) where meals are served twice a day and need to be tracked per participant, per day.
 
 ### How it works
 
-1. **Enable it per event** — from *Admin → Events → edit event*, check "🍽️ This event has meal tickets." Most events leave this off. Optionally also check "💰 Meals are paid" if payment needs confirming before a ticket is usable.
-2. **Participants get a digital ticket** — once an app user RSVPs to a meal-ticket-enabled event, a "🎫 Meal Ticket" button appears linking to `/meal-ticket?event=<id>`, showing a QR code plus a Day 1/Day 2/... checklist of every meal, computed automatically from the event's `date` → `end_date` range.
-3. **Walk-ins** — for people without the app, moderators can register them on the spot from the Meal Tickets scanner ("➕ Register Walk-in"), which also checks for likely duplicate names before creating a new entry.
+1. **Enable it per event** — from *Admin → Events → edit event*, check "🍽️ This event has tickets." Most events leave this off. Optionally also check "💰 Meals are paid" if payment needs confirming before a ticket is usable.
+2. **Participants get a digital ticket** — once an app user RSVPs to a ticket-enabled event, a "🎫 Ticket" button appears linking to `/ticket?event=<id>`, showing a QR code plus a Day 1/Day 2/... checklist of every meal, computed automatically from the event's `date` → `end_date` range.
+3. **Walk-ins** — for people without the app, moderators can register them on the spot from the Tickets scanner ("➕ Register Walk-in"), which also checks for likely duplicate names before creating a new entry.
 4. **Payment gating** (optional, per event) — if enabled, a ticket's QR still displays (so staff can scan it to identify the person and confirm payment), but meals can't be marked as collected until a moderator taps "✅ Confirm Payment Received."
-5. **Checking meals off** — moderators use *Admin → Meal Tickets*: scan a QR (camera, via the native `BarcodeDetector` API or a `jsQR` fallback loaded from CDN) or search by name/phone. Each conference day shows its own Breakfast/Dinner row, so a moderator can correct a missed scan from an earlier day, not just "today."
+5. **Checking meals off** — moderators use *Admin → Tickets*: scan a QR (camera, via the native `BarcodeDetector` API or a `jsQR` fallback loaded from CDN) or search by name/phone. Each conference day shows its own Breakfast/Dinner row, so a moderator can correct a missed scan from an earlier day, not just "today."
 6. **Offline-first** — meal check-ins queue locally (`localStorage`) and sync automatically once the connection returns, since conference wifi is often unreliable. The roster itself is cached locally too, so search still works offline.
 7. **Audit trail** — walk-in registrations, payment confirmations, and every meal check-in are logged to `admin_audit_log`, viewable by admins/super-admins (moderators can't see the log themselves, so this is their accountability trail for handling payments).
 
 ### Who can access it
 
-Meal Tickets is one of the few admin pages moderators can reach (most admin pages are admin/super-admin only) — see `AdminApp.jsx`'s `visibleNav` logic.
+Tickets is one of the few admin pages moderators can reach (most admin pages are admin/super-admin only) — see `AdminApp.jsx`'s `visibleNav` logic.
 
 ---
 
@@ -175,7 +175,7 @@ Defined on `profiles.role`, four tiers:
 | Role | Access |
 |---|---|
 | `member` | Standard app experience only, no admin panel |
-| `moderator` | Admin panel, but limited to: Timeline moderation, Prayer, Meal Tickets |
+| `moderator` | Admin panel, but limited to: Timeline moderation, Prayer, Tickets |
 | `admin` | Full admin panel access |
 | `super_admin` | Everything `admin` has, plus role management, Maintenance mode, Audit Log |
 
@@ -187,7 +187,7 @@ Role gating happens in `src/admin/AdminApp.jsx` (`visibleNav`, `superAdminOnlyPa
 
 `public/sw.js` implements two layers of caching:
 
-1. **App shell precache** — core routes (`/`, `/events`, `/programme`, `/meal-ticket`, etc.) and static assets, cached on install.
+1. **App shell precache** — core routes (`/`, `/events`, `/programme`, `/ticket`, etc.) and static assets, cached on install.
 2. **API cache-with-network-first-fallback** — for GET requests to specific Supabase tables (Sabbath lessons, devotionals, hymns, programme tables, events, event_registrations, meal_checkins): try the network first, fall back to the last-known-good cached response when offline. Only `GET` requests are ever touched — mutations (POST/PATCH/DELETE) always go straight to the network untouched.
 
 **When you change `sw.js`, bump the `CACHE` and `API_CACHE` version constants at the top of the file.** Browsers that already installed the old service worker won't pick up your changes otherwise — they'll keep serving old cached content indefinitely.

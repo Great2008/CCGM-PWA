@@ -6,7 +6,7 @@ const PRECACHE = [
   '/', '/bible', '/hymnal', '/devotional',
   '/sermons', '/events', '/about', '/contact',
   '/gallery', '/blog', '/live', '/sabbath-school', '/timeline',
-  '/notifications', '/programme', '/meal-ticket', '/newsletter', '/divine-service', '/ten-commandments',
+  '/notifications', '/programme', '/ticket', '/newsletter', '/divine-service', '/ten-commandments',
   // Precache WebP logos for instant display
   '/logo.webp', '/logo-sm.webp', '/logo-splash.webp',
 ]
@@ -106,7 +106,7 @@ self.addEventListener('fetch', e => {
     const isProgramme  = url.pathname.includes('programme_days') || url.pathname.includes('programme_sessions') ||
                           url.pathname.includes('programme_agenda_items') || url.pathname.includes('programmes') ||
                           url.pathname.includes('programme_rsvps')
-    // Cache events + this user's own registrations so meal tickets & RSVP status
+    // Cache events + this user's own registrations so tickets & RSVP status
     // still work when conference wifi is unreliable.
     const isEvents      = url.pathname.includes('/events') ||
                            url.pathname.includes('event_registrations') ||
