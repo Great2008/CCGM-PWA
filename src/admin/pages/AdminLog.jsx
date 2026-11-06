@@ -40,7 +40,7 @@ const ACTION_ICONS = {
   'live_started':       '🔴',
   'meal_walkin_register': '🧾',
   'meal_payment_confirm':  '💰',
-  'meal_checkin':          '🍽️',
+  'meal_checkin':          '🎫',
   'newsletter_add':        '📰',
   'newsletter_edit':       '✏️',
   'newsletter_delete':     '🗑️',

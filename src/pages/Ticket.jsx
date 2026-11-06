@@ -3,14 +3,15 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
+import { TICKET_SLOTS, ticketQrValue } from '../lib/tickets'
 
 function qrDataUrl(text, size = 240) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=ffffff&color=0a2612&margin=10`
 }
 
-// Computes the labeled conference days (Day 1, Day 2, ...) from an event's
+// Computes the labeled event days (Day 1, Day 2, ...) from an event's
 // date → end_date range. Falls back to a single day if there's no end_date.
-function getConferenceDays(ev) {
+function getEventDays(ev) {
   if (!ev?.date) return []
   const start = new Date(ev.date + 'T00:00:00')
   const end = ev.end_date ? new Date(ev.end_date + 'T00:00:00') : start
@@ -79,7 +80,7 @@ export default function Ticket() {
 
         {status === 'disabled' && (
           <div>
-            <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🍽️</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🎫</div>
             <p style={{ color: 'var(--text-mid)', marginBottom: 16 }}><strong>{event?.title}</strong> doesn't use tickets.</p>
             <Link to="/events" className="btn btn-primary">Back to Events</Link>
           </div>
@@ -105,10 +106,10 @@ export default function Ticket() {
             </div>
 
             {paymentConfirmed ? (
-              <img src={qrDataUrl(`MEAL-${regId}`)} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #f1f5f9' }} />
+              <img src={qrDataUrl(ticketQrValue(regId))} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #f1f5f9' }} />
             ) : (
               <div style={{ position: 'relative', display: 'inline-block' }}>
-                <img src={qrDataUrl(`MEAL-${regId}`)} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #fde68a' }} />
+                <img src={qrDataUrl(ticketQrValue(regId))} alt="Ticket QR code" style={{ width: 220, height: 220, borderRadius: 12, border: '1.5px solid #fde68a' }} />
                 <div style={{ marginTop: 10, background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: 10, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
                   <span>⏳</span>
                   <span style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: 700 }}>Payment pending — show this to staff to confirm</span>
@@ -118,27 +119,27 @@ export default function Ticket() {
 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: 18, lineHeight: 1.6 }}>
               {paymentConfirmed
-                ? 'Present this code at breakfast and dinner during the conference. One scan per meal, per day.'
-                : 'Present this code at the registration desk to confirm your payment. Meals can\'t be marked until payment is confirmed.'}
+                ? 'Present this code at the Day and Night sessions of the event. One scan per session, per day.'
+                : 'Present this code at the registration desk to confirm your payment. Your ticket can\'t be checked in until payment is confirmed.'}
             </p>
 
             {(() => {
-              const days = getConferenceDays(event)
+              const days = getEventDays(event)
               const map = {}
               history.forEach(h => { map[h.meal_date] = { ...map[h.meal_date], [h.slot]: h.checked_in_at } })
               return (
                 <div style={{ marginTop: 26, textAlign: 'left', borderTop: '1.5px solid #f1f5f9', paddingTop: 18 }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Meal History</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-deep)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Check-in History</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {days.map(({ day, date }) => (
                       <div key={date}>
                         <div style={{ fontSize: '0.72rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: 4 }}>Day {day} · {date}</div>
                         <div style={{ display: 'flex', gap: 6 }}>
-                          {['breakfast', 'dinner'].map(slot => {
+                          {TICKET_SLOTS.map(({ id: slot, label: slotName, icon: slotIcon }) => {
                             const ts = map[date]?.[slot]
                             return (
                               <div key={slot} style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem', padding: '7px 10px', borderRadius: 8, background: ts ? '#f0fdf4' : '#f8fafc', color: ts ? '#16a34a' : 'var(--text-light)' }}>
-                                <span>{slot === 'breakfast' ? '🌅' : '🌙'} {slot === 'breakfast' ? 'Breakfast' : 'Dinner'}</span>
+                                <span>{slotIcon} {slotName}</span>
                                 <span>{ts ? `✅ ${new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '—'}</span>
                               </div>
                             )

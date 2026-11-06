@@ -93,10 +93,10 @@ This repo assumes a **pre-existing base schema** (profiles, events, event_regist
 
 | # | File | What it does |
 |---|---|---|
-| 1 | `meal_checkins.sql` | Creates the `meal_checkins` table (per-day, per-slot meal check-in records). Also loosens `event_registrations.user_id` to nullable and adds `is_guest`, `guest_name`, `guest_phone`, `registered_by` — enabling walk-in registrations for people without an app account. |
+| 1 | `meal_checkins.sql` | Creates the `meal_checkins` table (per-day, per-slot ticket check-in records). Also loosens `event_registrations.user_id` to nullable and adds `is_guest`, `guest_name`, `guest_phone`, `registered_by` — enabling walk-in registrations for people without an app account. |
 | 2 | `self_registration_policy.sql` | Adds an RLS policy letting a signed-in user manage (insert/select/delete) their **own** `event_registrations` row. Without this, ordinary members can't RSVP — only staff (admin/moderator) can register people, since the walk-in policy added in step 1 is staff-only. |
 | 3 | `payment_gating.sql` | Adds `events.requires_payment` and `event_registrations.payment_confirmed` (+ who/when confirmed). Lets an event be flagged as needing payment before a ticket becomes usable. |
-| 4 | `meal_tickets_opt_in.sql` | Adds `events.meal_tickets_enabled` (default `false`). Tickets are **opt-in per event** — most events (a Sunday service, a one-off talk) don't need them; only enable this for residential/catering events like a conference. |
+| 4 | `meal_tickets_opt_in.sql` | Adds `events.meal_tickets_enabled` (default `false`). Tickets are **opt-in per event** — most events (a Sunday service, a one-off talk) don't need them; only enable this for events that need check-in, like a conference. |
 
 All migrations are written with `if not exists`-style guards where practical, so they're safe to re-run — except `create policy` statements, which Postgres has no `if not exists` form for; if one of those errors on re-run, it just means it's already applied.
 
@@ -150,17 +150,17 @@ Reached via the admin login; sidebar visibility depends on role (see [Roles & Pe
 
 ## Tickets — Deep Dive
 
-Built for residential conferences (e.g. a multi-day youth conference) where meals are served twice a day and need to be tracked per participant, per day.
+Built for events (e.g. a multi-day youth conference) that run a **Day** and a **Night** session, where each participant's attendance is tracked per session, per day. (The database still stores the two sessions under their original values, `breakfast` and `dinner`; the app shows them as Day and Night.)
 
 ### How it works
 
-1. **Enable it per event** — from *Admin → Events → edit event*, check "🍽️ This event has tickets." Most events leave this off. Optionally also check "💰 Meals are paid" if payment needs confirming before a ticket is usable.
+1. **Enable it per event** — from *Admin → Events → edit event*, check "🎫 This event has tickets." Most events leave this off. Optionally also check "💰 Tickets are paid" if payment needs confirming before a ticket is usable.
 2. **Participants get a digital ticket** — once an app user RSVPs to a ticket-enabled event, a "🎫 Ticket" button appears linking to `/ticket?event=<id>`, showing a QR code plus a Day 1/Day 2/... checklist of every meal, computed automatically from the event's `date` → `end_date` range.
 3. **Walk-ins** — for people without the app, moderators can register them on the spot from the Tickets scanner ("➕ Register Walk-in"), which also checks for likely duplicate names before creating a new entry.
-4. **Payment gating** (optional, per event) — if enabled, a ticket's QR still displays (so staff can scan it to identify the person and confirm payment), but meals can't be marked as collected until a moderator taps "✅ Confirm Payment Received."
-5. **Checking meals off** — moderators use *Admin → Tickets*: scan a QR (camera, via the native `BarcodeDetector` API or a `jsQR` fallback loaded from CDN) or search by name/phone. Each conference day shows its own Breakfast/Dinner row, so a moderator can correct a missed scan from an earlier day, not just "today."
-6. **Offline-first** — meal check-ins queue locally (`localStorage`) and sync automatically once the connection returns, since conference wifi is often unreliable. The roster itself is cached locally too, so search still works offline.
-7. **Audit trail** — walk-in registrations, payment confirmations, and every meal check-in are logged to `admin_audit_log`, viewable by admins/super-admins (moderators can't see the log themselves, so this is their accountability trail for handling payments).
+4. **Payment gating** (optional, per event) — if enabled, a ticket's QR still displays (so staff can scan it to identify the person and confirm payment), but the ticket can't be checked in until a moderator taps "✅ Confirm Payment Received."
+5. **Checking in** — moderators use *Admin → Tickets*: scan a QR (camera, via the native `BarcodeDetector` API or a `jsQR` fallback loaded from CDN) or search by name/phone. Each event day shows its own Day/Night row, so a moderator can correct a missed scan from an earlier day, not just "today."
+6. **Offline-first** — check-ins queue locally (`localStorage`) and sync automatically once the connection returns, since event wifi is often unreliable. The roster itself is cached locally too, so search still works offline.
+7. **Audit trail** — walk-in registrations, payment confirmations, and every ticket check-in are logged to `admin_audit_log`, viewable by admins/super-admins (moderators can't see the log themselves, so this is their accountability trail for handling payments).
 
 ### Who can access it
 
@@ -192,7 +192,7 @@ Role gating happens in `src/admin/AdminApp.jsx` (`visibleNav`, `superAdminOnlyPa
 
 **When you change `sw.js`, bump the `CACHE` and `API_CACHE` version constants at the top of the file.** Browsers that already installed the old service worker won't pick up your changes otherwise — they'll keep serving old cached content indefinitely.
 
-Meal check-ins additionally use their own `localStorage`-based offline queue (separate from the service worker) since they need read-your-own-writes consistency while offline, not just cached reads — see `AdminMealTickets.jsx`.
+Ticket check-ins additionally use their own `localStorage`-based offline queue (separate from the service worker) since they need read-your-own-writes consistency while offline, not just cached reads — see `AdminTickets.jsx`.
 
 ---
 

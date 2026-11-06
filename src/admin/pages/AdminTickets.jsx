@@ -2,17 +2,16 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useAdmin } from '../AdminApp'
 import supabaseAdmin from '../../lib/supabase'
 import PageHeader from '../components/PageHeader'
+import { TICKET_SLOTS, slotLabel, ticketQrValue, parseTicketQr } from '../../lib/tickets'
 
-const SLOTS = [
-  { id: 'breakfast', label: '🌅 Breakfast' },
-  { id: 'dinner',    label: '🌙 Dinner' },
-]
-const QUEUE_KEY = 'ccgm_meal_checkin_queue'
+const SLOTS = TICKET_SLOTS.map(s => ({ id: s.id, label: `${s.icon} ${s.label}` }))   // shown as Day and Night
+const QUEUE_KEY = 'ccgm_ticket_checkin_queue'
+const OLD_QUEUE_KEY = 'ccgm_meal_checkin_queue'
 const todayStr  = () => new Date().toISOString().slice(0, 10)
 
-// Computes the labeled conference days (Day 1, Day 2, ...) from an event's
+// Computes the labeled event days (Day 1, Day 2, ...) from an event's
 // date → end_date range. Falls back to a single day if there's no end_date.
-function getConferenceDays(ev) {
+function getEventDays(ev) {
   if (!ev?.date) return []
   const start = new Date(ev.date + 'T00:00:00')
   const end = ev.end_date ? new Date(ev.end_date + 'T00:00:00') : start
@@ -32,6 +31,18 @@ function loadQueue() {
   try { return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]') } catch { return [] }
 }
 function saveQueue(q) { localStorage.setItem(QUEUE_KEY, JSON.stringify(q)) }
+// One-time move from the old storage name, so check-ins queued before the rename are never lost.
+function moveOldQueue() {
+  try {
+    const old = JSON.parse(localStorage.getItem(OLD_QUEUE_KEY) || 'null')
+    if (Array.isArray(old) && old.length) {
+      const current = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]')
+      localStorage.setItem(QUEUE_KEY, JSON.stringify([...current, ...old]))
+    }
+    localStorage.removeItem(OLD_QUEUE_KEY)
+  } catch { /* storage unavailable */ }
+}
+moveOldQueue()
 
 function displayName(reg) {
   if (!reg) return ''
@@ -48,7 +59,7 @@ export default function AdminTickets() {
   const [events, setEvents]       = useState([])
   const [eventId, setEventId]     = useState('')
   const selectedEvent = events.find(e => e.id === eventId)
-  const confDays = useMemo(() => getConferenceDays(selectedEvent), [selectedEvent])
+  const eventDays = useMemo(() => getEventDays(selectedEvent), [selectedEvent])
   const today = todayStr()
   const [roster, setRoster]       = useState([])       // cached registrations for offline lookup
   const [loading, setLoading]     = useState(true)
@@ -56,7 +67,7 @@ export default function AdminTickets() {
   const [mode, setMode]           = useState('scan')   // scan | search
   const [search, setSearch]       = useState('')
   const [selected, setSelected]   = useState(null)      // currently focused registration
-  const [checkins, setCheckins]   = useState({})        // registration_id -> {breakfast: ts, dinner: ts}
+  const [checkins, setCheckins]   = useState({})        // registration_id -> { date: { breakfast: ts (Day), dinner: ts (Night) } }
   const [queue, setQueue]         = useState(loadQueue())
   const [online, setOnline]       = useState(navigator.onLine)
   const [scanError, setScanError] = useState('')
@@ -90,7 +101,7 @@ export default function AdminTickets() {
   // Load roster + today's checkins for selected event, cache to localStorage for offline search
   const loadRoster = useCallback(async (id) => {
     setLoadingRoster(true)
-    const cacheKey = `ccgm_meal_roster_${id}`
+    const cacheKey = `ccgm_ticket_roster_${id}`
     try {
       const { data, error } = await supabaseAdmin
         .from('event_registrations')
@@ -111,7 +122,7 @@ export default function AdminTickets() {
       })
       setCheckins(map)
     } catch (e) {
-      console.error('Meal roster load failed:', e)
+      console.error('Ticket roster load failed:', e)
       const cached = localStorage.getItem(cacheKey)
       const reason = navigator.onLine ? (e?.message || e?.error_description || 'Unknown error') : 'No internet connection'
       if (cached) { setRoster(JSON.parse(cached)); showToastRef.current(`Using cached roster — ${reason}`, 'error') }
@@ -147,16 +158,16 @@ export default function AdminTickets() {
     return () => { cancelled = true }
   }, [online, queue])
 
-  const markMeal = async (reg, dateStr, slot) => {
+  const markSlot = async (reg, dateStr, slot) => {
     if (selectedEvent?.requires_payment && !reg.payment_confirmed) {
-      showToast('Payment not confirmed yet — confirm payment before serving this ticket', 'error')
+      showToast('Payment not confirmed yet — confirm payment before checking in this ticket', 'error')
       return
     }
-    const dayInfo = confDays.find(d => d.date === dateStr)
+    const dayInfo = eventDays.find(d => d.date === dateStr)
     const dayLabel = dayInfo ? `Day ${dayInfo.day}` : dateStr
     const already = checkins[reg.id]?.[dateStr]?.[slot]
     if (already) {
-      if (!window.confirm(`Already marked ${dayLabel} ${slot} at ${new Date(already).toLocaleTimeString()}. Mark again?`)) return
+      if (!window.confirm(`Already checked in for ${dayLabel} · ${slotLabel(slot)} at ${new Date(already).toLocaleTimeString()}. Check in again?`)) return
     }
     const ts = new Date().toISOString()
     setCheckins(c => ({ ...c, [reg.id]: { ...c[reg.id], [dateStr]: { ...c[reg.id]?.[dateStr], [slot]: ts } } }))
@@ -169,7 +180,7 @@ export default function AdminTickets() {
     if (!online) {
       const q = [...queue, record]; setQueue(q); saveQueue(q)
       showToast('Saved offline — will sync later')
-      logAction('meal_checkin', `${dayLabel} ${slot} marked for ${displayName(reg)} — ${selectedEvent?.title || 'event'} (offline, queued)`, displayName(reg))
+      logAction('meal_checkin', `${dayLabel} · ${slotLabel(slot)} checked in for ${displayName(reg)} — ${selectedEvent?.title || 'event'} (offline, queued)`, displayName(reg))
       return
     }
     const { error } = await supabaseAdmin.from('meal_checkins').insert({
@@ -181,8 +192,8 @@ export default function AdminTickets() {
       const q = [...queue, record]; setQueue(q); saveQueue(q)
       showToast('Could not save — queued for retry', 'error')
     } else {
-      logAction('meal_checkin', `${dayLabel} ${slot} marked for ${displayName(reg)} — ${selectedEvent?.title || 'event'}`, displayName(reg))
-      showToast(`✅ ${dayLabel} ${slot === 'breakfast' ? 'Breakfast' : 'Dinner'} marked`)
+      logAction('meal_checkin', `${dayLabel} · ${slotLabel(slot)} checked in for ${displayName(reg)} — ${selectedEvent?.title || 'event'}`, displayName(reg))
+      showToast(`✅ ${dayLabel} · ${slotLabel(slot)} checked in`)
     }
   }
 
@@ -218,7 +229,7 @@ export default function AdminTickets() {
     if (error) { showToast('Could not register — try again', 'error'); return }
     setRoster(r => {
       const next = [...r, data]
-      localStorage.setItem(`ccgm_meal_roster_${eventId}`, JSON.stringify(next))
+      localStorage.setItem(`ccgm_ticket_roster_${eventId}`, JSON.stringify(next))
       return next
     })
     setShowWalkin(false); setWalkinName(''); setWalkinPhone(''); setWalkinPaid(false); setPossibleDupe(null)
@@ -235,7 +246,7 @@ export default function AdminTickets() {
     const updated = { ...reg, ...patch }
     setRoster(r => {
       const next = r.map(x => x.id === reg.id ? updated : x)
-      localStorage.setItem(`ccgm_meal_roster_${eventId}`, JSON.stringify(next))
+      localStorage.setItem(`ccgm_ticket_roster_${eventId}`, JSON.stringify(next))
       return next
     })
     setSelected(updated)
@@ -251,7 +262,7 @@ export default function AdminTickets() {
   }
 
   const onDecoded = useCallback((text) => {
-    const id = text.replace(/^MEAL-/, '').trim()
+    const id = parseTicketQr(text)
     const reg = roster.find(r => r.id === id)
     if (!reg) { setScanError('Ticket not recognized for this event'); setTimeout(() => setScanError(''), 2000); return }
     setSelected(reg)
@@ -328,7 +339,7 @@ export default function AdminTickets() {
 
   return (
     <div>
-      <PageHeader icon="🍽️" title="Tickets" subtitle="Check in participants at breakfast & dinner" />
+      <PageHeader icon="🎫" title="Tickets" subtitle="Check in participants for the Day and Night sessions" />
 
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
         <select value={eventId} onChange={e => { setEventId(e.target.value); setSelected(null) }}
@@ -401,9 +412,9 @@ export default function AdminTickets() {
 
           {ticketReg && (
             <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '2px solid #bbf7d0', marginBottom: 16, textAlign: 'center' }}>
-              <div style={{ fontWeight: 700, color: '#16a34a', marginBottom: 8, fontSize: '0.9rem' }}>🎟️ Ticket ready for {ticketReg.guest_name}</div>
-              <img src={qrDataUrl(`MEAL-${ticketReg.id}`)} alt="Walk-in ticket QR" style={{ width: 180, height: 180, borderRadius: 10 }} />
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 8 }}>Screenshot or print this for {ticketReg.guest_name} to present at meals — or just mark today's meal below now.</div>
+              <div style={{ fontWeight: 700, color: '#16a34a', marginBottom: 8, fontSize: '0.9rem' }}>🎫 Ticket ready for {ticketReg.guest_name}</div>
+              <img src={qrDataUrl(ticketQrValue(ticketReg.id))} alt="Walk-in ticket QR" style={{ width: 180, height: 180, borderRadius: 10 }} />
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 8 }}>Screenshot or print this for {ticketReg.guest_name} to present at check-in — or just check them in below now.</div>
               <button onClick={() => setTicketReg(null)} className="btn btn-outline-blue" style={{ fontSize: '0.8rem', marginTop: 10 }}>Done</button>
             </div>
           )}
@@ -457,7 +468,7 @@ export default function AdminTickets() {
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {confDays.map(({ day, date }) => {
+                    {eventDays.map(({ day, date }) => {
                       const dayCheckins = checkins[selected.id]?.[date] || {}
                       const isToday = date === today
                       return (
@@ -467,7 +478,7 @@ export default function AdminTickets() {
                           </div>
                           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                             {SLOTS.map(s => (
-                              <button key={s.id} onClick={() => markMeal(selected, date, s.id)}
+                              <button key={s.id} onClick={() => markSlot(selected, date, s.id)}
                                 style={{ flex: 1, minWidth: 130, padding: '12px 10px', borderRadius: 10, border: '2px solid', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.85rem',
                                   borderColor: dayCheckins[s.id] ? '#bbf7d0' : '#e2e8f0', background: dayCheckins[s.id] ? '#f0fdf4' : 'white', color: dayCheckins[s.id] ? '#16a34a' : 'var(--brand-deep)' }}>
                                 {s.label}{dayCheckins[s.id] ? ` ✅ ${new Date(dayCheckins[s.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}

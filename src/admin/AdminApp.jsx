@@ -57,7 +57,7 @@ const NAV = [
   ['newsletter',  '📰', 'Newsletter'],
   ['email',      '✉️', 'Email Blast'],
   ['registrations','📋','Registrations'],
-  ['tickets', '🍽️', 'Tickets'],
+  ['tickets', '🎫', 'Tickets'],
   ['notifications','🔔','Push Notifications'],
   ['branches',    '⛪', 'Church Branches'],
   ['bulk-message', '📣', 'Bulk Message'],
