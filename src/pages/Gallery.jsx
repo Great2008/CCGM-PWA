@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { Helmet } from 'react-helmet-async'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import supabase from '../lib/supabase'
 import SEO from '../components/SEO'
 import GalleryCarousel from '../components/GalleryCarousel'
 import { filterGallery } from '../lib/galleryCarousel'
+import { ownDomainImageUrl, onImageError, SITE_ORIGIN } from '../lib/imageUrl'
 
 const CACHE_KEY = 'ccgworld_gallery'
 
@@ -52,6 +54,25 @@ export default function Gallery() {
   const featured = images.filter(i => i.featured)
   const searching = query.trim().length > 0
 
+  // Tells Google what this page contains (a gallery of photos), using the first 50 photos.
+  const galleryJsonLd = useMemo(() => {
+    if (!images.length) return null
+    return JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ImageGallery',
+      name: 'CCG World Photo Gallery',
+      url: `${SITE_ORIGIN}/gallery`,
+      description: 'Photos and memories from CCG World church events, services and programmes.',
+      image: images.slice(0, 50).map(i => ({
+        '@type': 'ImageObject',
+        contentUrl: ownDomainImageUrl(i.url || i.src),
+        name: i.title || i.caption || undefined,
+        caption: i.caption || undefined,
+        uploadDate: String(i.date || i.created_at || '').slice(0, 10) || undefined,
+      })),
+    }).replace(/</g, '\\u003c')
+  }, [images])
+
   // New cards appear whenever the filter, search or photo list changes: tell AOS to look again.
   useEffect(() => {
     const t = setTimeout(() => AOS.refreshHard(), 60)
@@ -65,6 +86,9 @@ export default function Gallery() {
         description="Photos and memories from CCG World church events, services and programmes."
         path="/gallery"
       />
+      {galleryJsonLd && (
+        <Helmet><script type="application/ld+json">{galleryJsonLd}</script></Helmet>
+      )}
       <div style={{
         background: 'linear-gradient(160deg,rgba(10,38,18,0.93) 0%,rgba(22,100,52,0.87) 55%,rgba(22,163,74,0.45) 100%),url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1600&q=80") center/cover no-repeat',
         padding: 'clamp(90px,14vw,130px) 5% 60px', textAlign: 'center',
@@ -160,8 +184,10 @@ export default function Gallery() {
                       onClick={() => setLightbox(img)}>
                       <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 12 }}>
                         <img
-                          src={img.url || img.src}
+                          src={ownDomainImageUrl(img.url || img.src)}
                           alt={img.caption || img.title || ''}
+                          loading="lazy" decoding="async"
+                          onError={onImageError(img.url || img.src)}
                           style={{ width: '100%', display: 'block', transition: 'transform 0.4s' }}
                           onMouseEnter={e => { e.target.style.transform = 'scale(1.05)'; e.target.nextSibling.style.opacity = '1' }}
                           onMouseLeave={e => { e.target.style.transform = 'scale(1)'; e.target.nextSibling.style.opacity = '0' }}
@@ -202,7 +228,8 @@ export default function Gallery() {
 
       {/* Lightbox */}
       {lightbox && (() => {
-        const imgUrl = lightbox.url || lightbox.src
+        const originalUrl = lightbox.url || lightbox.src
+        const imgUrl = ownDomainImageUrl(originalUrl)
         const handleDownload = async () => {
           setDownloading(true)
           try {
@@ -235,6 +262,7 @@ export default function Gallery() {
             <div onClick={e => e.stopPropagation()} style={{ maxWidth: 900, width: '100%' }}>
               <img
                 src={imgUrl}
+                onError={onImageError(originalUrl)}
                 alt={lightbox.caption || lightbox.title || ''}
                 style={{ width: '100%', borderRadius: 12, boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}
               />

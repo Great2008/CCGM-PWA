@@ -4,6 +4,7 @@
 // photo to bring it forward. Tapping the centre photo opens the full-screen viewer.
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { carouselOffset, slideLook, MAX_VISIBLE } from '../lib/galleryCarousel'
+import { ownDomainImageUrl, onImageError } from '../lib/imageUrl'
 
 const arrow = (side) => ({
   position: 'absolute', top: '50%', [side]: 4, transform: 'translateY(-50%)', zIndex: 30,
@@ -83,7 +84,7 @@ export default function GalleryCarousel({ items, onOpen }) {
               }}
             >
               <img
-                src={img.url || img.src} alt={img.caption || img.title || ''} draggable={false}
+                src={ownDomainImageUrl(img.url || img.src)} onError={onImageError(img.url || img.src)} alt={img.caption || img.title || ''} draggable={false}
                 loading={Math.abs(offset) <= 1 ? 'eager' : 'lazy'}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none' }}
               />
