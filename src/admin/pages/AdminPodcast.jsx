@@ -3,7 +3,7 @@ import supabaseAdmin from '../../lib/supabase'
 import { getAll, insert, update, remove } from '../supabase'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
-import { generateAudio } from '../podcastGenerate'
+import { generateAudio } from './podcastGenerate'
 import PodcastGenerationLog from '../components/PodcastGenerationLog'
 
 const EMPTY = { episode_date: '', title: '', script: '', published: true }
