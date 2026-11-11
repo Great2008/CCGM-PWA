@@ -3,6 +3,8 @@ import supabaseAdmin from '../../lib/supabase'
 import { getAll, insert, update, remove } from '../supabase'
 import PageHeader from '../components/PageHeader'
 import AdminCard from '../components/AdminCard'
+import { generateAudio } from '../podcastGenerate'
+import PodcastGenerationLog from '../components/PodcastGenerationLog'
 
 const EMPTY = { episode_date: '', title: '', script: '', published: true }
 
@@ -20,33 +22,11 @@ function StatusBadge({ status }) {
   )
 }
 
-function withTimeout(promise, ms, message) {
-  let timer
-  const timeout = new Promise((_, reject) => {
-    timer = setTimeout(() => reject(new Error(message)), ms)
-  })
-  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
-}
-
-async function invokeGenerate(episodeId) {
-  const { data: { session } } = await supabaseAdmin.auth.getSession()
-  const res = await withTimeout(
-    fetch('/api/generate-daily-podcast', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.access_token || ''}`,
-      },
-      body: JSON.stringify({ episode_id: episodeId }),
-    }),
-    45000,
-    "Generation timed out after 45s — the TTS provider likely hung without responding. Try again, or it may need a different provider."
-  )
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
-  if (data?.skipped) throw new Error(data.reason || 'Generation was skipped')
-  return data
-}
+const invokeGenerate = (episodeId, previousUrl) => generateAudio(episodeId, previousUrl, {
+  getToken: async () => (await supabaseAdmin.auth.getSession()).data.session?.access_token || '',
+  readEpisode: async (id) => (await supabaseAdmin.from('podcast_episodes')
+    .select('audio_url, duration_seconds, status').eq('id', id).maybeSingle()).data,
+})
 
 export default function AdminPodcast() {
   const [episodes, setEpisodes] = useState([])
@@ -56,6 +36,15 @@ export default function AdminPodcast() {
   const [generating, setGenerating] = useState(false)
   const [genError, setGenError] = useState('')
   const [preview, setPreview] = useState(null) // { audio_url, duration_seconds }
+  const [elapsed, setElapsed] = useState(0)
+  const [tab, setTab] = useState('episodes')     // 'episodes' | 'log'
+  const [logKey, setLogKey] = useState(0)        // bumped after every generation so the log reloads
+  useEffect(() => {
+    if (!generating) { setElapsed(0); return }
+    const t0 = Date.now()
+    const id = setInterval(() => setElapsed(Math.round((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [generating])
 
   async function load() {
     setLoading(true)
@@ -106,13 +95,14 @@ export default function AdminPodcast() {
     setGenerating(true)
     setPreview(null)
     try {
-      const data = await invokeGenerate(savedRow.id)
+      const data = await invokeGenerate(savedRow.id, savedRow.audio_url)
       setPreview({ audio_url: data.url, duration_seconds: data.seconds })
       load()
     } catch (e) {
       setGenError(e.message || 'Audio generation failed — you can retry below.')
     }
     setGenerating(false)
+    setLogKey(k => k + 1)
   }
 
   async function regenerate() {
@@ -120,13 +110,14 @@ export default function AdminPodcast() {
     setGenerating(true)
     setGenError('')
     try {
-      const data = await invokeGenerate(form.id)
+      const data = await invokeGenerate(form.id, form.audio_url)
       setPreview({ audio_url: data.url, duration_seconds: data.seconds })
       load()
     } catch (e) {
       setGenError(e.message || 'Audio generation failed — you can retry below.')
     }
     setGenerating(false)
+    setLogKey(k => k + 1)
   }
 
   async function del(ep) {
@@ -185,7 +176,7 @@ export default function AdminPodcast() {
               <div style={{ padding: '14px 16px', background: 'var(--brand-pale, #f0fdf4)', borderRadius: 12 }}>
                 {generating && (
                   <div style={{ fontSize: '0.85rem', color: 'var(--brand-deep, #166534)', fontWeight: 600 }}>
-                    🎙 Generating audio… this can take up to 30 seconds for longer scripts.
+                    🎙 Generating audio… {elapsed}s. Longer scripts can take up to a minute, so please keep this page open.
                   </div>
                 )}
                 {!generating && preview && (
@@ -205,6 +196,10 @@ export default function AdminPodcast() {
                         Retry generation
                       </button>
                     )}
+                    <button onClick={() => { setForm(null); setTab('log') }}
+                      style={{ marginLeft: 8, padding: '8px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                      📋 Open generation log
+                    </button>
                   </>
                 )}
               </div>
@@ -237,6 +232,17 @@ export default function AdminPodcast() {
             + New Episode
           </button>
         } />
+      <div style={{ display: 'flex', gap: 4, background: '#f1f5f9', borderRadius: 12, padding: 4, marginBottom: 16, width: 'fit-content', maxWidth: '100%', flexWrap: 'wrap' }}>
+        {[['episodes', '🎙 Episodes'], ['log', '📋 Generation Log']].map(([id, label]) => (
+          <button key={id} onClick={() => setTab(id)} style={{
+            padding: '8px 16px', borderRadius: 9, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.84rem',
+            background: tab === id ? 'white' : 'transparent', color: tab === id ? 'var(--brand-deep)' : 'var(--text-light)',
+            fontWeight: tab === id ? 700 : 400, boxShadow: tab === id ? 'var(--shadow-sm)' : 'none',
+          }}>{label}</button>
+        ))}
+      </div>
+      {tab === 'log' && <PodcastGenerationLog refreshKey={logKey} />}
+      {tab === 'episodes' && (
       <AdminCard>
         {loading ? (
           <p>Loading…</p>
@@ -265,6 +271,7 @@ export default function AdminPodcast() {
           </div>
         )}
       </AdminCard>
+      )}
     </div>
   )
 }

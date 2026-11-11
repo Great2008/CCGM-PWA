@@ -13,6 +13,12 @@ const VOICE = 'en-GB-ThomasNeural'   // Azure / Edge voice
 const escapeXml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
+// Every voice attempt can be recorded into `trace.events` (pass { trace } to synthesizeAll). The podcast
+// route saves it in the Generation Log, so you can see exactly what each voice did and how long it took.
+const note = (trace, e) => {
+  if (trace) trace.events.push({ ...e, error: e.error ? String(e.error).slice(0, 200) : undefined })
+}
+
 export const piperConfigured = () => !!(process.env.PIPER_API_URL && process.env.PIPER_API_KEY)
 export const azureConfigured = () => !!(process.env.AZURE_SPEECH_KEY && process.env.AZURE_SPEECH_REGION)
 
@@ -86,19 +92,28 @@ async function mapLimit(items, limit, fn) {
   return results
 }
 
-async function piperAll(chunks, deadline) {
+async function piperAll(chunks, deadline, trace) {
   const pieces = chunks.flatMap(c => splitText(c, PIPER_PIECE_CHARS))
   // Leave time at the end for the fallback voices if Piper turns out not to work.
   const phaseEnd = Math.min(deadline - 12000, Date.now() + 38000)
-  const parts = await mapLimit(pieces, PIPER_PARALLEL, async (piece) => {
+  const parts = await mapLimit(pieces, PIPER_PARALLEL, async (piece, idx) => {
+    const base = { provider: 'piper', piece: idx + 1, of: pieces.length }
     let last
     for (let attempt = 0; attempt < 2; attempt++) {     // the first call after a quiet spell can be slow: try twice
       const remaining = phaseEnd - Date.now()
       if (remaining < 3000) break
-      try { return await piperPiece(piece, Math.min(30000, remaining)) }
-      catch (e) { last = e; await sleep(400) }
+      const t0 = Date.now()
+      try {
+        const buf = await piperPiece(piece, Math.min(30000, remaining))
+        note(trace, { ...base, attempt: attempt + 1, ok: true, ms: Date.now() - t0, bytes: buf.length })
+        return buf
+      } catch (e) {
+        note(trace, { ...base, attempt: attempt + 1, ok: false, ms: Date.now() - t0, error: e.message })
+        last = e; await sleep(400)
+      }
     }
-    throw last || new Error('Piper ran out of time')
+    if (!last) { last = new Error('Piper ran out of time'); note(trace, { ...base, attempt: 0, ok: false, ms: 0, error: last.message }) }
+    throw last
   })
   return Buffer.concat(parts)
 }
@@ -141,34 +156,54 @@ async function edgeChunk(text, timeoutMs) {
   })(), timeoutMs, `Edge TTS timed out after ${Math.round(timeoutMs / 1000)}s`)
 }
 
-// chunks: array of strings. Returns one MP3 Buffer.
-export async function synthesizeAll(chunks, { budgetMs = 52000 } = {}) {
+// chunks: array of strings. Returns one MP3 Buffer. Optional { trace: { events: [], provider: null } }
+// is filled in with every attempt and the voice that produced the final audio.
+export async function synthesizeAll(chunks, { budgetMs = 52000, trace } = {}) {
   const deadline = Date.now() + budgetMs
   const problems = new Set()
 
   if (piperConfigured()) {
-    try { return await piperAll(chunks, deadline) }
-    catch (e) { problems.add(e.message) }
+    try {
+      const out = await piperAll(chunks, deadline, trace)
+      if (trace) trace.provider = 'piper'
+      return out
+    } catch (e) { problems.add(e.message) }
   }
 
   const plan = azureConfigured()
     ? [['Azure', azureChunk, 20000], ['Azure', azureChunk, 20000], ['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000]]
     : [['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000], ['Edge TTS', edgeChunk, 15000]]
   const parts = []
+  const used = []
 
   for (let i = 0; i < chunks.length; i++) {
     let audio = null
-    for (const [, fn, perTry] of plan) {
+    const tries = {}
+    for (const [name, fn, perTry] of plan) {
       const remaining = deadline - Date.now()
       if (remaining < 4000) break
-      try { audio = await fn(chunks[i], Math.min(perTry, remaining - 1000)); break }
-      catch (e) { problems.add(e.message); await sleep(300) }
+      const id = name === 'Azure' ? 'azure' : 'edge'
+      tries[id] = (tries[id] || 0) + 1
+      const base = { provider: id, piece: i + 1, of: chunks.length, attempt: tries[id] }
+      const t0 = Date.now()
+      try {
+        audio = await fn(chunks[i], Math.min(perTry, remaining - 1000))
+        note(trace, { ...base, ok: true, ms: Date.now() - t0, bytes: audio.length })
+        if (!used.includes(id)) used.push(id)
+        break
+      } catch (e) {
+        problems.add(e.message)
+        note(trace, { ...base, ok: false, ms: Date.now() - t0, error: e.message })
+        await sleep(300)
+      }
     }
     if (!audio) {
+      if (trace) trace.provider = null
       const hint = (piperConfigured() || azureConfigured()) ? '' : ' · Tip: set up Piper (PIPER_API_URL and PIPER_API_KEY) or an Azure Speech key for reliable audio.'
       throw new Error(`Couldn’t generate audio for part ${i + 1} of ${chunks.length}. ${[...problems].join(' · ')}${hint}`)
     }
     parts.push(audio)
   }
+  if (trace) trace.provider = used.join('+') || null
   return Buffer.concat(parts)
 }

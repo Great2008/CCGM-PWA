@@ -39,6 +39,7 @@ export const config = { maxDuration: 60 }
 
 import { createClient } from '@supabase/supabase-js'
 import { synthesizeAll } from '../server/tts.js'
+import { startPodcastLog, finishPodcastLog } from '../server/podcastLog.js'
 
 const SUPABASE_URL      = process.env.SUPABASE_URL
 const SERVICE_ROLE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -82,7 +83,7 @@ async function verifyAdmin(authHeader) {
   const { data: userData, error: userErr } = await userClient.auth.getUser(token)
   if (userErr || !userData?.user) return false
   const { data: isAdmin } = await userClient.rpc('is_admin')
-  return !!isAdmin
+  return isAdmin ? (userData.user.email || 'admin') : false      // the admin's email, for the Generation Log
 }
 
 export default async function handler(req, res) {
@@ -99,6 +100,11 @@ export default async function handler(req, res) {
   }
 
   const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
+
+  // Generation Log: filled in as we go; finishPodcastLog() is called on success AND on failure.
+  const startedAt = Date.now()
+  const trace = { events: [], provider: null }
+  let logId = null, stage = 'speech', stats = {}
 
   try {
     const episodeId = req.body?.episode_id
@@ -129,13 +135,17 @@ export default async function handler(req, res) {
       return res.status(200).json({ skipped: true, reason: 'No matching episode to process' })
     }
 
+    logId = await startPodcastLog(sb, { episode, source: isCron ? 'cron-endpoint' : 'admin-page', triggeredBy: isCron ? 'cron' : isAdmin })
+
     let script = stripScript(`${episode.title}. ${episode.script || ''}`)
     const words = script.split(' ')
     if (words.length > MAX_WORDS) script = words.slice(0, MAX_WORDS).join(' ') + '.'
 
     const chunks = chunkText(script, MAX_CHARS_PER_REQUEST)
     // Azure Speech first (if configured), Edge TTS as a retrying fallback. See server/tts.js
-    const audio = await synthesizeAll(chunks)
+    stats = { chars: script.length, parts: chunks.length }
+    const audio = await synthesizeAll(chunks, { trace })
+    stage = 'upload'
 
     const path = `${episode.id}.mp3`
     const { error: upErr } = await sb.storage
@@ -147,14 +157,18 @@ export default async function handler(req, res) {
     const audioUrl = `${pub.publicUrl}?v=${Date.now()}`
     const durationSeconds = Math.round((script.split(' ').length / WORDS_PER_MINUTE) * 60)
 
+    stage = 'save'
     const { error: updateErr } = await sb
       .from('podcast_episodes')
       .update({ audio_url: audioUrl, duration_seconds: durationSeconds, status: 'ready' })
       .eq('id', episode.id)
     if (updateErr) throw updateErr
 
+    await finishPodcastLog(sb, logId, { startedAt, trace, ...stats, audioBytes: audio.length, audioSeconds: durationSeconds })
     return res.status(200).json({ success: true, url: audioUrl, seconds: durationSeconds })
   } catch (err) {
-    return res.status(500).json({ error: err instanceof Error ? err.message : String(err) })
+    const message = err instanceof Error ? err.message : (err?.message || String(err))
+    await finishPodcastLog(sb, logId, { startedAt, trace, stage, error: message, ...stats })
+    return res.status(500).json({ error: message })
   }
 }
