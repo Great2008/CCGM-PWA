@@ -232,16 +232,35 @@ def chunk_text(text: str, max_len: int) -> list[str]:
     return chunks
 
 
+def _note(trace: dict | None, **event) -> None:
+    """Record one voice attempt for the Generation Log (Admin > Daily Podcast > Generation Log)."""
+    if trace is None:
+        return
+    if event.get("error"):
+        event["error"] = str(event["error"])[:200]
+    trace["events"].append({k: v for k, v in event.items() if v is not None})
+
+
+def _ms(t0: float) -> int:
+    return round((time.perf_counter() - t0) * 1000)
+
+
+def _clean_setting(value: str | None) -> str:
+    """Keep only visible characters: a key or address pasted on a phone can carry a trailing space, a new line
+    or an invisible character, and one stray character is enough to make Piper reject the key."""
+    return re.sub(r"[^\x21-\x7E]", "", value or "").strip("\"'")
+
+
 def _piper_configured() -> bool:
-    return bool(os.environ.get("PIPER_API_URL") and os.environ.get("PIPER_API_KEY"))
+    return bool(_clean_setting(os.environ.get("PIPER_API_URL")) and _clean_setting(os.environ.get("PIPER_API_KEY")))
 
 
 def synth_piper(text: str) -> bytes:
     """Your self-hosted Piper API. Asks for MP3 (small); refuses WAV with a clear message."""
-    base = os.environ["PIPER_API_URL"].strip().rstrip("/")
+    base = _clean_setting(os.environ["PIPER_API_URL"]).rstrip("/")
     r = requests.post(
         f"{base}/api/tts",
-        headers={"x-api-key": os.environ["PIPER_API_KEY"].strip()},
+        headers={"x-api-key": _clean_setting(os.environ["PIPER_API_KEY"])},
         json={"text": text, "format": "mp3"},
         timeout=120,
     )
@@ -250,7 +269,8 @@ def synth_piper(text: str) -> bytes:
             detail = str(r.json().get("detail", ""))[:100]
         except Exception:  # noqa: BLE001
             detail = ""
-        raise RuntimeError(f"Piper error {r.status_code}" + (f": {detail}" if detail else ""))
+        hint = " (the key on this site and on the Piper service differ)" if r.status_code == 401 else ""
+        raise RuntimeError(f"Piper error {r.status_code}" + (f": {detail}" if detail else "") + hint)
     if "wav" in r.headers.get("content-type", "").lower():
         raise RuntimeError("Piper sent WAV instead of MP3: update the Piper service's main.py to the version with MP3 support")
     if len(r.content) < 100:
@@ -258,34 +278,46 @@ def synth_piper(text: str) -> bytes:
     return r.content
 
 
-def _piper_piece(text: str) -> bytes:
+def _piper_piece(text: str, trace: dict | None = None, piece: int = 1, of: int = 1) -> bytes:
     """One small piece, tried up to 3 times (the first call after a quiet spell can be slow)."""
     last: Exception | None = None
     for attempt in range(3):
+        t0 = time.perf_counter()
         try:
-            return synth_piper(text)
+            audio = synth_piper(text)
+            _note(trace, provider="piper", piece=piece, of=of, attempt=attempt + 1, ok=True, ms=_ms(t0), bytes=len(audio))
+            return audio
         except Exception as e:  # noqa: BLE001
+            _note(trace, provider="piper", piece=piece, of=of, attempt=attempt + 1, ok=False, ms=_ms(t0), error=e)
             last = e
             print(f"  Piper attempt {attempt + 1} failed -> {e}")
             time.sleep(3)
     raise last  # type: ignore[misc]
 
 
-def synth_all(chunks: list[str]) -> bytes:
+def synth_all(chunks: list[str], trace: dict | None = None) -> bytes:
     """Piper first (whole episode in ONE voice), then Azure / Edge TTS if Piper can't do it."""
     piper_problem = ""
     if _piper_configured():
         pieces = [p for c in chunks for p in chunk_text(c, 700)]
         try:
             with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-                return b"".join(pool.map(_piper_piece, pieces))     # map() keeps the original order
+                parts = list(pool.map(lambda ip: _piper_piece(ip[1], trace, ip[0] + 1, len(pieces)), enumerate(pieces)))   # keeps order
+            if trace is not None:
+                trace["provider"] = "piper"
+            return b"".join(parts)
         except Exception as e:  # noqa: BLE001
             piper_problem = f"Piper: {e} | "
             print(f"  Piper could not finish the episode, trying the next voice. ({e})")
     try:
-        return b"".join(synth_chunk(c) for c in chunks)
+        audio = b"".join(synth_chunk(c, trace, i + 1, len(chunks)) for i, c in enumerate(chunks))
     except RuntimeError as e:
+        if trace is not None:
+            trace["provider"] = None
         raise RuntimeError(piper_problem + str(e)) from None
+    if trace is not None:
+        trace["provider"] = "+".join(trace.get("used", [])) or None
+    return audio
 
 
 def _azure_configured() -> bool:
@@ -328,21 +360,64 @@ def synth_edge(text: str) -> bytes:
     return asyncio.run(asyncio.wait_for(_edge_once(text), timeout=60))
 
 
-def synth_chunk(text: str) -> bytes:
+def synth_chunk(text: str, trace: dict | None = None, piece: int = 1, of: int = 1) -> bytes:
     """Azure first (if configured), then Edge TTS, with retries. Raises with a clear reason if all fail."""
     plan = ([("Azure", synth_azure)] * 2 if _azure_configured() else []) + [("Edge TTS", synth_edge)] * 3
     problems: list[str] = []
+    tries: dict[str, int] = {}
     for name, fn in plan:
+        pid = "azure" if name == "Azure" else "edge"
+        tries[pid] = tries.get(pid, 0) + 1
+        t0 = time.perf_counter()
         try:
-            return fn(text)
+            audio = fn(text)
+            _note(trace, provider=pid, piece=piece, of=of, attempt=tries[pid], ok=True, ms=_ms(t0), bytes=len(audio))
+            if trace is not None and pid not in trace.setdefault("used", []):
+                trace["used"].append(pid)
+            return audio
         except Exception as e:  # noqa: BLE001
             msg = f"{name}: {e or type(e).__name__}"
+            _note(trace, provider=pid, piece=piece, of=of, attempt=tries[pid], ok=False, ms=_ms(t0), error=e or type(e).__name__)
             if msg not in problems:
                 problems.append(msg)
             print(f"  TTS attempt failed -> {msg}")
             time.sleep(2)
     tip = "" if (_azure_configured() or _piper_configured()) else " | Tip: set up Piper (PIPER_API_URL, PIPER_API_KEY) or an Azure Speech key for reliable audio."
     raise RuntimeError("Couldn't generate audio. " + " | ".join(problems) + tip)
+
+
+# ── Generation Log (same table the website writes to; see sql/podcast_generation_logs.sql) ──
+# Logging must never stop a podcast being made: every problem here is swallowed.
+def _log_start(ep: dict) -> str | None:
+    try:
+        source = "nightly-job" if os.environ.get("GITHUB_EVENT_NAME") == "schedule" else "github-manual"
+        r = rest("POST", "podcast_generation_logs",
+                 json={"episode_id": str(ep["id"]), "episode_title": str(ep.get("title") or "")[:200],
+                       "source": source, "status": "running"},
+                 headers={"Prefer": "return=representation"})
+        return r.json()[0]["id"]
+    except Exception as e:  # noqa: BLE001
+        print(f"  (could not write the generation log: {e})")
+        return None
+
+
+def _log_finish(log_id: str | None, started: float, trace: dict, error: Exception | None = None, stage: str | None = None,
+                chars: int | None = None, parts: int | None = None, audio_bytes: int | None = None,
+                audio_seconds: int | None = None) -> None:
+    if not log_id:
+        return
+    try:
+        rest("PATCH", f"podcast_generation_logs?id=eq.{log_id}", json={
+            "status": "failed" if error else "success",
+            "provider": trace.get("provider"),
+            "stage": (stage or "speech") if error else None,
+            "error_message": str(error)[:600] if error else None,
+            "duration_ms": _ms(started),
+            "chars": chars, "parts": parts, "audio_bytes": audio_bytes, "audio_seconds": audio_seconds,
+            "attempts": trace.get("events", [])[:80],
+        })
+    except Exception as e:  # noqa: BLE001
+        print(f"  (could not update the generation log: {e})")
 
 
 def podcast(episode_id: str | None = None) -> None:
@@ -363,22 +438,34 @@ def podcast(episode_id: str | None = None) -> None:
     if len(words) > MAX_WORDS:
         script = " ".join(words[:MAX_WORDS]) + "."
 
-    audio = synth_all(chunk_text(script, MAX_CHARS))
+    chunks = chunk_text(script, MAX_CHARS)
+    started = time.perf_counter()
+    trace: dict = {"events": [], "provider": None, "used": []}
+    log_id = _log_start(ep)
+    stage, audio, seconds = "speech", b"", 0
+    try:
+        audio = synth_all(chunks, trace)
 
-    path = f"{ep['id']}.mp3"
-    up = requests.post(
-        f"{SUPABASE_URL}/storage/v1/object/podcast-audio/{path}",
-        headers={"apikey": SERVICE_KEY, "Authorization": f"Bearer {SERVICE_KEY}",
-                 "Content-Type": "audio/mpeg", "x-upsert": "true", "cache-control": "0"},
-        data=audio, timeout=120,
-    )
-    if not up.ok:
-        raise RuntimeError(f"Upload failed {up.status_code}: {up.text[:300]}")
+        stage = "upload"
+        path = f"{ep['id']}.mp3"
+        up = requests.post(
+            f"{SUPABASE_URL}/storage/v1/object/podcast-audio/{path}",
+            headers={"apikey": SERVICE_KEY, "Authorization": f"Bearer {SERVICE_KEY}",
+                     "Content-Type": "audio/mpeg", "x-upsert": "true", "cache-control": "0"},
+            data=audio, timeout=120,
+        )
+        if not up.ok:
+            raise RuntimeError(f"Upload failed {up.status_code}: {up.text[:300]}")
 
-    url = f"{SUPABASE_URL}/storage/v1/object/public/podcast-audio/{path}?v={int(time.time() * 1000)}"
-    seconds = round(len(script.split(" ")) / WORDS_PER_MINUTE * 60)
-    rest("PATCH", f"podcast_episodes?id=eq.{ep['id']}",
-         json={"audio_url": url, "duration_seconds": seconds, "status": "ready"})
+        stage = "save"
+        url = f"{SUPABASE_URL}/storage/v1/object/public/podcast-audio/{path}?v={int(time.time() * 1000)}"
+        seconds = round(len(script.split(" ")) / WORDS_PER_MINUTE * 60)
+        rest("PATCH", f"podcast_episodes?id=eq.{ep['id']}",
+             json={"audio_url": url, "duration_seconds": seconds, "status": "ready"})
+    except Exception as e:  # noqa: BLE001
+        _log_finish(log_id, started, trace, error=e, stage=stage, chars=len(script), parts=len(chunks))
+        raise
+    _log_finish(log_id, started, trace, chars=len(script), parts=len(chunks), audio_bytes=len(audio), audio_seconds=seconds)
     print(f"Podcast ready: {url} ({seconds}s)")
 
 

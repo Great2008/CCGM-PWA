@@ -19,7 +19,11 @@ const note = (trace, e) => {
   if (trace) trace.events.push({ ...e, error: e.error ? String(e.error).slice(0, 200) : undefined })
 }
 
-export const piperConfigured = () => !!(process.env.PIPER_API_URL && process.env.PIPER_API_KEY)
+// Keep only visible characters: a key or address pasted on a phone can carry a trailing space, a new line or an
+// invisible character, and one stray character is enough to make Piper reject the key.
+const cleanSetting = v => String(v || '').replace(/[^\x21-\x7E]/g, '').replace(/^["']+|["']+$/g, '')
+
+export const piperConfigured = () => !!(cleanSetting(process.env.PIPER_API_URL) && cleanSetting(process.env.PIPER_API_KEY))
 export const azureConfigured = () => !!(process.env.AZURE_SPEECH_KEY && process.env.AZURE_SPEECH_REGION)
 
 function withTimeout(promise, ms, message) {
@@ -50,20 +54,20 @@ export function splitText(text, max) {
 
 // ── Piper (self-hosted) ──────────────────────────────────────────────────────
 async function piperPiece(text, timeoutMs) {
-  const base = process.env.PIPER_API_URL.trim().replace(/\/+$/, '')
+  const base = cleanSetting(process.env.PIPER_API_URL).replace(/\/+$/, '')
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), timeoutMs)
   try {
     const res = await fetch(`${base}/api/tts`, {
       method: 'POST',
       signal: ctrl.signal,
-      headers: { 'x-api-key': process.env.PIPER_API_KEY.trim(), 'Content-Type': 'application/json' },
+      headers: { 'x-api-key': cleanSetting(process.env.PIPER_API_KEY), 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, format: 'mp3' }),
     })
     if (!res.ok) {
       let detail = ''
       try { detail = (await res.json()).detail } catch { /* not JSON */ }
-      throw new Error(`Piper error ${res.status}${detail ? ': ' + String(detail).slice(0, 100) : ''}`)
+      throw new Error(`Piper error ${res.status}${detail ? ': ' + String(detail).slice(0, 100) : ''}${res.status === 401 ? ' (the key on this site and on the Piper service differ)' : ''}`)
     }
     const type = (res.headers.get('content-type') || '').toLowerCase()
     if (type.includes('wav')) throw new Error('Piper sent WAV instead of MP3: update the Piper service’s main.py to the version with MP3 support')
