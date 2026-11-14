@@ -70,6 +70,21 @@ const NAV = [
 ]
 const PAGES = { dashboard:AdminDashboard, studio:AdminStudio, sermons:AdminSermons, events:AdminEvents, programme:AdminProgramme, blog:AdminBlog, podcast:AdminPodcast, gallery:AdminGallery, homepage:AdminHomepage, prayer:AdminPrayer, timeline:AdminTimeline, members:AdminMembers, live:AdminLive, sabbath:AdminSabbath, analytics:AdminAnalytics, email:AdminEmail, newsletter:AdminNewsletter, registrations:AdminRegistrations, tickets:AdminTickets, notifications:AdminNotifications, branches:AdminBranches, directory:AdminMemberDirectory, 'bulk-message':AdminBulkMessage, signature:AdminSignature, 'audit-log':AdminLog, certificates:AdminCertificates, letters:AdminLetterWriter, maintenance:AdminMaintenance }
 
+// ── Who can see what ─────────────────────────────────────────────────────
+// super_admin: everything.  admin: everything except SUPER_ADMIN_ONLY.
+// moderator / editor: only the pages listed here (first one is their landing page).
+// To change what a role can open, edit this list only.
+const STAFF_ROLES = ['super_admin', 'admin', 'moderator', 'editor']
+const SUPER_ADMIN_ONLY = ['audit-log', 'signature', 'maintenance', 'certificates', 'letters']
+const ROLE_PAGES = {
+  moderator: ['timeline', 'prayer', 'tickets', 'studio', 'programme', 'live', 'members'],
+  editor:    ['blog', 'sermons', 'gallery', 'podcast', 'sabbath', 'newsletter'],
+}
+const canSee = (role, id) =>
+  role === 'super_admin' ? true
+  : role === 'admin' ? !SUPER_ADMIN_ONLY.includes(id)
+  : (ROLE_PAGES[role] || []).includes(id)
+
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)
   const [checking, setChecking] = useState(true)
@@ -78,7 +93,7 @@ export default function AdminApp() {
   const [sideOpen, setSideOpen] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
 
-  const [adminRole, setAdminRole] = useState(null) // 'super_admin' | 'admin' | 'moderator'
+  const [adminRole, setAdminRole] = useState(null) // 'super_admin' | 'admin' | 'moderator' | 'editor'
   const [adminUser, setAdminUser] = useState(null) // { id, email }
 
   // Entering the admin panel REQUIRES signing in (password or passkey), even for someone who is already
@@ -89,7 +104,7 @@ export default function AdminApp() {
   const enterAdmin = async (session) => {
     if (!session?.user) return false
     const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-    if (!['super_admin', 'admin', 'moderator'].includes(p?.role)) return false
+    if (!STAFF_ROLES.includes(p?.role)) return false
     setAdminRole(p.role)
     setAdminUser({ id: session.user.id, email: session.user.email })
     try { if (ADMIN_REMEMBER_IN_TAB) sessionStorage.setItem(ADMIN_UNLOCK_KEY, session.user.id) } catch { /* ignore */ }
@@ -147,18 +162,14 @@ export default function AdminApp() {
   if (checking) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--brand-deep)', color:'white', fontSize:'1.1rem' }}>⏳ Loading admin...</div>
   if (!authed) return (<><AdminLogin onLogin={async () => { const { data: { session } } = await supabase.auth.getSession(); await enterAdmin(session) }} /><IdleSignOut active={false} /></>)
 
-  // Moderators see only moderation-relevant pages
   const isSuperAdmin = adminRole === 'super_admin'
   const isFullAdmin  = adminRole === 'admin' || isSuperAdmin
-  const superAdminOnlyPages = ['maintenance', 'audit-log']
-  const visibleNav   = isFullAdmin
-    ? NAV.filter(([id]) => !superAdminOnlyPages.includes(id) || isSuperAdmin)
-    : NAV.filter(([id]) => ['timeline', 'prayer', 'tickets'].includes(id))
+  const visibleNav   = NAV.filter(([id]) => canSee(adminRole, id))
 
-  // Maintenance Mode and the Audit Log are super-admin only, even if someone
-  // lands on the page directly (e.g. stale link) without it being in their nav.
-  const requestedPage = superAdminOnlyPages.includes(page) && !isSuperAdmin ? null : page
-  const Page = PAGES[requestedPage] || (isFullAdmin ? AdminDashboard : AdminTimeline)
+  // Pages are checked here too, so a stale link or a Dashboard shortcut can't open a page the role can't see.
+  const requestedPage = canSee(adminRole, page) ? page : null
+  const landing = ROLE_PAGES[adminRole]?.[0]
+  const Page = PAGES[requestedPage] || (isFullAdmin ? AdminDashboard : PAGES[landing])
   return (
     <AdminContext.Provider value={{ showToast, setPage, pendingCount, adminRole, isSuperAdmin, isFullAdmin, logAction, adminUser }}>
       <IdleSignOut active timeoutMs={STAFF_IDLE_MS} warnMs={WARN_MS} onSignOut={logout} />

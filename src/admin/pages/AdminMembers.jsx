@@ -9,9 +9,10 @@ import { useIsMobile } from '../hooks/useIsMobile'
 // ── App roles (permissions) ────────────────────────────────────────────────
 const APP_ROLES = [
   { value: 'member',      label: 'Member',      color: '#2563eb', bg: '#eff6ff', desc: 'Standard member experience' },
-  { value: 'moderator',   label: 'Moderator',   color: '#059669', bg: '#f0fdf4', desc: 'Timeline & Prayer Wall moderation' },
+  { value: 'editor',      label: 'Editor',      color: '#0891b2', bg: '#ecfeff', desc: 'Blog, Sermons, Gallery, Podcast, Sabbath School, Newsletter' },
+  { value: 'moderator',   label: 'Moderator',   color: '#059669', bg: '#f0fdf4', desc: 'Studio, Programme, Live, Timeline, Prayer, Tickets, suspend & reinstate' },
   { value: 'admin',       label: 'Admin',       color: '#7c3aed', bg: '#f5f3ff', desc: 'Full admin panel access' },
-  { value: 'super_admin', label: 'Super Admin', color: '#dc2626', bg: '#fff1f2', desc: 'All access including role management' },
+  { value: 'super_admin', label: 'Super Admin', color: '#dc2626', bg: '#fff1f2', desc: 'All access including role management, Audit Log, Signature, Maintenance, Certificates, Letter Writer' },
 ]
 // ── Church titles (display only, no permissions) ───────────────────────────
 const CHURCH_TITLES = ['', 'Apostle', 'Prophet', 'Evangelist', 'Pastor', 'Elder', 'Deacon', 'Deaconess']
@@ -42,7 +43,7 @@ function addMonths(date, n) {
 }
 
 export default function AdminMembers() {
-  const { showToast, isSuperAdmin, logAction } = useAdmin()
+  const { showToast, isSuperAdmin, isFullAdmin, logAction } = useAdmin()
   const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
   const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
@@ -264,10 +265,12 @@ export default function AdminMembers() {
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'suspended' ? '#dc2626' : '#f1f5f9', color: tab === 'suspended' ? 'white' : 'var(--text-mid)' }}>
           🚫 Suspended ({suspendedMembers.length})
         </button>
+        {isFullAdmin && (
         <button onClick={() => { setTab('pending_posts'); setSelected(null) }}
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'pending_posts' ? '#d97706' : '#f1f5f9', color: tab === 'pending_posts' ? 'white' : 'var(--text-mid)', position: 'relative' }}>
           ✝️ Posts {pendingPosts.length > 0 && <span style={{ background: '#dc2626', color: 'white', borderRadius: 10, fontSize: '0.65rem', fontWeight: 900, padding: '1px 6px', marginLeft: 4 }}>{pendingPosts.length}</span>}
         </button>
+        )}
       </div>
 
       {/* Search */}
@@ -441,7 +444,7 @@ export default function AdminMembers() {
                   )}
 
                   {/* ── Church Title (display only) ── */}
-                  {!selected.suspended && (
+                  {isFullAdmin && !selected.suspended && (
                     <div style={{ marginTop: 8, marginBottom: 4 }}>
                       <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Church Title</div>
                       <select

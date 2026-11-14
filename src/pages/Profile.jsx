@@ -24,7 +24,10 @@ function Avatar({ profile, size = 96 }) {
 }
 
 const ROLE_LABELS = {
+  super_admin: { label: 'Super Admin', color: '#dc2626', bg: '#fee2e2' },
   admin: { label: 'Admin', color: '#7c3aed', bg: '#ede9fe' },
+  moderator: { label: 'Moderator', color: '#059669', bg: '#dcfce7' },
+  editor: { label: 'Editor', color: '#0891b2', bg: '#cffafe' },
   member: { label: 'Member', color: 'var(--brand-mid)', bg: 'var(--brand-pale)' },
   pastor: { label: 'Pastor', color: '#b45309', bg: '#fef3c7' },
 }

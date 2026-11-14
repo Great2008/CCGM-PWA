@@ -118,12 +118,13 @@ export function AuthProvider({ children }) {
   }
 
   // ── Role helpers ──────────────────────────────────────────────────────────
-  // App roles (permissions):   super_admin > admin > moderator > member
+  // App roles (permissions):   super_admin > admin > moderator > member   (editor is a separate content role)
   // Church titles (display):   stored in profile.church_title, no permissions attached
   const appRole        = profile?.role || 'member'
   const isSuperAdmin   = appRole === 'super_admin'
   const isAdmin        = appRole === 'admin' || isSuperAdmin
   const isModerator    = appRole === 'moderator' || isAdmin
+  const isEditor       = appRole === 'editor' || isAdmin
   const canModerate    = isModerator   // shorthand: can delete posts, manage prayer wall
   const churchTitle    = profile?.church_title || null   // e.g. 'Pastor', 'Elder', 'Deacon'
 
@@ -132,7 +133,7 @@ export function AuthProvider({ children }) {
       user, profile, loading,
       signUp, verifyOtp, resendOtp, signIn, signOut, updateProfile,
       // Role flags
-      appRole, isSuperAdmin, isAdmin, isModerator, canModerate,
+      appRole, isSuperAdmin, isAdmin, isModerator, isEditor, canModerate,
       churchTitle,
       // Legacy alias (keep for any components not yet updated)
       isApproved: !!user,

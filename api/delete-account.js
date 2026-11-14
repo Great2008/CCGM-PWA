@@ -11,7 +11,7 @@ import { cors, authenticate, serviceClient, emailConfigured, sendEmail, escapeHt
 
 export const config = { maxDuration: 60 }
 
-const STAFF_ROLES = ['moderator', 'admin', 'super_admin']
+const STAFF_ROLES = ['editor', 'moderator', 'admin', 'super_admin']
 
 // Rows owned by the member. Children come before parents. A table or column that doesn't exist
 // in your database is skipped silently, so this list can safely be a little generous.
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
     // Guard rails
     const { data: profile } = await sb.from('profiles').select('*').eq('id', uid).maybeSingle()
     if (STAFF_ROLES.includes(profile?.role)) {
-      return res.status(403).json({ error: 'Admin and moderator accounts can’t be deleted here. Ask a super admin to change your role first.' })
+      return res.status(403).json({ error: 'Staff accounts can’t be deleted here. Ask a super admin to change your role first.' })
     }
     if (profile?.suspended) {
       return res.status(403).json({ error: 'Your account is suspended, so it can’t be deleted right now. Please contact us.' })
