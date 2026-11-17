@@ -44,9 +44,9 @@ function addMonths(date, n) {
 
 export default function AdminMembers() {
   const { showToast, isSuperAdmin, isFullAdmin, logAction } = useAdmin()
-  const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false, filter: { email_verified: true } }) // unverified sign-ups are hidden
+  const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
-  const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
+  const [tab, setTab]         = useState('all') // 'all' | 'active' | 'suspended' | 'pending_posts'
   const [selected, setSelected] = useState(null)
   const isMobile = useIsMobile()
   const [saving, setSaving]   = useState(false)
@@ -102,10 +102,11 @@ export default function AdminMembers() {
     setSuspLogLoading(false)
   }
 
-  const activeMembers = members.filter(m => !m.suspended)
+  const allMembers = members                                                   // every account
+  const activeMembers = members.filter(m => m.email_verified === true && !m.suspended) // verified, not suspended
   const suspendedMembers = members.filter(m => m.suspended === true)
 
-  const listSource = tab === 'active' ? activeMembers : tab === 'suspended' ? suspendedMembers : pendingPosts
+  const listSource = tab === 'all' ? allMembers : tab === 'active' ? activeMembers : tab === 'suspended' ? suspendedMembers : pendingPosts
   const list = listSource.filter(m => {
     const q = search.toLowerCase()
     return !q || (m.full_name || '').toLowerCase().includes(q) || (m.email || '').toLowerCase().includes(q)
@@ -256,10 +257,14 @@ export default function AdminMembers() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+        <button onClick={() => { setTab('all'); setSelected(null) }}
+          style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'all' ? 'var(--brand-mid)' : '#f1f5f9', color: tab === 'all' ? 'white' : 'var(--text-mid)' }}>
+          👥 Members ({allMembers.length})
+        </button>
         <button onClick={() => { setTab('active'); setSelected(null) }}
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'active' ? 'var(--brand-mid)' : '#f1f5f9', color: tab === 'active' ? 'white' : 'var(--text-mid)' }}>
-          ✅ Active ({activeMembers.length})
+          ✅ Active Members ({activeMembers.length})
         </button>
         <button onClick={() => { setTab('suspended'); setSelected(null) }}
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'suspended' ? '#dc2626' : '#f1f5f9', color: tab === 'suspended' ? 'white' : 'var(--text-mid)' }}>
@@ -335,6 +340,11 @@ export default function AdminMembers() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 700, color: 'var(--text-dark)', fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.full_name || m.display_name || 'Unknown'}</div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.email}</div>
+                {tab === 'all' && (
+                  <span style={{ display: 'inline-block', marginTop: 4, fontSize: '0.68rem', fontWeight: 800, padding: '2px 9px', borderRadius: 20, background: m.email_verified ? '#dcfce7' : '#fef3c7', color: m.email_verified ? '#166534' : '#92400e' }}>
+                    {m.email_verified ? '✓ Verified' : '⏳ Unverified'}
+                  </span>
+                )}
                 {m.suspended && m.suspension_expires_at && (
                   <div style={{ fontSize: '0.72rem', color: '#dc2626', marginTop: 2 }}>Until {fmtDate(m.suspension_expires_at)}</div>
                 )}
