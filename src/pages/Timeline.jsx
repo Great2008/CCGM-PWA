@@ -1429,23 +1429,7 @@ export default function Timeline() {
     const { error } = await supabase.from('post_reports').insert({ post_id: reportPost.id, reporter_id: user.id, reason })
     if (error) { setReportSending(false); return }
     setMyReports(r => [...r, reportPost.id])
-    const { count } = await supabase.from('post_reports')
-      .select('*', { count: 'exact', head: true }).eq('post_id', reportPost.id)
-    // Reports on a moderator's/admin's post are recommended to Super Admins by the database, never auto-suspended here
-    if (count >= 10 && !(await supabase.rpc('is_staff_user', { p_user: reportPost.user_id })).data) {
-      const authorId = reportPost.user_id
-      const now = new Date().toISOString()
-      const reason_text = `Auto-suspended: post received ${count} reports`
-      await supabase.from('profiles').update({ suspended: true, suspended_at: now, suspension_reason: reason_text, suspension_expires_at: null, auto_suspended: true }).eq('id', authorId)
-      await supabase.from('suspension_logs').insert({ user_id: authorId, action: 'auto_suspended', reason: reason_text, post_id: reportPost.id, created_at: now })
-      const authorName = reportPost.profiles?.display_name || reportPost.profiles?.full_name || 'Member'
-      auditLog('suspend', reason_text, authorName)
-      try {
-        await invokeApi('send-suspension-email', {
-          body: { type: 'auto_suspension_admin_alert', authorName, postBody: reportPost.body?.slice(0, 120), reportCount: count, adminPanelUrl: 'https://www.ccgworld.name.ng/admin' }
-        })
-      } catch(_) {}
-    }
+    // 10 reports from distinct verified members are flagged for staff review by the database (no auto-suspension here).
     setReportSending(false); setReportDone(true)
   }
 

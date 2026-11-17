@@ -118,7 +118,7 @@ export default function AdminMembers() {
     return ['member', 'editor'].includes(r)
   }
   // Suspension recommendations: moderators/admins recommend admins; 10 reports on a moderator's or admin's
-  // post creates one automatically. Super admins review them in the Reviews tab.
+  // post creates one automatically. Admins review the ones about members/editors, super admins the rest, in the Reviews tab.
   const pendingRecs = recs.filter(r => r.status === 'pending')
   const byId = Object.fromEntries(members.map(m => [m.id, m]))
   const canRecommend = (t) => !!t && t.id !== adminUser?.id && t.role === 'admin' && ['moderator', 'admin'].includes(adminRole)
@@ -329,7 +329,7 @@ export default function AdminMembers() {
           ✝️ Posts {pendingPosts.length > 0 && <span style={{ background: '#dc2626', color: 'white', borderRadius: 10, fontSize: '0.65rem', fontWeight: 900, padding: '1px 6px', marginLeft: 4 }}>{pendingPosts.length}</span>}
         </button>
         )}
-        {isSuperAdmin && (
+        {isFullAdmin && (
         <button onClick={() => { setTab('reviews'); setSelected(null) }}
           style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'reviews' ? '#b45309' : '#f1f5f9', color: tab === 'reviews' ? 'white' : 'var(--text-mid)' }}>
           📋 Reviews ({pendingRecs.length})
@@ -380,7 +380,7 @@ export default function AdminMembers() {
       )}
 
       {/* Suspension reviews (super admins) */}
-      {tab === 'reviews' && isSuperAdmin && (
+      {tab === 'reviews' && isFullAdmin && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {recs.length === 0 && (
             <div style={{ background: 'white', borderRadius: 14, padding: '40px 20px', textAlign: 'center', color: 'var(--text-light)' }}>
@@ -402,7 +402,7 @@ export default function AdminMembers() {
                   </span>
                 </div>
                 <div style={{ fontSize: '0.76rem', color: 'var(--text-light)', margin: '4px 0 8px' }}>
-                  {r.source === 'auto_reports' ? `🤖 Auto: post reported ${r.report_count || 10}+ times` : `✍️ Recommended by ${by?.full_name || by?.display_name || 'a staff member'}${by?.role ? ' (' + by.role + ')' : ''}`} · {fmtDate(r.created_at)}
+                  {r.source === 'auto_reports' ? `🤖 Auto: a post was reported by ${r.report_count || 10} verified members` : `✍️ Recommended by ${by?.full_name || by?.display_name || 'a staff member'}${by?.role ? ' (' + by.role + ')' : ''}`} · {fmtDate(r.created_at)}
                 </div>
                 <div style={{ fontSize: '0.88rem', color: 'var(--text-dark)', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{r.note}</div>
                 {!pending && r.review_note && (
@@ -410,7 +410,7 @@ export default function AdminMembers() {
                 )}
                 {pending && (
                   <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-                    {t && !t.suspended && t.id !== adminUser?.id && (
+                    {t && !t.suspended && canSuspend(t) && (
                       <button onClick={() => { setSelected(t); openSuspend() }}
                         style={{ padding: '8px 16px', borderRadius: 10, border: 'none', background: '#dc2626', color: 'white', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                         🚫 Review &amp; suspend
