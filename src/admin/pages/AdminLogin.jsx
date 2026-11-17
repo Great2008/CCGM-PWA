@@ -39,9 +39,9 @@ export default function AdminLogin({ onLogin }) {
 
   // Shared by password and passkey sign-in: only staff roles may enter the admin panel.
   const finishLogin = async (userId) => {
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', userId).single()
+    const { data: profile } = await supabase.from('profiles').select('role, suspended').eq('id', userId).single()
     const allowed = ['super_admin', 'admin', 'moderator', 'editor']
-    if (!allowed.includes(profile?.role)) {
+    if (!allowed.includes(profile?.role) || profile?.suspended) {
       await supabase.auth.signOut()
       setLoading(false)
       setDenied(true)

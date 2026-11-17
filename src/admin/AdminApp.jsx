@@ -103,8 +103,8 @@ export default function AdminApp() {
 
   const enterAdmin = async (session) => {
     if (!session?.user) return false
-    const { data: p } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-    if (!STAFF_ROLES.includes(p?.role)) return false
+    const { data: p } = await supabase.from('profiles').select('role, suspended').eq('id', session.user.id).single()
+    if (!STAFF_ROLES.includes(p?.role) || p?.suspended) return false
     setAdminRole(p.role)
     setAdminUser({ id: session.user.id, email: session.user.email })
     try { if (ADMIN_REMEMBER_IN_TAB) sessionStorage.setItem(ADMIN_UNLOCK_KEY, session.user.id) } catch { /* ignore */ }

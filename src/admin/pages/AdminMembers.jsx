@@ -43,10 +43,16 @@ function addMonths(date, n) {
 }
 
 export default function AdminMembers() {
-  const { showToast, isSuperAdmin, isFullAdmin, logAction } = useAdmin()
+  const { showToast, isSuperAdmin, isFullAdmin, adminRole, adminUser, logAction } = useAdmin()
   const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
+  const { rows: recs, reload: reloadRecs, update: updateRec } = useTable('suspension_recommendations', { order: 'created_at', asc: false })
   const [search, setSearch]   = useState('')
-  const [tab, setTab]         = useState('all') // 'all' | 'active' | 'suspended' | 'pending_posts'
+  const [showRecommend, setShowRecommend] = useState(false)
+  const [recNote, setRecNote] = useState('')
+  const [recSending, setRecSending] = useState(false)
+  const [dismissRec, setDismissRec] = useState(null)
+  const [dismissNote, setDismissNote] = useState('')
+  const [tab, setTab]         = useState('all') // 'all' | 'active' | 'suspended' | 'pending_posts' | 'reviews'
   const [selected, setSelected] = useState(null)
   const isMobile = useIsMobile()
   const [saving, setSaving]   = useState(false)
@@ -100,6 +106,48 @@ export default function AdminMembers() {
       .order('created_at', { ascending: false })
     setSuspLog(data || [])
     setSuspLogLoading(false)
+  }
+
+  // Who may suspend / reinstate whom: never yourself; moderators → members & editors;
+  // admins → everyone below admin; super admins → anyone else.
+  const canSuspend = (t) => {
+    if (!t || t.id === adminUser?.id) return false
+    const r = t.role || 'member'
+    if (isSuperAdmin) return true
+    if (adminRole === 'admin') return !['admin', 'super_admin'].includes(r)
+    return ['member', 'editor'].includes(r)
+  }
+  // Suspension recommendations: moderators/admins recommend admins; 10 reports on a moderator's or admin's
+  // post creates one automatically. Super admins review them in the Reviews tab.
+  const pendingRecs = recs.filter(r => r.status === 'pending')
+  const byId = Object.fromEntries(members.map(m => [m.id, m]))
+  const canRecommend = (t) => !!t && t.id !== adminUser?.id && t.role === 'admin' && ['moderator', 'admin'].includes(adminRole)
+  const mySentRec = (t) => pendingRecs.find(r => r.target_id === t?.id && r.recommended_by === adminUser?.id && r.source === 'manual')
+
+  const sendRecommendation = async () => {
+    if (recNote.trim().length < 10) { showToast('Please write a note (at least 10 characters)', 'error'); return }
+    setRecSending(true)
+    const { error } = await supabaseAdmin.from('suspension_recommendations').insert({
+      target_id: selected.id, recommended_by: adminUser.id, source: 'manual', status: 'pending', note: recNote.trim(),
+    })
+    setRecSending(false)
+    if (error) {
+      showToast(error.code === '23505' ? 'You already have a pending recommendation for this admin.' : (error.message || 'Could not send recommendation'), 'error')
+      return
+    }
+    logAction('recommend_suspension', recNote.trim(), selected.full_name || selected.display_name)
+    showToast('Recommendation sent to the Super Admins')
+    setShowRecommend(false); setRecNote(''); reloadRecs()
+  }
+
+  const confirmDismiss = async () => {
+    try {
+      await updateRec(dismissRec.id, { status: 'dismissed', reviewed_by: adminUser?.id, reviewed_at: new Date().toISOString(), review_note: dismissNote.trim() || null })
+      const t = byId[dismissRec.target_id]
+      logAction('dismiss_recommendation', dismissNote.trim() || 'No action taken', t?.full_name || t?.display_name)
+      showToast('Recommendation dismissed')
+      setDismissRec(null); setDismissNote('')
+    } catch (e) { showToast(e.message, 'error') }
   }
 
   const allMembers = members                                                   // every account
@@ -190,6 +238,11 @@ export default function AdminMembers() {
 
       showToast((selected.full_name || 'Member') + ' suspended for ' + (suspendPeriod.months ? suspendPeriod.label : 'indefinitely') + '.')
       logAction('suspend', `Suspended for ${suspendPeriod.months ? suspendPeriod.label : 'indefinitely'}: ${fullReason}`, selected.full_name || selected.display_name)
+      try {
+        for (const r of pendingRecs.filter(r => r.target_id === selected.id)) {
+          await updateRec(r.id, { status: 'approved', reviewed_by: adminUser?.id, reviewed_at: new Date().toISOString(), review_note: 'Suspended' })
+        }
+      } catch (_) { /* only super admins can close recommendations */ }
       setShowSuspend(false)
       setSelected(s => ({ ...s, suspended: true, suspension_reason: fullReason, suspension_expires_at: expiresAt }))
       reload()
@@ -276,6 +329,12 @@ export default function AdminMembers() {
           ✝️ Posts {pendingPosts.length > 0 && <span style={{ background: '#dc2626', color: 'white', borderRadius: 10, fontSize: '0.65rem', fontWeight: 900, padding: '1px 6px', marginLeft: 4 }}>{pendingPosts.length}</span>}
         </button>
         )}
+        {isSuperAdmin && (
+        <button onClick={() => { setTab('reviews'); setSelected(null) }}
+          style={{ padding: '8px 22px', borderRadius: 30, border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.84rem', background: tab === 'reviews' ? '#b45309' : '#f1f5f9', color: tab === 'reviews' ? 'white' : 'var(--text-mid)' }}>
+          📋 Reviews ({pendingRecs.length})
+        </button>
+        )}
       </div>
 
       {/* Search */}
@@ -320,8 +379,58 @@ export default function AdminMembers() {
         </div>
       )}
 
+      {/* Suspension reviews (super admins) */}
+      {tab === 'reviews' && isSuperAdmin && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {recs.length === 0 && (
+            <div style={{ background: 'white', borderRadius: 14, padding: '40px 20px', textAlign: 'center', color: 'var(--text-light)' }}>
+              No suspension recommendations yet.
+            </div>
+          )}
+          {[...recs].sort((a, b) => (a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1)).map(r => {
+            const t = byId[r.target_id]
+            const by = byId[r.recommended_by]
+            const pending = r.status === 'pending'
+            return (
+              <div key={r.id} style={{ background: 'white', borderRadius: 14, padding: '16px 18px', boxShadow: '0 1px 8px rgba(0,0,0,0.06)', borderLeft: '4px solid ' + (pending ? '#f59e0b' : r.status === 'approved' ? '#dc2626' : '#94a3b8') }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div style={{ fontWeight: 800, color: 'var(--text-dark)' }}>
+                    {t?.full_name || t?.display_name || 'Unknown'} <span style={{ fontWeight: 600, fontSize: '0.75rem', color: 'var(--text-light)' }}>({t?.role || 'member'})</span>
+                  </div>
+                  <span style={{ fontSize: '0.68rem', fontWeight: 800, padding: '3px 10px', borderRadius: 20, background: pending ? '#fef3c7' : r.status === 'approved' ? '#fee2e2' : '#f1f5f9', color: pending ? '#92400e' : r.status === 'approved' ? '#991b1b' : '#475569' }}>
+                    {pending ? '⏳ Pending' : r.status === 'approved' ? '🚫 Suspended' : 'Dismissed'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-light)', margin: '4px 0 8px' }}>
+                  {r.source === 'auto_reports' ? `🤖 Auto: post reported ${r.report_count || 10}+ times` : `✍️ Recommended by ${by?.full_name || by?.display_name || 'a staff member'}${by?.role ? ' (' + by.role + ')' : ''}`} · {fmtDate(r.created_at)}
+                </div>
+                <div style={{ fontSize: '0.88rem', color: 'var(--text-dark)', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{r.note}</div>
+                {!pending && r.review_note && (
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 8 }}>Review note: {r.review_note}</div>
+                )}
+                {pending && (
+                  <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+                    {t && !t.suspended && t.id !== adminUser?.id && (
+                      <button onClick={() => { setSelected(t); openSuspend() }}
+                        style={{ padding: '8px 16px', borderRadius: 10, border: 'none', background: '#dc2626', color: 'white', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                        🚫 Review &amp; suspend
+                      </button>
+                    )}
+                    {t?.suspended && <span style={{ fontSize: '0.78rem', color: '#991b1b', alignSelf: 'center' }}>Already suspended</span>}
+                    <button onClick={() => { setDismissRec(r); setDismissNote('') }}
+                      style={{ padding: '8px 16px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', color: 'var(--text-mid)', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                      Dismiss
+                    </button>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {/* Two-pane */}
-      {tab !== 'pending_posts' && (
+      {tab !== 'pending_posts' && tab !== 'reviews' && (
       <div className="members-pane" style={{ display: 'grid', gridTemplateColumns: (selected && !isMobile) ? 'minmax(0,1fr) min(340px,38%)' : '1fr', gap: 20, alignItems: 'start' }}>
 
         {/* List */}
@@ -472,7 +581,24 @@ export default function AdminMembers() {
                   )}
 
                   {/* ── Suspend / Reinstate ── */}
-                  {!selected.suspended ? (
+                  {!canSuspend(selected) ? (
+                    canRecommend(selected) ? (
+                      mySentRec(selected) ? (
+                        <div style={{ padding: '10px 12px', borderRadius: 10, background: '#fffbeb', color: '#92400e', fontSize: '0.8rem', textAlign: 'center' }}>
+                          ✓ You recommended this admin for suspension. Waiting for a Super Admin.
+                        </div>
+                      ) : (
+                        <button onClick={() => { setRecNote(''); setShowRecommend(true) }}
+                          style={{ padding: '10px', borderRadius: 10, border: '1.5px solid #fde68a', background: '#fffbeb', color: '#b45309', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', fontFamily: 'var(--font-body)', width: '100%' }}>
+                          ⚠️ Recommend suspension to Super Admins
+                        </button>
+                      )
+                    ) : (
+                      <div style={{ padding: '10px 12px', borderRadius: 10, background: '#f8fafc', color: 'var(--text-light)', fontSize: '0.8rem', textAlign: 'center' }}>
+                        {selected.id === adminUser?.id ? "You can't suspend yourself." : (selected.role === 'admin' || selected.role === 'super_admin') ? 'Only a super admin can suspend an admin.' : "You don't have permission to suspend this account."}
+                      </div>
+                    )
+                  ) : !selected.suspended ? (
                     <button onClick={openSuspend}
                       style={{ padding: '10px', borderRadius: 10, border: '1.5px solid #fecaca', background: '#fff5f5', color: '#dc2626', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '0.88rem', marginTop: 4 }}>
                       🚫 Suspend Member
@@ -489,6 +615,46 @@ export default function AdminMembers() {
           </div>
         )}
       </div>
+      )}
+
+      {/* Recommend suspension modal */}
+      {showRecommend && selected && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }}
+          onClick={e => { if (e.target === e.currentTarget) setShowRecommend(false) }}>
+          <div style={{ background: 'white', borderRadius: 18, padding: 28, width: '100%', maxWidth: 440, boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', color: '#b45309', fontSize: '1.2rem', margin: '0 0 6px' }}>⚠️ Recommend suspension</h3>
+            <p style={{ color: 'var(--text-light)', fontSize: '0.84rem', margin: '0 0 14px' }}>
+              Recommending <strong>{selected.full_name || selected.display_name}</strong> to the Super Admins. Explain why — a note is required.
+            </p>
+            <textarea value={recNote} onChange={e => setRecNote(e.target.value)} rows={5} placeholder="What happened? Include dates, posts or links if you can…"
+              style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #fde68a', fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }} />
+            <div style={{ fontSize: '0.72rem', color: recNote.trim().length < 10 ? '#b45309' : 'var(--text-light)', margin: '4px 0 16px' }}>{recNote.trim().length} / 10 characters minimum</div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => setShowRecommend(false)} style={{ flex: 1, padding: '11px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Cancel</button>
+              <button onClick={sendRecommendation} disabled={recSending || recNote.trim().length < 10}
+                style={{ flex: 1, padding: '11px', borderRadius: 10, border: 'none', background: '#b45309', color: 'white', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', opacity: (recSending || recNote.trim().length < 10) ? 0.5 : 1 }}>
+                {recSending ? 'Sending…' : 'Send'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dismiss recommendation modal */}
+      {dismissRec && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }}
+          onClick={e => { if (e.target === e.currentTarget) setDismissRec(null) }}>
+          <div style={{ background: 'white', borderRadius: 18, padding: 28, width: '100%', maxWidth: 440, boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', margin: '0 0 6px' }}>Dismiss recommendation</h3>
+            <p style={{ color: 'var(--text-light)', fontSize: '0.84rem', margin: '0 0 14px' }}>No suspension will be applied. Add a note if you like.</p>
+            <textarea value={dismissNote} onChange={e => setDismissNote(e.target.value)} rows={3} placeholder="Optional note…"
+              style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: '0.9rem', fontFamily: 'var(--font-body)', outline: 'none', boxSizing: 'border-box', resize: 'vertical', marginBottom: 16 }} />
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => setDismissRec(null)} style={{ flex: 1, padding: '11px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Cancel</button>
+              <button onClick={confirmDismiss} style={{ flex: 1, padding: '11px', borderRadius: 10, border: 'none', background: '#475569', color: 'white', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Dismiss</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Suspend Modal */}

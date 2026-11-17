@@ -1431,7 +1431,8 @@ export default function Timeline() {
     setMyReports(r => [...r, reportPost.id])
     const { count } = await supabase.from('post_reports')
       .select('*', { count: 'exact', head: true }).eq('post_id', reportPost.id)
-    if (count >= 10) {
+    // Reports on a moderator's/admin's post are recommended to Super Admins by the database, never auto-suspended here
+    if (count >= 10 && !(await supabase.rpc('is_staff_user', { p_user: reportPost.user_id })).data) {
       const authorId = reportPost.user_id
       const now = new Date().toISOString()
       const reason_text = `Auto-suspended: post received ${count} reports`
