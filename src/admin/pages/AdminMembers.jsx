@@ -44,7 +44,7 @@ function addMonths(date, n) {
 
 export default function AdminMembers() {
   const { showToast, isSuperAdmin, isFullAdmin, logAction } = useAdmin()
-  const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false })
+  const { rows: members, loading, update, reload } = useTable('profiles', { order: 'created_at', asc: false, filter: { email_verified: true } }) // unverified sign-ups are hidden
   const [search, setSearch]   = useState('')
   const [tab, setTab]         = useState('active') // 'active' | 'suspended' | 'pending_posts'
   const [selected, setSelected] = useState(null)
