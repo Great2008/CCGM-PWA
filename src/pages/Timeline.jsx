@@ -990,7 +990,14 @@ function AuthModal({ onClose }) {
     e.preventDefault(); setErr(''); setLoading(true)
     rememberSharedChoice()
     const error = await signIn(email, pass)
-    if (error) setErr(error.message); else onClose()
+    if (error) {
+      // Unverified account: send a fresh code and jump to the code-entry screen
+      if (error.code === 'email_not_confirmed' || /not confirmed/i.test(error.message || '')) {
+        const resendErr = await resendOtp(email)
+        if (resendErr) setErr(resendErr.message)
+        else { setOtp(['','','','','','']); setMode('signup'); setStep(3); setResendCooldown(60); setErr('') }
+      } else setErr(error.message)
+    } else onClose()
     setLoading(false)
   }
 
