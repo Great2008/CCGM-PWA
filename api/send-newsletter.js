@@ -10,7 +10,7 @@
 //     reported as failed ("time limit reached") in Delivery Logs so you can resend it.
 // Vercel request bodies max out at ~4.5 MB, so total attachment size must stay under ~3 MB.
 import {
-  cors, authenticate, isAdmin, serviceClient, emailConfigured,
+  cors, authenticate, isEditorOrAbove, serviceClient, emailConfigured,
   sendEmail, sendBatch, logDelivery, escapeHtml, sleep,
 } from '../server/mail.js'
 
@@ -47,7 +47,7 @@ const stripMd = str => str.split('\n').map(l => l.replace(/^##?\s*/, '')).join('
 export default async function handler(req, res) {
   if (cors(req, res)) return
   const ctx = await authenticate(req)
-  if (!ctx || !(await isAdmin(ctx))) return res.status(401).json({ error: 'Unauthorized' })
+  if (!ctx || !(await isEditorOrAbove(ctx))) return res.status(401).json({ error: 'Unauthorized' })
 
   try {
     const {

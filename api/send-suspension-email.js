@@ -5,7 +5,7 @@
 //   - type "auto_suspension_admin_alert": any signed-in member (Timeline triggers it from the
 //     reporting member's session). It can only ever email ADMIN_ALERT_EMAIL.
 //   - "suspension" / "reinstatement" (emails a member): ADMIN ONLY.
-import { cors, authenticate, isAdmin, serviceClient, emailConfigured, sendEmail, logDelivery, escapeHtml, APP_URL } from '../server/mail.js'
+import { cors, authenticate, isStaff, serviceClient, emailConfigured, sendEmail, logDelivery, escapeHtml, APP_URL } from '../server/mail.js'
 
 export const config = { maxDuration: 30 }
 
@@ -138,8 +138,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true })
     }
 
-    // ── Emails to a member: admin only ──────────────────────────────────────
-    if (!(await isAdmin(ctx))) return res.status(403).json({ error: 'Admin access required' })
+    // ── Emails to a member: moderator and above ──────────────────────────────────────
+    if (!(await isStaff(ctx))) return res.status(403).json({ error: 'Staff access required' })
     if (!email) return res.status(400).json({ error: 'email is required' })
 
     const reinstated = type === 'reinstatement'

@@ -82,7 +82,7 @@ async function verifyAdmin(authHeader) {
   })
   const { data: userData, error: userErr } = await userClient.auth.getUser(token)
   if (userErr || !userData?.user) return false
-  const { data: isAdmin } = await userClient.rpc('is_admin')
+  const { data: isAdmin } = await userClient.rpc('is_editor_or_above')
   return isAdmin ? (userData.user.email || 'admin') : false      // the admin's email, for the Generation Log
 }
 

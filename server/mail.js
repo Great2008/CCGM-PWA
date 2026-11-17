@@ -52,6 +52,18 @@ export async function isAdmin(ctx) {
   return !!data
 }
 
+// Moderator, admin or super admin (suspension emails).
+export async function isStaff(ctx) {
+  const { data } = await ctx.userClient.rpc('is_mod_or_admin')
+  return !!data
+}
+
+// Editor, admin or super admin (newsletter + podcast).
+export async function isEditorOrAbove(ctx) {
+  const { data } = await ctx.userClient.rpc('is_editor_or_above')
+  return !!data
+}
+
 // ── Resend ───────────────────────────────────────────────────────────────────
 function fromHeader() {
   const email = process.env.RESEND_FROM_EMAIL
