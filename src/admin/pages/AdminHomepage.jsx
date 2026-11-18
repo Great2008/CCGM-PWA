@@ -7,6 +7,14 @@ import { BG_COLORS, DEFAULT_BG } from '../../components/DailyVerseBanner'
 
 const ICONS = ['🤝','🙏','📖','⛪','🔥','✨','🌟','🎵','📢','✝','🕊','💒']
 
+const DAY_MESSAGE_DEFAULTS = {
+  Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
+  Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
+  Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
+  Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
+  Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
+}
+
 const DEFAULT = {
   hero: { title:'Welcome to CCG World', subtitle:'A community rooted in faith, love, and the Word of God. Join us as we worship, grow, and serve together.', ctaText:'Join Us This Saturday', ctaLink:'/events' },
   serviceTimes: [
@@ -135,6 +143,25 @@ export default function AdminHomepage() {
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
             <div className="form-group"><label>CTA Button Text</label><input value={data.hero.ctaText} onChange={e=>setData(d=>({...d,hero:{...d.hero,ctaText:e.target.value}}))} /></div>
             <div className="form-group"><label>CTA Link</label><input value={data.hero.ctaLink} onChange={e=>setData(d=>({...d,hero:{...d.hero,ctaLink:e.target.value}}))} /></div>
+          </div>
+          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
+            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🌅 Daily Messages (Monday – Friday)</h4>
+            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Each weekday shows its own picture, today's date and the message below.</p>
+            {[['Mon','Monday'],['Tue','Tuesday'],['Wed','Wednesday'],['Thu','Thursday'],['Fri','Friday']].map(([k,label])=>(
+              <div className="form-group" key={k}><label>{label}</label>
+                <textarea rows={2} style={{resize:'vertical'}} value={(data.hero.dayMessages||{})[k] ?? DAY_MESSAGE_DEFAULTS[k]}
+                  onChange={e=>setData(d=>({...d,hero:{...d.hero,dayMessages:{...DAY_MESSAGE_DEFAULTS,...(d.hero.dayMessages||{}),[k]:e.target.value}}}))} />
+              </div>
+            ))}
+          </div>
+          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
+            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>📖 Weekend Theme</h4>
+            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown on the homepage every Saturday and Sunday (Nigeria time). Update this each week.</p>
+            <div className="form-group"><label>Theme Title</label><input value={data.hero.themeTitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeTitle:e.target.value}}))} placeholder="e.g. Walking in Faith" /></div>
+            <div className="form-group"><label>Theme Subtitle (optional)</label><input value={data.hero.themeSubtitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeSubtitle:e.target.value}}))} placeholder="e.g. Hebrews 11:1" /></div>
+            <div className="form-group"><label>Theme Image Link</label><input value={data.hero.themeImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeImage:e.target.value}}))} placeholder="https://i.supaimg.com/..." />
+              {data.hero.themeImage && <img src={data.hero.themeImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
+            </div>
           </div>
         </AdminCard>
       )}

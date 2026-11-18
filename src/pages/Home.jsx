@@ -6,8 +6,47 @@ import { getSiteSetting, setSiteSettingCache } from '../lib/siteSettings'
 import AppDownloadBanner from '../components/AppDownloadBanner'
 import SEO from '../components/SEO'
 
+// Hero rule (Nigeria time, WAT):
+//  • Saturday & Sunday: the week's theme image + title (set in Admin → Homepage → Hero).
+//  • Monday–Friday: a daily card — that day's background image (saved in the repo, same every week),
+//    today's date, and that day's message (set in Admin → Homepage → Hero).
+// `color` is the date/message text colour for that day's image (use 'white' on dark images).
+// If an image uses another extension (.png/.webp), change it here.
+const HERO_BY_DAY = {
+  Mon: { img: '/hero/morning.webp', color: '#1f3a2a' },
+  Tue: { img: '/hero/morning.webp', color: '#1f3a2a' },
+  Wed: { img: '/hero/morning.webp', color: '#1f3a2a' },
+  Thu: { img: '/hero/morning.webp', color: '#1f3a2a' },
+  Fri: { img: '/hero/morning.webp', color: '#1f3a2a' },
+}
+// Used until a message is saved in Admin → Homepage → Hero.
+const DEFAULT_DAY_MESSAGES = {
+  Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
+  Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
+  Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
+  Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
+  Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
+}
+const watDay  = (d) => new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Africa/Lagos' }).format(d)
+const watDate = (d) => new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', timeZone: 'Africa/Lagos' }).format(d)
+
 export default function Home() {
   const { data: hp } = useHomepageContent()
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 60000) // flips at midnight WAT even if the page stays open
+    return () => clearInterval(t)
+  }, [])
+  const day = watDay(now)
+  const isWeekend = day === 'Sat' || day === 'Sun'
+  const cardMode = !isWeekend
+  const dayCfg = HERO_BY_DAY[day] || HERO_BY_DAY.Fri
+  const tc = dayCfg.color
+  const savedMsg = (hp.hero.dayMessages || {})[day]
+  const dayMessage = (savedMsg === undefined ? (DEFAULT_DAY_MESSAGES[day] || '') : savedMsg).trim()
+  const themeImage = (hp.hero.themeImage || '').trim()
+  const themeTitle = (hp.hero.themeTitle || '').trim()
+  const heroImg = (isWeekend ? (themeImage || HERO_BY_DAY.Fri.img) : dayCfg.img).replace(/"/g, '%22')
   const { data: liveSermons } = useSermonsContent()
   const { data: liveEvents }  = useEventsContent()
   const [liveData, setLiveData]     = useState(null)
@@ -61,24 +100,38 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         minHeight:'100vh',
-        background:`linear-gradient(160deg,rgba(10,38,18,0.92) 0%,rgba(22,100,52,0.85) 55%,rgba(22,163,74,0.4) 100%),url('https://images.unsplash.com/photo-1600288480699-0b0d8a456dd8?w=1600&q=80') center/cover no-repeat`,
+        background:`url("${heroImg}") center/cover no-repeat #0a2612`,
         display:'flex',alignItems:'center',justifyContent:'center',
         textAlign:'center',padding:'clamp(100px,15vw,140px) 20px 80px',
         position:'relative',overflow:'hidden',
         marginTop: hp.announcement?.show ? 44 : 0,
       }}>
-        <div style={{position:'absolute',right:'-2%',bottom:'2%',fontSize:'clamp(8rem,20vw,22rem)',color:'rgba(255,255,255,0.04)',lineHeight:1,pointerEvents:'none',userSelect:'none'}}>✝</div>
+        <div style={{position:'absolute',right:'-2%',bottom:'2%',fontSize:'clamp(8rem,20vw,22rem)',color:cardMode?'transparent':'rgba(255,255,255,0.04)',lineHeight:1,pointerEvents:'none',userSelect:'none'}}>✝</div>
         <div style={{position:'relative',maxWidth:780,width:'100%'}}>
+          {cardMode ? (
+            <div style={{margin:'0 auto 40px',maxWidth:600}}>
+              <div style={{fontFamily:'var(--font-body)',fontWeight:900,fontSize:'clamp(2.6rem,11vw,4.6rem)',color:tc,lineHeight:1.1,marginBottom:18}}>{watDate(now)}</div>
+              {dayMessage && <div style={{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'clamp(1.3rem,4.8vw,2.3rem)',color:tc,opacity:0.85,lineHeight:1.5}}>{dayMessage}</div>}
+            </div>
+          ) : (<>
           <div style={{display:'inline-block',border:'1px solid var(--gold)',color:'var(--gold)',padding:'6px 24px',borderRadius:30,fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:28}}>🌐 CCG World</div>
-          <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(2rem,6vw,4.4rem)',color:'white',lineHeight:1.12,marginBottom:20,textShadow:'0 2px 24px rgba(0,0,0,0.3)'}}>
+          <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(2rem,6vw,4.4rem)',color:'white',lineHeight:1.12,marginBottom:20,textShadow:'0 2px 18px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.6)'}}>
             Welcome to<br /><em style={{fontStyle:'italic',color:'var(--gold)'}}>CCG World</em>
           </h1>
-          <p style={{fontSize:'clamp(0.95rem,2vw,1.1rem)',color:'rgba(255,255,255,0.88)',lineHeight:1.8,maxWidth:540,margin:'0 auto 40px'}}>
+          <p style={{fontSize:'clamp(0.95rem,2vw,1.1rem)',color:'rgba(255,255,255,0.92)',lineHeight:1.8,maxWidth:540,margin:'0 auto 40px',textShadow:'0 2px 12px rgba(0,0,0,0.7)'}}>
             {hp.hero.subtitle}
           </p>
+          </>)}
+          {isWeekend && themeTitle && (
+            <div style={{margin:'-10px auto 36px',maxWidth:600,textShadow:'0 2px 14px rgba(0,0,0,0.8)'}}>
+              <div style={{fontSize:'0.72rem',fontWeight:800,letterSpacing:'0.25em',textTransform:'uppercase',color:'var(--gold)',marginBottom:8}}>📖 This Week's Theme</div>
+              <div style={{fontFamily:'var(--font-display)',fontWeight:900,fontStyle:'italic',fontSize:'clamp(1.3rem,4vw,2.1rem)',color:'white',lineHeight:1.25}}>{themeTitle}</div>
+              {hp.hero.themeSubtitle && <div style={{color:'rgba(255,255,255,0.92)',fontSize:'0.95rem',marginTop:8}}>{hp.hero.themeSubtitle}</div>}
+            </div>
+          )}
           <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
-            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white">{hp.hero.ctaText}</Link>
+            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white" style={cardMode ? {color:tc,borderColor:tc} : undefined}>{hp.hero.ctaText}</Link>
           </div>
 
           {/* Programme Banner — shown only when an active programme exists */}
@@ -125,17 +178,17 @@ export default function Home() {
                 <span style={{color:'white',fontSize:'0.88rem',fontWeight:900}}>🔴 We Are Live — Watch Now</span>
               </Link>
             ) : (
-              <div style={{display:'inline-flex',alignItems:'center',gap:10,background:'rgba(255,255,255,0.12)',backdropFilter:'blur(8px)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:40,padding:'10px 24px'}}>
+              <div style={{display:'inline-flex',alignItems:'center',gap:10,background:cardMode?'rgba(15,40,28,0.6)':'rgba(255,255,255,0.12)',backdropFilter:'blur(8px)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:40,padding:'10px 24px'}}>
                 <span style={{width:8,height:8,borderRadius:'50%',background:'#ff4444',animation:'pulse 1.5s infinite',display:'inline-block'}} />
                 <span style={{color:'white',fontSize:'0.88rem',fontWeight:700}}>🌟 Divine Service every Saturday</span>
               </div>
             )}
-            <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:6,color:'rgba(255,255,255,0.6)',fontSize:'0.8rem',textDecoration:'none',border:'1px solid rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 18px'}}>
+            <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:6,color:cardMode?tc:'rgba(255,255,255,0.6)',fontSize:'0.8rem',textDecoration:'none',border:cardMode?'1px solid '+tc:'1px solid rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 18px'}}>
               📡 View Schedule
             </Link>
           </div>
         </div>
-        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',color:'rgba(255,255,255,0.45)',fontSize:'0.72rem',letterSpacing:'0.18em',textTransform:'uppercase',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',color:cardMode?tc:'rgba(255,255,255,0.45)',fontSize:'0.72rem',letterSpacing:'0.18em',textTransform:'uppercase',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
           <span>Scroll</span><span style={{animation:'bounce 2s infinite'}}>↓</span>
         </div>
       </section>
