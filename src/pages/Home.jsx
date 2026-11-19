@@ -8,8 +8,10 @@ import SEO from '../components/SEO'
 
 // Hero rule (Nigeria time, WAT):
 //  • Saturday & Sunday: the week's theme image + title (set in Admin → Homepage → Hero).
-//  • Monday–Friday: a daily card — that day's background image (saved in the repo, same every week),
-//    today's date, and that day's message (set in Admin → Homepage → Hero).
+//  • Monday–Friday: a daily card — background image (saved in the repo, same every week),
+//    today's date and that day's message (set in Admin → Homepage → Hero).
+//  • From 6pm to 6am (WAT) everything switches to the evening look: night image + evening messages.
+//    Weekend evenings use the evening theme fields in Admin → Homepage → Hero (day theme if left empty).
 // `color` is the date/message text colour for that day's image (use 'white' on dark images).
 // If an image uses another extension (.png/.webp), change it here.
 const HERO_BY_DAY = {
@@ -19,6 +21,7 @@ const HERO_BY_DAY = {
   Thu: { img: '/hero/morning.webp', color: '#1f3a2a' },
   Fri: { img: '/hero/morning.webp', color: '#1f3a2a' },
 }
+const HERO_NIGHT = { img: '/hero/night.webp', color: '#ffffff' }
 // Used until a message is saved in Admin → Homepage → Hero.
 const DEFAULT_DAY_MESSAGES = {
   Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
@@ -27,9 +30,19 @@ const DEFAULT_DAY_MESSAGES = {
   Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
   Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
 }
+const DEFAULT_NIGHT_MESSAGES = {
+  Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
+  Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
+  Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
+  Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
+  Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
+}
+// Soft dark shadow behind white text on the night picture.
+const NIGHT_GLOW = '0 2px 12px rgba(0,0,25,0.85), 0 0 26px rgba(0,0,30,0.6)'
 // Soft white halo behind dark text so it stays readable over leaves, sky and water (no overlay on the photo).
 const GLOW = '0 0 10px rgba(255,255,255,0.95), 0 0 22px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.55)'
 const watDay  = (d) => new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Africa/Lagos' }).format(d)
+const watHour = (d) => Number(new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone: 'Africa/Lagos' }).format(d))
 const watDate = (d) => new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', timeZone: 'Africa/Lagos' }).format(d)
 
 export default function Home() {
@@ -42,12 +55,19 @@ export default function Home() {
   const day = watDay(now)
   const isWeekend = day === 'Sat' || day === 'Sun'
   const cardMode = !isWeekend
-  const dayCfg = HERO_BY_DAY[day] || HERO_BY_DAY.Fri
+  const hour = watHour(now)
+  const isNight = hour >= 18 || hour < 6
+  const dayCfg = isNight ? HERO_NIGHT : (HERO_BY_DAY[day] || HERO_BY_DAY.Fri)
   const tc = dayCfg.color
-  const savedMsg = (hp.hero.dayMessages || {})[day]
-  const dayMessage = (savedMsg === undefined ? (DEFAULT_DAY_MESSAGES[day] || '') : savedMsg).trim()
-  const themeImage = (hp.hero.themeImage || '').trim()
-  const themeTitle = (hp.hero.themeTitle || '').trim()
+  const glow = isNight ? NIGHT_GLOW : GLOW
+  const msgSet = isNight ? hp.hero.nightMessages : hp.hero.dayMessages
+  const msgDefaults = isNight ? DEFAULT_NIGHT_MESSAGES : DEFAULT_DAY_MESSAGES
+  const savedMsg = (msgSet || {})[day]
+  const dayMessage = (savedMsg === undefined ? (msgDefaults[day] || '') : savedMsg).trim()
+  const pick = (dayVal, nightVal) => ((isNight && (nightVal || '').trim()) ? nightVal : (dayVal || '')).trim()
+  const themeImage = pick(hp.hero.themeImage, hp.hero.themeNightImage)
+  const themeTitle = pick(hp.hero.themeTitle, hp.hero.themeNightTitle)
+  const themeSubtitle = pick(hp.hero.themeSubtitle, hp.hero.themeNightSubtitle)
   const heroImg = (isWeekend ? (themeImage || HERO_BY_DAY.Fri.img) : dayCfg.img).replace(/"/g, '%22')
   const { data: liveSermons } = useSermonsContent()
   const { data: liveEvents }  = useEventsContent()
@@ -113,8 +133,8 @@ export default function Home() {
         <div style={{position:'relative',maxWidth:780,width:'100%'}}>
           {cardMode ? (
             <div style={{margin:'0 auto 40px',maxWidth:600}}>
-              <div style={{fontFamily:'var(--font-body)',fontWeight:900,fontSize:'clamp(2.6rem,11vw,4.6rem)',color:tc,lineHeight:1.1,marginBottom:14,textShadow:GLOW}}>{watDate(now)}</div>
-              {dayMessage && <div style={{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'clamp(1.05rem,3.7vw,1.6rem)',color:tc,lineHeight:1.5,textShadow:GLOW}}>{dayMessage}</div>}
+              <div style={{fontFamily:'var(--font-body)',fontWeight:900,fontSize:'clamp(2.6rem,11vw,4.6rem)',color:tc,lineHeight:1.1,marginBottom:14,textShadow:glow}}>{watDate(now)}</div>
+              {dayMessage && <div style={{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'clamp(1.05rem,3.7vw,1.6rem)',color:tc,lineHeight:1.5,textShadow:glow}}>{dayMessage}</div>}
             </div>
           ) : (<>
           <div style={{display:'inline-block',border:'1px solid var(--gold)',color:'var(--gold)',padding:'6px 24px',borderRadius:30,fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:28}}>🌐 CCG World</div>
@@ -129,12 +149,12 @@ export default function Home() {
             <div style={{margin:'-10px auto 36px',maxWidth:600,textShadow:'0 2px 14px rgba(0,0,0,0.8)'}}>
               <div style={{fontSize:'0.72rem',fontWeight:800,letterSpacing:'0.25em',textTransform:'uppercase',color:'var(--gold)',marginBottom:8}}>📖 This Week's Theme</div>
               <div style={{fontFamily:'var(--font-display)',fontWeight:900,fontStyle:'italic',fontSize:'clamp(1.3rem,4vw,2.1rem)',color:'white',lineHeight:1.25}}>{themeTitle}</div>
-              {hp.hero.themeSubtitle && <div style={{color:'rgba(255,255,255,0.92)',fontSize:'0.95rem',marginTop:8}}>{hp.hero.themeSubtitle}</div>}
+              {themeSubtitle && <div style={{color:'rgba(255,255,255,0.92)',fontSize:'0.95rem',marginTop:8}}>{themeSubtitle}</div>}
             </div>
           )}
           <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
-            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white" style={cardMode ? {background:'rgba(255,255,255,0.92)',color:tc,borderColor:'rgba(255,255,255,0.92)'} : undefined}>{hp.hero.ctaText}</Link>
+            <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white" style={cardMode ? {background:'rgba(255,255,255,0.92)',color:'#1f3a2a',borderColor:'rgba(255,255,255,0.92)'} : undefined}>{hp.hero.ctaText}</Link>
           </div>
 
           {/* Programme Banner — shown only when an active programme exists */}
@@ -186,7 +206,7 @@ export default function Home() {
                 <span style={{color:'white',fontSize:'0.88rem',fontWeight:700}}>🌟 Divine Service every Saturday</span>
               </div>
             )}
-            <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:6,color:cardMode?tc:'rgba(255,255,255,0.6)',fontSize:'0.8rem',fontWeight:cardMode?700:400,textDecoration:'none',background:cardMode?'rgba(255,255,255,0.92)':'transparent',border:cardMode?'1px solid rgba(255,255,255,0.92)':'1px solid rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 18px'}}>
+            <Link to="/live" style={{display:'inline-flex',alignItems:'center',gap:6,color:cardMode?'#1f3a2a':'rgba(255,255,255,0.6)',fontSize:'0.8rem',fontWeight:cardMode?700:400,textDecoration:'none',background:cardMode?'rgba(255,255,255,0.92)':'transparent',border:cardMode?'1px solid rgba(255,255,255,0.92)':'1px solid rgba(255,255,255,0.15)',borderRadius:30,padding:'8px 18px'}}>
               📡 View Schedule
             </Link>
           </div>

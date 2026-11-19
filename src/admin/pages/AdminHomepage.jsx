@@ -15,6 +15,14 @@ const DAY_MESSAGE_DEFAULTS = {
   Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
 }
 
+const NIGHT_MESSAGE_DEFAULTS = {
+  Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
+  Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
+  Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
+  Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
+  Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
+}
+
 const DEFAULT = {
   hero: { title:'Welcome to CCG World', subtitle:'A community rooted in faith, love, and the Word of God. Join us as we worship, grow, and serve together.', ctaText:'Join Us This Saturday', ctaLink:'/events' },
   serviceTimes: [
@@ -155,10 +163,25 @@ export default function AdminHomepage() {
             ))}
           </div>
           <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
+            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🌙 Evening Messages (6pm – 6am, Monday – Friday)</h4>
+            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown with the night picture after 6pm Nigerian time.</p>
+            {[['Mon','Monday night'],['Tue','Tuesday night'],['Wed','Wednesday night'],['Thu','Thursday night'],['Fri','Friday night']].map(([k,label])=>(
+              <div className="form-group" key={k}><label>{label}</label>
+                <textarea rows={3} style={{resize:'vertical'}} value={(data.hero.nightMessages||{})[k] ?? NIGHT_MESSAGE_DEFAULTS[k]}
+                  onChange={e=>setData(d=>({...d,hero:{...d.hero,nightMessages:{...NIGHT_MESSAGE_DEFAULTS,...(d.hero.nightMessages||{}),[k]:e.target.value}}}))} />
+              </div>
+            ))}
+          </div>
+          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
             <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>📖 Weekend Theme</h4>
             <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown on the homepage every Saturday and Sunday (Nigeria time). Update this each week.</p>
             <div className="form-group"><label>Theme Title</label><input value={data.hero.themeTitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeTitle:e.target.value}}))} placeholder="e.g. Walking in Faith" /></div>
             <div className="form-group"><label>Theme Subtitle (optional)</label><input value={data.hero.themeSubtitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeSubtitle:e.target.value}}))} placeholder="e.g. Hebrews 11:1" /></div>
+            <div className="form-group"><label>Evening Theme Title (6pm – 6am, optional)</label><input value={data.hero.themeNightTitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightTitle:e.target.value}}))} placeholder="Leave empty to keep the day title" /></div>
+            <div className="form-group"><label>Evening Theme Subtitle (optional)</label><input value={data.hero.themeNightSubtitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightSubtitle:e.target.value}}))} /></div>
+            <div className="form-group"><label>Evening Theme Image Link (optional)</label><input value={data.hero.themeNightImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightImage:e.target.value}}))} placeholder="Leave empty to keep the day image" />
+              {data.hero.themeNightImage && <img src={data.hero.themeNightImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
+            </div>
             <div className="form-group"><label>Theme Image Link</label><input value={data.hero.themeImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeImage:e.target.value}}))} placeholder="https://i.supaimg.com/..." />
               {data.hero.themeImage && <img src={data.hero.themeImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
             </div>
