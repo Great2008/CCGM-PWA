@@ -7,21 +7,38 @@ import { BG_COLORS, DEFAULT_BG } from '../../components/DailyVerseBanner'
 
 const ICONS = ['🤝','🙏','📖','⛪','🔥','✨','🌟','🎵','📢','✝','🕊','💒']
 
-const DAY_MESSAGE_DEFAULTS = {
-  Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
-  Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
-  Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
-  Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
-  Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
+const MSG_DEFAULTS = {
+  morning: {
+    Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
+    Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
+    Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
+    Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
+    Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
+    Sat: "Rest in God's promises. He who began a good work in you is faithful to bring it to completion.",
+    Sun: "May this new week be filled with fresh grace, renewed strength, divine encounters, and abundant blessings.",
+  },
+  evening: {
+    Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
+    Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
+    Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
+    Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
+    Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
+  },
+  night: {
+    Mon: "Today has come to an end, and another night is here. Whatever the day has brought, remember that God's grace has carried you this far. Let go of your worries, trust His plans, and rest in the assurance that He is watching over you.",
+    Tue: "Another day is behind you, and a peaceful night lies ahead. May every burden on your heart be lifted, every anxious thought be calmed, and God's unfailing love give you peace tonight.",
+    Wed: "The day is over, but God's faithfulness never ends. Take a moment to appreciate how far He has brought you. May His presence fill your home, protect your loved ones, and grant you refreshing rest.",
+    Thu: "As another night begins, remember that a delay is not a denial, and a difficult day is not the end of your story. Keep trusting God. He is still working things together for your good.",
+    Fri: "The week is gradually coming to a close. Whatever you accomplished or could not accomplish, give thanks to God. May He restore your strength, renew your joy, and prepare you for greater testimonies.",
+    Sat: "Another Sabbath day has drawn to a close. May the blessings of God's presence remain with you. As you enter this new night, may your heart be filled with gratitude, your mind with peace, and your home with His love.",
+    Sun: "A new week is approaching, and tonight is a beautiful opportunity to place it all in God's hands. May He go ahead of you, open the right doors, order your steps, and make the coming week a season of testimonies.",
+  },
 }
-
-const NIGHT_MESSAGE_DEFAULTS = {
-  Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
-  Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
-  Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
-  Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
-  Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
-}
+const DAY_NAMES = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' }
+const updateMsg = (setData, slot, k, v) => setData(d => {
+  const all = d.hero.msgs || {}
+  return { ...d, hero: { ...d.hero, msgs: { ...MSG_DEFAULTS, ...all, [slot]: { ...MSG_DEFAULTS[slot], ...(all[slot] || {}), [k]: v } } } }
+})
 
 const DEFAULT = {
   hero: { title:'Welcome to CCG World', subtitle:'A community rooted in faith, love, and the Word of God. Join us as we worship, grow, and serve together.', ctaText:'Join Us This Saturday', ctaLink:'/events' },
@@ -152,38 +169,31 @@ export default function AdminHomepage() {
             <div className="form-group"><label>CTA Button Text</label><input value={data.hero.ctaText} onChange={e=>setData(d=>({...d,hero:{...d.hero,ctaText:e.target.value}}))} /></div>
             <div className="form-group"><label>CTA Link</label><input value={data.hero.ctaLink} onChange={e=>setData(d=>({...d,hero:{...d.hero,ctaLink:e.target.value}}))} /></div>
           </div>
-          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
-            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🌅 Daily Messages (Monday – Friday)</h4>
-            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Each weekday shows its own picture, today's date and the message below.</p>
-            {[['Mon','Monday'],['Tue','Tuesday'],['Wed','Wednesday'],['Thu','Thursday'],['Fri','Friday']].map(([k,label])=>(
-              <div className="form-group" key={k}><label>{label}</label>
-                <textarea rows={2} style={{resize:'vertical'}} value={(data.hero.dayMessages||{})[k] ?? DAY_MESSAGE_DEFAULTS[k]}
-                  onChange={e=>setData(d=>({...d,hero:{...d.hero,dayMessages:{...DAY_MESSAGE_DEFAULTS,...(d.hero.dayMessages||{}),[k]:e.target.value}}}))} />
-              </div>
-            ))}
-          </div>
-          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
-            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🌙 Evening Messages (6pm – 6am, Monday – Friday)</h4>
-            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown with the night picture after 6pm Nigerian time.</p>
-            {[['Mon','Monday night'],['Tue','Tuesday night'],['Wed','Wednesday night'],['Thu','Thursday night'],['Fri','Friday night']].map(([k,label])=>(
-              <div className="form-group" key={k}><label>{label}</label>
-                <textarea rows={3} style={{resize:'vertical'}} value={(data.hero.nightMessages||{})[k] ?? NIGHT_MESSAGE_DEFAULTS[k]}
-                  onChange={e=>setData(d=>({...d,hero:{...d.hero,nightMessages:{...NIGHT_MESSAGE_DEFAULTS,...(d.hero.nightMessages||{}),[k]:e.target.value}}}))} />
-              </div>
-            ))}
-          </div>
-          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
-            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>📖 Weekend Theme</h4>
-            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown on the homepage every Saturday and Sunday (Nigeria time). Update this each week.</p>
-            <div className="form-group"><label>Theme Title</label><input value={data.hero.themeTitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeTitle:e.target.value}}))} placeholder="e.g. Walking in Faith" /></div>
-            <div className="form-group"><label>Theme Subtitle (optional)</label><input value={data.hero.themeSubtitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeSubtitle:e.target.value}}))} placeholder="e.g. Hebrews 11:1" /></div>
-            <div className="form-group"><label>Evening Theme Title (6pm – 6am, optional)</label><input value={data.hero.themeNightTitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightTitle:e.target.value}}))} placeholder="Leave empty to keep the day title" /></div>
-            <div className="form-group"><label>Evening Theme Subtitle (optional)</label><input value={data.hero.themeNightSubtitle||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightSubtitle:e.target.value}}))} /></div>
-            <div className="form-group"><label>Evening Theme Image Link (optional)</label><input value={data.hero.themeNightImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightImage:e.target.value}}))} placeholder="Leave empty to keep the day image" />
-              {data.hero.themeNightImage && <img src={data.hero.themeNightImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
+          {[
+            ['morning','🌅 Morning Messages','6am – 3pm (Saturday & Sunday: until 6pm)',['Mon','Tue','Wed','Thu','Fri','Sat','Sun']],
+            ['evening','🌇 Evening Messages','3pm – 6pm, Monday to Friday',['Mon','Tue','Wed','Thu','Fri']],
+            ['night','🌙 Night Messages','6pm – 6am',['Mon','Tue','Wed','Thu','Fri','Sat','Sun']],
+          ].map(([slot,title,when,days])=>(
+            <div key={slot} style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
+              <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>{title}</h4>
+              <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Shown with the {slot} picture and today's date · {when} · Nigerian time.</p>
+              {days.map(k=>(
+                <div className="form-group" key={k}><label>{DAY_NAMES[k]}</label>
+                  <textarea rows={3} style={{resize:'vertical'}}
+                    value={((data.hero.msgs||{})[slot]||{})[k] ?? (slot==='morning' ? (data.hero.dayMessages||{})[k] : undefined) ?? MSG_DEFAULTS[slot][k]}
+                    onChange={e=>updateMsg(setData,slot,k,e.target.value)} />
+                </div>
+              ))}
             </div>
-            <div className="form-group"><label>Theme Image Link</label><input value={data.hero.themeImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeImage:e.target.value}}))} placeholder="https://i.supaimg.com/..." />
+          ))}
+          <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
+            <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🖼️ Saturday & Sunday Pictures (optional)</h4>
+            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Weekends use the same pictures as the other days. Paste an image link below to replace a picture on Saturday and Sunday only. The messages stay the same.</p>
+            <div className="form-group"><label>Daytime picture link (6am – 6pm)</label><input value={data.hero.themeImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeImage:e.target.value}}))} placeholder="Leave empty to use the normal morning / evening picture" />
               {data.hero.themeImage && <img src={data.hero.themeImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
+            </div>
+            <div className="form-group"><label>Night picture link (6pm – 6am)</label><input value={data.hero.themeNightImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeNightImage:e.target.value}}))} placeholder="Leave empty to use the normal night picture" />
+              {data.hero.themeNightImage && <img src={data.hero.themeNightImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
             </div>
           </div>
         </AdminCard>

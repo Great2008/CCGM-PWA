@@ -6,36 +6,42 @@ import { getSiteSetting, setSiteSettingCache } from '../lib/siteSettings'
 import AppDownloadBanner from '../components/AppDownloadBanner'
 import SEO from '../components/SEO'
 
-// Hero rule (Nigeria time, WAT):
-//  • Saturday & Sunday: the week's theme image + title (set in Admin → Homepage → Hero).
-//  • Monday–Friday: a daily card — background image (saved in the repo, same every week),
-//    today's date and that day's message (set in Admin → Homepage → Hero).
-//  • From 6pm to 6am (WAT) everything switches to the evening look: night image + evening messages.
-//    Weekend evenings use the evening theme fields in Admin → Homepage → Hero (day theme if left empty).
-// `color` is the date/message text colour for that day's image (use 'white' on dark images).
-// If an image uses another extension (.png/.webp), change it here.
-const HERO_BY_DAY = {
-  Mon: { img: '/hero/morning.webp', color: '#1f3a2a' },
-  Tue: { img: '/hero/morning.webp', color: '#1f3a2a' },
-  Wed: { img: '/hero/morning.webp', color: '#1f3a2a' },
-  Thu: { img: '/hero/morning.webp', color: '#1f3a2a' },
-  Fri: { img: '/hero/morning.webp', color: '#1f3a2a' },
-}
-const HERO_NIGHT = { img: '/hero/night.webp', color: '#ffffff' }
+// Hero rule (Nigeria time, WAT) — the same on every day of the week:
+//   morning 6am–3pm · evening 3pm–6pm · night 6pm–6am, each with its own picture (saved in the repo).
+//   The picture shows with today's date and a message (edit them in Admin → Homepage → Hero).
+//   Messages: Mon–Fri have morning, evening and night texts. Sat & Sun keep their morning text until 6pm,
+//   then switch to their night text. After midnight the night text is still the previous evening's.
+//   Saturday & Sunday use the same pictures unless a picture link is set in Admin → Homepage → Hero.
+// If an image uses another extension (.png/.jpg), change it here. Text colour must suit each picture.
+const HERO_IMG   = { morning: '/hero/morning.webp', evening: '/hero/evening.webp', night: '/hero/night.webp' }
+const HERO_COLOR = { morning: '#1f3a2a', evening: '#4a2a45', night: '#ffffff' }
 // Used until a message is saved in Admin → Homepage → Hero.
-const DEFAULT_DAY_MESSAGES = {
-  Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
-  Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
-  Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
-  Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
-  Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
-}
-const DEFAULT_NIGHT_MESSAGES = {
-  Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
-  Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
-  Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
-  Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
-  Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
+const DEFAULT_MESSAGES = {
+  morning: {
+    Mon: "May the Lord go before you this week, open new doors, and give you the strength to accomplish great things.",
+    Tue: "God is working behind the scenes. Trust His timing, walk in faith, and never give up on His promises.",
+    Wed: "May God's wisdom guide your decisions, His peace guard your heart, and His grace sustain you today.",
+    Thu: "Your present challenges are not greater than God's power. Keep believing; your testimony is on the way.",
+    Fri: "May the goodness of God surround you, His favour distinguish you, and His blessings overflow in your life.",
+    Sat: "Rest in God's promises. He who began a good work in you is faithful to bring it to completion.",
+    Sun: "May this new week be filled with fresh grace, renewed strength, divine encounters, and abundant blessings.",
+  },
+  evening: {
+    Mon: "As the sun goes down, may God's grace renew your strength, quiet every worry, and fill your heart with peace. Rest knowing He is watching over you.",
+    Tue: "As evening falls, remember that God is working even when you cannot see it. Let go of today's worries and trust Him with tomorrow.",
+    Wed: "As the day comes to an end, may God's peace settle your heart, His love surround your home, and His presence give you sweet rest tonight.",
+    Thu: "As night approaches, remember that no challenge is greater than God's power. Keep your faith alive; your story is still unfolding.",
+    Fri: "As the week draws to a close, give thanks for God's faithfulness. May He refresh your soul, restore your strength, and fill your night with peace.",
+  },
+  night: {
+    Mon: "Today has come to an end, and another night is here. Whatever the day has brought, remember that God's grace has carried you this far. Let go of your worries, trust His plans, and rest in the assurance that He is watching over you.",
+    Tue: "Another day is behind you, and a peaceful night lies ahead. May every burden on your heart be lifted, every anxious thought be calmed, and God's unfailing love give you peace tonight.",
+    Wed: "The day is over, but God's faithfulness never ends. Take a moment to appreciate how far He has brought you. May His presence fill your home, protect your loved ones, and grant you refreshing rest.",
+    Thu: "As another night begins, remember that a delay is not a denial, and a difficult day is not the end of your story. Keep trusting God. He is still working things together for your good.",
+    Fri: "The week is gradually coming to a close. Whatever you accomplished or could not accomplish, give thanks to God. May He restore your strength, renew your joy, and prepare you for greater testimonies.",
+    Sat: "Another Sabbath day has drawn to a close. May the blessings of God's presence remain with you. As you enter this new night, may your heart be filled with gratitude, your mind with peace, and your home with His love.",
+    Sun: "A new week is approaching, and tonight is a beautiful opportunity to place it all in God's hands. May He go ahead of you, open the right doors, order your steps, and make the coming week a season of testimonies.",
+  },
 }
 // Soft dark shadow behind white text on the night picture.
 const NIGHT_GLOW = '0 2px 12px rgba(0,0,25,0.85), 0 0 26px rgba(0,0,30,0.6)'
@@ -52,23 +58,21 @@ export default function Home() {
     const t = setInterval(() => setNow(new Date()), 60000) // flips at midnight WAT even if the page stays open
     return () => clearInterval(t)
   }, [])
-  const day = watDay(now)
-  const isWeekend = day === 'Sat' || day === 'Sun'
-  const cardMode = !isWeekend
+  const day = watDay(now)                                    // calendar day in WAT
   const hour = watHour(now)
-  const isNight = hour >= 18 || hour < 6
-  const dayCfg = isNight ? HERO_NIGHT : (HERO_BY_DAY[day] || HERO_BY_DAY.Fri)
-  const tc = dayCfg.color
-  const glow = isNight ? NIGHT_GLOW : GLOW
-  const msgSet = isNight ? hp.hero.nightMessages : hp.hero.dayMessages
-  const msgDefaults = isNight ? DEFAULT_NIGHT_MESSAGES : DEFAULT_DAY_MESSAGES
-  const savedMsg = (msgSet || {})[day]
-  const dayMessage = (savedMsg === undefined ? (msgDefaults[day] || '') : savedMsg).trim()
-  const pick = (dayVal, nightVal) => ((isNight && (nightVal || '').trim()) ? nightVal : (dayVal || '')).trim()
-  const themeImage = pick(hp.hero.themeImage, hp.hero.themeNightImage)
-  const themeTitle = pick(hp.hero.themeTitle, hp.hero.themeNightTitle)
-  const themeSubtitle = pick(hp.hero.themeSubtitle, hp.hero.themeNightSubtitle)
-  const heroImg = (isWeekend ? (themeImage || HERO_BY_DAY.Fri.img) : dayCfg.img).replace(/"/g, '%22')
+  const period = (hour >= 18 || hour < 6) ? 'night' : hour >= 15 ? 'evening' : 'morning'
+  // After midnight the night text still belongs to the evening before (Sunday's night text at 1am Monday).
+  const textDay = (period === 'night' && hour < 6) ? watDay(new Date(now.getTime() - 86400000)) : day
+  const weekendText = textDay === 'Sat' || textDay === 'Sun'
+  const slot = (period === 'evening' && weekendText) ? 'morning' : period // weekend text keeps its morning message until 6pm
+  const saved = ((hp.hero.msgs || {})[slot] || {})[textDay] ?? (slot === 'morning' ? (hp.hero.dayMessages || {})[textDay] : undefined)
+  const dayMessage = (saved === undefined ? ((DEFAULT_MESSAGES[slot] || {})[textDay] || '') : saved).trim()
+  const cardMode = true
+  const tc = HERO_COLOR[period]
+  const glow = period === 'night' ? NIGHT_GLOW : GLOW
+  const weekendDay = day === 'Sat' || day === 'Sun'
+  const link = ((weekendDay ? (period === 'night' ? hp.hero.themeNightImage : hp.hero.themeImage) : '') || '').trim()
+  const heroImg = (link || HERO_IMG[period]).replace(/"/g, '%22')
   const { data: liveSermons } = useSermonsContent()
   const { data: liveEvents }  = useEventsContent()
   const [liveData, setLiveData]     = useState(null)
@@ -131,27 +135,10 @@ export default function Home() {
         {cardMode && <div style={{position:'absolute',top:0,left:0,right:0,height:150,background:'linear-gradient(to bottom,rgba(8,28,18,0.55),rgba(8,28,18,0))',pointerEvents:'none'}} />}
         <div style={{position:'absolute',right:'-2%',bottom:'2%',fontSize:'clamp(8rem,20vw,22rem)',color:cardMode?'transparent':'rgba(255,255,255,0.04)',lineHeight:1,pointerEvents:'none',userSelect:'none'}}>✝</div>
         <div style={{position:'relative',maxWidth:780,width:'100%'}}>
-          {cardMode ? (
             <div style={{margin:'0 auto 40px',maxWidth:600}}>
               <div style={{fontFamily:'var(--font-body)',fontWeight:900,fontSize:'clamp(2.6rem,11vw,4.6rem)',color:tc,lineHeight:1.1,marginBottom:14,textShadow:glow}}>{watDate(now)}</div>
               {dayMessage && <div style={{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'clamp(1.05rem,3.7vw,1.6rem)',color:tc,lineHeight:1.5,textShadow:glow}}>{dayMessage}</div>}
             </div>
-          ) : (<>
-          <div style={{display:'inline-block',border:'1px solid var(--gold)',color:'var(--gold)',padding:'6px 24px',borderRadius:30,fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:28}}>🌐 CCG World</div>
-          <h1 style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'clamp(2rem,6vw,4.4rem)',color:'white',lineHeight:1.12,marginBottom:20,textShadow:'0 2px 18px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.6)'}}>
-            Welcome to<br /><em style={{fontStyle:'italic',color:'var(--gold)'}}>CCG World</em>
-          </h1>
-          <p style={{fontSize:'clamp(0.95rem,2vw,1.1rem)',color:'rgba(255,255,255,0.92)',lineHeight:1.8,maxWidth:540,margin:'0 auto 40px',textShadow:'0 2px 12px rgba(0,0,0,0.7)'}}>
-            {hp.hero.subtitle}
-          </p>
-          </>)}
-          {isWeekend && themeTitle && (
-            <div style={{margin:'-10px auto 36px',maxWidth:600,textShadow:'0 2px 14px rgba(0,0,0,0.8)'}}>
-              <div style={{fontSize:'0.72rem',fontWeight:800,letterSpacing:'0.25em',textTransform:'uppercase',color:'var(--gold)',marginBottom:8}}>📖 This Week's Theme</div>
-              <div style={{fontFamily:'var(--font-display)',fontWeight:900,fontStyle:'italic',fontSize:'clamp(1.3rem,4vw,2.1rem)',color:'white',lineHeight:1.25}}>{themeTitle}</div>
-              {themeSubtitle && <div style={{color:'rgba(255,255,255,0.92)',fontSize:'0.95rem',marginTop:8}}>{themeSubtitle}</div>}
-            </div>
-          )}
           <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
             <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white" style={cardMode ? {background:'rgba(255,255,255,0.92)',color:'#1f3a2a',borderColor:'rgba(255,255,255,0.92)'} : undefined}>{hp.hero.ctaText}</Link>
