@@ -60,7 +60,7 @@ export default function Home() {
   }, [])
   const day = watDay(now)                                    // calendar day in WAT
   const hour = watHour(now)
-  const period = (hour >= 18 || hour < 6) ? 'night' : hour >= 15 ? 'evening' : 'morning'
+  const period = (hour >= 18 || hour < 1) ? 'night' : hour >= 15 ? 'evening' : 'morning'
   // After midnight the night text still belongs to the evening before (Sunday's night text at 1am Monday).
   const textDay = (period === 'night' && hour < 6) ? watDay(new Date(now.getTime() - 86400000)) : day
   const weekendText = textDay === 'Sat' || textDay === 'Sun'
