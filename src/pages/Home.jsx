@@ -60,7 +60,7 @@ export default function Home() {
   }, [])
   const day = watDay(now)                                    // calendar day in WAT
   const hour = watHour(now)
-  const period = (hour >= 18 || hour < 1) ? 'night' : hour >= 15 ? 'evening' : 'morning'
+  const period = (hour >= 18 || hour < 6) ? 'night' : hour >= 15 ? 'evening' : 'morning'
   // After midnight the night text still belongs to the evening before (Sunday's night text at 1am Monday).
   const textDay = (period === 'night' && hour < 6) ? watDay(new Date(now.getTime() - 86400000)) : day
   const weekendText = textDay === 'Sat' || textDay === 'Sun'
@@ -72,6 +72,7 @@ export default function Home() {
   const glow = period === 'night' ? NIGHT_GLOW : GLOW
   const weekendDay = day === 'Sat' || day === 'Sun'
   const link = ((weekendDay ? (period === 'night' ? hp.hero.themeNightImage : hp.hero.themeImage) : '') || '').trim()
+  const poster = !!link   // a picture set in Admin for Sat/Sun is shown as it is: no date or message on top of it
   const heroImg = (link || HERO_IMG[period]).replace(/"/g, '%22')
   const { data: liveSermons } = useSermonsContent()
   const { data: liveEvents }  = useEventsContent()
@@ -127,18 +128,18 @@ export default function Home() {
       <section style={{
         minHeight:'100vh',
         background:`url("${heroImg}") center/cover no-repeat #0a2612`,
-        display:'flex',alignItems:'center',justifyContent:'center',
-        textAlign:'center',padding: cardMode ? 'clamp(230px,33vh,310px) 20px 80px' : 'clamp(100px,15vw,140px) 20px 80px',
+        display:'flex',alignItems: poster ? 'flex-end' : 'center',justifyContent:'center',
+        textAlign:'center',padding: poster ? '120px 20px 90px' : 'clamp(230px,33vh,310px) 20px 80px',
         position:'relative',overflow:'hidden',
         marginTop: hp.announcement?.show ? 44 : 0,
       }}>
         {cardMode && <div style={{position:'absolute',top:0,left:0,right:0,height:150,background:'linear-gradient(to bottom,rgba(8,28,18,0.55),rgba(8,28,18,0))',pointerEvents:'none'}} />}
         <div style={{position:'absolute',right:'-2%',bottom:'2%',fontSize:'clamp(8rem,20vw,22rem)',color:cardMode?'transparent':'rgba(255,255,255,0.04)',lineHeight:1,pointerEvents:'none',userSelect:'none'}}>✝</div>
         <div style={{position:'relative',maxWidth:780,width:'100%'}}>
-            <div style={{margin:'0 auto 40px',maxWidth:600}}>
+            {!poster && <div style={{margin:'0 auto 40px',maxWidth:600}}>
               <div style={{fontFamily:'var(--font-body)',fontWeight:900,fontSize:'clamp(2.6rem,11vw,4.6rem)',color:tc,lineHeight:1.1,marginBottom:14,textShadow:glow}}>{watDate(now)}</div>
               {dayMessage && <div style={{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'clamp(1.05rem,3.7vw,1.6rem)',color:tc,lineHeight:1.5,textShadow:glow}}>{dayMessage}</div>}
-            </div>
+            </div>}
           <div className="hero-ctas" style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
             <Link to="/sermons" className="btn btn-gold">🎙 Latest Sermon</Link>
             <Link to={hp.hero.ctaLink||'/events'} className="btn btn-outline-white" style={cardMode ? {background:'rgba(255,255,255,0.92)',color:'#1f3a2a',borderColor:'rgba(255,255,255,0.92)'} : undefined}>{hp.hero.ctaText}</Link>
@@ -198,7 +199,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',color:cardMode?tc:'rgba(255,255,255,0.45)',fontSize:'0.72rem',letterSpacing:'0.18em',textTransform:'uppercase',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',color:cardMode?tc:'rgba(255,255,255,0.45)',fontSize:'0.72rem',letterSpacing:'0.18em',textTransform:'uppercase',display:poster?'none':'flex',flexDirection:'column',alignItems:'center',gap:6}}>
           <span>Scroll</span><span style={{animation:'bounce 2s infinite'}}>↓</span>
         </div>
       </section>

@@ -188,7 +188,7 @@ export default function AdminHomepage() {
           ))}
           <div style={{borderTop:'1px solid #e2e8f0',margin:'18px 0 16px',paddingTop:16}}>
             <h4 style={{margin:'0 0 4px',color:'var(--brand-deep)'}}>🖼️ Saturday & Sunday Pictures (optional)</h4>
-            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Weekends use the same pictures as the other days. Paste an image link below to replace a picture on Saturday and Sunday only. The messages stay the same.</p>
+            <p style={{margin:'0 0 14px',fontSize:'0.82rem',color:'var(--text-light)'}}>Weekends use the same pictures as the other days. Paste an image link below to replace a picture on Saturday and Sunday only. A picture set here is shown on its own: the date and message are hidden, so a finished poster isn't covered. Only the buttons stay.</p>
             <div className="form-group"><label>Daytime picture link (6am – 6pm)</label><input value={data.hero.themeImage||''} onChange={e=>setData(d=>({...d,hero:{...d.hero,themeImage:e.target.value}}))} placeholder="Leave empty to use the normal morning / evening picture" />
               {data.hero.themeImage && <img src={data.hero.themeImage} alt="" style={{marginTop:10,width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}} />}
             </div>
