@@ -16,6 +16,7 @@ function useSermonNotes(sermonId) {
   const [loading, setLoading] = useState(false)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
+  const [saveError, setSaveError] = useState('')
   const saveTimer = useRef(null)
 
   const fetch = useCallback(async () => {
@@ -35,7 +36,7 @@ function useSermonNotes(sermonId) {
 
   const save = useCallback(async (content, isPublic, sermonTitle) => {
     if (!user || !sermonId) return
-    setSaving(true); setSaved(false)
+    setSaving(true); setSaved(false); setSaveError('')
     const payload = {
       user_id:      user.id,
       sermon_id:    String(sermonId),
@@ -45,10 +46,12 @@ function useSermonNotes(sermonId) {
       updated_at:   new Date().toISOString(),
     }
     if (note?.id) {
-      await supabase.from('sermon_notes').update(payload).eq('id', note.id)
+      const { error } = await supabase.from('sermon_notes').update(payload).eq('id', note.id)
+      if (error) { setSaveError(error.message || 'Could not save your note'); setSaving(false); return }
       setNote(prev => ({ ...prev, ...payload }))
     } else {
-      const { data } = await supabase.from('sermon_notes').insert(payload).select().single()
+      const { data, error } = await supabase.from('sermon_notes').insert(payload).select().single()
+      if (error) { setSaveError(error.message || 'Could not save your note'); setSaving(false); return }
       setNote(data)
     }
     setSaving(false); setSaved(true)
@@ -63,7 +66,7 @@ function useSermonNotes(sermonId) {
 
   useEffect(() => () => clearTimeout(saveTimer.current), [])
 
-  return { note, loading, saving, saved, save, remove, refetch: fetch }
+  return { note, loading, saving, saved, saveError, save, remove, refetch: fetch }
 }
 
 // ─── Public Notes ──────────────────────────────────────────────────────────────
@@ -166,7 +169,7 @@ function MyNotesModal({ onClose }) {
 // ─── Sermon Notes Panel ─────────────────────────────────────────────────────────
 function SermonNotesPanel({ sermon, onClose }) {
   const { user } = useAuth()
-  const { note, loading, saving, saved, save, remove } = useSermonNotes(sermon.id)
+  const { note, loading, saving, saved, saveError, save, remove } = useSermonNotes(sermon.id)
   const { notes: publicNotes, loading: pubLoading } = usePublicNotes(sermon.id)
   const [content,    setContent]  = useState('')
   const [isPublic,   setIsPublic] = useState(false)
@@ -264,7 +267,7 @@ function SermonNotesPanel({ sermon, onClose }) {
                 <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                   <div style={{ fontSize:'0.72rem', color:'var(--text-light)', flex:1 }}>
                     {wordCount > 0 && `${wordCount} word${wordCount!==1?'s':''} · `}
-                    {saving ? '💾 Saving...' : saved ? '✅ Saved' : note?.updated_at ? `Last saved ${fmtDate(note.updated_at)}` : 'Not saved yet'}
+                    {saving ? '💾 Saving...' : saveError ? <span style={{ color:'#dc2626', fontWeight:700 }}>⚠️ Not saved: {saveError}</span> : saved ? '✅ Saved' : note?.updated_at ? `Last saved ${fmtDate(note.updated_at)}` : 'Not saved yet'}
                   </div>
                   {note && (
                     <button onClick={() => setShowDelete(true)} style={{ padding:'8px 14px', borderRadius:8, border:'1px solid #fecaca', background:'#fff5f5', color:'#dc2626', cursor:'pointer', fontFamily:'var(--font-body)', fontSize:'0.78rem', fontWeight:600 }}>
